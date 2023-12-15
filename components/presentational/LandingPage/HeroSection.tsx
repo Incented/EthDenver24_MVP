@@ -1,4 +1,3 @@
-import PrivyAuthButton from "../Auth/PrivyAuthButton";
 import { ChevronRightIcon } from "lucide-react";
 import { T } from "@/components/ui/Typography";
 import { Anchor } from "@/components/Anchor";
@@ -45,8 +44,26 @@ export default function HeroSection({
             {description}
           </p>
           <div className="flex items-center gap-6 pt-4">
-            {/* Privy Auth Button */}
-            <PrivyAuthButton />
+            <Anchor href="/login" className="">
+              <Button
+                size="lg"
+                className="group mt-3 w-full md:w-fit bg-primary hover:bg-primary/95 dark:bg-primary dark:text-white dark:hover:bg-primary/95"
+              >
+                Log In
+                <svg
+                  className="ml-2 -mr-1 w-5 h-5 group-hover:translate-x-1 transition"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </Button>
+            </Anchor>
             <Anchor href="http://protocol.incented.co/" target="_blank">
               <Button variant="outline" size="lg" className="">
                 Learn More

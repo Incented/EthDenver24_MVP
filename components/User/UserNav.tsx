@@ -3,11 +3,11 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { FC } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import LogoutButton from "../presentational/Auth/LogoutButton";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 interface UserNavProps {
-  avatarUrl?: string;
+  avatarUrl: string;
 }
 
 const UserNav: FC<UserNavProps> = ({
@@ -26,10 +26,12 @@ const UserNav: FC<UserNavProps> = ({
         align="center"
         className="w-[150px] px-4 flex flex-col justify-start"
       >
-        <Button variant="ghost" className="mb-2">
+        <Link href="#" className="hover:bg-accent py-1 px-2 rounded-md">
           My Profile
-        </Button>
-        <LogoutButton />
+        </Link>
+        <Link href="/logout" className="hover:bg-accent py-1 px-2 rounded-md">
+          Logout
+        </Link>
       </PopoverContent>
     </Popover>
   );

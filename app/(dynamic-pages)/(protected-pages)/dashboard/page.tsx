@@ -70,13 +70,13 @@ const taskData: {
 
 const DashboardPage = () => {
   const router = useRouter();
-  const { ready, authenticated, user } = usePrivy();
+  // const { ready, authenticated, user } = usePrivy();
 
-  useEffect(() => {
-    if (ready && !authenticated) {
-      router.push("/");
-    }
-  }, [ready, authenticated, router]);
+  // useEffect(() => {
+  //   if (ready && !authenticated) {
+  //     router.push("/");
+  //   }
+  // }, [ready, authenticated, router]);
 
   return (
     <main className="mx-8 mb-10 ">
