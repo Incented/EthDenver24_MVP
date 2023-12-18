@@ -29,6 +29,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import FilterTypeMenu from "../FilterTypeMenu";
 import DashboardCard from "@/components/ui/DashboardCard";
+import Pagination from "@/components/ui/Pagination";
 
 const taskData: {
   taskStatus: string;
@@ -194,6 +195,9 @@ const DashboardPage = () => {
           taskType="Others"
           taskStatus="In Progress"
         /> */}
+      </div>
+      <div className="mt-10">
+        <Pagination currentPage={1} title="tasks" totalPages={10} />
       </div>
     </main>
   );
