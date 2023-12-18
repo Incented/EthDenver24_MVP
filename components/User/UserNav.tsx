@@ -3,22 +3,20 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { FC } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Button } from "../ui/button";
 import Link from "next/link";
 
 interface UserNavProps {
   avatarUrl: string;
+  userName: string | null;
 }
 
-const UserNav: FC<UserNavProps> = ({
-  avatarUrl = "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-}) => {
+const UserNav: FC<UserNavProps> = ({ avatarUrl = "", userName }) => {
   return (
     <Popover>
       <PopoverTrigger>
         <Avatar>
           <AvatarImage src={avatarUrl} />
-          <AvatarFallback>IN</AvatarFallback>
+          <AvatarFallback>{userName?.slice(0, 2)}</AvatarFallback>
         </Avatar>
       </PopoverTrigger>
       <PopoverContent
@@ -26,10 +24,10 @@ const UserNav: FC<UserNavProps> = ({
         align="center"
         className="w-[150px] px-4 flex flex-col justify-start"
       >
-        <Link href="#" className="hover:bg-accent py-1 px-2 rounded-md">
+        <Link href="#" className="px-2 py-1 rounded-md hover:bg-accent">
           My Profile
         </Link>
-        <Link href="/logout" className="hover:bg-accent py-1 px-2 rounded-md">
+        <Link href="/logout" className="px-2 py-1 rounded-md hover:bg-accent">
           Logout
         </Link>
       </PopoverContent>

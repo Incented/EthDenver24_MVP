@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import UserNav from "@/components/User/UserNav";
 import NotificationMenu from "./NotificationMenu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { SheetClose } from "@/components/ui/sheet";
 
 interface IProps {
   userProfile: {
@@ -20,34 +21,38 @@ interface IProps {
 }
 
 const Navbar: FC<IProps> = ({ userProfile }) => {
-  const { user, linkWallet, connectWallet } = usePrivy();
-  console.log(user);
+  const { user, linkWallet } = usePrivy();
 
   const walletAddress =
     user?.wallet?.address.slice(0, 4) + "..." + user?.wallet?.address.slice(-4);
 
   const navLinks = [
     { href: "/dashboard", label: "My Dashbord" },
-    { href: "#", label: "Rewards" },
-    { href: "#", label: "Notification" },
-    { href: "#", label: "Settings" },
+    { href: "/dashboard/rewards", label: "Rewards" },
+    { href: "/dashboard/notifications", label: "Notifications" },
+    { href: "/dashboard/settings", label: "Settings" },
   ];
 
   return (
-    <header className="py-3 border-b relative">
+    <header className="relative py-3 border-b">
       <nav className="flex items-center justify-between gap-6 mx-4">
         <Sheet>
           <SheetTrigger asChild>
-            <Menu className="absolute lg:hidden" />
+            <Menu className="absolute cursor-pointer lg:hidden" />
           </SheetTrigger>
+
           <SheetContent side="left">
-            <ul className="flex flex-col gap-8 mt-10 mx-6">
+            <ul className="flex flex-col gap-8 mx-6 mt-10">
               {navLinks.map((link, i) => (
-                <li key={i} className="hover:bg-accent py-3 px-8 rounded-md">
+                <SheetClose
+                  asChild
+                  className="px-8 py-3 rounded-md hover:bg-accent"
+                  key={i}
+                >
                   <Link color="foreground" href={link.href} aria-current="page">
                     {link.label}
                   </Link>
-                </li>
+                </SheetClose>
               ))}
             </ul>
           </SheetContent>
@@ -74,7 +79,10 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
 
         <div className="flex items-center gap-3">
           <NotificationMenu />
-          <UserNav avatarUrl={userProfile.avatar_url || ""} />
+          <UserNav
+            userName={userProfile.full_name}
+            avatarUrl={userProfile.avatar_url || ""}
+          />
           <Button
             className="flex items-center gap-1"
             onClick={() => {

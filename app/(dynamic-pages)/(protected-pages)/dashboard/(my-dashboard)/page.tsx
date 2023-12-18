@@ -2,7 +2,6 @@
 
 import TaskCard from "@/components/presentational/Tasks/TaskCard";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -28,7 +27,8 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import FilterTypeMenu from "./FilterTypeMenu";
+import FilterTypeMenu from "../FilterTypeMenu";
+import DashboardCard from "@/components/ui/DashboardCard";
 
 const taskData: {
   taskStatus: string;
@@ -84,16 +84,13 @@ const DashboardPage = () => {
 
       <div className="grid gap-3 mt-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {taskData.map((task, i) => (
-          <Card className="p-6" key={i}>
-            <div className="flex justify-between">
-              <h2 className="">{task.taskStatus}</h2>
-              <task.Icon size={20} />
-            </div>
-            <div className="mt-2">
-              <h1 className="text-2xl font-bold leading-8">{task.value}</h1>
-              <p className="text-xs text-gray-400">{task.description}</p>
-            </div>
-          </Card>
+          <DashboardCard
+            key={i}
+            title={task.taskStatus}
+            value={task.value}
+            description={task.description}
+            Icon={task.Icon}
+          />
         ))}
       </div>
 
