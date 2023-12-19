@@ -188,6 +188,7 @@ const DashboardPage = () => {
           taskStatus="In Progress"
         />
         <TaskCard taskStatus="Prioritized" />
+        <TaskCard taskStatus="Prioritized" />
         {/* <TaskCard taskStatus="Prioritized" />
         <TaskCard
           imageUrl="/images/task2.jpeg"

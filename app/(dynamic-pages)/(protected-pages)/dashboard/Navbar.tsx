@@ -34,7 +34,7 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
   ];
 
   return (
-    <header className="relative py-3 border-b">
+    <header className="w-full py-3 border-b ">
       <nav className="flex items-center justify-between gap-6 mx-4">
         <Sheet>
           <SheetTrigger asChild>

@@ -28,9 +28,9 @@ const Pagination: FC<PaginationProps> = ({
   title,
 }) => {
   return (
-    <div className="flex items-center justify-between w-full gap-6 overflow-x-scroll scrollbar-hide">
+    <div className="flex items-center justify-between w-full gap-6 overflow-x-scroll text-sm scrollbar-hide">
       <div className="flex gap-1">
-        <p className="whitespace-nowrap">
+        <p className="text-sm whitespace-nowrap">
           {currentPage} of {totalPages} {title}(s)
         </p>
       </div>

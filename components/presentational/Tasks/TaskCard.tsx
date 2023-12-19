@@ -12,6 +12,8 @@ import { Card } from "@/components/ui/card";
 import { Carrot, Info } from "lucide-react";
 import { FC } from "react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { Anchor } from "@/components/Anchor";
 
 interface TaskCardProps {
   taskTitle?: string;
@@ -96,7 +98,9 @@ const TaskCard: FC<TaskCardProps> = ({
         </div>
       </div>
       <div className="px-4">
-        <h1 className="text-lg font-bold">{taskTitle}</h1>
+        <Anchor href="/dashboard/task-details" className="text-lg font-bold">
+          {taskTitle}
+        </Anchor>
         <p className="text-gray-400 w-72">
           {`${taskDescription.slice(0, 60)}`}...
         </p>
