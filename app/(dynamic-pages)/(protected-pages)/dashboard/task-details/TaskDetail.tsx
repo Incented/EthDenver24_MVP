@@ -12,16 +12,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 
 import { cn } from "@/lib/utils";
 import { Carrot, Copy, File, Info, MoreVertical, Plus } from "lucide-react";
@@ -31,6 +21,7 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import PriDepriButton from "./PriDepriButton";
+import ContributionTable from "./ContributionTable";
 
 interface TaskDetailProps {
   taskTitle?: string;
@@ -43,7 +34,6 @@ interface TaskDetailProps {
   efforts?: string;
   imageUrl?: string;
 }
-const contributions = [];
 const TaskDetail: FC<TaskDetailProps> = ({
   taskTitle = "Generate a Landing Page Design for Shoe brand called “Walkers”",
   taskDescription = "The brand “Walkers” is looking for a redesign of their landing page. The current page can be found here at walker.com. They are looking for a more whimsical design that highlights their super comfy shoes. Include a 3D rendering of their new shoe design (link to shoe) that floats on the hero section.",
@@ -139,42 +129,7 @@ const TaskDetail: FC<TaskDetailProps> = ({
 
         <Card className="p-6 mb-4">
           <h1 className="text-lg font-bold">Contributions</h1>
-          <Table className="mb-4 border">
-            <TableHeader>
-              <TableRow>
-                <TableHead className=" whitespace-nowrap">
-                  Solution Description
-                </TableHead>
-                <TableHead className=" whitespace-nowrap">Member</TableHead>
-                <TableHead className=" whitespace-nowrap">
-                  Attachment File
-                </TableHead>
-                <TableHead className="whitespace-nowrap">
-                  Total Validators
-                </TableHead>
-                <TableHead className="whitespace-nowrap">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {contributions.length === 0 ? (
-                <TableRow className="flex justify-center">
-                  <TableCell>
-                    <h1 className="w-full text-center whitespace-nowrap">
-                      No Contributions yet
-                    </h1>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                <TableRow>
-                  <TableCell className="font-medium"></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell className=""></TableCell>
-                  <TableCell className=""></TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+          <ContributionTable />
           <Pagination currentPage={0} title="contribution" totalPages={0} />
         </Card>
 

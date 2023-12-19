@@ -15,7 +15,7 @@ const UserNav: FC<UserNavProps> = ({ avatarUrl = "", userName }) => {
     <Popover>
       <PopoverTrigger>
         <Avatar>
-          <AvatarImage src={avatarUrl} />
+          <AvatarImage src={avatarUrl} className="object-cover" />
           <AvatarFallback>{userName?.slice(0, 2)}</AvatarFallback>
         </Avatar>
       </PopoverTrigger>
