@@ -16,6 +16,7 @@ import {
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import CommunityDetailsTab from "./CommunityDetailsTab";
+import { Search } from "@/components/Search";
 
 interface pageProps {}
 
@@ -141,12 +142,18 @@ const CommunityDetailsPage: FC<pageProps> = ({}) => {
               </Card>
             </div>
           </div>
-          <div className="">
-            <h1>Task</h1>
-          </div>
-          <div className="">
-            <CommunityDetailsTab />
-          </div>
+          <Card className="p-6">
+            <div className="flex items-center mb-4">
+              <h1 className="text-[20px] font-semibold">Task</h1>
+              <div className="flex gap-4 ml-auto">
+                <Search placeholder="Search Tasks..." />
+                <Button variant="outline">Filter</Button>
+              </div>
+            </div>
+            <div className="">
+              <CommunityDetailsTab />
+            </div>
+          </Card>
         </section>
       </div>
     </main>
