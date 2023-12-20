@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Bookmark } from "lucide-react";
+import Link from "next/link";
 import { FC } from "react";
 
 interface CommunityCardProps {
@@ -34,7 +35,7 @@ const CommunityCard: FC<CommunityCardProps> = ({
           </AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
-          <h4>{communityName}</h4>
+          <Link href="/dashboard/community-details">{communityName}</Link>
           <p className="text-xs text-gray-400">{communityAddress}</p>
         </div>
         <div className="flex items-center justify-center w-8 h-8 ml-auto border border-gray-400 rounded-full text-primary">
