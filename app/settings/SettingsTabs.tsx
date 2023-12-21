@@ -13,23 +13,53 @@ interface SettingsTabsProps {}
 
 const SettingsTabs: FC<SettingsTabsProps> = ({}) => {
   return (
-    <Tabs defaultValue="all" className="">
+    <Tabs defaultValue="general" className="">
       <TabsList className="gap-6 p-4 h-fit">
-        <TabsTrigger value="all">General Settings</TabsTrigger>
+        <TabsTrigger value="general">General Settings</TabsTrigger>
         <TabsTrigger value="wallet">Wallet Settings</TabsTrigger>
         <TabsTrigger value="notifications">Notifications</TabsTrigger>
         <TabsTrigger value="theme">Theme Preferences</TabsTrigger>
-        <TabsTrigger value="inReview">Language & Time</TabsTrigger>
+        <TabsTrigger value="language">Language & Time</TabsTrigger>
       </TabsList>
-      <TabsContent value="all" className="w-full">
+      <TabsContent value="general" className="w-full">
         <Card className="p-6">
-          <h1 className="text-[16px] font-semibold">General Settings</h1>
-          <p className="mb-2">
+          <h1 className="text-[16px] font-semibold mb-1">General Settings</h1>
+          <p className="mb-2 text-sm">
             Update your photo profile and personal details here
           </p>
           <Separator className="mb-6" />
 
           <UpdateUserForm />
+        </Card>
+      </TabsContent>
+      <TabsContent value="wallet" className="w-full">
+        <Card className="p-6">
+          <h1 className="text-[16px] font-semibold mb-1">Wallet Settings</h1>
+          <p className="mb-2 text-sm">Manage all your connected wallets</p>
+          <Separator className="mb-6" />
+        </Card>
+      </TabsContent>
+      <TabsContent value="notifications" className="w-full">
+        <Card className="p-6">
+          <h1 className="text-[16px] font-semibold mb-1">Notifications</h1>
+          <p className="mb-2 text-sm">Manage all your notification</p>
+          <Separator className="mb-6" />
+        </Card>
+      </TabsContent>
+      <TabsContent value="theme" className="w-full">
+        <Card className="p-6">
+          <h1 className="text-[16px] font-semibold mb-1">Theme preferences</h1>
+          <p className="mb-2 text-sm">
+            Customization according to your preference.
+          </p>
+          <Separator className="mb-6" />
+        </Card>
+      </TabsContent>
+      <TabsContent value="language" className="w-full">
+        <Card className="p-6">
+          <h1 className="text-[16px] font-semibold mb-1">Language</h1>
+          <p className="mb-2 text-sm">Manage your language preference</p>
+          <Separator className="mb-6" />
         </Card>
       </TabsContent>
     </Tabs>

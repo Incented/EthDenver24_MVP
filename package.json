@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@hookform/resolvers": "^3.3.2",
+    "@lexical/react": "^0.12.5",
     "@privy-io/react-auth": "^1.49.2",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -38,6 +39,7 @@
     "clsx": "^2.0.0",
     "crypto-js": "^4.2.0",
     "framer-motion": "^10.16.12",
+    "lexical": "^0.12.5",
     "lucide-react": "^0.294.0",
     "next": "14.0.3",
     "next-themes": "^0.2.1",
