@@ -10,6 +10,7 @@ import UpdateUserForm from "./UpdateUserForm";
 import { Separator } from "@/components/ui/separator";
 import WalletSetting from "./WalletSetting";
 import { Button } from "@/components/ui/button";
+import NotificationSetting from "./NotificationSetting";
 
 interface SettingsTabsProps {}
 
@@ -71,9 +72,43 @@ const SettingsTabs: FC<SettingsTabsProps> = ({}) => {
       </TabsContent>
       <TabsContent value="notifications" className="w-full">
         <Card className="p-6">
-          <h1 className="text-[16px] font-semibold mb-1">Notifications</h1>
-          <p className="mb-2 text-sm">Manage all your notification</p>
+          <div className="flex justify-between gap-4">
+            <div>
+              <h1 className="text-[16px] font-semibold mb-1">Notifications</h1>
+              <p className="mb-2 text-sm">Manage all your notification</p>
+            </div>
+            <div className="flex space-x-4">
+              <Button variant="outline">Cancel</Button>
+              <Button>Save</Button>
+            </div>
+          </div>
           <Separator className="mb-6" />
+          <div className="grid gap-4">
+            <NotificationSetting
+              notification="New task uploaded"
+              description="Lorem ipsum dolor sit amet"
+            />
+            <NotificationSetting
+              notification="Winner contribution announcement"
+              description="Lorem ipsum dolor sit amet"
+            />
+            <NotificationSetting
+              notification="New contribution on your task proposal"
+              description="Lorem ipsum dolor sit amet"
+            />
+            <NotificationSetting
+              notification="New validation on your contribution"
+              description="Lorem ipsum dolor sit amet"
+            />
+            <NotificationSetting
+              notification="Your join request in community gets approved by admin"
+              description="Lorem ipsum dolor sit amet"
+            />
+            <NotificationSetting
+              notification="Email notification"
+              description="Lorem ipsum dolor sit amet"
+            />
+          </div>
         </Card>
       </TabsContent>
       <TabsContent value="theme" className="w-full">
