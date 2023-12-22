@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import WalletSetting from "./WalletSetting";
 import { Button } from "@/components/ui/button";
 import NotificationSetting from "./NotificationSetting";
+import { ThemeSettingDark, ThemeSettingLight } from "./ThemeSetting";
 
 interface SettingsTabsProps {}
 
@@ -113,17 +114,39 @@ const SettingsTabs: FC<SettingsTabsProps> = ({}) => {
       </TabsContent>
       <TabsContent value="theme" className="w-full">
         <Card className="p-6">
-          <h1 className="text-[16px] font-semibold mb-1">Theme preferences</h1>
-          <p className="mb-2 text-sm">
-            Customization according to your preference.
-          </p>
+          <div className="flex justify-between gap-4">
+            <div>
+              <h1 className="text-[16px] font-semibold mb-1">
+                Theme preferences
+              </h1>
+              <p className="mb-2 text-sm">
+                Customization according to your preference.
+              </p>
+            </div>
+            <div className="flex space-x-4">
+              <Button variant="outline">Cancel</Button>
+              <Button>Save</Button>
+            </div>
+          </div>
           <Separator className="mb-6" />
+          <div className="grid gap-4 md:grid-cols-2">
+            <ThemeSettingLight />
+            <ThemeSettingDark />
+          </div>
         </Card>
       </TabsContent>
       <TabsContent value="language" className="w-full">
         <Card className="p-6">
-          <h1 className="text-[16px] font-semibold mb-1">Language</h1>
-          <p className="mb-2 text-sm">Manage your language preference</p>
+          <div className="flex justify-between gap-4">
+            <div>
+              <h1 className="text-[16px] font-semibold mb-1">Language</h1>
+              <p className="mb-2 text-sm">Manage your language preference</p>
+            </div>
+            <div className="flex space-x-4">
+              <Button variant="outline">Cancel</Button>
+              <Button>Save</Button>
+            </div>
+          </div>
           <Separator className="mb-6" />
         </Card>
       </TabsContent>
