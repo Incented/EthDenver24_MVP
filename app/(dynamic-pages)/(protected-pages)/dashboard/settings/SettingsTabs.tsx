@@ -12,12 +12,13 @@ import WalletSetting from "./WalletSetting";
 import { Button } from "@/components/ui/button";
 import NotificationSetting from "./NotificationSetting";
 import { ThemeSettingDark, ThemeSettingLight } from "./ThemeSetting";
+import LanguageSetting from "./LanguageSetting";
 
 interface SettingsTabsProps {}
 
 const SettingsTabs: FC<SettingsTabsProps> = ({}) => {
   return (
-    <Tabs defaultValue="general" className="">
+    <Tabs defaultValue="general" className="max-w-6xl">
       <TabsList className="gap-6 p-4 h-fit">
         <TabsTrigger value="general">General Settings</TabsTrigger>
         <TabsTrigger value="wallet">Wallet Settings</TabsTrigger>
@@ -84,7 +85,7 @@ const SettingsTabs: FC<SettingsTabsProps> = ({}) => {
             </div>
           </div>
           <Separator className="mb-6" />
-          <div className="grid gap-4">
+          <div className="grid gap-8">
             <NotificationSetting
               notification="New task uploaded"
               description="Lorem ipsum dolor sit amet"
@@ -137,17 +138,15 @@ const SettingsTabs: FC<SettingsTabsProps> = ({}) => {
       </TabsContent>
       <TabsContent value="language" className="w-full">
         <Card className="p-6">
-          <div className="flex justify-between gap-4">
-            <div>
-              <h1 className="text-[16px] font-semibold mb-1">Language</h1>
-              <p className="mb-2 text-sm">Manage your language preference</p>
-            </div>
-            <div className="flex space-x-4">
-              <Button variant="outline">Cancel</Button>
-              <Button>Save</Button>
-            </div>
+          <div>
+            <h1 className="text-[16px] font-semibold mb-1">Language</h1>
+            <p className="mb-2 text-sm">Manage your language preference</p>
           </div>
+
           <Separator className="mb-6" />
+          <div className="">
+            <LanguageSetting />
+          </div>
         </Card>
       </TabsContent>
     </Tabs>
