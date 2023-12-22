@@ -70,16 +70,21 @@ const CommunityDetailsPage: FC<pageProps> = ({}) => {
             />
           </div>
           <div className="flex gap-4 mb-8">
-            <Card className="p-8 text-2xl bg-primary h-[340px]">
-              <p className="whitespace-nowrap">Carrot Pot</p>
-              <p>2.340</p>
-              <div className="flex items-center gap-2">
-                <p className="text-xs whitespace-nowrap">
-                  80 from Community Fee
-                </p>
-                <Info size={14} />
+            <div
+              className=" h-[340px] w-60  bg-cover bg-center text-2xl bg-primary shadow-sm rounded-md"
+              style={{ backgroundImage: "url(/images/carrot-pot.png)" }}
+            >
+              <div className="w-full h-full p-8 backdrop-brightness-75">
+                <p className="whitespace-nowrap">Carrot Pot</p>
+                <p>2.340</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-xs whitespace-nowrap">
+                    80 from Community Fee
+                  </p>
+                  <Info size={14} />
+                </div>
               </div>
-            </Card>
+            </div>
             <Card className="grid grid-cols-2 gap-4 p-6">
               <div className="">
                 <h1 className="mb-10 text-2xl">Periods</h1>
