@@ -8,6 +8,8 @@ import {
 import { FC } from "react";
 import UpdateUserForm from "./UpdateUserForm";
 import { Separator } from "@/components/ui/separator";
+import WalletSetting from "./WalletSetting";
+import { Button } from "@/components/ui/button";
 
 interface SettingsTabsProps {}
 
@@ -34,9 +36,37 @@ const SettingsTabs: FC<SettingsTabsProps> = ({}) => {
       </TabsContent>
       <TabsContent value="wallet" className="w-full">
         <Card className="p-6">
-          <h1 className="text-[16px] font-semibold mb-1">Wallet Settings</h1>
-          <p className="mb-2 text-sm">Manage all your connected wallets</p>
+          <div className="flex justify-between gap-4">
+            <div>
+              <h1 className="text-[16px] font-semibold mb-1">
+                Wallet Settings
+              </h1>
+              <p className="mb-2 text-sm">Manage all your connected wallets</p>
+            </div>
+            <div className="flex space-x-4">
+              <Button variant="outline">Cancel</Button>
+              <Button>Save</Button>
+            </div>
+          </div>
+
           <Separator className="mb-6" />
+          <div className="grid gap-4 mb-8">
+            <WalletSetting
+              isConnected
+              walletImage="/logos/ico_orange.svg"
+              walletName="Metamask"
+            />
+            <WalletSetting
+              isConnected={false}
+              walletImage="/logos/ico_orange.svg"
+              walletName="Coinbase"
+            />
+            <WalletSetting
+              isConnected={false}
+              walletImage="/logos/ico_orange.svg"
+              walletName="WalletConnect"
+            />
+          </div>
         </Card>
       </TabsContent>
       <TabsContent value="notifications" className="w-full">

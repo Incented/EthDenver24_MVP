@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { LucideCamera, SwitchCamera } from "lucide-react";
+import { LucideCamera } from "lucide-react";
 import { ChangeEvent, FC, useState } from "react";
 import { updateUserFormSchema } from "./updateUserFormData";
 import { useForm } from "react-hook-form";
