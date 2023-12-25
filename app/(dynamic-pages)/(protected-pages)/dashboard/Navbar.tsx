@@ -10,6 +10,7 @@ import UserNav from "@/components/User/UserNav";
 import NotificationMenu from "./NotificationMenu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { SheetClose } from "@/components/ui/sheet";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   userProfile: {
@@ -22,6 +23,8 @@ interface IProps {
 
 const Navbar: FC<IProps> = ({ userProfile }) => {
   const { user, linkWallet } = usePrivy();
+  const pathName = usePathname();
+  console.log(pathName);
 
   const walletAddress =
     user?.wallet?.address.slice(0, 4) + "..." + user?.wallet?.address.slice(-4);
@@ -71,7 +74,12 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
         <ul className="hidden gap-6 xl:gap-10 lg:flex">
           {navLinks.map((link, i) => (
             <li key={i}>
-              <Link color="foreground" href={link.href} aria-current="page">
+              <Link
+                color="foreground"
+                href={link.href}
+                aria-current="page"
+                className={pathName == link.href ? "text-primary" : ""}
+              >
                 {link.label}
               </Link>
             </li>

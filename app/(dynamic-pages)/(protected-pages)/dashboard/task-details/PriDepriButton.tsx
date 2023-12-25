@@ -8,7 +8,7 @@ interface PriDepriButtonProps {}
 
 const PriDepriButton: FC<PriDepriButtonProps> = ({}) => {
   return (
-    <Card className="flex flex-row items-center p-2 space-x-3 bg-gray-100 rounded-md">
+    <Card className="flex flex-row items-center p-2 space-x-3 rounded-md bg-background">
       <Button variant="outline" className="bg-[#78716C] w-full">
         <CarrotStrikIcon />
       </Button>
