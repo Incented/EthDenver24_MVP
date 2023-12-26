@@ -23,4 +23,5 @@ export const createFormSchema = z.object({
     required_error: "Effort is required",
   }),
   image: z.string().optional(),
+  attchament: z.string().optional(),
 });
