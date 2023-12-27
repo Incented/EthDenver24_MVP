@@ -86,21 +86,21 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
       <Toggle
         size="sm"
         pressed={editor.isActive("underline")}
-        onPressedChange={() => editor.chain().focus().toggleStrike().run()}
+        onPressedChange={() => editor.commands.toggleUnderline()}
       >
         <Underline size={16} />
       </Toggle>
       <Toggle
         size="sm"
-        pressed={editor.isActive("underline")}
-        onPressedChange={() => editor.chain().focus().toggleStrike().run()}
+        pressed={editor.isActive("strike")}
+        onPressedChange={() => editor.commands.toggleUnderline()}
       >
         <Strikethrough size={16} />
       </Toggle>
       <Toggle
         size="sm"
-        pressed={editor.isActive("underline")}
-        onPressedChange={() => editor.chain().focus().toggleStrike().run()}
+        pressed={editor.isActive("code")}
+        onPressedChange={() => editor.chain().focus().toggleCode().run()}
       >
         <Code size={16} />
       </Toggle>
