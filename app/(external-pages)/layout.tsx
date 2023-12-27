@@ -1,5 +1,5 @@
 import IsAuth from "@/hooks/IsAuth";
-import { ExternalNavigation } from "./ExternalNavigation";
+import { ExternalNavigation } from "./component/ExternalNavigation";
 
 export const dynamic = "force-static";
 export const revalidate = 60;

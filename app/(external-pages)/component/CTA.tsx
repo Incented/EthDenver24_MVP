@@ -5,7 +5,7 @@ const CalltoActionSection = () => {
   return (
     <section className="mb-24 bg-background">
       <div className="px-4 mx-auto md:container xl:px-6 md:px-6 sm:py-24">
-        <div className="flex flex-col items-center justify-between w-full px-6 py-10 bg-gray-100 md:flex-row md:py-16 md:px-16 dark:bg-slate-800 rounded-xl">
+        <div className="flex flex-col items-center justify-between w-full px-6 py-10 bg-gray-100 md:flex-row md:py-16 md:px-16 dark:bg-muted-foreground/5 rounded-xl">
           <div className="w-full max-w-3xl ">
             <h2 className="mb-5 text-3xl leading-[38px]  md:text-4xl md:leading-[44px] font-semibold text-gray-900 dark:text-white">
               Sign Up For News
@@ -27,7 +27,7 @@ const CalltoActionSection = () => {
             >
               <span>Sign Up</span>
               <svg
-                className="w-10 h-5 ml-2 -mr-1 transition group-hover:translate-x-1"
+                className="w-8 h-5 ml-1 -mr-1 transition group-hover:translate-x-1"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"

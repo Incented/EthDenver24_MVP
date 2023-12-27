@@ -31,7 +31,7 @@ export function ExternalNavigation() {
   }, []);
 
   return (
-    <header className="sticky inset-x-0 top-0 z-50 w-full border-b bg-white/80 dark:bg-slate-900/90 border-gray-200/20 dark:border-gray-700/40 backdrop-blur">
+    <header className="sticky inset-x-0 top-0 z-50 w-full border-b bg-white/80 dark:bg-background border-gray-200/20 dark:border-gray-700/40 backdrop-blur">
       <div className="inset-0" />
       <nav
         className="flex items-center w-full h-[54px] md:container justify-between px-6 md:px-8"

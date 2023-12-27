@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from "lucide-react";
 import { T } from "@/components/ui/Typography";
 import { Anchor } from "@/components/Anchor";
-import { Button } from "../../ui/button";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 type HeroSectionProps = {
@@ -47,11 +47,11 @@ export default function HeroSection({
             <Anchor href="/login" className="">
               <Button
                 size="lg"
-                className="group mt-3 w-full md:w-fit bg-primary hover:bg-primary/95 dark:bg-primary dark:text-white dark:hover:bg-primary/95"
+                className="w-full mt-3 group md:w-fit bg-primary hover:bg-primary/95 dark:bg-primary dark:text-white dark:hover:bg-primary/95"
               >
                 Log In
                 <svg
-                  className="ml-2 -mr-1 w-5 h-5 group-hover:translate-x-1 transition"
+                  className="w-5 h-5 ml-2 -mr-1 transition group-hover:translate-x-1"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
