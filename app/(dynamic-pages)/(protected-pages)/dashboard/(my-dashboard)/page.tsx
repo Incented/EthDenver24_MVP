@@ -1,5 +1,3 @@
-"use client";
-
 import TaskCard from "@/components/presentational/Tasks/TaskCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,72 +11,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-import { usePrivy } from "@privy-io/react-auth";
-import {
-  ArrowBigUp,
-  Calendar,
-  Carrot,
-  CheckCircle,
-  ChevronDown,
-  Hourglass,
-  LayoutDashboard,
-  LayoutList,
-  LucideIcon,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import { ChevronDown, LayoutList } from "lucide-react";
+import React from "react";
 import FilterTypeMenu from "../FilterTypeMenu";
 import DashboardCard from "@/components/ui/DashboardCard";
 import Pagination from "@/components/ui/Pagination";
-
-const taskData: {
-  taskStatus: string;
-  value: number;
-  description: string;
-  Icon: LucideIcon;
-}[] = [
-  {
-    taskStatus: "Completed Task",
-    value: 50,
-    description: "Total reward : 866 carrots",
-    Icon: Calendar,
-  },
-  {
-    taskStatus: "Prioritized",
-    value: 10,
-    description: "Priority by staking for or against",
-    Icon: ArrowBigUp,
-  },
-  {
-    taskStatus: "In Progress",
-    value: 6,
-    description: "Working on a solution",
-    Icon: Hourglass,
-  },
-  {
-    taskStatus: "In Review",
-    value: 4,
-    description: "Contributionn needs validation",
-    Icon: CheckCircle,
-  },
-  {
-    taskStatus: "Total Carrots",
-    value: 300,
-    description: "My carrot stock",
-    Icon: Carrot,
-  },
-];
+import { taskData } from "./data";
 
 const DashboardPage = () => {
-  const router = useRouter();
-  // const { ready, authenticated, user } = usePrivy();
-
-  // useEffect(() => {
-  //   if (ready && !authenticated) {
-  //     router.push("/");
-  //   }
-  // }, [ready, authenticated, router]);
-
   return (
     <main className="mx-8 mb-10 ">
       <h1 className="mt-8 text-3xl">My Home</h1>

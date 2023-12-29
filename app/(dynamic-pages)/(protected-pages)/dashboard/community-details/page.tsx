@@ -74,10 +74,10 @@ const CommunityDetailsPage: FC<pageProps> = ({}) => {
               className=" h-[340px] w-60  bg-cover bg-center text-2xl bg-primary shadow-sm rounded-md"
               style={{ backgroundImage: "url(/images/carrot-pot.png)" }}
             >
-              <div className="w-full h-full p-8 backdrop-brightness-75">
+              <div className="w-full h-full p-8 text-white backdrop-brightness-75">
                 <p className="whitespace-nowrap">Carrot Pot</p>
                 <p>2.340</p>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 ">
                   <p className="text-xs whitespace-nowrap">
                     80 from Community Fee
                   </p>

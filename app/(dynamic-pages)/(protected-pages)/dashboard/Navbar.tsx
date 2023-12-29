@@ -32,7 +32,6 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
   const navLinks = [
     { href: "/dashboard", label: "My Dashbord" },
     { href: "/dashboard/rewards", label: "Rewards" },
-    { href: "/dashboard/notifications", label: "Notifications" },
     { href: "/dashboard/community", label: "Community" },
     { href: "/dashboard/settings", label: "Settings" },
   ];

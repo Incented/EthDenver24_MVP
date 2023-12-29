@@ -5,6 +5,18 @@ import { Bookmark } from "lucide-react";
 import Link from "next/link";
 import { FC } from "react";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+
 interface CommunityCardProps {
   communityName?: string;
   communityDescription?: string;
@@ -56,7 +68,27 @@ const CommunityCard: FC<CommunityCardProps> = ({
           <p className="text-xs text-gray-400">Total Members</p>
         </div>
       </div>
-      <Button className="w-full">Join</Button>
+
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button className="w-full">Join</Button>
+        </DialogTrigger>
+        <DialogContent className="p-6">
+          <DialogHeader>
+            <DialogTitle className="mb-4 text-lg text-center">
+              Join Community
+            </DialogTitle>
+            <DialogDescription className="text-center text-[14px]">
+              Admin approval is required. Once you get approved you will receive
+              a notification.
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <Button className="w-full">Join Buan Fund</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };
