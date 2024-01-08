@@ -1,6 +1,6 @@
 import GoBack from "@/components/ui/GoBack";
 import { FC } from "react";
-import TaskDetail from "./TaskDetail";
+import TaskDetail from "./_components/TaskDetail";
 
 interface pageProps {}
 

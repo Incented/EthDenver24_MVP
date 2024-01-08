@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { rewardData } from "./data";
 import DashboardCard from "@/components/ui/DashboardCard";
-import MyRewardTabs from "./MyRewardTabs";
+import MyRewardTabs from "./_components/MyRewardTabs";
 import Pagination from "@/components/ui/Pagination";
 
 interface pageProps {}

@@ -1,7 +1,7 @@
-import HeroSection from "./component/HeroSection";
-import MainFeatures from "./component/MainFeatures";
-import CalltoActionSection from "./component/CTA";
-import Footer from "./component/Footer";
+import HeroSection from "./_component/HeroSection";
+import MainFeatures from "./_component/MainFeatures";
+import CalltoActionSection from "./_component/CTA";
+import Footer from "./_component/Footer";
 import React from "react";
 
 const LandingPage = () => {

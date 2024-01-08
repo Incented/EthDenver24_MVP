@@ -1,9 +1,9 @@
 import GoBack from "@/components/ui/GoBack";
 import { Button } from "@/components/ui/button";
 import { FC } from "react";
-import CommunityInfo from "./CommunityInfo";
-import CommunityMembers from "./CommunityMembers";
-import CommunityDetailTopCard from "./CommunityDetailTopCard";
+import CommunityInfo from "./_components/CommunityInfo";
+import CommunityMembers from "./_components/CommunityMembers";
+import CommunityDetailTopCard from "./_components/CommunityDetailTopCard";
 import {
   ArrowBigUp,
   Calendar,
@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import CommunityDetailsTab from "./CommunityDetailsTab";
+import CommunityDetailsTab from "./_components/CommunityDetailsTab";
 import { Search } from "@/components/Search";
 
 interface pageProps {}

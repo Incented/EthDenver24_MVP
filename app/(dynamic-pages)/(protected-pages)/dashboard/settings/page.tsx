@@ -1,5 +1,5 @@
 import { FC } from "react";
-import SettingsTabs from "./SettingsTabs";
+import SettingsTabs from "./_components/SettingsTabs";
 
 interface pageProps {}
 

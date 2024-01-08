@@ -11,6 +11,7 @@ import NotificationMenu from "./NotificationMenu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { SheetClose } from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface IProps {
   userProfile: {
@@ -77,7 +78,11 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
                 color="foreground"
                 href={link.href}
                 aria-current="page"
-                className={pathName == link.href ? "text-primary" : ""}
+                className={cn(
+                  pathName === link.href && pathName.startsWith(link.href)
+                    ? "text-primary"
+                    : ""
+                )}
               >
                 {link.label}
               </Link>

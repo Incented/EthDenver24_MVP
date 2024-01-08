@@ -2,7 +2,7 @@ import { Search } from "@/components/Search";
 import { Button } from "@/components/ui/button";
 import { Filter, Plus } from "lucide-react";
 import { FC } from "react";
-import CommunityCard from "./CommunityCard";
+import CommunityCard from "./_components/CommunityCard";
 import Pagination from "@/components/ui/Pagination";
 
 interface pageProps {}
