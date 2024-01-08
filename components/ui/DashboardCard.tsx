@@ -16,7 +16,7 @@ const DashboardCard: FC<DashboardCardProps> = ({
   description,
 }) => {
   return (
-    <Card className="p-6">
+    <Card className="min-w-[230px] w-full p-6">
       <div className="flex justify-between">
         <h2 className="">{title}</h2>
         <Icon size={20} />
