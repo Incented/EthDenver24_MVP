@@ -17,6 +17,7 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import CommunityDetailsTab from "./_components/CommunityDetailsTab";
 import { Search } from "@/components/Search";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface pageProps {}
 
@@ -43,32 +44,35 @@ const CommunityDetailsPage: FC<pageProps> = ({}) => {
           </div>
         </section>
         <section className="flex-1">
-          <div className="grid gap-3 mb-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <CommunityDetailTopCard
-              value={10}
-              Icon={Trophy}
-              test="Proposal reward"
-              info="Proposal rewards"
-            />
-            <CommunityDetailTopCard
-              value={5}
-              Icon={ArrowBigUp}
-              test="Prioritization Reward"
-              info="Proposal rewards"
-            />
-            <CommunityDetailTopCard
-              value={5}
-              Icon={Calendar}
-              test="Validation Reward"
-              info="Proposal rewards"
-            />
-            <CommunityDetailTopCard
-              value={5}
-              Icon={Carrot}
-              test="Claim Stake Amount"
-              info="Proposal rewards"
-            />
-          </div>
+          <ScrollArea className="w-full mt-8 whitespace-nowrap">
+            <div className="flex w-full gap-3">
+              <CommunityDetailTopCard
+                value={10}
+                Icon={Trophy}
+                test="Proposal reward"
+                info="Proposal rewards"
+              />
+              <CommunityDetailTopCard
+                value={5}
+                Icon={ArrowBigUp}
+                test="Prioritization Reward"
+                info="Proposal rewards"
+              />
+              <CommunityDetailTopCard
+                value={5}
+                Icon={Calendar}
+                test="Validation Reward"
+                info="Proposal rewards"
+              />
+              <CommunityDetailTopCard
+                value={5}
+                Icon={Carrot}
+                test="Claim Stake Amount"
+                info="Proposal rewards"
+              />
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
           <div className="flex gap-4 mb-8">
             <div
               className=" h-[340px] w-60  bg-cover bg-center text-2xl bg-primary shadow-sm rounded-md"

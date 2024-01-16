@@ -1,21 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Bookmark } from "lucide-react";
 import Link from "next/link";
 import { FC } from "react";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import JoinCommunityModal from "./JoinCommunityModal";
 
 interface CommunityCardProps {
   communityName?: string;
@@ -61,7 +50,7 @@ const CommunityCard: FC<CommunityCardProps> = ({
           <p>{communityTasks}</p>
           <p className="text-xs text-gray-400">Active Tasks</p>
         </div>
-        <div className="h-[35px] w-[1px] bg-gray-300" />
+        <div className="h-[35px] w-[1px] bg-gray-500" />
 
         <div className="">
           <p>{communityMembers}</p>
@@ -69,26 +58,7 @@ const CommunityCard: FC<CommunityCardProps> = ({
         </div>
       </div>
 
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="w-full">Join</Button>
-        </DialogTrigger>
-        <DialogContent className="p-6">
-          <DialogHeader>
-            <DialogTitle className="mb-4 text-lg text-center">
-              Join Community
-            </DialogTitle>
-            <DialogDescription className="text-center text-[14px]">
-              Admin approval is required. Once you get approved you will receive
-              a notification.
-            </DialogDescription>
-          </DialogHeader>
-
-          <DialogFooter>
-            <Button className="w-full">Join Buan Fund</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <JoinCommunityModal triggerText="Join" community={communityName} />
     </Card>
   );
 };

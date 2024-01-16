@@ -9,22 +9,22 @@ interface pageProps {}
 
 const CommunityPage: FC<pageProps> = ({}) => {
   return (
-    <main className="mx-4">
-      <div className="flex items-center mt-8">
+    <main className="mx-4 mb-10">
+      <div className="items-center mt-8 md:flex">
         <h1 className="text-3xl ">Community</h1>
-        <div className="flex items-center gap-3 ml-auto">
+        <div className="flex items-center gap-3 mt-4 ml-auto md:mt-0">
           <Search placeholder="Search Community" />
           <Button variant="outline">
             <Filter size={20} />
           </Button>
-          <Button>
+          <Button size="sm">
             <Plus size={16} />
-            Add Community
+            <p className="hidden md:flex">Add Community</p>
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mt-4 mb-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+      <div className="grid gap-4 mt-4 mb-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <CommunityCard />
         <CommunityCard />
         <CommunityCard />
@@ -32,7 +32,12 @@ const CommunityPage: FC<pageProps> = ({}) => {
         <CommunityCard />
         <CommunityCard />
       </div>
-      <Pagination currentPage={1} title="Communities" totalPages={10} />
+      <div className="hidden md:flex">
+        <Pagination currentPage={1} title="Communities" totalPages={10} />
+      </div>
+      <div className="flex justify-center md:hidden">
+        <Button variant="link">Show more</Button>
+      </div>
     </main>
   );
 };
