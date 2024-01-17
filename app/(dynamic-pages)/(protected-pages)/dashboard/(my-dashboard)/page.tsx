@@ -42,7 +42,7 @@ const DashboardPage = () => {
       </div>
 
       <div className="relative mt-20 xl:mt-4">
-        <div className="flex gap-3 absolute right-[0.3rem] -top-16 xl:top-0">
+        <div className="flex gap-3 z-10 absolute right-[0.3rem] -top-16 xl:top-0">
           <SelectCommunity />
           <Button>Submit Proposal</Button>
         </div>
