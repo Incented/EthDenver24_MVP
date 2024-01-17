@@ -22,7 +22,7 @@ const CommunityInfo: FC<CommunityInfoProps> = ({
   communityUrl = "www.buanfund.com",
 }) => {
   return (
-    <Card className="w-[281px] p-4">
+    <Card className="min-w-[281px] p-8">
       <div className="flex items-center gap-4 mb-4">
         <Avatar className="w-16 h-16">
           <AvatarImage src={communityImage} className="object-cover" />

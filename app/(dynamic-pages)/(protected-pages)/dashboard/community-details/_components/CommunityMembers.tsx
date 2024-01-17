@@ -13,7 +13,7 @@ interface CommunityMembersProps {}
 
 const CommunityMembers: FC<CommunityMembersProps> = ({}) => {
   return (
-    <Card className="p-4 w-[281px]">
+    <Card className="p-8 min-w-[281px] h-fit">
       <h1 className="mb-6 text-sm font-semibold">Community members</h1>
       <div className="flex flex-col mb-10 gap-y-4">
         <CommunityMember name="Randy Dias" imageUrl="/assets/avatar_3.jpg" />

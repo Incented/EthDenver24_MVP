@@ -114,10 +114,10 @@ const TaskTab: FC<TaskTabProps> = ({}) => {
           {
             <div
               className={cn(
-                "grid gap-4 mt-4 sm:grid-cols-2 md:grid-cols-4",
+                "grid gap-4 mt-4 sm:grid-cols-2 md:grid-cols-3",
                 isVertical
                   ? "sm:grid-cols-1 md:grid-cols-1"
-                  : "sm:grid-cols-2 md:grid-cols-4"
+                  : "sm:grid-cols-2 md:grid-cols-3"
               )}
             >
               {task.tasks.map((data, i) => (

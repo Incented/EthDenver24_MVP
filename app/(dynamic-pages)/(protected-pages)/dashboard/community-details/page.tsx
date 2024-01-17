@@ -3,156 +3,47 @@ import { Button } from "@/components/ui/button";
 import { FC } from "react";
 import CommunityInfo from "./_components/CommunityInfo";
 import CommunityMembers from "./_components/CommunityMembers";
-import CommunityDetailTopCard from "./_components/CommunityDetailTopCard";
-import {
-  ArrowBigUp,
-  Calendar,
-  Carrot,
-  ChevronRight,
-  Info,
-  Timer,
-  Trophy,
-} from "lucide-react";
+
 import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import CommunityDetailsTab from "./_components/CommunityDetailsTab";
+
 import { Search } from "@/components/Search";
+import CarrotPotCard from "./_components/CarrotPotCard";
+import CommunityDetailsTopCards from "./_components/CommunityDetailsTopCards";
+import PeriodsCard from "./_components/PeriodsCard";
+import PriorityCards from "./_components/PriorityCards";
+import TaskTab from "../(my-dashboard)/_components/TaskTab";
+import Pagination from "@/components/ui/Pagination";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface pageProps {}
 
 const CommunityDetailsPage: FC<pageProps> = ({}) => {
   return (
-    <main className="mx-8 mb-10">
-      <div className="mt-4 mb-6">
-        <GoBack />
-      </div>
-      <div className="flex items-center mb-6">
-        <h1 className="text-3xl ">Community Details</h1>
+    <main className="mx-8 mb-10 ">
+      <div className="grid items-center grid-cols-2 mt-8 mb-6">
+        <div className="md:col-span-2">
+          <GoBack />
+        </div>
+        <h1 className="col-span-2 row-start-2 mt-4 text-3xl md:col-span-1">
+          Community Details
+        </h1>
         <div className="ml-auto ">
           <Button className="w-32">Join</Button>
         </div>
       </div>
 
-      <div className="flex gap-3">
-        <section className="">
-          <div className="mb-6">
-            <CommunityInfo />
-          </div>
-          <div className="">
-            <CommunityMembers />
-          </div>
-        </section>
-        <section className="flex-1">
-          <ScrollArea className="w-full mt-8 whitespace-nowrap">
-            <div className="flex w-full gap-3">
-              <CommunityDetailTopCard
-                value={10}
-                Icon={Trophy}
-                test="Proposal reward"
-                info="Proposal rewards"
-              />
-              <CommunityDetailTopCard
-                value={5}
-                Icon={ArrowBigUp}
-                test="Prioritization Reward"
-                info="Proposal rewards"
-              />
-              <CommunityDetailTopCard
-                value={5}
-                Icon={Calendar}
-                test="Validation Reward"
-                info="Proposal rewards"
-              />
-              <CommunityDetailTopCard
-                value={5}
-                Icon={Carrot}
-                test="Claim Stake Amount"
-                info="Proposal rewards"
-              />
-            </div>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
-          <div className="flex gap-4 mb-8">
-            <div
-              className=" h-[340px] w-60  bg-cover bg-center text-2xl bg-primary shadow-sm rounded-md"
-              style={{ backgroundImage: "url(/images/carrot-pot.png)" }}
-            >
-              <div className="w-full h-full p-8 text-white backdrop-brightness-75">
-                <p className="whitespace-nowrap">Carrot Pot</p>
-                <p>2.340</p>
-                <div className="flex items-center gap-2 ">
-                  <p className="text-xs whitespace-nowrap">
-                    80 from Community Fee
-                  </p>
-                  <Info size={14} />
-                </div>
-              </div>
-            </div>
-            <Card className="grid grid-cols-2 gap-4 p-6">
-              <div className="">
-                <h1 className="mb-10 text-2xl">Periods</h1>
-                <Timer size={60} className="mb-2" />
-                <p className="text-xs ">
-                  Duration for users to prioritize, contribute and validate the
-                  task
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <Card className="p-4 border border-primary text-primary">
-                  <p className="text-[20px]">10 days</p>
-                  <div className="flex items-center gap-1">
-                    <p className="text-xs whitespace-nowrap">
-                      Prioritization Period
-                    </p>
-                    <Info size={14} />
-                  </div>
-                </Card>
-                <Card className="p-4 border border-primary text-primary">
-                  <p className="text-[20px]">10 days</p>
-                  <div className="flex items-center gap-1">
-                    <p className="text-xs whitespace-nowrap">
-                      Prioritization Period
-                    </p>
-                    <Info size={14} />
-                  </div>
-                </Card>
-                <Card className="p-4 border border-primary text-primary">
-                  <p className="text-[20px]">10 days</p>
-                  <div className="flex items-center gap-1">
-                    <p className="text-xs whitespace-nowrap">
-                      Prioritization Period
-                    </p>
-                    <Info size={14} />
-                  </div>
-                </Card>
-              </div>
-            </Card>
-
-            <div className="flex flex-col w-1/4 gap-4">
-              <Card className="p-6 ">
-                <h1 className="text-[16px] mb-2">Prioritization Quorum</h1>
-                <Separator className="mb-4" />
-                <div className="flex items-center justify-center text-2xl">
-                  <ChevronRight />
-                  <h1>75%</h1>
-                </div>
-                <p className="mb-2 text-center">positive priority</p>
-              </Card>
-              <Card className="p-4 ">
-                <h1 className="text-[16px] mb-2">Prioritization Quorum</h1>
-                <Separator className="mb-4" />
-                <div className="flex items-center justify-center text-2xl">
-                  <ChevronRight />
-                  <h1>75%</h1>
-                </div>
-                <p className="mb-2 text-center">positive priority</p>
-              </Card>
+      <div className="grid gap-4 lg:grid-cols-3 2xl:grid-cols-4">
+        <div className="grid gap-8 lg:col-span-2 2xl:col-span-3">
+          <CommunityDetailsTopCards />
+          <div className="grid gap-6 md:grid-cols-2 2xl:grid-cols-3">
+            <CarrotPotCard />
+            <PeriodsCard />
+            <div className="md:col-span-2 2xl:col-span-1">
+              <PriorityCards />
             </div>
           </div>
-          <Card className="p-6">
-            <div className="flex items-center mb-4">
+          <Card className="w-full p-6">
+            <div className="flex items-center w-full mb-4">
               <h1 className="text-[20px] font-semibold">Task</h1>
               <div className="flex gap-4 ml-auto">
                 <Search placeholder="Search Tasks..." />
@@ -160,9 +51,17 @@ const CommunityDetailsPage: FC<pageProps> = ({}) => {
               </div>
             </div>
             <div className="">
-              <CommunityDetailsTab />
+              <TaskTab />
+              <Pagination currentPage={1} title="tasks" totalPages={10} />
             </div>
           </Card>
+        </div>
+
+        <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-1 lg:row-start-1 lg:col-span-1 2xl:col-span-1">
+          <CommunityInfo />
+          <div className="">
+            <CommunityMembers />
+          </div>
         </section>
       </div>
     </main>
