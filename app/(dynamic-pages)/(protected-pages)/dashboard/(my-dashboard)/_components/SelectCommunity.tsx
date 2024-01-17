@@ -15,18 +15,21 @@ interface SelectCommunityProps {}
 
 const SelectCommunity: FC<SelectCommunityProps> = ({}) => {
   return (
-    <div className="flex items-center gap-2 px-4 rounded-md bg-slate-100 dark:bg-accent min-w-fit max-h-fit h-fit">
-      <Avatar>
-        <AvatarImage
-          className="w-8 h-8 rounded-full"
-          src="/assets/avatar_1.jdpg"
-        />
-        <AvatarFallback>BF</AvatarFallback>
-      </Avatar>
-      <p className="">Buan Fund</p>
-
+    <div className="flex w-[176px] items-center px-2 py-1 rounded-md overflow-hidden bg-secondary dark:bg-accent min-w-fit max-h-fit h-10">
       <Popover>
-        <PopoverTrigger>
+        <PopoverTrigger className="flex items-center justify-between w-full">
+          <div className="flex justify-start items-center ">
+            <Avatar className="w-8 h-8 flex justify-start items-center">
+              <AvatarImage
+                className="w-6 h-6 rounded-full"
+                src="/assets/avatar_1.jdpg"
+              />
+              <AvatarFallback className="bg-zinc-200 flex items-center justify-center w-6 h-6 text-sm">
+                BF
+              </AvatarFallback>
+            </Avatar>
+            <p className="text-sm text-muted-foreground">Buan Fund</p>
+          </div>
           <ChevronDown size={18} className="ml-auto" />
         </PopoverTrigger>
         <PopoverContent

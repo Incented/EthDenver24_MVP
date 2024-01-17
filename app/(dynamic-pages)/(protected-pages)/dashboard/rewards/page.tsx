@@ -9,9 +9,9 @@ interface pageProps {}
 const RewardsPage: FC<pageProps> = ({}) => {
   return (
     <main className="mx-8 mb-4 ">
-      <h1 className="mt-8 text-2xl">Rewards</h1>
+      <h1 className="mt-8 text-3xl font-medium">Rewards</h1>
 
-      <div className="grid gap-3 mt-2 mb-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <div className="grid gap-3 py-8 pt-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {rewardData.map((reward, i) => (
           <DashboardCard
             title={reward.title}

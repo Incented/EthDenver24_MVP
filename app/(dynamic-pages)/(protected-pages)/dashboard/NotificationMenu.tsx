@@ -28,8 +28,8 @@ const NotificationItem: FC<NotificationItemProps> = ({
 const NotificationMenu: FC<NotificationMenuProps> = ({}) => {
   return (
     <Popover>
-      <PopoverTrigger>
-        <Bell size={24} />
+      <PopoverTrigger className="px-3">
+        <Bell size={16} />
       </PopoverTrigger>
       <PopoverContent
         sideOffset={30}

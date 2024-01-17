@@ -10,14 +10,15 @@ import { taskData } from "./data";
 import TaskTab from "./_components/TaskTab";
 import SelectCommunity from "./_components/SelectCommunity";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { CardLayoutSwitcher } from "@/components/ui/card-layout-switcher";
 
 const DashboardPage = () => {
   return (
     <main className="mx-8 mb-10 ">
-      <h1 className="mt-8 text-3xl">My Home</h1>
+      <h1 className="mt-8 text-3xl font-medium">My Home</h1>
 
-      <ScrollArea className="w-full mt-8 whitespace-nowrap">
-        <div className="flex w-full gap-3">
+      <ScrollArea className="w-full whitespace-nowrap">
+        <div className="flex w-full gap-3 py-8 pt-4">
           {taskData.map((task, i) => (
             <DashboardCard
               key={i}
@@ -31,22 +32,16 @@ const DashboardPage = () => {
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
 
-      <div className="flex items-center justify-between gap-3 mt-6">
+      <div className="flex items-center justify-between gap-3">
         <h1 className="text-xl">Tasks</h1>
-
-        <div className="flex items-center gap-3">
-          <Input placeholder="search tasks" />
-
-          <Button variant="outline">Filter</Button>
+        <div className="flex items-center gap-2">
+          <Input placeholder="Search tasks" />
           <FilterTypeMenu />
-
-          <Button variant="outline">
-            <LayoutList size={20} />
-          </Button>
+          <CardLayoutSwitcher />
         </div>
       </div>
 
-      <div className="relative mt-20 xl:mt-8">
+      <div className="relative mt-20 xl:mt-4">
         <div className="flex gap-3 absolute right-[0.3rem] -top-16 xl:top-0">
           <SelectCommunity />
           <Button>Submit Proposal</Button>

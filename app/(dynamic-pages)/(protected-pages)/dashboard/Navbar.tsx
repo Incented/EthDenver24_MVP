@@ -25,13 +25,12 @@ interface IProps {
 const Navbar: FC<IProps> = ({ userProfile }) => {
   const { user, linkWallet } = usePrivy();
   const pathName = usePathname();
-  console.log(pathName);
 
   const walletAddress =
     user?.wallet?.address.slice(0, 4) + "..." + user?.wallet?.address.slice(-4);
 
   const navLinks = [
-    { href: "/dashboard", label: "My Dashbord" },
+    { href: "/dashboard", label: "My Dashboard" },
     { href: "/dashboard/rewards", label: "Rewards" },
     { href: "/dashboard/community", label: "Community" },
     { href: "/dashboard/settings", label: "Settings" },
@@ -53,7 +52,12 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
                   className="px-8 py-3 rounded-md hover:bg-accent"
                   key={i}
                 >
-                  <Link color="foreground" href={link.href} aria-current="page">
+                  <Link
+                    color="foreground"
+                    className=" text-sm"
+                    href={link.href}
+                    aria-current="page"
+                  >
                     {link.label}
                   </Link>
                 </SheetClose>
@@ -69,9 +73,9 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
             alt="Incented Logo"
             className="w-8 h-8"
           />
-          <p className="font-bold text-inherit">Incented</p>
+          <p className="font-bold text-xl text-inherit">Incented</p>
         </Link>
-        <ul className="hidden gap-6 xl:gap-10 lg:flex">
+        <ul className="hidden xl:ml-12 gap-0 xl:gap-0 lg:flex text-sm">
           {navLinks.map((link, i) => (
             <li key={i}>
               <Link
@@ -79,9 +83,10 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
                 href={link.href}
                 aria-current="page"
                 className={cn(
+                  "px-4 py-2",
                   pathName === link.href && pathName.startsWith(link.href)
-                    ? "text-primary"
-                    : ""
+                    ? "text-black"
+                    : "text-muted-foreground"
                 )}
               >
                 {link.label}
@@ -90,19 +95,19 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
           ))}
         </ul>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center">
           <NotificationMenu />
           <UserNav
             userName={userProfile.full_name}
             avatarUrl={userProfile.avatar_url || ""}
           />
           <Button
-            className="flex items-center gap-1"
+            className="flex items-center gap-2"
             onClick={() => {
               user?.wallet === undefined ? linkWallet() : null;
             }}
           >
-            <Wallet size={18} />
+            <Wallet size={16} className="text-white" />
             <p className="text-sm">
               {user?.wallet ? walletAddress : "Connect"}
             </p>

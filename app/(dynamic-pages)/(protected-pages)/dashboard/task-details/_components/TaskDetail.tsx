@@ -22,6 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import PriDepriButton from "./PriDepriButton";
 import ContributionTable from "./ContributionTable";
+import Image from "next/image";
 
 interface TaskDetailProps {
   taskTitle?: string;
@@ -57,17 +58,17 @@ const TaskDetail: FC<TaskDetailProps> = ({
   return (
     <div className="flex gap-4 mt-4">
       <section className="flex-1">
-        <Card className="relative mb-4">
+        <Card className="relative mb-4 bg-[#f5f5f480] overflow-hidden border-none">
           <div
             className={cn(
-              "absolute top-0 letf-0 px-6 py-1 text-sm text-white rounded-br-md ",
+              "absolute top-0 left-0 px-6 py-1 text-sm text-white rounded-br-md ",
               taskStatusBg
             )}
           >
             {taskStatus}
           </div>
 
-          <div className="p-6 mt-6">
+          <div className="p-8 mt-6">
             <div className="flex items-center gap-2 mb-6 text-sm">
               <p>{rabbitHole}</p>
               <TooltipProvider>
@@ -94,14 +95,18 @@ const TaskDetail: FC<TaskDetailProps> = ({
             </Badge>
             <p className="text-xs text-gray-400">Posted 5 days ago</p>
             <h1 className="mb-6 text-2xl font-semibold">{taskTitle}</h1>
-            <div
-              className={`w-full h-40  bg-cover bg-center rounded-md mb-6`}
-              style={{ backgroundImage: `url(${imageUrl})` }}
-            />
-            <p className="text-gray-500 text-[14px] font-normal mb-6">
+            <div className="relative w-full h-[165px] mb-6 rounded-md overflow-hidden">
+              <Image
+                src={imageUrl}
+                alt={imageUrl}
+                fill
+                className="object-cover object-center"
+              />
+            </div>
+            <p className="text-gray-500 text-sm leading-6 font-normal mb-6">
               {taskDescription}
             </p>
-            <div className="mb-6">
+            <div className="mb-6 w-64">
               <TaksAttributes
                 rewards={rewards}
                 efforts={efforts}
@@ -112,12 +117,12 @@ const TaskDetail: FC<TaskDetailProps> = ({
             <div className="">
               <h4 className="mb-2 text-sm font-medium ">Attachment files</h4>
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 px-2 py-2 border border-gray-400 rounded-md w-fit">
+                <div className="flex items-center gap-1 px-2 py-2.5 border rounded-md w-fit">
                   <File size={16} />
                   <samp className="text-xs">description_123.pdf</samp>
                   <MoreVertical size={16} className="ml-2" />
                 </div>
-                <div className="flex items-center gap-1 px-2 py-2 border border-gray-400 rounded-md w-fit">
+                <div className="flex items-center gap-1 px-2 py-2.5 border rounded-md w-fit">
                   <File size={16} />
                   <samp className="text-xs">description_123.pdf</samp>
                   <MoreVertical size={16} className="ml-2" />
@@ -127,13 +132,13 @@ const TaskDetail: FC<TaskDetailProps> = ({
           </div>
         </Card>
 
-        <Card className="p-6 mb-4">
-          <h1 className="text-lg font-bold">Contributions</h1>
+        <Card className="p-4 mb-4 bg-[#f5f5f480] overflow-hidden border-none">
+          <h1 className="text-lg leading-8 mb-2 font-bold">Contributions</h1>
           <ContributionTable />
           <Pagination currentPage={0} title="contribution" totalPages={0} />
         </Card>
 
-        <Card className="p-6 mb-4">
+        <Card className="p-8 mb-4 bg-[#f5f5f480] overflow-hidden border-none">
           <div className="flex items-center justify-between mb-2">
             <h1 className="text-lg font-bold ">Discussion</h1>
             <Button variant="ghost" className="text-primary">
@@ -155,16 +160,16 @@ const TaskDetail: FC<TaskDetailProps> = ({
         <div className="mb-4">
           <PriDepriButton />
         </div>
-        <Card className="p-6 mb-4">
+        <Card className="p-4 mb-4 ">
           <h1 className="mb-2 text-lg font-bold">Proposer</h1>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-[10px]">
             <Avatar>
               <AvatarImage src="/assets/avatar_1.jpg" />
             </Avatar>
             <p>Randy Dias</p>
           </div>
         </Card>
-        <Card className="p-6 mb-4">
+        <Card className="p-4 mb-4">
           <h1 className="mb-2 text-lg font-bold">Priority</h1>
           <div className="flex items-center gap-4">
             <div className="flex items-center space-x-2">
@@ -180,7 +185,7 @@ const TaskDetail: FC<TaskDetailProps> = ({
             </div>
           </div>
         </Card>
-        <Card className="p-6 mb-4">
+        <Card className="p-4 mb-4">
           <h1 className="mb-2 text-lg font-bold">Validation</h1>
           <div className="flex items-center gap-4">
             <div className="flex items-center space-x-2">

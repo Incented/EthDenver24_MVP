@@ -6,7 +6,7 @@ import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { PopoverContent } from "@radix-ui/react-popover";
-import { LayoutDashboard } from "lucide-react";
+import { LayoutGrid } from "lucide-react";
 import { FC } from "react";
 
 interface FilterTypeMenuProps {}
@@ -14,8 +14,10 @@ interface FilterTypeMenuProps {}
 const FilterTypeMenu: FC<FilterTypeMenuProps> = ({}) => {
   return (
     <Popover>
-      <PopoverTrigger className="">
-        <LayoutDashboard size={20} />
+      <PopoverTrigger asChild>
+        <Button variant="outline" className="px-3 w-[168px]">
+          Filter
+        </Button>
       </PopoverTrigger>
       <PopoverContent
         sideOffset={10}

@@ -1,7 +1,11 @@
+"use client";
+
 import TaskCard from "@/components/presentational/Tasks/TaskCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
+import { CardVerticalLayoutContext } from "@/contexts/CardVerticalLayoutContext";
 
 interface TaskTabProps {}
 
@@ -17,7 +21,7 @@ type ITask = {
 
 const data: ITask[] = [
   {
-    taskCategory: "all task",
+    taskCategory: "all tasks",
     tasks: [
       {
         imageUrl: "/images/task2.jpeg",
@@ -87,8 +91,9 @@ const data: ITask[] = [
 ];
 
 const TaskTab: FC<TaskTabProps> = ({}) => {
+  const { isVertical } = useContext(CardVerticalLayoutContext);
   return (
-    <Tabs defaultValue="all task" className="">
+    <Tabs defaultValue="all tasks" className="">
       <ScrollArea className="whitespace-nowrap">
         <TabsList className="w-full lg:w-fit">
           {data.map((task) => (
@@ -106,17 +111,27 @@ const TaskTab: FC<TaskTabProps> = ({}) => {
 
       {data.map((task) => (
         <TabsContent value={task.taskCategory} key={task.taskCategory}>
-          <div className="grid gap-4 mt-4 sm:grid-cols-2 md:grid-cols-3">
-            {task.tasks.map((data, i) => (
-              <TaskCard
-                key={i}
-                imageUrl="/images/task2.jpeg"
-                taskTitle="Install trash container"
-                taskType="Others"
-                taskStatus="In Progress"
-              />
-            ))}
-          </div>
+          {
+            <div
+              className={cn(
+                "grid gap-4 mt-4 sm:grid-cols-2 md:grid-cols-4",
+                isVertical
+                  ? "sm:grid-cols-1 md:grid-cols-1"
+                  : "sm:grid-cols-2 md:grid-cols-4"
+              )}
+            >
+              {task.tasks.map((data, i) => (
+                <TaskCard
+                  key={i}
+                  imageUrl="/images/task2.jpeg"
+                  taskTitle="Install trash container"
+                  taskType="Others"
+                  taskStatus="In Progress"
+                  isVertical={isVertical}
+                />
+              ))}
+            </div>
+          }
         </TabsContent>
       ))}
     </Tabs>

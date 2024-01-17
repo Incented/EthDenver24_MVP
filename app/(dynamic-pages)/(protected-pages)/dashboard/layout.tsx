@@ -39,7 +39,6 @@ export default async function RootLayout({
 
   try {
     const { userProfile } = await fetchData(supabaseClient, data.user);
-    console.log(userProfile);
 
     return (
       <main>
