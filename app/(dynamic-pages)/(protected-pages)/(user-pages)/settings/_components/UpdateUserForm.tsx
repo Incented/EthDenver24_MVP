@@ -65,9 +65,12 @@ const UpdateUserForm: FC<UpdateUserFormProps> = ({}) => {
   const isLoading = form.formState.isSubmitting;
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full h-full">
-        <Card className="p-6 w-full h-full ">
-          <div className="md:flex md:flex-row flex flex-col items-start md:justify-between gap-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-full md:h-full h-full overflow-auto md:overflow-hidden"
+      >
+        <Card className="p-6 w-full h-full overflow-auto md:overflow-hidden">
+          <div className="md:flex md:flex-row flex flex-col items-start md:justify-between gap-4 ">
             <div className="w-full">
               <h1 className="text-base leading-9 font-semibold">
                 General Settings
@@ -90,7 +93,7 @@ const UpdateUserForm: FC<UpdateUserFormProps> = ({}) => {
             </CardFooter>
           </div>
           <Separator className="my-4" />
-          <div className="flex flex-col md:flex md:flex-row items-center md:items-start gap-6 w-full">
+          <div className="flex flex-col md:flex md:flex-row items-center md:items-start gap-6 w-full h-full overflow-auto">
             <Card className="shadow-none w-[228px] md:w-4/12 border-none bg-secondary py-6 lg:col-span-1  h-fit">
               <FormField
                 control={form.control}

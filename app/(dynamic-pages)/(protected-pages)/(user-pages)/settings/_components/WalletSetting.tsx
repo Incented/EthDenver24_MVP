@@ -16,8 +16,8 @@ const WalletSetting: FC<WalletSettingProps> = ({
   isConnected = true,
 }) => {
   return (
-    <div className="flex items-center gap-4">
-      <Card className="flex-1 px-4 py-2">
+    <div className="flex flex-col md:flex md:flex-row items-center gap-4">
+      <Card className="flex-1 w-full px-4 py-2">
         <div className="flex items-center gap-2">
           <Image
             src={walletImage}
@@ -34,7 +34,10 @@ const WalletSetting: FC<WalletSettingProps> = ({
           )}
         </div>
       </Card>
-      <Button variant={isConnected ? "destructive" : "default"}>
+      <Button
+        variant={isConnected ? "destructive" : "default"}
+        className="w-full md:w-fit"
+      >
         {isConnected ? "Disconnect" : "Connect"}
       </Button>
     </div>

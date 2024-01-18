@@ -106,7 +106,7 @@ export function ClientLayout({
       <div className="flex flex-col overflow-y-hidden h-full w-full">
         <MaintenanceModeBanner />
         <div className="flex h-full">
-          <div className="flex-1 h-auto overflow-auto">{children}</div>
+          <div className="relative flex-1 h-auto overflow-auto">{children}</div>
           {showConfetti && userProfile.full_name && (
             <Confetti
               confettiSource={{

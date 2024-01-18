@@ -47,8 +47,8 @@ const LanguageSetting: FC<LanguageSettingProps> = ({}) => {
   const isLoading = form.formState.isSubmitting;
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card className="p-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="h-full">
+        <Card className="p-6 h-full">
           <div className="md:flex md:flex-row flex flex-col items-start md:justify-between gap-4">
             <div className="w-full">
               <h1 className="text-base leading-9 font-semibold">Language</h1>
