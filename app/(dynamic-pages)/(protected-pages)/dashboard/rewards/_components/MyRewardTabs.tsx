@@ -65,7 +65,7 @@ const MyRewardTabs: FC<MyRewardTabsProps> = ({}) => {
               {Array.from({ length: 7 }).map((_, i) => (
                 <TableRow
                   key={i}
-                  className={cn("py-0", i % 2 === 0 ? "bg-[#f5f5f480]" : "")}
+                  className={cn("py-0", i % 2 === 0 ? "bg-secondary" : "")}
                 >
                   <TableCell className="py-1.5 font-medium whitespace-nowrap">
                     Buy a trash container

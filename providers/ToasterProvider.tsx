@@ -4,9 +4,9 @@ import { Toaster } from "sonner";
 
 const ToasterProvider = () => {
   return (
-    <main>
+    <div>
       <Toaster />
-    </main>
+    </div>
   );
 };
 

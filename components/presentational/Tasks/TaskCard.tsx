@@ -53,7 +53,7 @@ const TaskCard: FC<TaskCardProps> = ({
   return (
     <>
       {isVertical ? (
-        <Card className="flex relative justify-between rounded-lg overflow-hidden w-full">
+        <Card className="flex relative justify-between rounded-lg w-full">
           <div
             className={cn(
               "absolute top-0 right-0 px-4 py-2 text-xs font-medium text-white rounded-tr-md rounded-bl-md",
@@ -70,7 +70,7 @@ const TaskCard: FC<TaskCardProps> = ({
               className="object-cover object-center"
             />
           </div>
-          <div className="relative w-full h-full text-black px-6 py-6">
+          <div className="relative w-full h-full text-foreground px-6 py-6">
             <div className="flex items-center gap-2 text-sm">
               <p className="text-xs font-medium leading-6">{rabbitHole}</p>
               <TooltipProvider>
@@ -94,14 +94,14 @@ const TaskCard: FC<TaskCardProps> = ({
             </div>
             <div className="mt-2">
               <div className="flex items-center w-full justify-between my-1">
-                <Badge className="text-xs text-black bg-secondary hover:bg-white">
+                <Badge className="text-xs text-foreground bg-secondary hover:bg-white">
                   {taskType}
                 </Badge>
               </div>
               <div className="mt-2">
                 <Anchor
                   href="/dashboard/task-details"
-                  className="text-base text-black leading-7 font-semibold"
+                  className="text-base text-foreground dark:text-white leading-7 font-semibold"
                 >
                   {taskTitle}
                 </Anchor>
@@ -141,7 +141,7 @@ const TaskCard: FC<TaskCardProps> = ({
             <div className="w-full h-full text-white backdrop-brightness-75">
               <div className="absolute -z-50 w-full top-0 left-0">
                 <div className="relative w-full h-[116px] ">
-                  <div className="absolute bottom-0 z-50 w-full h-[116px] bg-gradient-to-b from-black/75  via-white/25 to-white"></div>
+                  <div className="absolute bottom-0 z-50 w-full h-[116px] bg-gradient-to-b from-foreground/75  via-background/25 to-background"></div>
                   <Image
                     src={imageUrl}
                     alt={imageUrl}
@@ -160,11 +160,13 @@ const TaskCard: FC<TaskCardProps> = ({
               </div>
 
               <div className="flex items-center gap-2 text-sm px-6 py-[10px]">
-                <p className="text-xs font-medium leading-6">{rabbitHole}</p>
+                <p className="text-xs font-medium text-background leading-6">
+                  {rabbitHole}
+                </p>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild className="cursor-pointer">
-                      <Info size={18} />
+                      <Info size={18} className="text-background" />
                     </TooltipTrigger>
                     <TooltipContent>
                       <div className="">
@@ -182,7 +184,7 @@ const TaskCard: FC<TaskCardProps> = ({
               </div>
               <div className=" px-6">
                 <div className="flex items-center w-full justify-between mt-4">
-                  <Badge className="text-xs text-black bg-white hover:bg-white">
+                  <Badge className="text-xs text-foreground bg-background hover:bg-background">
                     {taskType}
                   </Badge>
 
@@ -196,7 +198,7 @@ const TaskCard: FC<TaskCardProps> = ({
                 <div className="mt-4">
                   <Anchor
                     href="/dashboard/task-details"
-                    className="text-base text-black leading-7 font-semibold"
+                    className="text-base text-foreground leading-7 font-semibold"
                   >
                     {taskTitle}
                   </Anchor>

@@ -41,10 +41,10 @@ export default async function RootLayout({
     const { userProfile } = await fetchData(supabaseClient, data.user);
 
     return (
-      <main>
+      <>
         <Navbar userProfile={userProfile} />
         {children}
-      </main>
+      </>
     );
   } catch (fetchDataError) {
     errors.add(fetchDataError);

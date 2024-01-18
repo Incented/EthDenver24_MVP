@@ -5,10 +5,12 @@ interface pageProps {}
 
 const SettingsPage: FC<pageProps> = ({}) => {
   return (
-    <main className="mx-4 mb-8 ">
-      <h1 className="mt-8 mb-4 text-2xl">Settings</h1>
-      <SettingsTabs />
-    </main>
+    <>
+      <div className="mx-8 h-full">
+        <h1 className="mt-8 mb-4 text-3xl font-semibold">Settings</h1>
+        <SettingsTabs />
+      </div>
+    </>
   );
 };
 

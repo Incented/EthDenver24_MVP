@@ -22,6 +22,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Card, CardFooter } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 interface LanguageSettingProps {}
 const updateLangSchema = z.object({
@@ -46,68 +48,87 @@ const LanguageSetting: FC<LanguageSettingProps> = ({}) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="language"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <div className="mb-6">
-                  <Label htmlFor="language">Language</Label>
-                  <Select {...field} disabled={isLoading}>
-                    <SelectTrigger className="w-full mt-1">
-                      <SelectValue placeholder="Select a language" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="eng">English</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                  <p className="my-2 text-xs text-gray-400">
-                    Choose the language you’d like to use
-                  </p>
+        <Card className="p-6">
+          <div className="md:flex md:flex-row flex flex-col items-start md:justify-between gap-4">
+            <div className="w-full">
+              <h1 className="text-base leading-9 font-semibold">Language</h1>
+              <p className=" text-sm leading-6 text-foreground tracking-[-0.35px]">
+                Manage your language preference
+              </p>
+            </div>
+            <CardFooter className="w-full justify-end gap-2 md:mt-3 px-0 py-0">
+              <Button
+                variant="outline"
+                type="submit"
+                className="w-full md:w-fit bg-secondary hover:bg-muted border-none"
+              >
+                Cancel{" "}
+              </Button>
+              <Button type="submit" className="w-full md:w-fit">
+                Save
+              </Button>
+            </CardFooter>
+          </div>
+          <Separator className="my-4" />
+          <div className="w-full md:max-w-xs">
+            <FormField
+              control={form.control}
+              name="language"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <div className="mb-6">
+                      <Label htmlFor="language">Language</Label>
+                      <Select {...field} disabled={isLoading}>
+                        <SelectTrigger className="w-full mt-1">
+                          <SelectValue placeholder="Select a language" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectItem value="eng">English</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <p className="my-2 text-xs text-gray-400">
+                        Choose the language you’d like to use
+                      </p>
 
-                  <FormMessage />
-                </div>
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="timeZone"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <div className="">
-                  <Label htmlFor="language">Time Zone</Label>
-                  <Select {...field} disabled={isLoading}>
-                    <SelectTrigger className="w-full mt-1">
-                      <SelectValue placeholder="Select a time zone" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="gmt">GMT</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                  <p className="my-2 text-xs text-gray-400">
-                    Use your time zone to follow the time on the task
-                  </p>
+                      <FormMessage />
+                    </div>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="timeZone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <div className="">
+                      <Label htmlFor="language">Time Zone</Label>
+                      <Select {...field} disabled={isLoading}>
+                        <SelectTrigger className="w-full mt-1">
+                          <SelectValue placeholder="Select a time zone" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectItem value="gmt">GMT</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <p className="my-2 text-xs text-gray-400">
+                        Use your time zone to follow the time on the task
+                      </p>
 
-                  <FormMessage />
-                </div>
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <div className="flex justify-end gap-4">
-          <Button type="button" variant="outline">
-            Canel
-          </Button>
-          <Button type="submit">Save</Button>
-        </div>
+                      <FormMessage />
+                    </div>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+        </Card>
       </form>
     </Form>
   );

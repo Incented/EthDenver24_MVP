@@ -23,7 +23,7 @@ const NotificationSetting: FC<NotificationSettingProps> = ({
           {notification}
         </label>
       </div>
-      <p className="inline ml-6 text-xs text-gray-400">{description}</p>
+      <p className="inline ml-6 text-xs text-muted-foreground">{description}</p>
     </div>
   );
 };

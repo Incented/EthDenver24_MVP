@@ -85,7 +85,7 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
                 className={cn(
                   "px-4 py-2",
                   pathName === link.href && pathName.startsWith(link.href)
-                    ? "text-black"
+                    ? "text-foreground"
                     : "text-muted-foreground"
                 )}
               >

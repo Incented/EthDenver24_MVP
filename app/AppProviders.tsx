@@ -5,7 +5,7 @@ import NProgress from "nprogress";
 import { usePathname, useSearchParams } from "next/navigation";
 import RouterProgressionContext from "@/contexts/RouterProgressionContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
+import { Toaster as SonnerToaster } from "sonner";
 import ToasterProvider from "@/providers/ToasterProvider";
 import NavigationProgressbar from "@/components/NavigationProgressBar";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
@@ -42,7 +42,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
       <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
         <RouterEventWrapper>
           <NavigationProgressbar />
-          <ToasterProvider />
+          <SonnerToaster theme={"light"} />
           {children}
         </RouterEventWrapper>
       </NextThemesProvider>

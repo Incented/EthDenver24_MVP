@@ -103,12 +103,10 @@ export function ClientLayout({
 
   return (
     <PostHogProvider>
-      <div className="flex overflow-y-auto flex-col h-full w-full">
+      <div className="flex flex-col overflow-y-hidden h-full w-full">
         <MaintenanceModeBanner />
         <div className="flex h-full">
-          <div className="flex-1 h-auto overflow-auto">
-            <div className="space-y-10">{children}</div>
-          </div>
+          <div className="flex-1 h-auto overflow-auto">{children}</div>
           {showConfetti && userProfile.full_name && (
             <Confetti
               confettiSource={{

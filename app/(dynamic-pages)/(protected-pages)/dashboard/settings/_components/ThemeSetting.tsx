@@ -41,7 +41,7 @@ export const ThemeSettingDark: FC<ThemeSettingProps> = ({}) => {
   const { setTheme } = useTheme();
   return (
     <Card
-      className="cursor-pointer bg-primary"
+      className="cursor-pointer bg-primary overflow-hidden"
       onClick={() => setTheme("dark")}
     >
       <div className="bg-black">
