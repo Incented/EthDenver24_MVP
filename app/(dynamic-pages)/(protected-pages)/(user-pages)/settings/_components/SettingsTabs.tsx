@@ -58,7 +58,7 @@ const SettingsTabs: FC<SettingsTabsProps> = ({}) => {
         value="general"
         className="w-full h-full bg-transparent p-0 m-0"
       >
-        <UpdateUserForm />
+        {/* <UpdateUserForm /> */}
       </TabsContent>
       <TabsContent value="wallet" className="w-full bg-transparent p-0 m-0 ">
         <Card className="p-6">

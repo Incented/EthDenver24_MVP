@@ -7,6 +7,8 @@ import {
 } from "@/data/user/user";
 import { useToastMutation } from "@/hooks/useToastMutation";
 import { Table } from "@/types";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function UserOnboardingFlow({
   userProfile,
@@ -15,6 +17,10 @@ export function UserOnboardingFlow({
   userProfile: Table<"user_profiles">;
   onSuccess: () => void;
 }) {
+  const router = useRouter();
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
+    userProfile.avatar_url ?? undefined
+  );
   const { mutate: updateProfile, isLoading: isUpdatingProfile } =
     useToastMutation(
       async ({
@@ -38,7 +44,9 @@ export function UserOnboardingFlow({
 
   const { mutate: uploadFile, isLoading: isUploading } = useToastMutation(
     async (file: File) => {
-      return uploadPublicUserAvatar(file, file.name, {
+      const formData = new FormData();
+      formData.append("file", file);
+      return uploadPublicUserAvatar(formData, file.name, {
         upsert: true,
       });
     },
@@ -46,6 +54,10 @@ export function UserOnboardingFlow({
       loadingMessage: "Uploading avatar...",
       successMessage: "Avatar uploaded!",
       errorMessage: "Error uploading avatar",
+      onSuccess: (newAvatarURL) => {
+        setAvatarUrl(newAvatarURL);
+        router.refresh();
+      },
     }
   );
 
@@ -55,12 +67,13 @@ export function UserOnboardingFlow({
       onSubmit={(fullName: string) => {
         updateProfile({
           fullName,
+          avatarUrl,
         });
       }}
       onFileUpload={(file: File) => {
         uploadFile(file);
       }}
-      profileAvatarUrl={userProfile.avatar_url ?? undefined}
+      profileAvatarUrl={avatarUrl}
       isUploading={isUploading}
       isLoading={isUpdatingProfile ?? isUploading}
     />

@@ -1,6 +1,6 @@
 "use client";
 
-import LoginHeader from "public/assets/login-asset-dashboard.png";
+import LoginHeader from "@/public/assets/login-asset-dashboard.png";
 import { ReactNode, useEffect } from "react";
 import Image from "next/image";
 import { MaintenanceModeBanner } from "@/components/presentational/MaintenanceModeBanner";

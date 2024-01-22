@@ -6,13 +6,11 @@ export const updateUserFormSchema = z.object({
   }),
 
   lastName: z.string({
-    required_error: "Phone number is required",
+    required_error: "Last name is required",
   }),
-  userName: z.string({
-    required_error: "Country is required",
+  userName: z.string().refine((value) => !value.includes(" "), {
+    message: "Username must not contain spaces",
   }),
-  email: z.string({
-    required_error: "Email is required",
-  }),
+  email: z.string().email({ message: "Please enter a valid email" }),
   image: z.string().optional(),
 });

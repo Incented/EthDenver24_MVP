@@ -3,7 +3,7 @@ import LanguageSetting from "../_components/LanguageSetting";
 
 const LanguagePage: React.FC = () => {
   return (
-    <div className="h-full">
+    <div className="h-full ">
       <LanguageSetting />
     </div>
   );
