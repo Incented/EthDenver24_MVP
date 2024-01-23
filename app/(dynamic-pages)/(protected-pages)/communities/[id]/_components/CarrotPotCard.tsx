@@ -7,21 +7,25 @@ interface CarrotPotCardProps {}
 
 const CarrotPotCard: FC<CarrotPotCardProps> = ({}) => {
   return (
-    <Card className="flex flex-col items-center justify-center p-8 bg-primary">
-      <div className="text-4xl text-center text-white ">
-        <p className=" whitespace-nowrap">Carrot Pot</p>
-        <p>2.340</p>
-        <div className="flex items-center gap-2 text-[12px]">
-          <p className="text-xs whitespace-nowrap">80 from Community Fee</p>
+    <Card className="col-span-1 flex flex-col w-full items-center justify-center p-8 py-6 bg-primary">
+      <div className=" text-center text-white ">
+        <p className=" text-3xl leading-9 font-medium">Carrot Pot</p>
+        <p className="font-extrabold">2.340</p>
+        <div className="flex items-center w-full justify-center py-1 gap-1">
+          <p className="text-xs font-normal whitespace-nowrap">
+            80 from Community Fee
+          </p>
           <Info size={14} />
         </div>
       </div>
-      <Image
-        src="/images/carrot-pot.png"
-        width={200}
-        height={200}
-        alt="Carrot Pot"
-      />
+      <div className="relative h-[174px] w-full">
+        <Image
+          src="/images/carrot-pot.png"
+          fill
+          alt="Carrot Pot"
+          className="opacity-50 object-contain"
+        />
+      </div>
     </Card>
   );
 };

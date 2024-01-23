@@ -22,16 +22,20 @@ const CommunityDetailTopCard: FC<CommunityDetailTopCardProps> = ({
   info,
 }) => {
   return (
-    <Card className="relative w-full p-6">
-      <Icon className="absolute right-3 top-3" size={20} />
-      <h1 className="p-3 text-3xl">{value}%</h1>
+    <Card className="w-[233px] relative rounded-xl gap-0 p-0">
+      <div className="p-6 pb-2 flex justify-between items-center">
+        <h1 className=" text-3xl">{value}%</h1>
+        <Icon className="text-muted-foreground" size={20} />
+      </div>
 
-      <div className="flex items-center gap-2 mb-6 text-sm font-semibold">
-        <p className="text-xs whitespace-nowrap">{test}</p>
+      <div className="flex h-11 px-6 py-2 items-center gap-1 w-full text-sm font-semibold">
+        <p className="text-xs text-muted-foreground font-normal whitespace-nowrap">
+          {test}
+        </p>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild className="cursor-pointer">
-              <Info size={18} />
+              <Info size={16} className="text-muted-foreground" />
             </TooltipTrigger>
             <TooltipContent className="w-[200px]">
               <p className="text-xs">{info}</p>

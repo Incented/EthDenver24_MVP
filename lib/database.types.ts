@@ -485,22 +485,85 @@ export interface Database {
       };
       organizations: {
         Row: {
+          active_tasks: number | null;
+          addresses_with_veto: string | null;
+          carrot_pot_initial_amount: number | null;
+          claim_lock_period_duration: unknown | null;
+          claim_stake_amount_percentage: number | null;
+          community_avatar_url: string | null;
+          community_fee_percentage: number | null;
+          contribution_period_duration: unknown | null;
           created_at: string;
           created_by: string;
           id: string;
+          location: string | null;
+          prioritization_period_duration: unknown | null;
+          prioritization_period_start: string | null;
+          prioritization_quorum_percentage: number | null;
+          prioritization_reward_percentage: number | null;
+          proposal_absolute_reward: number | null;
+          proposal_relative_reward: number | null;
+          task_expiration_time: string | null;
           title: string;
+          total_members: number | null;
+          total_tasks: number | null;
+          validation_period_duration: unknown | null;
+          validation_quorum_percentage: number | null;
+          validation_reward_percentage: number | null;
         };
         Insert: {
+          active_tasks?: number | null;
+          addresses_with_veto?: string | null;
+          carrot_pot_initial_amount?: number | null;
+          claim_lock_period_duration?: unknown | null;
+          claim_stake_amount_percentage?: number | null;
+          community_avatar_url?: string | null;
+          community_fee_percentage?: number | null;
+          contribution_period_duration?: unknown | null;
           created_at?: string;
           created_by: string;
           id?: string;
+          location?: string | null;
+          prioritization_period_duration?: unknown | null;
+          prioritization_period_start?: string | null;
+          prioritization_quorum_percentage?: number | null;
+          prioritization_reward_percentage?: number | null;
+          proposal_absolute_reward?: number | null;
+          proposal_relative_reward?: number | null;
+          task_expiration_time?: string | null;
           title?: string;
+          total_members?: number | null;
+          total_tasks?: number | null;
+          validation_period_duration?: unknown | null;
+          validation_quorum_percentage?: number | null;
+          validation_reward_percentage?: number | null;
         };
         Update: {
+          active_tasks?: number | null;
+          addresses_with_veto?: string | null;
+          carrot_pot_initial_amount?: number | null;
+          claim_lock_period_duration?: unknown | null;
+          claim_stake_amount_percentage?: number | null;
+          community_avatar_url?: string | null;
+          community_fee_percentage?: number | null;
+          contribution_period_duration?: unknown | null;
           created_at?: string;
           created_by?: string;
           id?: string;
+          location?: string | null;
+          prioritization_period_duration?: unknown | null;
+          prioritization_period_start?: string | null;
+          prioritization_quorum_percentage?: number | null;
+          prioritization_reward_percentage?: number | null;
+          proposal_absolute_reward?: number | null;
+          proposal_relative_reward?: number | null;
+          task_expiration_time?: string | null;
           title?: string;
+          total_members?: number | null;
+          total_tasks?: number | null;
+          validation_period_duration?: unknown | null;
+          validation_quorum_percentage?: number | null;
+          validation_reward_percentage?: number | null;
         };
         Relationships: [
           {
@@ -514,27 +577,115 @@ export interface Database {
       };
       organizations_private_info: {
         Row: {
+          active_tasks: number | null;
+          addresses_with_veto: string | null;
           billing_address: Json | null;
+          carrot_pot_initial_amount: number | null;
+          claim_lock_period_duration: unknown | null;
+          claim_stake_amount_percentage: number | null;
+          community_fee_percentage: number | null;
+          contribution_period_duration: unknown | null;
           id: string;
+          location: string | null;
           payment_method: Json | null;
+          prioritization_period_duration: unknown | null;
+          prioritization_period_start: string | null;
+          prioritization_quorum_percentage: number | null;
+          prioritization_reward_percentage: number | null;
+          proposal_absolute_reward: number | null;
+          proposal_relative_reward: number | null;
+          task_expiration_time: string | null;
+          total_members: number | null;
+          total_tasks: number | null;
+          validation_period_duration: unknown | null;
+          validation_quorum_percentage: number | null;
+          validation_reward_percentage: number | null;
         };
         Insert: {
+          active_tasks?: number | null;
+          addresses_with_veto?: string | null;
           billing_address?: Json | null;
+          carrot_pot_initial_amount?: number | null;
+          claim_lock_period_duration?: unknown | null;
+          claim_stake_amount_percentage?: number | null;
+          community_fee_percentage?: number | null;
+          contribution_period_duration?: unknown | null;
           id: string;
+          location?: string | null;
           payment_method?: Json | null;
+          prioritization_period_duration?: unknown | null;
+          prioritization_period_start?: string | null;
+          prioritization_quorum_percentage?: number | null;
+          prioritization_reward_percentage?: number | null;
+          proposal_absolute_reward?: number | null;
+          proposal_relative_reward?: number | null;
+          task_expiration_time?: string | null;
+          total_members?: number | null;
+          total_tasks?: number | null;
+          validation_period_duration?: unknown | null;
+          validation_quorum_percentage?: number | null;
+          validation_reward_percentage?: number | null;
         };
         Update: {
+          active_tasks?: number | null;
+          addresses_with_veto?: string | null;
           billing_address?: Json | null;
+          carrot_pot_initial_amount?: number | null;
+          claim_lock_period_duration?: unknown | null;
+          claim_stake_amount_percentage?: number | null;
+          community_fee_percentage?: number | null;
+          contribution_period_duration?: unknown | null;
           id?: string;
+          location?: string | null;
           payment_method?: Json | null;
+          prioritization_period_duration?: unknown | null;
+          prioritization_period_start?: string | null;
+          prioritization_quorum_percentage?: number | null;
+          prioritization_reward_percentage?: number | null;
+          proposal_absolute_reward?: number | null;
+          proposal_relative_reward?: number | null;
+          task_expiration_time?: string | null;
+          total_members?: number | null;
+          total_tasks?: number | null;
+          validation_period_duration?: unknown | null;
+          validation_quorum_percentage?: number | null;
+          validation_reward_percentage?: number | null;
         };
         Relationships: [
+          {
+            foreignKeyName: "organizations_private_info_active_tasks_fkey";
+            columns: ["active_tasks"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["active_tasks"];
+          },
           {
             foreignKeyName: "organizations_private_info_id_fkey";
             columns: ["id"];
             isOneToOne: true;
             referencedRelation: "organizations";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "organizations_private_info_proposal_absolute_reward_fkey";
+            columns: ["proposal_absolute_reward"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["proposal_absolute_reward"];
+          },
+          {
+            foreignKeyName: "organizations_private_info_total_members_fkey";
+            columns: ["total_members"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["total_members"];
+          },
+          {
+            foreignKeyName: "organizations_private_info_total_tasks_fkey";
+            columns: ["total_tasks"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["total_tasks"];
           }
         ];
       };

@@ -22,47 +22,46 @@ const CommunityInfo: FC<CommunityInfoProps> = ({
   communityUrl = "www.buanfund.com",
 }) => {
   return (
-    <Card className="min-w-[281px] p-8">
+    <Card className="min-w-[281px] border-none bg-muted p-8">
       <div className="flex items-center gap-4 mb-4">
         <Avatar className="w-16 h-16">
           <AvatarImage src={communityImage} className="object-cover" />
         </Avatar>
         <div className="">
           <h1 className="text-lg font-semibold">{communityName}</h1>
-          <p className="text-xs text-gray-400">{communityMembers} members</p>
+          <p className="text-xs text-muted-foreground">
+            {communityMembers} members
+          </p>
         </div>
       </div>
-      <p className="mb-4 text-sm text-gray-400">
+      <p className="mb-4 text-sm leading-6 text-muted-foreground">
         {communityDescription} <span className="text-primary">See more</span>
       </p>
       <div className="flex flex-col gap-y-4">
         <Link href={communityUrl} className="flex items-center gap-2">
-          <LinkIcon
-            size={24}
-            className="p-1 text-black bg-gray-300 rounded-md"
-          />
-          <p className="text-xs">{communityUrl}</p>
+          <LinkIcon size={24} className="p-1 text-black bg-border rounded-md" />
+          <p className="text-xs text-muted-foreground">{communityUrl}</p>
         </Link>
         <Link href={communityUrl} className="flex items-center gap-2">
           <Facebook
             size={24}
-            className="p-1 text-black bg-gray-300 rounded-md"
+            className="p-1 text-foreground bg-border rounded-md"
           />
-          <p className="text-xs">{communityUrl}</p>
+          <p className="text-xs text-muted-foreground">{communityUrl}</p>
         </Link>
         <Link href={communityUrl} className="flex items-center gap-2">
           <Twitter
             size={24}
-            className="p-1 text-black bg-gray-300 rounded-md"
+            className="p-1 text-foreground bg-border rounded-md"
           />
-          <p className="text-xs">{communityUrl}</p>
+          <p className="text-xs text-muted-foreground">{communityUrl}</p>
         </Link>
         <Link href={communityUrl} className="flex items-center gap-2">
           <Linkedin
             size={24}
-            className="p-1 text-black bg-gray-300 rounded-md"
+            className="p-1 text-foreground bg-border rounded-md"
           />
-          <p className="text-xs">{communityUrl}</p>
+          <p className="text-xs text-muted-foreground">{communityUrl}</p>
         </Link>
       </div>
     </Card>

@@ -33,6 +33,36 @@ const CommunityDetailsTopCards: FC<CommunityDetailsTopCardsProps> = ({}) => {
           test="Claim Stake Amount"
           info="Proposal rewards"
         />
+        <CommunityDetailTopCard
+          value={10}
+          Icon={Trophy}
+          test="Proposal reward"
+          info="Proposal rewards"
+        />
+        <CommunityDetailTopCard
+          value={10}
+          Icon={Trophy}
+          test="Proposal reward"
+          info="Proposal rewards"
+        />
+        <CommunityDetailTopCard
+          value={10}
+          Icon={Trophy}
+          test="Proposal reward"
+          info="Proposal rewards"
+        />
+        <CommunityDetailTopCard
+          value={10}
+          Icon={Trophy}
+          test="Proposal reward"
+          info="Proposal rewards"
+        />
+        <CommunityDetailTopCard
+          value={10}
+          Icon={Trophy}
+          test="Proposal reward"
+          info="Proposal rewards"
+        />
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>

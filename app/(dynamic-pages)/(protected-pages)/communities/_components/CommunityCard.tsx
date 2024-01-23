@@ -7,21 +7,23 @@ import { FC } from "react";
 import JoinCommunityModal from "./JoinCommunityModal";
 
 interface CommunityCardProps {
-  communityName?: string;
+  communityName: string;
   communityDescription?: string;
   communityImage?: string;
   communityMembers?: number;
   communityTasks?: number;
   communityAddress?: string;
+  communityId?: string;
 }
 
 const CommunityCard: FC<CommunityCardProps> = ({
-  communityName = "Buan",
+  communityName,
   communityDescription = "Buan is a community of people who are passionate about learning new things.",
   communityImage = "/assets/avatar_2.jpg",
   communityMembers = 100,
   communityTasks = 100,
   communityAddress = "New York, USA",
+  communityId: id,
 }) => {
   return (
     <Card className="p-4">
@@ -36,7 +38,7 @@ const CommunityCard: FC<CommunityCardProps> = ({
           </AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
-          <Link href="/dashboard/community-details">{communityName}</Link>
+          <Link href={`/communities/${id}`}>{communityName}</Link>
           <p className="text-xs text-gray-400">{communityAddress}</p>
         </div>
         <div className="flex items-center justify-center w-8 h-8 ml-auto border border-gray-400 rounded-full text-primary">
