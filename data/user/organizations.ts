@@ -1,5 +1,4 @@
 "use server";
-import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
 import { createSupabaseUserServerActionClient } from "@/supabase-clients/user/createSupabaseUserServerActionClient";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 import { Enum, NormalizedSubscription, Table, UnwrapPromise } from "@/types";
@@ -36,7 +35,7 @@ export const createOrganization = async ({
   return data;
 };
 
-export async function fetchSlimOrganizations() {
+export async function fetchSlimOrganizationsWithMembers() {
   const currentUser = await serverGetLoggedInUser();
   const supabaseClient = createSupabaseUserServerComponentClient();
   const { data: organizations, error: organizationsError } =
@@ -64,6 +63,48 @@ export async function fetchSlimOrganizations() {
   }
 
   return data || [];
+}
+
+export async function fetchSlimOrganizations() {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+
+  const { data, error } = await supabaseClient
+    .from("organizations")
+    .select("id,title,community_avatar_url")
+    .order("created_at", {
+      ascending: false,
+    });
+  if (error) {
+    throw error;
+  }
+
+  return data || [];
+}
+
+export async function getPaginatedOrganizationsList({
+  limit = 10,
+  page,
+  query,
+}: {
+  page?: number;
+  query?: string;
+  limit?: number;
+}) {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const startIndex = (page - 1) * limit;
+  const { data, error } = await supabaseClient
+    .from("organizations")
+    .select("*")
+    .ilike("title", `%${query}%`)
+    .range(startIndex, startIndex + limit - 1)
+    .order("created_at", {
+      ascending: false,
+    });
+  if (error) throw error;
+  if (!data) {
+    throw new Error("No data");
+  }
+  return data;
 }
 
 export const getSlimOrganizationById = async (organizationId: string) => {

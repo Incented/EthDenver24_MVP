@@ -1,8 +1,6 @@
 "use server";
 import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
-import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 import { ensureAppAdmin } from "@/utils/route-handlers/ensureAppAdmin";
-import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 
 export async function getOrganizationsTotalPages({
   query = "",
@@ -45,19 +43,6 @@ export async function getPaginatedOrganizationList({
   if (!data) {
     throw new Error("No data");
   }
-  return data;
-}
-
-export async function getCommunityDetailsAdmin({ id }: { id: string }) {
-  const { data, error } = await supabaseAdminClient
-    .from("organizations")
-    .select("id")
-    .eq("id", id);
-
-  if (error) {
-    throw error;
-  }
-
   return data;
 }
 
