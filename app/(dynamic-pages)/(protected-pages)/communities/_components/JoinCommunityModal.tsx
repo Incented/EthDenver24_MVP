@@ -16,34 +16,40 @@ import React, { FC } from "react";
 interface JoinCommunityModalProps {
   triggerText: string;
   community: string;
+  userId?: string;
 }
 
 const JoinCommunityModal: FC<JoinCommunityModalProps> = ({
   triggerText,
   community,
+  userId,
 }) => {
   return (
     <>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="w-full">{triggerText}</Button>
-        </DialogTrigger>
-        <DialogContent className="p-6">
-          <DialogHeader>
-            <DialogTitle className="mb-4 text-lg text-center">
-              Join Community
-            </DialogTitle>
-            <DialogDescription className="text-center text-[14px]">
-              Admin approval is required. Once you get approved you will receive
-              a notification.
-            </DialogDescription>
-          </DialogHeader>
+      {!userId ? (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="w-full">{triggerText}</Button>
+          </DialogTrigger>
+          <DialogContent className="p-6">
+            <DialogHeader>
+              <DialogTitle className="mb-4 text-lg text-center">
+                Join Community
+              </DialogTitle>
+              <DialogDescription className="text-center text-[14px]">
+                Admin approval is required. Once you get approved you will
+                receive a notification.
+              </DialogDescription>
+            </DialogHeader>
 
-          <DialogFooter>
-            <CommunityInfoModal community={community} triggerText="" />
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            <DialogFooter>
+              <CommunityInfoModal community={community} triggerText="" />
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <Button className="w-full">Open</Button>
+      )}
     </>
   );
 };

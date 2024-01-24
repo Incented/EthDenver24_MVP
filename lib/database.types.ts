@@ -51,6 +51,24 @@ export interface Database {
         };
         Relationships: [];
       };
+      bookmarked_organizations: {
+        Row: {
+          created_at: string;
+          id: string;
+          organization_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id: string;
+          organization_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          organization_id?: string;
+        };
+        Relationships: [];
+      };
       customers: {
         Row: {
           organization_id: string;
@@ -1353,6 +1371,10 @@ export interface Database {
     };
     Enums: {
       app_admin_role: "moderator" | "admin" | "super_admin";
+      community_filter_type:
+        | "all_communities"
+        | "my_communities"
+        | "bookmarked";
       internal_blog_post_status: "draft" | "published";
       internal_feedback_thread_priority: "low" | "medium" | "high";
       internal_feedback_thread_status:

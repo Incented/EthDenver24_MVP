@@ -35,6 +35,83 @@ export const createOrganization = async ({
   return data;
 };
 
+export const addBookmark = async ({
+  id,
+  organizationId,
+}: {
+  id: string;
+  organizationId: string;
+}) => {
+  const supabase = createSupabaseUserServerComponentClient();
+
+  // Check if the bookmark already exists
+  const { data: existingBookmark } = await supabase
+    .from("bookmarked_organizations")
+    .select("*")
+    .eq("id", id)
+    .eq("organization_id", organizationId)
+    .single();
+
+  // If the bookmark already exists, return it without making a new one
+  if (existingBookmark) {
+    return existingBookmark;
+  }
+
+  // If the bookmark does not exist, create a new one
+  const { data, error } = await supabase
+    .from("bookmarked_organizations")
+    .insert({
+      id: id,
+      organization_id: organizationId,
+    })
+    .select("*")
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+};
+
+export const removeBookmark = async ({
+  id,
+  organizationId,
+}: {
+  id: string;
+  organizationId: string;
+}) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data, error } = await supabase
+    .from("bookmarked_organizations")
+    .delete()
+    .eq("id", id)
+    .eq("organization_id", organizationId);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+};
+
+export const getAllBookmarkedOrganizationsForUser = async (id: string) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data, error } = await supabase
+    .from("bookmarked_organizations")
+    .select("organization_id")
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data.map((bookmark) => bookmark.organization_id);
+};
+
 export async function fetchSlimOrganizationsWithMembers() {
   const currentUser = await serverGetLoggedInUser();
   const supabaseClient = createSupabaseUserServerComponentClient();
@@ -82,7 +159,7 @@ export async function fetchSlimOrganizations() {
 }
 
 export async function getPaginatedOrganizationsList({
-  limit = 10,
+  limit = 8,
   page = 1,
   query,
 }: {

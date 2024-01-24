@@ -9,19 +9,48 @@ import { Separator } from "@/components/ui/separator";
 import { PopoverContent } from "@radix-ui/react-popover";
 import { SelectGroup } from "@radix-ui/react-select";
 import { Filter, LayoutGrid } from "lucide-react";
-import { FC } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { DropdownFiltersSchema, communityFilterSchema } from "./schema";
+import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { TYPE_OPTIONS, formatFieldValue } from "./community";
 
-type FilterTypeMenuProps = {};
+export function FilterCommunities() {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
 
-export function FilterOrganizations({}: FilterTypeMenuProps) {
+  const filters: DropdownFiltersSchema = {
+    types: communityFilterSchema.parse(
+      searchParams?.get("types")?.split(",") || []
+    ),
+  };
+
+  const setFilters = (newFilters: DropdownFiltersSchema) => {
+    const params = new URLSearchParams(searchParams ?? undefined);
+    for (const [key, value] of Object.entries(newFilters)) {
+      if (value.length) {
+        params.set(key, value.join(","));
+      } else {
+        params.delete(key);
+      }
+    }
+    params.set("page", "1");
+    replace(`${pathname}?${params.toString()}`);
+  };
+
   return (
-    <Popover>
-      <PopoverTrigger asChild>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button variant="outline">
           <Filter size={20} />
         </Button>
-      </PopoverTrigger>
-      <PopoverContent
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
         sideOffset={10}
         className="w-[338px] max-h-[400px] border bg-background dark:bg-muted z-50 mr-24 rounded-md p-1"
       >
@@ -32,6 +61,41 @@ export function FilterOrganizations({}: FilterTypeMenuProps) {
         </SelectGroup>
         <div className="flex w-full gap-2 px-2">
           <RadioGroup
+            defaultValue="all_communities"
+            className="flex w-full flex-col gap-0"
+          >
+            {TYPE_OPTIONS.map((type) => (
+              <div
+                className="flex items-center gap-2 py-1.5 w-full"
+                key={type}
+                onClick={() =>
+                  setFilters({
+                    ...filters,
+                    types: [type],
+                  })
+                }
+              >
+                <RadioGroupItem value={type} id={type} />
+                <Label htmlFor={type} className="font-normal">
+                  {formatFieldValue(type)}
+                </Label>
+              </div>
+              // <DropdownMenuItem
+              //   key={type}
+              //   onClick={() =>
+              //     setFilters({
+              //       ...filters,
+              //       types: filters.types?.includes(type)
+              //         ? filters.types.filter((status) => status !== type)
+              //         : [...(filters.types || []), type],
+              //     })
+              //   }
+              // >
+              //   {formatFieldValue(type)}
+              // </DropdownMenuItem>
+            ))}
+          </RadioGroup>
+          {/* <RadioGroup
             defaultValue="option-one"
             className="flex w-full flex-col gap-0"
           >
@@ -53,9 +117,9 @@ export function FilterOrganizations({}: FilterTypeMenuProps) {
                 Bookmark
               </Label>
             </div>
-          </RadioGroup>
+          </RadioGroup> */}
         </div>
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

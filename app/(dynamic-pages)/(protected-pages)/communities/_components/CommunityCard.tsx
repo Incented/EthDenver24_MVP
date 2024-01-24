@@ -9,6 +9,8 @@ import {
   getTeamMembersCountInOrganization,
   getTeamMembersInOrganization,
 } from "@/data/user/organizations";
+import { Button } from "@/components/ui/button";
+import BookmarkComponent from "./BookMarkComponent";
 
 interface CommunityCardProps {
   communityName: string;
@@ -17,17 +19,25 @@ interface CommunityCardProps {
   communityTasks?: number;
   communityAddress?: string;
   communityId: string;
+  communityCreatedBy?: string;
+  userId: string;
+  isBookmarked?: boolean;
 }
 
 const CommunityCard: FC<CommunityCardProps> = async ({
   communityName,
+  communityCreatedBy,
+  userId,
   communityDescription = "Buan is a community of people who are passionate about learning new things.",
   communityImage,
   communityTasks = 100,
   communityAddress = "New York, USA",
   communityId: id,
+  isBookmarked,
 }) => {
   const communityMembers = await getTeamMembersCountInOrganization(id);
+  const members = await getTeamMembersInOrganization(id);
+  const isMember = members.some((member) => member.member_id === userId);
   return (
     <Card className="p-4">
       <div className="flex items-center gap-2 mb-4">
@@ -44,9 +54,17 @@ const CommunityCard: FC<CommunityCardProps> = async ({
           <Link href={`/communities/${id}`}>{communityName}</Link>
           <p className="text-xs text-gray-400">{communityAddress}</p>
         </div>
-        <div className="flex items-center justify-center w-8 h-8 ml-auto border border-gray-400 rounded-full text-primary">
-          <Bookmark size={20} />
-        </div>
+        {/* <Button
+          variant="outline"
+          className="flex items-center px-2 justify-center ml-auto border rounded-full"
+        >
+          <Bookmark size={20} className="text-primary" />
+        </Button> */}
+        <BookmarkComponent
+          id={userId}
+          organizationId={id}
+          isBookmarked={isBookmarked}
+        />
       </div>
       <p className="mb-4 text-xs text-gray-400">{communityDescription}</p>
 
@@ -63,7 +81,15 @@ const CommunityCard: FC<CommunityCardProps> = async ({
         </div>
       </div>
 
-      <JoinCommunityModal triggerText="Join" community={communityName} />
+      {isMember ? (
+        <JoinCommunityModal
+          triggerText="Join"
+          community={communityName}
+          userId={communityCreatedBy}
+        />
+      ) : (
+        <JoinCommunityModal triggerText="Join" community={communityName} />
+      )}
     </Card>
   );
 };
