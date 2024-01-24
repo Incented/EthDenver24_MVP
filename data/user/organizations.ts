@@ -83,7 +83,7 @@ export async function fetchSlimOrganizations() {
 
 export async function getPaginatedOrganizationsList({
   limit = 10,
-  page,
+  page = 1,
   query,
 }: {
   page?: number;
@@ -92,10 +92,11 @@ export async function getPaginatedOrganizationsList({
 }) {
   const supabaseClient = createSupabaseUserServerComponentClient();
   const startIndex = (page - 1) * limit;
-  const { data, error } = await supabaseClient
-    .from("organizations")
-    .select("*")
-    .ilike("title", `%${query}%`)
+  let supabaseQuery = supabaseClient.from("organizations").select("*");
+  if (query) {
+    supabaseQuery = supabaseQuery.ilike("title", `%${query}%`);
+  }
+  const { data, error } = await supabaseQuery
     .range(startIndex, startIndex + limit - 1)
     .order("created_at", {
       ascending: false,
@@ -359,6 +360,23 @@ export const getTeamMembersInOrganization = async (organizationId: string) => {
       user_profiles: user_profiles,
     };
   });
+};
+
+export const getTeamMembersCountInOrganization = async (
+  organizationId: string
+) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data, error } = await supabase
+    .from("organization_members")
+    .select("id, user_profiles(*)")
+    .eq("organization_id", organizationId);
+
+  if (error) {
+    throw error;
+  }
+
+  const membersWithProfiles = data.filter((member) => member.user_profiles);
+  return membersWithProfiles.length;
 };
 
 export const getOrganizationAdmins = async (organizationId: string) => {

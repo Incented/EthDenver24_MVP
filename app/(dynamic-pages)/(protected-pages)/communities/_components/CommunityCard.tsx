@@ -5,26 +5,29 @@ import Link from "next/link";
 import { FC } from "react";
 
 import JoinCommunityModal from "./JoinCommunityModal";
+import {
+  getTeamMembersCountInOrganization,
+  getTeamMembersInOrganization,
+} from "@/data/user/organizations";
 
 interface CommunityCardProps {
   communityName: string;
   communityDescription?: string;
   communityImage?: string;
-  communityMembers?: number;
   communityTasks?: number;
   communityAddress?: string;
-  communityId?: string;
+  communityId: string;
 }
 
-const CommunityCard: FC<CommunityCardProps> = ({
+const CommunityCard: FC<CommunityCardProps> = async ({
   communityName,
   communityDescription = "Buan is a community of people who are passionate about learning new things.",
-  communityImage = "/assets/avatar_2.jpg",
-  communityMembers = 100,
+  communityImage,
   communityTasks = 100,
   communityAddress = "New York, USA",
   communityId: id,
 }) => {
+  const communityMembers = await getTeamMembersCountInOrganization(id);
   return (
     <Card className="p-4">
       <div className="flex items-center gap-2 mb-4">
