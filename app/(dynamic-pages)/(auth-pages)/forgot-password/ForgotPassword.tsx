@@ -1,9 +1,9 @@
-'use client';
-import { Email } from '@/components/presentational/tailwind/Auth/Email';
-import { T } from '@/components/ui/Typography';
-import { resetPassword } from '@/data/auth/auth';
-import { useToastMutation } from '@/hooks/useToastMutation';
-import { useState } from 'react';
+"use client";
+import { Email } from "@/components/Auth/Email";
+import { T } from "@/components/ui/Typography";
+import { resetPassword } from "@/data/auth/auth";
+import { useToastMutation } from "@/hooks/useToastMutation";
+import { useState } from "react";
 
 export function ForgotPassword() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -12,15 +12,15 @@ export function ForgotPassword() {
       return await resetPassword(email);
     },
     {
-      loadingMessage: 'Sending password reset link...',
-      errorMessage: 'Failed to send password reset link',
-      successMessage: 'Password reset link sent!',
+      loadingMessage: "Sending password reset link...",
+      errorMessage: "Failed to send password reset link",
+      successMessage: "Password reset link sent!",
       onSuccess: () => {
         setSuccessMessage(
-          'A  password reset link has been sent to your email!',
+          "A  password reset link has been sent to your email!"
         );
       },
-    },
+    }
   );
 
   return (
@@ -40,6 +40,7 @@ export function ForgotPassword() {
           onSubmit={magicLinkMutation.mutate}
           isLoading={magicLinkMutation.isLoading}
           view="forgot-password"
+          withMaintenanceMode={false} // Add this line
         />
       </div>
     </div>
