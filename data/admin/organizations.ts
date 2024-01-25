@@ -45,27 +45,3 @@ export async function getPaginatedOrganizationList({
   }
   return data;
 }
-
-export async function getPaginatedOrganizationListWithoutEnsuringAdmin({
-  limit = 10,
-  page,
-  query,
-}: {
-  page?: number;
-  query?: string;
-  limit?: number;
-}) {
-  const { data, error } = await supabaseAdminClient.rpc(
-    "app_admin_get_all_organizations",
-    {
-      page: page,
-      search_query: query,
-      page_size: limit,
-    }
-  );
-  if (error) throw error;
-  if (!data) {
-    throw new Error("No data");
-  }
-  return data;
-}

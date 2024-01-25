@@ -158,14 +158,26 @@ export async function fetchSlimOrganizations() {
   return data || [];
 }
 
+export async function getAllOrganizationsCount() {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+
+  const { data, error } = await supabaseClient
+    .from("organizations")
+    .select("id");
+  if (error) {
+    throw error;
+  }
+  return data.length;
+}
+
 export async function getPaginatedOrganizationsList({
-  limit = 8,
+  limit = 10,
   page = 1,
   query,
 }: {
+  limit?: number;
   page?: number;
   query?: string;
-  limit?: number;
 }) {
   const supabaseClient = createSupabaseUserServerComponentClient();
   const startIndex = (page - 1) * limit;

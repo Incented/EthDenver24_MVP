@@ -68,7 +68,7 @@ export default async function CommunityDetailsPage({
               </div>
               <div>
                 <TaskTab />
-                <Pagination currentPage={1} title="tasks" totalPages={10} />
+                {/* <Pagination currentPage={1} title="tasks" totalPages={10} /> */}
               </div>
             </Card>
           </div>

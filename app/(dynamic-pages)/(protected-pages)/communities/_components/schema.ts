@@ -1,6 +1,7 @@
 import { ZodTypeAny, z } from "zod";
 
 export const appAdminOrganizationsFiltersSchema = z.object({
+  limit: z.coerce.number().int().positive().optional(),
   page: z.coerce.number().int().positive().optional(),
   query: z.string().optional(),
 });

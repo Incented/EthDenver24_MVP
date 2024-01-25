@@ -4,7 +4,10 @@ import { Filter, Plus } from "lucide-react";
 import CommunityCard from "./_components/CommunityCard";
 import Pagination from "@/components/ui/Pagination";
 import Link from "next/link";
-import { getAllOrganizationsForUser } from "@/data/user/organizations";
+import {
+  getAllOrganizationsCount,
+  getAllOrganizationsForUser,
+} from "@/data/user/organizations";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 import { CommunitiesList } from "./_components/CommunitiesList";
 import {
@@ -22,8 +25,12 @@ export default async function CommunitiesPage({
 }) {
   const validatedSearchParams = filtersSchema.parse(searchParams);
   const suspenseKey = JSON.stringify(validatedSearchParams);
+  const communityCount = await getAllOrganizationsCount();
+  const params = new URLSearchParams();
+  const limit = Number(params.get("limit") || 5);
+  // const totalPages = Math.ceil(communityCount / limit);
   return (
-    <main className="px-8 pb-10 flex flex-col min-h-screen">
+    <>
       <div className="items-center mt-8 md:flex">
         <h1 className="text-3xl font-medium ">Communities</h1>
         <div className="flex items-center gap-3 mt-4 ml-auto md:mt-0">
@@ -47,17 +54,21 @@ export default async function CommunitiesPage({
           </div>
         }
       >
-        <div className="flex-grow">
+        <div className="flex-grow overflow-y-auto mt-4">
           <CommunitiesList filters={validatedSearchParams} />
         </div>
       </Suspense>
-      <div className="hidden md:flex py-8">
-        <Pagination currentPage={1} title="Communities" totalPages={10} />
-      </div>
       <div className="flex justify-center md:hidden">
         <Button variant="link">Show more</Button>
       </div>
-    </main>
+      {/* <div className="sticky hidden md:flex py-8 bottom-0">
+        <Pagination
+          title="Communities"
+          totalPages={totalPages}
+          communityCount={communityCount}
+        />
+      </div> */}
+    </>
   );
 }
 

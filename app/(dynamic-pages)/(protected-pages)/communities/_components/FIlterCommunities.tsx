@@ -61,7 +61,7 @@ export function FilterCommunities() {
         </SelectGroup>
         <div className="flex w-full gap-2 px-2">
           <RadioGroup
-            defaultValue="all_communities"
+            defaultValue={searchParams?.get("types")?.split(",")[0]}
             className="flex w-full flex-col gap-0"
           >
             {TYPE_OPTIONS.map((type) => (
