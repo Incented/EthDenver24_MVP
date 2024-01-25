@@ -86,7 +86,9 @@ export function Pagination({ totalPages, title, count }: PaginationProps) {
             <PaginationArrow
               direction="left"
               href={createPageURL(currentPage - 1)}
-              isDisabled={currentPage <= calculatedTotalPages}
+              isDisabled={
+                currentPage === 1 || currentPage > calculatedTotalPages
+              }
             />
             <PaginationArrow
               direction="right"

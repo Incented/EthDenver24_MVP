@@ -47,7 +47,7 @@ export const addBookmark = async ({
   // Check if the bookmark already exists
   const { data: existingBookmark } = await supabase
     .from("bookmarked_organizations")
-    .select("*")
+    .select("id, organization_id")
     .eq("id", id)
     .eq("organization_id", organizationId)
     .single();
@@ -181,7 +181,9 @@ export async function getPaginatedOrganizationsList({
 }) {
   const supabaseClient = createSupabaseUserServerComponentClient();
   const startIndex = (page - 1) * limit;
-  let supabaseQuery = supabaseClient.from("organizations").select("*");
+  let supabaseQuery = supabaseClient
+    .from("organizations")
+    .select("id,title,created_by");
   if (query) {
     supabaseQuery = supabaseQuery.ilike("title", `%${query}%`);
   }

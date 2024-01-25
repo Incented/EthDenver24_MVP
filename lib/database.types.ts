@@ -671,39 +671,11 @@ export interface Database {
         };
         Relationships: [
           {
-            foreignKeyName: "organizations_private_info_active_tasks_fkey";
-            columns: ["active_tasks"];
-            isOneToOne: false;
-            referencedRelation: "organizations";
-            referencedColumns: ["active_tasks"];
-          },
-          {
             foreignKeyName: "organizations_private_info_id_fkey";
             columns: ["id"];
             isOneToOne: true;
             referencedRelation: "organizations";
             referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_private_info_proposal_absolute_reward_fkey";
-            columns: ["proposal_absolute_reward"];
-            isOneToOne: false;
-            referencedRelation: "organizations";
-            referencedColumns: ["proposal_absolute_reward"];
-          },
-          {
-            foreignKeyName: "organizations_private_info_total_members_fkey";
-            columns: ["total_members"];
-            isOneToOne: false;
-            referencedRelation: "organizations";
-            referencedColumns: ["total_members"];
-          },
-          {
-            foreignKeyName: "organizations_private_info_total_tasks_fkey";
-            columns: ["total_tasks"];
-            isOneToOne: false;
-            referencedRelation: "organizations";
-            referencedColumns: ["total_tasks"];
           }
         ];
       };

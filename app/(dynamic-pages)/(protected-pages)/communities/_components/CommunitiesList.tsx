@@ -11,11 +11,11 @@ import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 import { revalidatePath } from "next/cache";
 
 export async function CommunitiesList({ filters }: { filters: FiltersSchema }) {
-  const allOrganizations = await getPaginatedOrganizationsList(filters);
   const user = await serverGetLoggedInUser();
-  const bookmarkedOrganizations = await getAllBookmarkedOrganizationsForUser(
-    user.id
-  );
+  const [allOrganizations, bookmarkedOrganizations] = await Promise.all([
+    getPaginatedOrganizationsList(filters),
+    getAllBookmarkedOrganizationsForUser(user.id),
+  ]);
   let filteredOrganizations = allOrganizations;
   if (filters.types) {
     if (filters.types.includes("my_communities")) {
