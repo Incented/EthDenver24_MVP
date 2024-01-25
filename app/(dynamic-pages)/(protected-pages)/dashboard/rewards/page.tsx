@@ -17,9 +17,9 @@ const RewardsPage = () => {
         <Button variant="link">Show more</Button>
       </div>
 
-      <div className="hidden sm:flex">
+      {/* <div className="hidden sm:flex">
         <Pagination currentPage={1} title="tasks" totalPages={10} />
-      </div>
+      </div> */}
     </main>
   );
 };
