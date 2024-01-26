@@ -15,7 +15,7 @@ import { Anchor } from "@/components/Anchor";
 
 const DashboardPage = () => {
   return (
-    <main className="mx-8 mb-10">
+    <main className="mx-8 mb-20">
       <h1 className="mt-8 text-3xl font-medium">My Home</h1>
 
       <ScrollArea className="w-full whitespace-nowrap">

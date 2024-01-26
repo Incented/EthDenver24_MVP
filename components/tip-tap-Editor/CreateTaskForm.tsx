@@ -29,6 +29,7 @@ import TipTap from "./TipTap";
 import { Card } from "../ui/card";
 import { Upload } from "lucide-react";
 import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
 
 interface CreateTaskFormProps {}
 
@@ -88,8 +89,8 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({}) => {
             control={form.control}
             name="community"
             render={({ field }) => (
-              <FormItem className="">
-                <FormLabel>Community</FormLabel>
+              <FormItem className="col-span-2 sm:w-1/3">
+                <FormLabel className="">Community</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -116,7 +117,7 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({}) => {
             name="taskTitle"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="">
+              <FormItem className="col-span-2 sm:w-1/2">
                 <FormLabel>Title</FormLabel>
                 <FormControl className="">
                   <Input
@@ -130,7 +131,7 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({}) => {
             )}
           />
 
-          <div className="md:col-span-2">
+          <div className="col-span-2">
             <Label>Task Description</Label>
             <Card className="mt-1">
               <FormField
@@ -155,9 +156,22 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({}) => {
             control={form.control}
             name="taskType"
             render={({ field }) => (
-              <FormItem className="md:col-span-2">
+              <FormItem className="col-span-2">
                 <FormLabel>Task Type</FormLabel>
-                <Select
+
+                <div className="flex flex-wrap gap-3">
+                  <Badge variant="outline">Software Dev</Badge>
+                  <Badge variant="outline">Hardware Dev</Badge>
+                  <Badge variant="outline">Legal</Badge>
+                  <Badge variant="outline">Marketing</Badge>
+                  <Badge variant="outline">Marketing</Badge>
+                  <Badge variant="outline">Marketing</Badge>
+                  <Badge variant="outline">Marketing</Badge>
+                  <Badge variant="outline">Marketing</Badge>
+                  <Badge variant="outline">Marketing</Badge>
+                  <Badge variant="outline">Marketing</Badge>
+                </div>
+                {/* <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
@@ -177,7 +191,7 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({}) => {
                       <SelectItem value="Marketing">Marketing</SelectItem>
                     </SelectGroup>
                   </SelectContent>
-                </Select>
+                </Select> */}
                 <FormMessage className="text-red-400" />
               </FormItem>
             )}
@@ -210,9 +224,9 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({}) => {
             )}
           />
 
-          <div className="md:col-span-2">
+          <div className="col-span-2">
             <Label>Upload</Label>
-            <Card className="relative mt-1 outline-dashed outline-gray-300">
+            <Card className="relative mt-1 outline-dashed outline-gray-600">
               <FormField
                 control={form.control}
                 name="image"
@@ -262,9 +276,9 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({}) => {
             </Card>
           </div>
 
-          <div className="md:col-span-2">
+          <div className="col-span-2">
             <Label>Attachments</Label>
-            <Card className="relative mt-1 outline-dashed outline-gray-300">
+            <Card className="relative mt-1 outline-dashed outline-gray-600">
               <FormField
                 control={form.control}
                 name="attchament"

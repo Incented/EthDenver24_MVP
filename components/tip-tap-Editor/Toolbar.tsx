@@ -36,7 +36,7 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
   }
 
   return (
-    <div className="flex items-center px-2 py-1 space-x-2 border-b-2">
+    <div className="flex flex-wrap items-center px-2 py-1 space-x-2 border-b-2">
       <DropdownMenu>
         <DropdownMenuTrigger className="flex items-center gap-2">
           <Plus className="w-4 h-4" />
