@@ -39,8 +39,8 @@ const CommunityCard: FC<CommunityCardProps> = async ({
   const members = await getTeamMembersInOrganization(id);
   const isMember = members.some((member) => member.member_id === userId);
   return (
-    <Card className="p-4">
-      <div className="flex items-center gap-2 mb-4">
+    <Card className="p-6 rounded-lg gap-4">
+      <div className="flex items-center gap-4 mb-4">
         <Avatar>
           <AvatarImage
             src={communityImage}
@@ -51,8 +51,13 @@ const CommunityCard: FC<CommunityCardProps> = async ({
           </AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
-          <Link href={`/communities/${id}`}>{communityName}</Link>
-          <p className="text-xs text-gray-400">{communityAddress}</p>
+          <Link
+            href={`/communities/${id}`}
+            className="text-base font-bold text-foreground leading-7"
+          >
+            {communityName}
+          </Link>
+          <p className="text-xs text-muted-foreground">{communityAddress}</p>
         </div>
         {/* <Button
           variant="outline"
@@ -66,18 +71,24 @@ const CommunityCard: FC<CommunityCardProps> = async ({
           isBookmarked={isBookmarked}
         />
       </div>
-      <p className="mb-4 text-xs text-gray-400">{communityDescription}</p>
+      <p className="mb-4 text-sm text-muted-foreground">
+        {communityDescription}
+      </p>
 
       <div className="flex items-center gap-3 mb-4">
         <div className="">
-          <p>{communityTasks}</p>
-          <p className="text-xs text-gray-400">Active Tasks</p>
+          <p className="text-base leading-7 font-bold">{communityTasks}</p>
+          <p className="text-xs leading-[14px] text-muted-foreground">
+            Active Tasks
+          </p>
         </div>
-        <div className="h-[35px] w-[1px] bg-gray-500" />
+        <div className="h-[35px] w-[1px] bg-muted" />
 
         <div className="">
-          <p>{communityMembers}</p>
-          <p className="text-xs text-gray-400">Total Members</p>
+          <p className="text-base leading-7 font-bold">{communityMembers}</p>
+          <p className="text-xs leading-[14px] text-muted-foreground">
+            Total Members
+          </p>
         </div>
       </div>
 

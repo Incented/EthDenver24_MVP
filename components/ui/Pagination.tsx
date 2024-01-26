@@ -22,9 +22,15 @@ type PaginationProps = {
   totalPages: number;
   title: string;
   count: number;
+  className?: string;
 };
 
-export function Pagination({ totalPages, title, count }: PaginationProps) {
+export function Pagination({
+  totalPages,
+  className,
+  title,
+  count,
+}: PaginationProps) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -44,7 +50,12 @@ export function Pagination({ totalPages, title, count }: PaginationProps) {
     return `${pathname}?${params.toString()}`;
   };
   return (
-    <div className="flex items-center justify-between w-full py-4 px-2 gap-6 overflow-x-scroll text-sm scrollbar-hide">
+    <div
+      className={cn(
+        "flex items-center bg-background justify-between w-full py-4 px-2 gap-6 overflow-x-scroll text-sm scrollbar-hide",
+        className
+      )}
+    >
       <div className="flex gap-1">
         <p className="text-sm text-muted-foreground whitespace-nowrap">
           {currentPage === calculatedTotalPages
