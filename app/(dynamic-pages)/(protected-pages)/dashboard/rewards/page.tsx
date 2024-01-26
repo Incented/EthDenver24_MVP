@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 const RewardsPage = () => {
   return (
-    <main className="mx-8 mb-4 ">
+    <main className="mx-8 mb-4">
       <h1 className="mt-8 mb-4 text-3xl font-medium">Rewards</h1>
 
       <RewardCards />
