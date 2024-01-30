@@ -15,7 +15,6 @@ export const createOrganization = async ({
 }) => {
   const supabase = createSupabaseUserServerComponentClient();
   const user = await serverGetLoggedInUser();
-  console.log(proposalAbsoluteReward);
   const { data, error } = await supabase
     .from("organizations")
     .insert({
@@ -26,7 +25,6 @@ export const createOrganization = async ({
     .select("*")
     .single();
 
-  console.log(data, error);
   if (error) {
     console.error(error);
     throw error;

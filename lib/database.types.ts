@@ -508,7 +508,6 @@ export interface Database {
           carrot_pot_initial_amount: number | null;
           claim_lock_period_duration: unknown | null;
           claim_stake_amount_percentage: number | null;
-          community_avatar_url: string | null;
           community_fee_percentage: number | null;
           contribution_period_duration: unknown | null;
           created_at: string;
@@ -535,7 +534,6 @@ export interface Database {
           carrot_pot_initial_amount?: number | null;
           claim_lock_period_duration?: unknown | null;
           claim_stake_amount_percentage?: number | null;
-          community_avatar_url?: string | null;
           community_fee_percentage?: number | null;
           contribution_period_duration?: unknown | null;
           created_at?: string;
@@ -562,7 +560,6 @@ export interface Database {
           carrot_pot_initial_amount?: number | null;
           claim_lock_period_duration?: unknown | null;
           claim_stake_amount_percentage?: number | null;
-          community_avatar_url?: string | null;
           community_fee_percentage?: number | null;
           contribution_period_duration?: unknown | null;
           created_at?: string;
@@ -1016,25 +1013,19 @@ export interface Database {
         Row: {
           created_at: string | null;
           default_organization: string | null;
-          first_name: string | null;
           id: string;
-          last_name: string | null;
           user_name: string | null;
         };
         Insert: {
           created_at?: string | null;
           default_organization?: string | null;
-          first_name?: string | null;
           id: string;
-          last_name?: string | null;
           user_name?: string | null;
         };
         Update: {
           created_at?: string | null;
           default_organization?: string | null;
-          first_name?: string | null;
           id?: string;
-          last_name?: string | null;
           user_name?: string | null;
         };
         Relationships: [
@@ -1065,20 +1056,26 @@ export interface Database {
         Row: {
           avatar_url: string | null;
           created_at: string;
+          first_name: string | null;
           full_name: string | null;
           id: string;
+          last_name: string | null;
         };
         Insert: {
           avatar_url?: string | null;
           created_at?: string;
+          first_name?: string | null;
           full_name?: string | null;
           id: string;
+          last_name?: string | null;
         };
         Update: {
           avatar_url?: string | null;
           created_at?: string;
+          first_name?: string | null;
           full_name?: string | null;
           id?: string;
+          last_name?: string | null;
         };
         Relationships: [
           {
