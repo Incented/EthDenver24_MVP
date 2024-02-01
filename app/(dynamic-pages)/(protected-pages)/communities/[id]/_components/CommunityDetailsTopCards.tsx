@@ -6,11 +6,14 @@ import { RewardSettingsSchema } from "../../create-community/_components/createC
 
 interface CommunityDetailsTopCardsProps {}
 
-export function CommunityDetailsTopCards({
-  rewards,
-}: {
-  rewards: RewardSettingsSchema | undefined;
-}) {
+export function CommunityDetailsTopCards() {
+  const rewards = {
+    proposalReward: 20,
+    prioritizationReward: 30,
+    validationReward: 50,
+    claimStakeAmount: 100,
+  };
+
   return (
     <div className="flex w-full gap-3">
       <CommunityDetailTopCard

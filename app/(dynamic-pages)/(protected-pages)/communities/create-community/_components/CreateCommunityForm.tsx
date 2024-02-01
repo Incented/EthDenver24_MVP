@@ -714,19 +714,21 @@ export default function CreateCommunityForm() {
                     {/* Details */}
                     <div className="h-full overflow-y-auto w-full">
                       <div className="flex flex-col gap-4 w-full">
-                        <CommunityDetailsTopCards rewards={rewardSettings} />
+                        <CommunityDetailsTopCards
+                        //  rewards={rewardSettings}
+                        />
                         <div className="grid grid-cols-4 gap-4 w-full">
                           <CarrotPotCard />
                           <PeriodsCard
-                            periods={{
-                              prioritizationPeriod:
-                                protocolConfiguration?.prioritizationPeriod ||
-                                0,
-                              contributionPeriod:
-                                protocolConfiguration?.contributionPeriod || 0,
-                              validationPeriod:
-                                protocolConfiguration?.validationPeriod || 0,
-                            }}
+                          // periods={{
+                          //   prioritizationPeriod:
+                          //     protocolConfiguration?.prioritizationPeriod ||
+                          //     0,
+                          //   contributionPeriod:
+                          //     protocolConfiguration?.contributionPeriod || 0,
+                          //   validationPeriod:
+                          //     protocolConfiguration?.validationPeriod || 0,
+                          // }}
                           />
                           <PriorityCards />
                         </div>
