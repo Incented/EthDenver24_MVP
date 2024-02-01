@@ -1,10 +1,9 @@
 import { Card } from "@/components/ui/card";
 import { Info, Timer } from "lucide-react";
 import { FC } from "react";
+import { Periods } from "../../create-community/_components/createCommunitySchema";
 
-interface PeriodsCardProps {}
-
-const PeriodsCard: FC<PeriodsCardProps> = ({}) => {
+export function PeriodsCard({ periods }: { periods: Periods }) {
   return (
     <Card className="bg-muted grid grid-cols-2 border-none col-span-2 p-6 w-full ">
       <div className="mb-4 flex flex-col gap-4 h-full justify-between ">
@@ -37,7 +36,9 @@ const PeriodsCard: FC<PeriodsCardProps> = ({}) => {
 
       <div className="grid grid-rows-3 gap-3">
         <Card className="bg-transparent shadow-none flex-col justify-center items-center py-3.5 p-4 h-full border border-primary text-primary">
-          <p className="text-xl leading-9 font-semibold">10 days</p>
+          <p className="text-xl leading-9 font-semibold">
+            {periods.prioritizationPeriod} days
+          </p>
           <div className="flex items-center gap-1">
             <p className="text-xs font-light text-primary whitespace-nowrap">
               Prioritization Period
@@ -46,19 +47,23 @@ const PeriodsCard: FC<PeriodsCardProps> = ({}) => {
           </div>
         </Card>
         <Card className="bg-transparent shadow-none flex-col justify-center items-center py-3.5 p-4 h-full border border-primary text-primary">
-          <p className="text-xl leading-9 font-semibold">10 days</p>
+          <p className="text-xl leading-9 font-semibold">
+            {periods.contributionPeriod} days
+          </p>
           <div className="flex items-center gap-1">
             <p className="text-xs font-light text-primary whitespace-nowrap">
-              Prioritization Period
+              Contribution Period
             </p>
             <Info size={14} />
           </div>
         </Card>
         <Card className="bg-transparent shadow-none flex-col justify-center items-center py-3.5 p-4 h-full border border-primary text-primary">
-          <p className="text-xl leading-9 font-semibold">10 days</p>
+          <p className="text-xl leading-9 font-semibold">
+            {periods.validationPeriod} days
+          </p>
           <div className="flex items-center gap-1">
             <p className="text-xs font-light text-primary whitespace-nowrap">
-              Prioritization Period
+              Validation Period
             </p>
             <Info size={14} />
           </div>
@@ -66,6 +71,6 @@ const PeriodsCard: FC<PeriodsCardProps> = ({}) => {
       </div>
     </Card>
   );
-};
+}
 
 export default PeriodsCard;

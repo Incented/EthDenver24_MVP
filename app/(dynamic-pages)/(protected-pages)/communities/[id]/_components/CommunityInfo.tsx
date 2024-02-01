@@ -9,7 +9,13 @@ type CommunityInfoProps = {
   communityDescription?: string;
   communityImage?: string;
   communityMembers?: number;
-  communityUrl?: string;
+  communityUrls?: {
+    website?: string;
+    facebook?: string;
+    twitter?: string;
+    linkedin?: string;
+    youtube?: string;
+  };
 };
 
 function CommunityInfo({
@@ -17,7 +23,7 @@ function CommunityInfo({
   communityDescription,
   communityImage,
   communityMembers,
-  communityUrl,
+  communityUrls,
 }: CommunityInfoProps) {
   return (
     <Card className="min-w-[281px] border-none bg-muted p-8">
@@ -41,28 +47,36 @@ function CommunityInfo({
       <div className="flex flex-col gap-y-4">
         <Link href="" className="flex items-center gap-2">
           <LinkIcon size={24} className="p-1 text-black bg-border rounded-md" />
-          <p className="text-xs text-muted-foreground">{communityUrl}</p>
+          <p className="text-xs text-muted-foreground">
+            {communityUrls?.website}
+          </p>
         </Link>
         <Link href="" className="flex items-center gap-2">
           <Facebook
             size={24}
             className="p-1 text-foreground bg-border rounded-md"
           />
-          <p className="text-xs text-muted-foreground">{communityUrl}</p>
+          <p className="text-xs text-muted-foreground">
+            {communityUrls?.facebook}
+          </p>
         </Link>
         <Link href="" className="flex items-center gap-2">
           <Twitter
             size={24}
             className="p-1 text-foreground bg-border rounded-md"
           />
-          <p className="text-xs text-muted-foreground">{communityUrl}</p>
+          <p className="text-xs text-muted-foreground">
+            {communityUrls?.linkedin}
+          </p>
         </Link>
         <Link href="" className="flex items-center gap-2">
           <Linkedin
             size={24}
             className="p-1 text-foreground bg-border rounded-md"
           />
-          <p className="text-xs text-muted-foreground">{communityUrl}</p>
+          <p className="text-xs text-muted-foreground">
+            {communityUrls?.youtube}
+          </p>
         </Link>
       </div>
     </Card>
