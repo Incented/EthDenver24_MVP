@@ -2,14 +2,14 @@ import CreateCommunityForm from "./_components/CreateCommunityForm";
 
 export default function CreateCommunityPage() {
   return (
-    <div className="relative h-full w-full overflow-hidden">
+    <main className="relative w-full overflow-x-hidden overflow-y-scroll">
       <div className="mt-10">
-        <div className="relative flex flex-col gap-4 w-full">
+        <div className="relative flex flex-col w-full gap-4">
           <div className="w-full">
             <CreateCommunityForm />
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

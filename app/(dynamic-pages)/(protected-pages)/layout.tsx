@@ -31,7 +31,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
     const { userProfile } = await fetchData(supabaseClient, data.user);
     return (
       <LoggedInUserProvider user={user}>
-        <div className="h-screen overflow-hidden">
+        <div className="">
           <Suspense>
             <Navbar userProfile={userProfile} />
           </Suspense>

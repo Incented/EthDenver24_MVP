@@ -30,6 +30,8 @@ import UserRolesAndPermissionsForm from "./UserRolesAndPermissions";
 import { Check } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import CarrotPotForm from "./CarrotPotForm";
+import CreateCommunityStep from "./CreateCommunityStep";
+import { FinalReviewForm } from "./FinalReviewForm";
 
 export default function CreateCommunityForm() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -173,7 +175,7 @@ export default function CreateCommunityForm() {
     },
     {
       id: 3,
-      name: "Carrot Pot",
+      name: "Configure Carrot Pot",
       icon: (
         <svg
           width="16"
@@ -346,288 +348,32 @@ export default function CreateCommunityForm() {
   // };
 
   return (
-    <div className="px-8 pt-0 w-full h-full md:overflow-y-hidden">
+    <div className="w-full px-6 pt-0">
       <div className="relative md:grid md:grid-cols-[auto,1fr] flex flex-col gap-4 w-full h-full">
         <div className="relative flex rounded-lg md:flex-col flex-row gap-6 p-6 md:w-[280px] w-full overflow-y-hidden md:overflow-x-hidden bg-secondary h-fit md:h-fit">
           <div
             className={cn(
-              "h-40",
+              "h-44",
               "absolute left-8 z-0 top-10 flex w-6 justify-center"
             )}
           >
-            <div className="w-px bg-border h-[240px]" />
+            <div className="hidden md:block w-px bg-border h-[240px]" />
           </div>
+          <hr className="absolute block md:hidden left-12 top-1/2 z-0 w-[400px] border-t border-border" />
           {steps.map((step) => {
             return (
-              <div
+              <CreateCommunityStep
+                step={step}
+                currentStep={currentStep}
+                setCurrentStep={setCurrentStep}
                 key={step.id}
-                onClick={() => setCurrentStep(step.id)}
-                className={cn(
-                  "relative w-full text-base leading-9 whitespace-nowrap px-0 bg-transparent shadow-none ",
-                  currentStep === step.id
-                    ? "text-foreground font-medium "
-                    : "text-muted-foreground font-normal hover:text-foreground"
-                )}
-              >
-                <div className="flex gap-2 items-center">
-                  {step.icon ? (
-                    <div
-                      className={cn(
-                        "border rounded-full h-10 w-10 bg-background flex items-center justify-center",
-                        currentStep === step.id
-                          ? "bg-primary stroke-background"
-                          : "bg-background stroke-foreground"
-                      )}
-                    >
-                      {currentStep > step.id ? <Check size={16} /> : step.icon}
-                    </div>
-                  ) : null}
-                  <span className="leading-9">{step.name}</span>
-                </div>
-              </div>
+              />
             );
           })}
         </div>
         <div className="w-full">
           <div className="w-full">
             {currentStep === 0 && (
-              // <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:h-[640px] 2xl:h-[760px]">
-              //   <div className="flex justify-between items-center pb-4 border-b">
-              //     <div className="flex flex-col w-full">
-              //       <p className="font-semibold text-foreground text-base leading-9">
-              //         Community Details
-              //       </p>
-              //       <p className="text-sm leading-6">
-              //         Basic information about the community.
-              //       </p>
-              //     </div>
-              //     <div className="flex flex-col">
-              //       <div className="flex justify-between text-sm text-muted-foreground">
-              //         <p>Step 1/5</p> <p>20%</p>
-              //       </div>
-              //       <div className="py-1.5">
-              //         <Progress value={20} className="h-2 w-[160px]" />
-              //       </div>
-              //     </div>
-              //   </div>
-
-              //   <div className=" h-[484px] overflow-hidden">
-              //     <div className="flex gap-6 mt-2 overflow-auto ">
-              //       <div className="bg-muted w-[228px] h-fit rounded-xl flex flex-col justify-center items-center p-6 px-4">
-              //         <div className="bg-background flex items-center justify-center mb-4 w-24 h-24 rounded-full p-4">
-              //           <svg
-              //             width="40"
-              //             height="40"
-              //             viewBox="0 0 16 16"
-              //             fill="none"
-              //             xmlns="http://www.w3.org/2000/svg"
-              //           >
-              //             <g id="image">
-              //               <path
-              //                 id="Vector"
-              //                 d="M14 10L11.9427 7.94267C11.6926 7.69271 11.3536 7.55229 11 7.55229C10.6464 7.55229 10.3074 7.69271 10.0573 7.94267L4 14M3.33333 2H12.6667C13.403 2 14 2.59695 14 3.33333V12.6667C14 13.403 13.403 14 12.6667 14H3.33333C2.59695 14 2 13.403 2 12.6667V3.33333C2 2.59695 2.59695 2 3.33333 2ZM7.33333 6C7.33333 6.73638 6.73638 7.33333 6 7.33333C5.26362 7.33333 4.66667 6.73638 4.66667 6C4.66667 5.26362 5.26362 4.66667 6 4.66667C6.73638 4.66667 7.33333 5.26362 7.33333 6Z"
-              //                 strokeLinecap="round"
-              //                 strokeLinejoin="round"
-              //                 className="stroke-border"
-              //               />
-              //             </g>
-              //           </svg>
-              //         </div>
-              //         <p className="text-sm leading-6 mb-2">
-              //           {" "}
-              //           Edit your community logo
-              //         </p>
-              //         <Button className="px-8">Update</Button>
-              //       </div>
-              //       <div className="space-y-4 w-[300px] pb-[10px]">
-              //         <div className="space-y-2">
-              //           <Label htmlFor="name">Community Name</Label>
-              //           <Input
-              //             {...register("title")}
-              //             required
-              //             id="title"
-              //             type="text"
-              //             placeholder="Community Name"
-              //             // disabled={isLoading}
-              //           />
-              //           {errors.title?.message && (
-              //             <p className="text-sm text-error">
-              //               {errors.title?.message}
-              //             </p>
-              //           )}
-              //         </div>
-              //         <div className="space-y-2">
-              //           <Label htmlFor="name">Community Description</Label>
-              //           <Textarea
-              //             {...register("description")}
-              //             className="h-24"
-              //             required
-              //             id="description"
-              //             placeholder="Community Description"
-              //             // disabled={isLoading}
-              //           />
-              //           {errors.description?.message && (
-              //             <p className="text-sm text-red-600 dark:text-red-500">
-              //               {errors.description?.message}
-              //             </p>
-              //           )}
-              //         </div>
-              //         {/* <div className="flex gap-3 items-center mb-2">
-              //           <Switch />{" "}
-              //           <p className="text-sm font-normal leading-5">
-              //             Allow Members to invite other members
-              //           </p>
-              //         </div>{" "} */}
-              //         <p className="text-sm font-medium leading-[14px]">
-              //           Social Media links
-              //         </p>
-              //         <div className="relative space-y-2">
-              //           <Input
-              //             {...register("website")}
-              //             required
-              //             className=" pl-8"
-              //             id="name"
-              //             placeholder="websitelink.com"
-              //             // disabled={isLoading}
-              //           />
-              //           {errors.website?.message && (
-              //             <p className="text-sm text-red-600 dark:text-red-500">
-              //               {errors.website?.message}
-              //             </p>
-              //           )}
-              //           <div className="absolute left-2.5 -top-1 translate-y-1/2">
-              //             <svg
-              //               width="16px"
-              //               height="16px"
-              //               viewBox="0 0 16 16"
-              //               fill="none"
-              //               xmlns="http://www.w3.org/2000/svg"
-              //             >
-              //               <g id="link">
-              //                 <path
-              //                   id="Vector"
-              //                   d="M6.66668 8.66667C6.95298 9.04942 7.31825 9.36612 7.73771 9.59529C8.15717 9.82446 8.62102 9.96074 9.09778 9.99489C9.57454 10.029 10.0531 9.96024 10.5009 9.79319C10.9487 9.62613 11.3554 9.36471 11.6933 9.02667L13.6933 7.02667C14.3005 6.39799 14.6365 5.55598 14.6289 4.682C14.6213 3.80801 14.2708 2.97196 13.6527 2.35394C13.0347 1.73591 12.1987 1.38535 11.3247 1.37775C10.4507 1.37016 9.60869 1.70614 8.98001 2.31333L7.83334 3.45333M9.33334 7.33333C9.04704 6.95058 8.68177 6.63388 8.26231 6.40471C7.84285 6.17553 7.37901 6.03926 6.90224 6.00511C6.42548 5.97097 5.94695 6.03975 5.49911 6.20681C5.05128 6.37387 4.6446 6.63529 4.30668 6.97333L2.30668 8.97333C1.69948 9.60201 1.3635 10.444 1.3711 11.318C1.37869 12.192 1.72926 13.028 2.34728 13.6461C2.96531 14.2641 3.80135 14.6147 4.67534 14.6222C5.54933 14.6298 6.39134 14.2939 7.02001 13.6867L8.16001 12.5467"
-              //                   strokeLinecap="round"
-              //                   strokeLinejoin="round"
-              //                   className=" stroke-foreground"
-              //                 />
-              //               </g>
-              //             </svg>
-              //           </div>
-              //         </div>
-              //         <div className="relative space-y-2">
-              //           <Input
-              //             {...register("facebook")}
-              //             required
-              //             className=" pl-8"
-              //             id="facebook"
-              //             name="facebook"
-              //             placeholder="facebook_username.com"
-              //             // disabled={isLoading}
-              //           />
-              //           {errors.facebook?.message && (
-              //             <p className="text-sm text-red-600 dark:text-red-500">
-              //               {errors.facebook?.message}
-              //             </p>
-              //           )}
-              //           <div className="absolute left-2.5 -top-1 translate-y-1/2">
-              //             <Facebook
-              //               size={16}
-              //               className=" text-border-foreground bg-transparent rounded-md"
-              //             />
-              //           </div>
-              //         </div>
-              //         <div className="relative space-y-2">
-              //           <Input
-              //             {...register("twitter")}
-              //             required
-              //             className=" pl-8"
-              //             id="twitter"
-              //             placeholder="twitter_username"
-              //             // disabled={isLoading}
-              //           />
-              //           {errors.twitter?.message && (
-              //             <p className="text-sm text-red-600 dark:text-red-500">
-              //               {errors.twitter?.message}
-              //             </p>
-              //           )}
-              //           <div className="absolute left-2.5 -top-1 translate-y-1/2">
-              //             <svg
-              //               width="1200px"
-              //               height="1200px"
-              //               viewBox="0 0 16 16"
-              //               fill="none"
-              //               xmlns="http://www.w3.org/2000/svg"
-              //               className="text-muted-foreground rounded-md"
-              //             >
-              //               <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z" />
-              //             </svg>
-              //           </div>
-              //         </div>
-              //         <div className="relative space-y-2">
-              //           <Input
-              //             {...register("linkedin")}
-              //             required
-              //             className=" pl-8"
-              //             placeholder="linkedin_username.com"
-              //             // disabled={isLoading}
-              //           />
-              //           {errors.linkedin?.message && (
-              //             <p className="text-sm text-red-600 dark:text-red-500">
-              //               {errors.linkedin?.message}
-              //             </p>
-              //           )}
-              //           <div className="absolute left-2.5 -top-1 translate-y-1/2">
-              //             <Facebook
-              //               size={16}
-              //               className=" text-border-foreground bg-transparent rounded-md"
-              //             />
-              //           </div>
-              //         </div>
-              //         <div className="relative space-y-2">
-              //           <Input
-              //             {...register("instagram")}
-              //             required
-              //             className=" pl-8"
-              //             placeholder="instagram_username.com"
-              //             // disabled={isLoading}
-              //           />
-              //           {errors.instagram?.message && (
-              //             <p className="text-sm text-red-600 dark:text-red-500">
-              //               {errors.instagram?.message}
-              //             </p>
-              //           )}
-              //           <div className="absolute left-2.5 -top-1 translate-y-1/2">
-              //             <Facebook
-              //               size={16}
-              //               className=" text-border-foreground bg-transparent rounded-md"
-              //             />
-              //           </div>
-              //         </div>
-              //         <div className="relative space-y-2">
-              //           <Input
-              //             {...register("youtube")}
-              //             required
-              //             className=" pl-8"
-              //             placeholder="youtube_username.com"
-              //             // disabled={isLoading}
-              //           />
-              //           {errors.youtube?.message && (
-              //             <p className="text-sm text-red-600 dark:text-red-500">
-              //               {errors.youtube?.message}
-              //             </p>
-              //           )}
-              //           <div className="absolute left-2.5 -top-1 translate-y-1/2">
-              //             <Facebook
-              //               size={16}
-              //               className=" text-border-foreground bg-transparent rounded-md"
-              //             />
-              //           </div>
-              //         </div>
-              //       </div>
-              //     </div>
-              //   </div>
-              // </div>
               <BasicDetailsForm
                 basicDetails={basicDetails}
                 setBasicDetails={setBasicDetails}
@@ -668,112 +414,93 @@ export default function CreateCommunityForm() {
               />
             )}
             {currentStep === 5 && (
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                data-tid="create-community-form"
-                className="w-full"
-              >
-                <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
-                  <div className="flex justify-between items-center pb-4 border-b">
-                    <div className="flex flex-col w-full">
-                      <p className="font-semibold text-foreground text-base leading-9">
-                        Final Review
-                      </p>
-                      <p className="text-sm leading-6">
-                        Assign roles and define permissions within the
-                        community.
-                      </p>
-                    </div>
-                    <div className="flex flex-col">
-                      <div className="flex justify-between text-sm text-muted-foreground">
-                        <p>Step 6/6</p> <p>100%</p>
-                      </div>
-                      <div className="py-1.5">
-                        <Progress value={100} className="h-2 w-[160px]" />
-                      </div>
-                    </div>
-                  </div>
+              // <form
+              //   onSubmit={handleSubmit(onSubmit)}
+              //   data-tid="create-community-form"
+              //   className="w-full"
+              // >
+              //   <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
+              //     <div className="flex justify-between items-center pb-4 border-b">
+              //       <div className="flex flex-col w-full">
+              //         <p className="font-semibold text-foreground text-base leading-9">
+              //           Final Review
+              //         </p>
+              //         <p className="text-sm leading-6">
+              //           Assign roles and define permissions within the
+              //           community.
+              //         </p>
+              //       </div>
+              //       <div className="flex flex-col">
+              //         <div className="flex justify-between text-sm text-muted-foreground">
+              //           <p>Step 6/6</p> <p>100%</p>
+              //         </div>
+              //         <div className="py-1.5">
+              //           <Progress value={100} className="h-2 w-[160px]" />
+              //         </div>
+              //       </div>
+              //     </div>
 
-                  <div className="grid grid-cols-[auto,1fr] gap-4 h-[calc(100vh-400px)]   md:h-[calc(100vh-600px)] xl:h-[calc(100vh-220px)] overflow-hidden w-full ">
-                    {/* Members */}
-                    <div className="flex flex-col gap-4 rounded-lg w-[280px]">
-                      <CommunityInfo
-                        communityName={basicDetails?.title || "Community name"}
-                        communityUrls={{
-                          website: basicDetails?.website || "",
-                          facebook: basicDetails?.facebook || "",
-                          twitter: basicDetails?.twitter || "",
-                          linkedin: basicDetails?.linkedin || "",
-                          youtube: basicDetails?.youtube || "",
-                        }}
-                      />
-                      <div className="h-20 md:h-20 xl:h-72 rounded-xl overflow-auto">
-                        <CommunityMembers />
-                      </div>
-                    </div>
-                    {/* Details */}
-                    <div className="h-full overflow-y-auto w-full">
-                      <div className="flex flex-col gap-4 w-full">
-                        <CommunityDetailsTopCards
-                        //  rewards={rewardSettings}
-                        />
-                        <div className="grid grid-cols-4 gap-4 w-full">
-                          <CarrotPotCard />
-                          <PeriodsCard
-                          // periods={{
-                          //   prioritizationPeriod:
-                          //     protocolConfiguration?.prioritizationPeriod ||
-                          //     0,
-                          //   contributionPeriod:
-                          //     protocolConfiguration?.contributionPeriod || 0,
-                          //   validationPeriod:
-                          //     protocolConfiguration?.validationPeriod || 0,
-                          // }}
-                          />
-                          <PriorityCards />
-                        </div>
-                        <Card className="w-full p-8 pb-4 bg-muted border-none ">
-                          <div className="flex items-center w-full mb-4">
-                            <h1 className="text-[20px] font-semibold">Tasks</h1>
-                            <div className="flex gap-4 ml-auto">
-                              <Search placeholder="Search Tasks..." />
-                              <Button variant="outline">Filter</Button>
-                            </div>
-                          </div>
-                          {/* <div>
-                            <TaskTab />
-                            <div className="pt-4">
-                              <Pagination
-                                count={20}
-                                title="Tasks"
-                                totalPages={10}
-                                className="bg-transparent"
-                              />
-                            </div>
-                          </div> */}
-                        </Card>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className=" flex w-full p-6 py-4 pb-6 rounded-lg rounded-t-none border">
-                  <div className="mx-auto flex gap-2 justify-start">
-                    <Button
-                      variant="outline"
-                      className="w-[100px]"
-                      onClick={() => {
-                        prev();
-                      }}
-                      type="button"
-                    >
-                      Back
-                    </Button>{" "}
-                    <Button variant="default" type="submit" className="w-full">
-                      Create Community
-                    </Button>
-                  </div>
-                </div>
-              </form>
+              //     <div className="grid grid-cols-[auto,1fr] gap-4 h-[calc(100vh-400px)]   md:h-[calc(100vh-600px)] xl:h-[calc(100vh-220px)] overflow-hidden w-full ">
+              //       {/* Members */}
+              //       <div className="flex flex-col gap-4 rounded-lg w-[280px]">
+              //         <CommunityInfo
+              //           communityName={basicDetails?.title || "Community name"}
+              //           communityUrls={{
+              //             website: basicDetails?.website || "",
+              //             facebook: basicDetails?.facebook || "",
+              //             twitter: basicDetails?.twitter || "",
+              //             linkedin: basicDetails?.linkedin || "",
+              //             youtube: basicDetails?.youtube || "",
+              //           }}
+              //         />
+              //         <div className="h-20 md:h-20 xl:h-72 rounded-xl overflow-auto">
+              //           <CommunityMembers />
+              //         </div>
+              //       </div>
+              //       {/* Details */}
+              //       <div className="h-full overflow-y-auto w-full">
+              //         <div className="flex flex-col gap-4 w-full">
+              //           <CommunityDetailsTopCards
+              //           //  rewards={rewardSettings}
+              //           />
+              //           <div className="grid grid-cols-4 gap-4 w-full">
+              //             <CarrotPotCard />
+              //             <PeriodsCard
+              //             // periods={{
+              //             //   prioritizationPeriod:
+              //             //     protocolConfiguration?.prioritizationPeriod ||
+              //             //     0,
+              //             //   contributionPeriod:
+              //             //     protocolConfiguration?.contributionPeriod || 0,
+              //             //   validationPeriod:
+              //             //     protocolConfiguration?.validationPeriod || 0,
+              //             // }}
+              //             />
+              //             <PriorityCards />
+              //           </div>
+              //         </div>
+              //       </div>
+              //     </div>
+              //   </div>
+              //   <div className=" flex w-full p-6 py-4 pb-6 rounded-lg rounded-t-none border">
+              //     <div className="mx-auto flex gap-2 justify-start">
+              //       <Button
+              //         variant="outline"
+              //         className="w-[100px]"
+              //         onClick={() => {
+              //           prev();
+              //         }}
+              //         type="button"
+              //       >
+              //         Back
+              //       </Button>{" "}
+              //       <Button variant="default" type="submit" className="w-full">
+              //         Create Community
+              //       </Button>
+              //     </div>
+              //   </div>
+              // </form>
+              <FinalReviewForm basicDetails={basicDetails} rewardSettings={rewardSettings} protocolConfiguration={protocolConfiguration} prev={prev} onSubmit={onSubmit}              />
             )}
           </div>
         </div>

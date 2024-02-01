@@ -5,33 +5,52 @@ import { FC } from "react";
 
 interface PriorityCardsProps {}
 
+export const PriorityCard = () => {
+  return (
+    <Card className=" grid grid-rows-[auto,1fr] w-full h-full p-4 ">
+      <div className="w-full border-b">
+        <h1 className="text-[16px] mb-2">Prioritization Quorum</h1>
+      </div>
+      <div className="flex flex-col items-center justify-center w-full h-full">
+        <div className="flex items-center justify-center text-2xl">
+          <ChevronRight />
+          <h1>75%</h1>
+        </div>
+        <p className="font-light text-center text-muted-foreground">
+          positive priority
+        </p>
+      </div>
+    </Card>
+  );
+};
+
 const PriorityCards: FC<PriorityCardsProps> = ({}) => {
   return (
-    <div className="col-span-1 grid grid-row-2 gap-3 w-full">
+    <div className="grid w-full col-span-1 gap-3 grid-row-2">
       <Card className=" grid grid-rows-[auto,1fr] w-full h-full p-4 ">
-        <div className="border-b w-full">
+        <div className="w-full border-b">
           <h1 className="text-[16px] mb-2">Prioritization Quorum</h1>
         </div>
-        <div className="w-full h-full flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center w-full h-full">
           <div className="flex items-center justify-center text-2xl">
             <ChevronRight />
             <h1>75%</h1>
           </div>
-          <p className="text-center font-light text-muted-foreground">
+          <p className="font-light text-center text-muted-foreground">
             positive priority
           </p>
         </div>
       </Card>
       <Card className=" grid grid-rows-[auto,1fr] w-full h-full p-4 ">
-        <div className="border-b w-full">
+        <div className="w-full border-b">
           <h1 className="text-[16px] mb-2">Prioritization Quorum</h1>
         </div>
-        <div className="w-full h-full flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center w-full h-full">
           <div className="flex items-center justify-center text-2xl">
             <ChevronRight />
             <h1>75%</h1>
           </div>
-          <p className="text-center font-light text-muted-foreground">
+          <p className="font-light text-center text-muted-foreground">
             positive priority
           </p>
         </div>

@@ -26,7 +26,7 @@ function CommunityInfo({
   communityUrls,
 }: CommunityInfoProps) {
   return (
-    <Card className="min-w-[281px] border-none bg-muted p-8">
+    <Card className="col-span-1 w-full lg:min-w-[281px] border-none bg-muted p-8">
       <div className="flex items-center gap-4 mb-4">
         <Avatar className="w-16 h-16">
           <AvatarImage src={communityImage} className="object-cover" />

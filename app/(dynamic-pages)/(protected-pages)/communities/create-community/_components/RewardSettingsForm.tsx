@@ -62,30 +62,30 @@ export default function RewardsSettingsForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
-        <div className="flex justify-between items-center pb-4 border-b">
-          <div className="flex flex-col w-full">
-            <p className="font-semibold text-foreground text-base leading-9">
+        <div className="flex flex-col lg:flex-row items-center justify-between border-b w-full">
+          <div className="flex flex-col w-full  pb-4 lg:col-span-2">
+            <p className="text-base font-semibold leading-9 text-foreground">
               Reward Settings
             </p>
             <p className="text-sm leading-6">
               Manage the task reward for your community members.
             </p>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col pt-[10px] md:justify-between w-full pb-4 lg:pb-0 lg:w-[160px]">
             <div className="flex justify-between text-sm text-muted-foreground">
               <p>Step 3/6</p> <p>40%</p>
             </div>
             <div className="py-1.5">
-              <Progress value={40} className="h-2 w-[160px]" />
+              <Progress value={40} className="w-full h-2" />
             </div>
           </div>
         </div>
 
         <div className="h-full overflow-hidden">
-          <div className="h-full flex gap-8">
+          <div className="h-full flex flex-col md:flex-row gap-8">
             <div className="flex-1 space-y-6">
               <div>
-                <div className="mt-2 grid grid-cols-2 gap-4 max-w-md">
+                <div className="mt-2 grid grid-cols-1 md:grid-cols-1 xl:grid-cols-2 gap-4 max-w-md">
                   <div className="relative w-40 space-y-1">
                     <span className="text-sm">Proposal Reward</span>
                     <Input

@@ -23,27 +23,27 @@ type socialMediaOption = {
 const socialMediaOptions: socialMediaOption[] = [
   {
     value: "website",
-    icon: <Link size={16} className="stroke-foreground" />,
+    icon: <Link size={16} className="pr-2 stroke-foreground" />,
     label: "Website",
   },
   {
     value: "facebook",
-    icon: <Facebook size={16} className="stroke-foreground" />,
+    icon: <Facebook size={16} className="pr-2 stroke-foreground" />,
     label: "Facebook",
   },
   {
     value: "linkedin",
-    icon: <Linkedin size={16} className="stroke-foreground" />,
+    icon: <Linkedin size={16} className="pr-2 stroke-foreground" />,
     label: "LinkedIn",
   },
   {
     value: "youtube",
-    icon: <Youtube size={16} className="stroke-foreground" />,
+    icon: <Youtube size={16} className="pr-2 stroke-foreground" />,
     label: "YouTube",
   },
   {
     value: "instagram",
-    icon: <Instagram size={16} className="stroke-foreground" />,
+    icon: <Instagram size={16} className="pr-2 stroke-foreground" />,
     label: "Instagram",
   },
 ];

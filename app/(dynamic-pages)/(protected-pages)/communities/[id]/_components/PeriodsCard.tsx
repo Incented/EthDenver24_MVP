@@ -1,15 +1,8 @@
 import { Card } from "@/components/ui/card";
 import { Info, Timer } from "lucide-react";
-import { FC } from "react";
 import { Periods } from "../../create-community/_components/createCommunitySchema";
 
-export function PeriodsCard() {
-  // { periods }: { periods: Periods }
-  const periods = {
-    prioritizationPeriod: 20,
-    contributionPeriod: 30,
-    validationPeriod: 50,
-  };
+export function PeriodsCard({ periods }: { periods: Periods }) {
   return (
     <Card className="bg-muted grid grid-cols-2 border-none col-span-2 p-6 w-full ">
       <div className="mb-4 flex flex-col gap-4 h-full justify-between ">

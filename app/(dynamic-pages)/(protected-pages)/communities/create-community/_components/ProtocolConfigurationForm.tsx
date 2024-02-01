@@ -67,9 +67,9 @@ export default function ProtocolConfigurationForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
-        <div className="flex justify-between items-center pb-4 border-b">
-          <div className="flex flex-col w-full">
-            <p className="font-semibold text-foreground text-base leading-9">
+        <div className="flex flex-col lg:flex-row items-center justify-between border-b w-full">
+          <div className="flex flex-col w-full  pb-4 lg:col-span-2">
+            <p className="text-base font-semibold leading-9 text-foreground">
               Protocol Configuration
             </p>
             <p className="text-sm leading-6">
@@ -77,22 +77,22 @@ export default function ProtocolConfigurationForm({
               carrot-pot, validation quorum, etc.
             </p>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col pt-[10px] md:justify-between w-full pb-4 lg:pb-0 lg:w-[160px]">
             <div className="flex justify-between text-sm text-muted-foreground">
               <p>Step 2/6</p> <p>20%</p>
             </div>
             <div className="py-1.5">
-              <Progress value={20} className="h-2 w-[160px]" />
+              <Progress value={20} className="w-full h-2" />
             </div>
           </div>
         </div>
 
-        <div className=" h-[484px] overflow-hidden ">
-          <div className="flex gap-8">
+        <div className=" h-[484px] overflow-auto ">
+          <div className="flex flex-col md:flex-row gap-8">
             <div className="flex-1 space-y-6">
               <div>
                 <h3 className="text-base leading-9 font-normal">Quorum</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-rows-auto md:grid-cols-1 gap-4 w-[160px] md:w-fit">
                   <div className="relative space-y-1">
                     <span className="text-sm">Prioritization Quorum</span>
                     <Input
@@ -130,7 +130,7 @@ export default function ProtocolConfigurationForm({
               </div>
               <div>
                 <h3 className="text-base leading-9 font-normal">Periods</h3>
-                <div className="mt-2 grid grid-cols-3 gap-4">
+                <div className="mt-2 grid grid-rows-auto md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 w-[160px] md:w-fit">
                   <div className="relative space-y-1">
                     <span className="text-sm">Prioritization Period</span>
                     <Input

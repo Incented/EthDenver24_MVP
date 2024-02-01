@@ -64,21 +64,21 @@ export default function CarrotPotForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
-        <div className="flex justify-between items-center pb-4 border-b">
-          <div className="flex flex-col w-full">
-            <p className="font-semibold text-foreground text-base leading-9">
+        <div className="flex flex-col lg:flex-row items-center justify-between border-b w-full">
+          <div className="flex flex-col w-full  pb-4 lg:col-span-2">
+            <p className="text-base font-semibold leading-9 text-foreground">
               Carrot Pot
             </p>
             <p className="text-sm leading-6">
               Manage the task reward for your community members.
             </p>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col pt-[10px] md:justify-between w-full pb-4 lg:pb-0 lg:w-[160px]">
             <div className="flex justify-between text-sm text-muted-foreground">
               <p>Step 4/6</p> <p>60%</p>
             </div>
             <div className="py-1.5">
-              <Progress value={60} className="h-2 w-[160px]" />
+              <Progress value={60} className="w-full h-2" />
             </div>
           </div>
         </div>
