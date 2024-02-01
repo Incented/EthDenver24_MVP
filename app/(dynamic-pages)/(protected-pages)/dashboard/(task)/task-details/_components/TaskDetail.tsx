@@ -58,7 +58,7 @@ const TaskDetail: FC<TaskDetailProps> = ({
   return (
     <div className="flex gap-4 mt-4">
       <section className="flex-1">
-        <Card className="relative mb-4 bg-[#f5f5f480] overflow-hidden border-none">
+        <Card className="relative mb-4 overflow-hidden border">
           <div
             className={cn(
               "absolute top-0 left-0 px-6 py-1 text-sm text-white rounded-br-md ",
@@ -103,10 +103,10 @@ const TaskDetail: FC<TaskDetailProps> = ({
                 className="object-cover object-center"
               />
             </div>
-            <p className="text-gray-500 text-sm leading-6 font-normal mb-6">
+            <p className="mb-6 text-sm font-normal leading-6 text-gray-500">
               {taskDescription}
             </p>
-            <div className="mb-6 w-64">
+            <div className="w-64 mb-6">
               <TaksAttributes
                 rewards={rewards}
                 efforts={efforts}
@@ -132,13 +132,13 @@ const TaskDetail: FC<TaskDetailProps> = ({
           </div>
         </Card>
 
-        <Card className="p-4 mb-4 bg-[#f5f5f480] overflow-hidden border-none">
-          <h1 className="text-lg leading-8 mb-2 font-bold">Contributions</h1>
+        <Card className="p-4 mb-4 overflow-hidden border-none">
+          <h1 className="mb-2 text-lg font-bold leading-8">Contributions</h1>
           <ContributionTable />
           {/* <Pagination currentPage={0} title="contribution" totalPages={0} /> */}
         </Card>
 
-        <Card className="p-8 mb-4 bg-[#f5f5f480] overflow-hidden border-none">
+        <Card className="p-8 mb-4 overflow-hidden border-none">
           <div className="flex items-center justify-between mb-2">
             <h1 className="text-lg font-bold ">Discussion</h1>
             <Button variant="ghost" className="text-primary">

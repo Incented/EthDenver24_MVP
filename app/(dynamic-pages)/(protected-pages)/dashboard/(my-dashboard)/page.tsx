@@ -11,6 +11,7 @@ import TaskTab from "./_components/TaskTab";
 import SelectCommunity from "./_components/SelectCommunity";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { CardLayoutSwitcher } from "@/components/ui/card-layout-switcher";
+import { Anchor } from "@/components/Anchor";
 
 const DashboardPage = () => {
   return (
@@ -44,7 +45,9 @@ const DashboardPage = () => {
       <div className="relative mt-20 xl:mt-4">
         <div className="flex gap-3 z-10 absolute right-[0.3rem] -top-16 xl:top-0">
           <SelectCommunity />
-          <Button>Submit Proposal</Button>
+          <Anchor href="dashboard/create-task">
+            <Button>Submit Proposal</Button>
+          </Anchor>
         </div>
 
         <TaskTab />

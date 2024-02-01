@@ -6,7 +6,7 @@ interface pageProps {}
 
 const TaskDetailsPage: FC<pageProps> = ({}) => {
   return (
-    <main className="mx-4 mt-4 mb-4">
+    <main className="mx-4 mt-4 mb-20">
       <GoBack />
 
       <TaskDetail />
