@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 const RewardsPage = () => {
   return (
-    <main className="mx-8 mb-4 ">
+    <main className="mx-8 mb-4">
       <h1 className="mt-8 mb-4 text-3xl font-medium">Rewards</h1>
 
       <RewardCards />
@@ -17,9 +17,9 @@ const RewardsPage = () => {
         <Button variant="link">Show more</Button>
       </div>
 
-      <div className="hidden sm:flex">
+      {/* <div className="hidden sm:flex">
         <Pagination currentPage={1} title="tasks" totalPages={10} />
-      </div>
+      </div> */}
     </main>
   );
 };

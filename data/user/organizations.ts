@@ -1,5 +1,4 @@
 "use server";
-import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
 import { createSupabaseUserServerActionClient } from "@/supabase-clients/user/createSupabaseUserServerActionClient";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 import { Enum, NormalizedSubscription, Table, UnwrapPromise } from "@/types";
@@ -16,7 +15,6 @@ export const createOrganization = async ({
 }) => {
   const supabase = createSupabaseUserServerComponentClient();
   const user = await serverGetLoggedInUser();
-  console.log(proposalAbsoluteReward);
   const { data, error } = await supabase
     .from("organizations")
     .insert({
@@ -27,7 +25,6 @@ export const createOrganization = async ({
     .select("*")
     .single();
 
-  console.log(data, error);
   if (error) {
     console.error(error);
     throw error;
@@ -36,7 +33,84 @@ export const createOrganization = async ({
   return data;
 };
 
-export async function fetchSlimOrganizations() {
+export const addBookmark = async ({
+  id,
+  organizationId,
+}: {
+  id: string;
+  organizationId: string;
+}) => {
+  const supabase = createSupabaseUserServerComponentClient();
+
+  // Check if the bookmark already exists
+  const { data: existingBookmark } = await supabase
+    .from("bookmarked_organizations")
+    .select("id, organization_id")
+    .eq("id", id)
+    .eq("organization_id", organizationId)
+    .single();
+
+  // If the bookmark already exists, return it without making a new one
+  if (existingBookmark) {
+    return existingBookmark;
+  }
+
+  // If the bookmark does not exist, create a new one
+  const { data, error } = await supabase
+    .from("bookmarked_organizations")
+    .insert({
+      id: id,
+      organization_id: organizationId,
+    })
+    .select("*")
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+};
+
+export const removeBookmark = async ({
+  id,
+  organizationId,
+}: {
+  id: string;
+  organizationId: string;
+}) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data, error } = await supabase
+    .from("bookmarked_organizations")
+    .delete()
+    .eq("id", id)
+    .eq("organization_id", organizationId);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+};
+
+export const getAllBookmarkedOrganizationsForUser = async (id: string) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data, error } = await supabase
+    .from("bookmarked_organizations")
+    .select("organization_id")
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data.map((bookmark) => bookmark.organization_id);
+};
+
+export async function fetchSlimOrganizationsWithMembers() {
   const currentUser = await serverGetLoggedInUser();
   const supabaseClient = createSupabaseUserServerComponentClient();
   const { data: organizations, error: organizationsError } =
@@ -64,6 +138,63 @@ export async function fetchSlimOrganizations() {
   }
 
   return data || [];
+}
+
+export async function fetchSlimOrganizations() {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+
+  const { data, error } = await supabaseClient
+    .from("organizations")
+    .select("id,title,community_avatar_url")
+    .order("created_at", {
+      ascending: false,
+    });
+  if (error) {
+    throw error;
+  }
+
+  return data || [];
+}
+
+export async function getAllOrganizationsCount() {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+
+  const { data, error } = await supabaseClient
+    .from("organizations")
+    .select("id");
+  if (error) {
+    throw error;
+  }
+  return data.length;
+}
+
+export async function getPaginatedOrganizationsList({
+  limit = 10,
+  page = 1,
+  query,
+}: {
+  limit?: number;
+  page?: number;
+  query?: string;
+}) {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const startIndex = (page - 1) * limit;
+  let supabaseQuery = supabaseClient
+    .from("organizations")
+    .select("id,title,created_by");
+  if (query) {
+    supabaseQuery = supabaseQuery.ilike("title", `%${query}%`);
+  }
+  const { data, error } = await supabaseQuery
+    .range(startIndex, startIndex + limit - 1)
+    .order("created_at", {
+      ascending: false,
+    });
+  if (error) throw error;
+  if (!data) {
+    throw new Error("No data");
+  }
+  return data;
 }
 
 export const getSlimOrganizationById = async (organizationId: string) => {
@@ -318,6 +449,23 @@ export const getTeamMembersInOrganization = async (organizationId: string) => {
       user_profiles: user_profiles,
     };
   });
+};
+
+export const getTeamMembersCountInOrganization = async (
+  organizationId: string
+) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data, error } = await supabase
+    .from("organization_members")
+    .select("id, user_profiles(*)")
+    .eq("organization_id", organizationId);
+
+  if (error) {
+    throw error;
+  }
+
+  const membersWithProfiles = data.filter((member) => member.user_profiles);
+  return membersWithProfiles.length;
 };
 
 export const getOrganizationAdmins = async (organizationId: string) => {

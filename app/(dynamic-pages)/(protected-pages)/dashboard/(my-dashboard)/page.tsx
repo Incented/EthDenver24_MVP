@@ -15,7 +15,7 @@ import { Anchor } from "@/components/Anchor";
 
 const DashboardPage = () => {
   return (
-    <main className="mx-8 mb-20">
+    <main className="px-8 pb-40 ">
       <h1 className="mt-8 text-3xl font-medium">My Home</h1>
 
       <ScrollArea className="w-full whitespace-nowrap">
@@ -53,9 +53,9 @@ const DashboardPage = () => {
         <TaskTab />
       </div>
 
-      <div className="mt-10">
+      {/* <div className="mt-10">
         <Pagination currentPage={1} title="tasks" totalPages={10} />
-      </div>
+      </div> */}
     </main>
   );
 };

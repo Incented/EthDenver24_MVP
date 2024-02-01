@@ -22,7 +22,7 @@ const CommunityDetailTopCard: FC<CommunityDetailTopCardProps> = ({
   info,
 }) => {
   return (
-    <Card className="w-[233px] relative rounded-xl gap-0 p-0">
+    <Card className="w-full relative rounded-xl gap-0 p-0">
       <div className="p-6 pb-2 flex justify-between items-center">
         <h1 className=" text-3xl">{value}%</h1>
         <Icon className="text-muted-foreground" size={20} />

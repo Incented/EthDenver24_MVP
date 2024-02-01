@@ -14,10 +14,7 @@ import PriorityCards from "./_components/PriorityCards";
 import TaskTab from "../../dashboard/(my-dashboard)/_components/TaskTab";
 import Pagination from "@/components/ui/Pagination";
 import { z } from "zod";
-import { getCommunityDetailsAdmin } from "@/data/admin/organizations";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Link from "next/link";
-import { Facebook, LinkIcon, Linkedin, Twitter } from "lucide-react";
+import { getOrganizationById } from "@/data/user/organizations";
 
 const paramsSchema = z.object({
   id: z.coerce.string(),
@@ -30,11 +27,10 @@ export default async function CommunityDetailsPage({
 }) {
   const parsedParams = paramsSchema.parse(params);
   const { id } = parsedParams;
-  const community = await getCommunityDetailsAdmin({ id });
-  console.log(community);
+  const community = await getOrganizationById(id);
 
   return (
-    <main className="mx-8 mb-10 ">
+    <div className="relative mx-8 overflow-hidden">
       <div className="grid items-center grid-cols-2 mt-8 mb-4">
         <div className="md:col-span-2 h-9">
           <GoBack />
@@ -46,25 +42,27 @@ export default async function CommunityDetailsPage({
           <Button className="w-32">Join</Button>
         </div>
       </div>
-      <div className="grid grid-cols-[auto,1fr] gap-4 w-full">
-        <div className="flex flex-col gap-4 w-[280px] h-screen overflow-y-auto">
-          <CommunityInfo />
-          <div className="w-full">
+      {/* Content */}
+      <div className="grid grid-cols-[auto,1fr] gap-4 h-[calc(100vh-400px)]   md:h-[calc(100vh-600px)] xl:h-[calc(100vh-220px)] overflow-hidden w-full ">
+        {/* Members */}
+        <div className="flex flex-col gap-4 rounded-lg w-[280px]">
+          <CommunityInfo communityName={community.title} />
+          <div className="h-20 md:h-20 xl:h-72 rounded-xl overflow-auto">
             <CommunityMembers />
           </div>
         </div>
-
-        <div className="grid gap-4 lg:grid-cols-2 2xl:grid-cols-3 overflow-auto">
-          <div className="grid gap-4 lg:col-span-2 2xl:col-span-3">
+        {/* Details */}
+        <div className="h-full overflow-y-auto w-full">
+          <div className="flex flex-col gap-4 w-full">
             <CommunityDetailsTopCards />
             <div className="grid grid-cols-4 gap-4 w-full">
               <CarrotPotCard />
               <PeriodsCard />
               <PriorityCards />
             </div>
-            <Card className="w-full p-8 bg-muted border-none ">
+            <Card className="w-full p-8 pb-4 bg-muted border-none ">
               <div className="flex items-center w-full mb-4">
-                <h1 className="text-[20px] font-semibold">Task</h1>
+                <h1 className="text-[20px] font-semibold">Tasks</h1>
                 <div className="flex gap-4 ml-auto">
                   <Search placeholder="Search Tasks..." />
                   <Button variant="outline">Filter</Button>
@@ -72,12 +70,19 @@ export default async function CommunityDetailsPage({
               </div>
               <div>
                 <TaskTab />
-                <Pagination currentPage={1} title="tasks" totalPages={10} />
+                <div className="pt-4">
+                  <Pagination
+                    count={20}
+                    title="Tasks"
+                    totalPages={10}
+                    className="bg-transparent"
+                  />
+                </div>
               </div>
             </Card>
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

@@ -22,5 +22,5 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="">{children}</div>;
+  return <div className="h-screen overflow-y-auto">{children}</div>;
 }

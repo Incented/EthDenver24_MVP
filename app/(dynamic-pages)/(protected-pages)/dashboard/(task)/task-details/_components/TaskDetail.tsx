@@ -135,7 +135,7 @@ const TaskDetail: FC<TaskDetailProps> = ({
         <Card className="p-4 mb-4 overflow-hidden border-none">
           <h1 className="mb-2 text-lg font-bold leading-8">Contributions</h1>
           <ContributionTable />
-          <Pagination currentPage={0} title="contribution" totalPages={0} />
+          {/* <Pagination currentPage={0} title="contribution" totalPages={0} /> */}
         </Card>
 
         <Card className="p-8 mb-4 overflow-hidden border-none">

@@ -27,10 +27,11 @@ import Image from "next/image";
 
 type UpdateUserFormProps = {
   userPrivateInfo: Table<"user_private_info">;
+  userProfile: Table<"user_profiles">;
+  onUserNameUpload: (userName: string) => void;
   onSubmit: (
     firstName: string | undefined,
-    lastName: string | undefined,
-    userName: string | undefined
+    lastName: string | undefined
   ) => void;
   isLoading: boolean;
   profileAvatarUrl?: string;
@@ -44,6 +45,8 @@ const MotionImage = motion(Image);
 
 function UpdateUserForm({
   userPrivateInfo,
+  userProfile,
+  onUserNameUpload,
   onSubmit,
   isLoading,
   profileAvatarUrl,
@@ -58,9 +61,9 @@ function UpdateUserForm({
     profileAvatarUrl,
     email: userEmail,
   });
-  const userFirstName = userPrivateInfo.first_name ?? undefined;
-  const userLastName = userPrivateInfo.last_name ?? undefined;
-  const userUserName = userPrivateInfo.user_name ?? undefined;
+  const userFirstName = userProfile.first_name;
+  const userLastName = userProfile.last_name;
+  const userUserName = userPrivateInfo.user_name;
   const [firstName, setFirstName] = useState(userFirstName);
   const [lastName, setLastName] = useState(userLastName);
   const [userName, setUserName] = useState(userUserName);
@@ -87,21 +90,24 @@ function UpdateUserForm({
   //   }
   // };
 
-  const form = useForm<z.infer<typeof updateUserFormSchema>>({
-    resolver: zodResolver(updateUserFormSchema),
-    defaultValues: {
-      firstName: firstName,
-      email: userEmail,
-      lastName: lastName,
-      userName: userName,
-    },
-  });
+  // const form = useForm<z.infer<typeof updateUserFormSchema>>({
+  //   resolver: zodResolver(updateUserFormSchema),
+  //   defaultValues: {
+  //     firstName: firstName,
+  //     email: userEmail,
+  //     lastName: lastName,
+  //     userName: userName,
+  //   },
+  // });
+
+  const form = useForm();
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((values) => {
-          onSubmit(values.firstName, values.lastName, values.userName);
+          onSubmit(values.firstName, values.lastName);
+          onUserNameUpload(values.userName);
         })}
         className="w-full md:h-full h-full overflow-auto md:overflow-hidden"
       >
@@ -205,7 +211,7 @@ function UpdateUserForm({
                             type="text"
                             className=""
                             disabled={isLoading}
-                            placeholder={firstName}
+                            placeholder={firstName ?? "First Name"}
                             id="firstName"
                             {...field}
                             onChange={(e) => {
@@ -213,11 +219,11 @@ function UpdateUserForm({
                             }}
                           />
                         </FormControl>
-                        {form.formState.errors.firstName && (
+                        {/* {form.formState.errors.firstName && (
                           <p className="text-destructive text-sm">
                             {form.formState.errors.firstName.message}
                           </p>
-                        )}
+                        )} */}
                         {/* <FormMessage className="text-destructive" /> */}
                       </FormItem>
                     )}
@@ -234,7 +240,7 @@ function UpdateUserForm({
                             type="text"
                             className=""
                             disabled={isLoading}
-                            placeholder={lastName}
+                            placeholder={lastName ?? "Last Name"}
                             id="lastName"
                             {...field}
                             onChange={(e) => {
@@ -242,11 +248,11 @@ function UpdateUserForm({
                             }}
                           />
                         </FormControl>
-                        {form.formState.errors.lastName && (
+                        {/* {form.formState.errors.lastName && (
                           <p className="text-destructive text-sm">
                             {form.formState.errors.lastName.message}
                           </p>
-                        )}
+                        )} */}
                         {/* <FormMessage className="text-destructive" /> */}
                       </FormItem>
                     )}
@@ -264,7 +270,7 @@ function UpdateUserForm({
                             type="text"
                             className=""
                             disabled={isLoading}
-                            placeholder={userName}
+                            placeholder={userName ?? "User Name"}
                             {...field}
                             id="userName"
                             onChange={(e) => {
@@ -272,11 +278,11 @@ function UpdateUserForm({
                             }}
                           />
                         </FormControl>
-                        {form.formState.errors.userName && (
+                        {/* {form.formState.errors.userName && (
                           <p className="text-destructive text-sm">
                             {form.formState.errors.userName.message}
                           </p>
-                        )}
+                        )} */}
                       </FormItem>
                     )}
                   />

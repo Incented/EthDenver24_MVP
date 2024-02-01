@@ -4,48 +4,73 @@ import { Filter, Plus } from "lucide-react";
 import CommunityCard from "./_components/CommunityCard";
 import Pagination from "@/components/ui/Pagination";
 import Link from "next/link";
-import { getAllOrganizationsForUser } from "@/data/user/organizations";
+import {
+  getAllOrganizationsCount,
+  getAllOrganizationsForUser,
+} from "@/data/user/organizations";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
-import { OrganizationList } from "./_components/OrganizationList";
-import { appAdminOrganizationsFiltersSchema } from "./_components/schema";
+import { CommunitiesList } from "./_components/CommunitiesList";
+import {
+  appAdminOrganizationsFiltersSchema,
+  filtersSchema,
+} from "./_components/schema";
 import { getOrganizationsTotalPages } from "@/data/admin/organizations";
 import { Suspense } from "react";
+import { FilterCommunities } from "./_components/FIlterCommunities";
 
 export default async function CommunitiesPage({
   searchParams,
 }: {
   searchParams: unknown;
 }) {
-  const validatedSearchParams =
-    appAdminOrganizationsFiltersSchema.parse(searchParams);
+  const validatedSearchParams = filtersSchema.parse(searchParams);
   const suspenseKey = JSON.stringify(validatedSearchParams);
+  const communityCount = await getAllOrganizationsCount();
+  const params = new URLSearchParams();
+  const limit = Number(params.get("limit") || 5);
+  const totalPages = Math.ceil(communityCount / limit);
+  // const totalPages = Math.ceil(communityCount / limit);
   return (
-    <main className="mx-4 mb-10">
-      <div className="items-center mt-8 md:flex">
-        <h1 className="text-3xl ">Community</h1>
-        <div className="flex items-center gap-3 mt-4 ml-auto md:mt-0">
-          <Search placeholder="Search Community" />
-          <Button variant="outline">
-            <Filter size={20} />
-          </Button>
-          <Link href={`/communities/create-community`}>
-            <Button size="sm">
-              <Plus size={16} />
-              <p className="hidden md:flex">Add Community</p>
-            </Button>
-          </Link>
+    <main className="h-screen px-8 pb-10 flex flex-col overflow-hidden">
+      <div className="h-screen">
+        <div className="items-center mt-8 md:flex">
+          <h1 className="text-3xl font-medium ">Communities</h1>
+          <div className="flex items-center gap-3 mt-4 ml-auto md:mt-0">
+            <Search placeholder="Search Community" />
+            <FilterCommunities />
+            <Link href={`/communities/create-community`}>
+              <Button size="sm">
+                <Plus size={16} />
+                <p className="hidden md:flex">Add Community</p>
+              </Button>
+            </Link>
+          </div>
+        </div>
+        <div className="h-full mt-4 overflow-auto pb-60 ">
+          <Suspense
+            key={suspenseKey}
+            fallback={
+              <div className="flex-grow w-full">
+                <div className="flex items-center justify-center h-full">
+                  Loading...
+                </div>
+              </div>
+            }
+          >
+            <CommunitiesList filters={validatedSearchParams} />
+          </Suspense>
+        </div>
+
+        <div className="flex justify-center md:hidden">
+          <Button variant="link">Show more</Button>
         </div>
       </div>
-      <Suspense key={suspenseKey} fallback={<div>Loading...</div>}>
-        <div className="grid gap-4 mt-4 mb-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          <OrganizationList filters={validatedSearchParams} />
-        </div>
-      </Suspense>
-      <div className="hidden md:flex">
-        <Pagination currentPage={1} title="Communities" totalPages={10} />
-      </div>
-      <div className="flex justify-center md:hidden">
-        <Button variant="link">Show more</Button>
+      <div className="sticky hidden md:flex py-6 pt-4 bottom-0">
+        <Pagination
+          title="Communities"
+          totalPages={totalPages}
+          count={communityCount}
+        />
       </div>
     </main>
   );

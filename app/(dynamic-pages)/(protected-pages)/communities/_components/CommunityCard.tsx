@@ -5,29 +5,42 @@ import Link from "next/link";
 import { FC } from "react";
 
 import JoinCommunityModal from "./JoinCommunityModal";
+import {
+  getTeamMembersCountInOrganization,
+  getTeamMembersInOrganization,
+} from "@/data/user/organizations";
+import { Button } from "@/components/ui/button";
+import BookmarkComponent from "./BookMarkComponent";
 
 interface CommunityCardProps {
   communityName: string;
   communityDescription?: string;
   communityImage?: string;
-  communityMembers?: number;
   communityTasks?: number;
   communityAddress?: string;
-  communityId?: string;
+  communityId: string;
+  communityCreatedBy?: string;
+  userId: string;
+  isBookmarked?: boolean;
 }
 
-const CommunityCard: FC<CommunityCardProps> = ({
+const CommunityCard: FC<CommunityCardProps> = async ({
   communityName,
+  communityCreatedBy,
+  userId,
   communityDescription = "Buan is a community of people who are passionate about learning new things.",
-  communityImage = "/assets/avatar_2.jpg",
-  communityMembers = 100,
+  communityImage,
   communityTasks = 100,
   communityAddress = "New York, USA",
   communityId: id,
+  isBookmarked,
 }) => {
+  const communityMembers = await getTeamMembersCountInOrganization(id);
+  const members = await getTeamMembersInOrganization(id);
+  const isMember = members.some((member) => member.member_id === userId);
   return (
-    <Card className="p-4">
-      <div className="flex items-center gap-2 mb-4">
+    <Card className="p-6 rounded-lg gap-4">
+      <div className="flex items-center gap-4 mb-4">
         <Avatar>
           <AvatarImage
             src={communityImage}
@@ -38,29 +51,56 @@ const CommunityCard: FC<CommunityCardProps> = ({
           </AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
-          <Link href={`/communities/${id}`}>{communityName}</Link>
-          <p className="text-xs text-gray-400">{communityAddress}</p>
+          <Link
+            href={`/communities/${id}`}
+            className="text-base font-bold text-foreground leading-7"
+          >
+            {communityName}
+          </Link>
+          <p className="text-xs text-muted-foreground">{communityAddress}</p>
         </div>
-        <div className="flex items-center justify-center w-8 h-8 ml-auto border border-gray-400 rounded-full text-primary">
-          <Bookmark size={20} />
-        </div>
+        {/* <Button
+          variant="outline"
+          className="flex items-center px-2 justify-center ml-auto border rounded-full"
+        >
+          <Bookmark size={20} className="text-primary" />
+        </Button> */}
+        <BookmarkComponent
+          id={userId}
+          organizationId={id}
+          isBookmarked={isBookmarked}
+        />
       </div>
-      <p className="mb-4 text-xs text-gray-400">{communityDescription}</p>
+      <p className="mb-4 text-sm text-muted-foreground">
+        {communityDescription}
+      </p>
 
       <div className="flex items-center gap-3 mb-4">
         <div className="">
-          <p>{communityTasks}</p>
-          <p className="text-xs text-gray-400">Active Tasks</p>
+          <p className="text-base leading-7 font-bold">{communityTasks}</p>
+          <p className="text-xs leading-[14px] text-muted-foreground">
+            Active Tasks
+          </p>
         </div>
-        <div className="h-[35px] w-[1px] bg-gray-500" />
+        <div className="h-[35px] w-[1px] bg-muted" />
 
         <div className="">
-          <p>{communityMembers}</p>
-          <p className="text-xs text-gray-400">Total Members</p>
+          <p className="text-base leading-7 font-bold">{communityMembers}</p>
+          <p className="text-xs leading-[14px] text-muted-foreground">
+            Total Members
+          </p>
         </div>
       </div>
 
-      <JoinCommunityModal triggerText="Join" community={communityName} />
+      {isMember ? (
+        <JoinCommunityModal
+          triggerText="Join"
+          community={communityName}
+          userId={communityCreatedBy}
+        />
+      ) : (
+        <JoinCommunityModal triggerText="Join" community={communityName} />
+      )}
     </Card>
   );
 };

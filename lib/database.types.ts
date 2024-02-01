@@ -51,6 +51,24 @@ export interface Database {
         };
         Relationships: [];
       };
+      bookmarked_organizations: {
+        Row: {
+          created_at: string;
+          id: string;
+          organization_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id: string;
+          organization_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          organization_id?: string;
+        };
+        Relationships: [];
+      };
       customers: {
         Row: {
           organization_id: string;
@@ -490,7 +508,6 @@ export interface Database {
           carrot_pot_initial_amount: number | null;
           claim_lock_period_duration: unknown | null;
           claim_stake_amount_percentage: number | null;
-          community_avatar_url: string | null;
           community_fee_percentage: number | null;
           contribution_period_duration: unknown | null;
           created_at: string;
@@ -517,7 +534,6 @@ export interface Database {
           carrot_pot_initial_amount?: number | null;
           claim_lock_period_duration?: unknown | null;
           claim_stake_amount_percentage?: number | null;
-          community_avatar_url?: string | null;
           community_fee_percentage?: number | null;
           contribution_period_duration?: unknown | null;
           created_at?: string;
@@ -544,7 +560,6 @@ export interface Database {
           carrot_pot_initial_amount?: number | null;
           claim_lock_period_duration?: unknown | null;
           claim_stake_amount_percentage?: number | null;
-          community_avatar_url?: string | null;
           community_fee_percentage?: number | null;
           contribution_period_duration?: unknown | null;
           created_at?: string;
@@ -653,39 +668,11 @@ export interface Database {
         };
         Relationships: [
           {
-            foreignKeyName: "organizations_private_info_active_tasks_fkey";
-            columns: ["active_tasks"];
-            isOneToOne: false;
-            referencedRelation: "organizations";
-            referencedColumns: ["active_tasks"];
-          },
-          {
             foreignKeyName: "organizations_private_info_id_fkey";
             columns: ["id"];
             isOneToOne: true;
             referencedRelation: "organizations";
             referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "organizations_private_info_proposal_absolute_reward_fkey";
-            columns: ["proposal_absolute_reward"];
-            isOneToOne: false;
-            referencedRelation: "organizations";
-            referencedColumns: ["proposal_absolute_reward"];
-          },
-          {
-            foreignKeyName: "organizations_private_info_total_members_fkey";
-            columns: ["total_members"];
-            isOneToOne: false;
-            referencedRelation: "organizations";
-            referencedColumns: ["total_members"];
-          },
-          {
-            foreignKeyName: "organizations_private_info_total_tasks_fkey";
-            columns: ["total_tasks"];
-            isOneToOne: false;
-            referencedRelation: "organizations";
-            referencedColumns: ["total_tasks"];
           }
         ];
       };
@@ -1026,25 +1013,19 @@ export interface Database {
         Row: {
           created_at: string | null;
           default_organization: string | null;
-          first_name: string | null;
           id: string;
-          last_name: string | null;
           user_name: string | null;
         };
         Insert: {
           created_at?: string | null;
           default_organization?: string | null;
-          first_name?: string | null;
           id: string;
-          last_name?: string | null;
           user_name?: string | null;
         };
         Update: {
           created_at?: string | null;
           default_organization?: string | null;
-          first_name?: string | null;
           id?: string;
-          last_name?: string | null;
           user_name?: string | null;
         };
         Relationships: [
@@ -1075,20 +1056,26 @@ export interface Database {
         Row: {
           avatar_url: string | null;
           created_at: string;
+          first_name: string | null;
           full_name: string | null;
           id: string;
+          last_name: string | null;
         };
         Insert: {
           avatar_url?: string | null;
           created_at?: string;
+          first_name?: string | null;
           full_name?: string | null;
           id: string;
+          last_name?: string | null;
         };
         Update: {
           avatar_url?: string | null;
           created_at?: string;
+          first_name?: string | null;
           full_name?: string | null;
           id?: string;
+          last_name?: string | null;
         };
         Relationships: [
           {
@@ -1353,6 +1340,10 @@ export interface Database {
     };
     Enums: {
       app_admin_role: "moderator" | "admin" | "super_admin";
+      community_filter_type:
+        | "all_communities"
+        | "my_communities"
+        | "bookmarked";
       internal_blog_post_status: "draft" | "published";
       internal_feedback_thread_priority: "low" | "medium" | "high";
       internal_feedback_thread_status:

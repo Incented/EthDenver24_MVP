@@ -176,25 +176,31 @@ export const uploadPublicUserAvatar = async (
 
 export const updateUserProfileNameAndAvatar = async ({
   fullName,
+  firstName,
+  lastName,
   avatarUrl,
 }: {
   fullName?: string;
+  firstName?: string;
+  lastName?: string;
   avatarUrl?: string;
 }) => {
   "use server";
   const supabaseClient = createSupabaseUserServerActionClient();
   const user = await serverGetLoggedInUser();
-  console.log("updated avatar url", avatarUrl);
   const { data, error } = await supabaseClient
     .from("user_profiles")
     .update({
       full_name: fullName,
+      first_name: firstName,
+      last_name: lastName,
       avatar_url: avatarUrl,
     })
     .eq("id", user.id)
     .single();
 
   if (error) {
+    console.log("updateUserProfileNameAndAvatar error", error);
     throw error;
   }
 
@@ -204,12 +210,8 @@ export const updateUserProfileNameAndAvatar = async ({
 };
 
 export const updateUserPrivateInfo = async ({
-  firstName,
-  lastName,
   userName,
 }: {
-  firstName?: string;
-  lastName?: string;
   userName?: string;
 }) => {
   "use server";
@@ -218,14 +220,13 @@ export const updateUserPrivateInfo = async ({
   const { data, error } = await supabaseClient
     .from("user_private_info")
     .update({
-      first_name: firstName,
-      last_name: lastName,
       user_name: userName,
     })
     .eq("id", user.id)
     .single();
 
   if (error) {
+    console.log("updateUserPrivateInfo error", error);
     throw error;
   }
 

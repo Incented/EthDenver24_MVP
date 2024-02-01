@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { TabProps } from "./types";
 import { cn } from "@/lib/utils";
 
-export const Tab = ({ label, href }: TabProps) => {
+export const Tab = ({ label, href, icon }: TabProps) => {
   const pathname = usePathname();
   const isActive = pathname === href;
   return (
@@ -17,7 +17,14 @@ export const Tab = ({ label, href }: TabProps) => {
           : "text-muted-foreground font-normal hover:text-foreground"
       )}
     >
-      <span className="leading-9">{label}</span>
+      <div className="flex gap-2 items-center">
+        {icon ? (
+          <div className="border rounded-full h-10 w-10 bg-background flex items-center justify-center">
+            {icon}
+          </div>
+        ) : null}
+        <span className="leading-9">{label}</span>
+      </div>
     </Anchor>
   );
 };

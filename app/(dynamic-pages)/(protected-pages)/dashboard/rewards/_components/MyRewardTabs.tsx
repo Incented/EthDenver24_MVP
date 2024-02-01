@@ -28,7 +28,7 @@ interface MyRewardTabsProps {}
 
 const MyRewardTabs: FC<MyRewardTabsProps> = ({}) => {
   return (
-    <div className="relative">
+    <div className="relative overflow-hidden pb-24">
       <Tabs defaultValue="past">
         <TabsList className="justify-start">
           <TabsTrigger value="past">Past Rewards</TabsTrigger>
@@ -36,7 +36,7 @@ const MyRewardTabs: FC<MyRewardTabsProps> = ({}) => {
         </TabsList>
         <TabsContent
           value="past"
-          className="w-full border rounded-lg mt-4 mb-6 overflow-hidden"
+          className="w-full border rounded-lg mt-4 mb-6  overflow-auto"
         >
           <Table className="w-full border-0 ">
             <TableHeader className="border-none">
@@ -62,7 +62,7 @@ const MyRewardTabs: FC<MyRewardTabsProps> = ({}) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {Array.from({ length: 7 }).map((_, i) => (
+              {Array.from({ length: 16 }).map((_, i) => (
                 <TableRow
                   key={i}
                   className={cn("py-0", i % 2 === 0 ? "bg-secondary" : "")}

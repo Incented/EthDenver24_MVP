@@ -2,9 +2,8 @@ import * as z from "zod";
 
 export const updateUserFormSchema = z.object({
   firstName: z.string({
-    required_error: "Full name is required",
+    required_error: "First name is required",
   }),
-
   lastName: z.string({
     required_error: "Last name is required",
   }),

@@ -19,32 +19,47 @@ export function AccountSettings({
   userProfile: Table<"user_profiles">;
 }) {
   const router = useRouter();
-  const { mutate, isLoading } = useToastMutation(
-    async ({
-      firstName,
-      lastName,
-      userName,
-      avatarUrl,
-    }: {
-      firstName: string | undefined;
-      lastName: string | undefined;
-      userName: string | undefined;
-      avatarUrl?: string;
-    }) => {
-      await updateUserProfileNameAndAvatar({
-        fullName: `${firstName} ${lastName}`,
-        avatarUrl,
-      });
-      return await updateUserPrivateInfo({
+  const { mutate, isLoading: isUpdatingUserProfileNameAndAvatar } =
+    useToastMutation(
+      async ({
         firstName,
         lastName,
-        userName,
+        avatarUrl,
+      }: {
+        firstName: string | undefined;
+        lastName: string | undefined;
+        avatarUrl?: string;
+      }) => {
+        return await updateUserProfileNameAndAvatar({
+          fullName: `${firstName} ${lastName}`,
+          firstName,
+          lastName,
+          avatarUrl,
+        });
+      },
+      {
+        loadingMessage: "Updating profile info...",
+        errorMessage: "Failed to update profile info",
+        successMessage: "Profile updated!",
+        onSuccess: () => {
+          router.refresh();
+        },
+      }
+    );
+
+  const { mutate: updateUserName, isLoading } = useToastMutation(
+    async ({ userName }: { userName: string | undefined }) => {
+      return await updateUserPrivateInfo({
+        userName: userName,
       });
     },
     {
-      loadingMessage: "Updating profile info...",
-      errorMessage: "Failed to update profile info",
-      successMessage: "Profile updated!",
+      loadingMessage: "Updating user name...",
+      errorMessage: "Failed to update user name",
+      successMessage: "User name updated!",
+      onSuccess: () => {
+        router.refresh();
+      },
     }
   );
 
@@ -83,9 +98,15 @@ export function AccountSettings({
       },
     }
   );
+
+  console.log("AccountSettings", userPrivateInfo, userProfile);
   return (
     <UpdateUserForm
       userPrivateInfo={userPrivateInfo}
+      userProfile={userProfile}
+      onUserNameUpload={(userName: string) => {
+        updateUserName({ userName });
+      }}
       onFileUpload={(file: File) => {
         console.log("onFileUpload file", file);
         upload(file);
@@ -94,16 +115,14 @@ export function AccountSettings({
       isNewAvatarImageLoading={isNewAvatarImageLoading}
       setIsNewAvatarImageLoading={setIsNewAvatarImageLoading}
       isUploading={isUploading}
-      isLoading={isLoading ?? isUploading}
+      isLoading={isLoading ?? isUploading ?? isUpdatingUserProfileNameAndAvatar}
       onSubmit={(
         firstName: string | undefined,
-        lastName: string | undefined,
-        userName: string | undefined
+        lastName: string | undefined
       ) => {
         mutate({
           firstName,
           lastName,
-          userName,
           avatarUrl,
         });
       }}
