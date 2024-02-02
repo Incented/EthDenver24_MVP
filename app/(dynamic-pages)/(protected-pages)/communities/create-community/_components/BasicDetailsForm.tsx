@@ -65,8 +65,8 @@ export default function BasicDetailsForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:h-[640px] 2xl:h-[760px] overflow-hidden">
-        <div className="flex flex-col lg:flex-row items-center justify-between border-b w-full">
-          <div className="flex flex-col w-full  pb-4 lg:col-span-2">
+        <div className="flex flex-col items-center justify-between w-full border-b lg:flex-row">
+          <div className="flex flex-col w-full pb-4 lg:col-span-2">
             <p className="text-base font-semibold leading-9 text-foreground">
               Community Details
             </p>
@@ -85,9 +85,9 @@ export default function BasicDetailsForm({
         </div>
         <div className="h-fit">
           <div className="overflow-scroll">
-            <div className="flex flex-col md:flex-row gap-6 mt-2">
+            <div className="flex flex-col gap-6 mt-2 md:flex-row">
               <div className="bg-muted w-full md:w-[228px] h-fit rounded-xl flex flex-col justify-center items-center p-6 px-4">
-                <div className="bg-background flex items-center justify-center mb-4 w-24 h-24 rounded-full p-4">
+                <div className="flex items-center justify-center w-24 h-24 p-4 mb-4 rounded-full bg-background">
                   <svg
                     width="40"
                     height="40"
@@ -106,7 +106,7 @@ export default function BasicDetailsForm({
                     </g>
                   </svg>
                 </div>
-                <p className="text-sm leading-6 mb-2">
+                <p className="mb-2 text-sm leading-6">
                   Edit your community logo
                 </p>
                 <Button className="px-8">Update</Button>
@@ -150,8 +150,8 @@ export default function BasicDetailsForm({
           </div>
         </div>
       </div>
-      <div className=" flex w-full p-6 py-4 pb-6 rounded-lg rounded-t-none border">
-        <div className="mx-auto flex gap-2 justify-start">
+      <div className="flex w-full p-6 py-4 pb-6 border rounded-lg rounded-t-none ">
+        <div className="flex justify-start gap-2 mx-auto">
           <Button
             variant="outline"
             className="w-[100px]"
