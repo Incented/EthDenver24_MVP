@@ -4,12 +4,10 @@ import CommunityDetailTopCard from "./CommunityDetailTopCard";
 import { ArrowBigUp, Calendar, Carrot, Trophy } from "lucide-react";
 import { RewardSettingsSchema } from "../../create-community/_components/createCommunitySchema";
 
-interface CommunityDetailsTopCardsProps {}
-
 export function CommunityDetailsTopCards({
   rewards,
 }: {
-  rewards: RewardSettingsSchema;
+  rewards: RewardSettingsSchema | undefined;
 }) {
   return (
     <div className="grid items-center w-full gap-4 lg:grid-cols-2 2xl:grid-cols-4">

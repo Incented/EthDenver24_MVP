@@ -4,8 +4,10 @@ import { carrotPotItems, rewardAccordionItems } from "./createCommunityData";
 import {
   RewardSettingsSchema,
   rewardSettingsSchema,
+  carrotPotSchema,
+  CarrotPotSchema,
 } from "./createCommunitySchema";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/Progress";
@@ -19,17 +21,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TokenPurchaseModal from "@/components/ui/token-purchase-modal";
+import { set } from "nprogress";
 
 export default function CarrotPotForm({
-  rewardSettings,
-  setRewardsSettings,
+  carrotPotSettings,
+  setCarrotPotSettings,
   currentStep,
   setCurrentStep,
 }: {
-  rewardSettings: RewardSettingsSchema | undefined;
-  setRewardsSettings: (data: RewardSettingsSchema) => void;
+  carrotPotSettings: CarrotPotSchema | undefined;
+  setCarrotPotSettings: (data: CarrotPotSchema) => void;
   currentStep: number;
   setCurrentStep: (step: number) => void;
 }) {
@@ -50,40 +53,32 @@ export default function CarrotPotForm({
     handleSubmit,
     getValues,
     reset,
+    control,
     formState: { errors },
-  } = useForm<RewardSettingsSchema>({
-    resolver: zodResolver(rewardSettingsSchema),
+  } = useForm<CarrotPotSchema>({
+    resolver: zodResolver(carrotPotSchema),
     defaultValues: {
-      proposalReward: rewardSettings?.proposalReward ?? 0,
-      prioritizationReward: rewardSettings?.prioritizationReward ?? 0,
-      validationReward: rewardSettings?.validationReward ?? 0,
-      claimStakeAmount: rewardSettings?.claimStakeAmount ?? 100,
+      community_live_status: carrotPotSettings?.community_live_status || "live",
+      community_token: carrotPotSettings?.community_token,
+      // carrot_pot_address: carrotPotSettings?.carrot_pot_address || "",
     },
   });
 
-  const onSubmit: SubmitHandler<RewardSettingsSchema> = (data) => {
-    // const numericData = {
-    //   ...data,
-    //   proposalReward: Number(data.proposalReward),
-    //   prioritizationReward: Number(data.prioritizationReward),
-    //   validationReward: Number(data.validationReward),
-    //   claimStakeAmount: Number(data.claimStakeAmount),
-    // };
-    // setRewardsSettings(numericData);
+  const onSubmit: SubmitHandler<CarrotPotSchema> = (data) => {
+    setCarrotPotSettings(data);
     const newStep = currentStep + 1;
     setCurrentStep(newStep);
-    toast("Carrot pot set up successfully", { duration: 5000 });
-    // localStorage.setItem("currentStep", String(newStep));
-    // localStorage.setItem("rewardSettings", JSON.stringify(data));
+    localStorage.setItem("currentStep", String(newStep));
+    localStorage.setItem("carrotPotSettings", JSON.stringify(data));
   };
 
-  //   useEffect(() => {
-  //     const savedRewardSettings = localStorage.getItem("rewardSettings");
-  //     if (savedRewardSettings) {
-  //       const parsedDetails = JSON.parse(savedRewardSettings);
-  //       reset(parsedDetails); // This sets the form values to the saved data
-  //     }
-  //   }, [reset]);
+  useEffect(() => {
+    const savedCarrotPotSettings = localStorage.getItem("carrotPotSettings");
+    if (savedCarrotPotSettings) {
+      const parsedDetails = JSON.parse(savedCarrotPotSettings);
+      reset(parsedDetails);
+    }
+  }, [reset]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
@@ -113,7 +108,28 @@ export default function CarrotPotForm({
                 <div className="mt-2 grid grid-cols-1 gap-4 w-64">
                   <div className="relative space-y-1">
                     <span className="text-sm">Community live status</span>
-                    <Select>
+                    <Controller
+                      name="community_live_status"
+                      control={control}
+                      render={({ field }) => (
+                        <Select {...field}>
+                          <SelectTrigger
+                            aria-label="Community live status"
+                            className="pr-2"
+                          >
+                            <SelectValue placeholder="Select status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value="live">Live</SelectItem>
+                              <SelectItem value="testnet">Testnet</SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+
+                    {/* <Select>
                       <SelectTrigger
                         aria-label="Community live status"
                         className="pr-2"
@@ -126,14 +142,34 @@ export default function CarrotPotForm({
                           <SelectItem value="testnet">Testnet</SelectItem>
                         </SelectGroup>
                       </SelectContent>
-                    </Select>
+                    </Select> */}
                     <p className="text-muted-foreground text-sm">
                       Choose the status
                     </p>
                   </div>
                   <div className="relative space-y-1">
                     <span className="text-sm">Choose token</span>
-                    <Select>
+                    <Controller
+                      name="community_token"
+                      control={control}
+                      render={({ field }) => (
+                        <Select {...field}>
+                          <SelectTrigger
+                            aria-label="Choose token"
+                            className="pr-2"
+                          >
+                            <SelectValue placeholder="Select token" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value="carrot">$Carrot</SelectItem>
+                              <SelectItem value="token_1">token_1</SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                    {/* <Select>
                       <SelectTrigger aria-label="choose token" className="pr-2">
                         <SelectValue
                           placeholder="$Carrot"
@@ -146,7 +182,7 @@ export default function CarrotPotForm({
                           <SelectItem value="token_1">token_1</SelectItem>
                         </SelectGroup>
                       </SelectContent>
-                    </Select>
+                    </Select> */}
                     <p className="text-muted-foreground text-sm">
                       {`Choose the token you'd like to use`}
                     </p>
@@ -154,11 +190,32 @@ export default function CarrotPotForm({
                   <div className="relative space-y-1">
                     <span className="text-sm">Carrot pot address</span>
                     <div className="relative">
+                      {/* <Controller
+                        name="carrot_pot_address"
+                        control={control}
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            ref={inputRef}
+                            className="w-full"
+                            placeholder="0x...2ue23541835232"
+                            defaultValue="0x...2ue23541835232" // Replace with the actual value you want to copy
+                            readOnly
+                            // Makes the input read-only since we don't want the user to edit it
+                          />
+                        )}
+                      />
+                      {errors.carrot_pot_address?.message && (
+                        <p className="text-sm text-red-600 dark:text-red-500">
+                          {errors.carrot_pot_address?.message}
+                        </p>
+                      )} */}
+
                       <Input
                         ref={inputRef}
                         className="w-full"
                         defaultValue="0x...2ue23541835232" // Replace with the actual value you want to copy
-                        // Makes the input read-only since we don't want the user to edit it
+                        readOnly // Makes the input read-only since we don't want the user to edit it
                       />
                       <button
                         onClick={(event) => {

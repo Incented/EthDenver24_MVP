@@ -18,6 +18,7 @@ import { Search } from "@/components/Search";
 import {
   AdminSettingsSchema,
   BasicCommunityDetailsSchema,
+  CarrotPotSchema,
   CreateCommunitySchema,
   ProtocolConfigurationSchema,
   RewardSettingsSchema,
@@ -254,6 +255,8 @@ export default function CreateCommunityForm() {
 
   const [permissions, setPermissions] = useState<AdminSettingsSchema>();
 
+  const [carrotPotSettings, setCarrotPotSettings] = useState<CarrotPotSchema>();
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const localBasicDetails = localStorage.getItem("basicDetails");
@@ -283,6 +286,7 @@ export default function CreateCommunityForm() {
       setPermissions(parsedLocalPermissions);
     }
   }, []);
+
   const onSubmit: SubmitHandler<CreateCommunitySchema> = (data) => {
     const publicData = {
       ...rewardSettings,
@@ -399,8 +403,8 @@ export default function CreateCommunityForm() {
             )}
             {currentStep === 3 && (
               <CarrotPotForm
-                rewardSettings={rewardSettings}
-                setRewardsSettings={setRewardsSettings}
+                carrotPotSettings={carrotPotSettings}
+                setCarrotPotSettings={setCarrotPotSettings}
                 currentStep={currentStep}
                 setCurrentStep={setCurrentStep}
               />

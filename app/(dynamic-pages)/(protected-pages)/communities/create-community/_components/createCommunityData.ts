@@ -78,6 +78,16 @@ export const carrotPotItems = [
 
 export const rolesAndPermissions = [
   {
+    fieldName: "changeProtocolSettings",
+    title: "Change protocol settings.",
+    isValidForAdmin: true,
+    register_admin: "changeProtocolSettings.isValidForAdmin",
+    isValidForMembers: false,
+    register_member: "changeProtocolSettings.isValidForMembers",
+    isValidForVetoPower: false,
+    register_veto_power: "changeProtocolSettings.isValidForVetoPower",
+  },
+  {
     fieldName: "communitySpecificSettings",
     title: "Set up community-specific settings.",
     isValidForAdmin: true,

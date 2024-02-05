@@ -194,22 +194,19 @@ export default function UserRolesAndPermissionsForm({
 
   const onSubmit: SubmitHandler<AdminSettingsSchema> = (data) => {
     setPermissions(data);
-    const watchAllFields = watch();
-    console.log(watchAllFields);
     const newStep = currentStep + 1;
     setCurrentStep(newStep);
     localStorage.setItem("currentStep", String(newStep));
     localStorage.setItem("permissions", JSON.stringify(data));
-    toast("User roles set up successfully", { duration: 5000 });
   };
 
-  // useEffect(() => {
-  //   const savedPermissions = localStorage.getItem("permissions");
-  //   if (savedPermissions) {
-  //     const parsedDetails = JSON.parse(savedPermissions);
-  //     reset(parsedDetails); // This sets the form values to the saved data
-  //   }
-  // }, [reset]);
+  useEffect(() => {
+    const savedPermissions = localStorage.getItem("permissions");
+    if (savedPermissions) {
+      const parsedDetails = JSON.parse(savedPermissions);
+      reset(parsedDetails); // This sets the form values to the saved data
+    }
+  }, [reset]);
 
   // const permissionsInLocalStorage = localStorage.getItem("permissions");
   // const parsedPermissions = permissionsInLocalStorage
@@ -239,7 +236,7 @@ export default function UserRolesAndPermissionsForm({
         </div>
 
         {/* <div className="grid grid-cols-5 gap-4"> */}
-        <div className="w-full overflow-auto md:overflow-hidden">
+        <div className="w-full overflow-auto">
           <Table className="w-full ">
             <TableHeader>
               <TableRow className="border-none">

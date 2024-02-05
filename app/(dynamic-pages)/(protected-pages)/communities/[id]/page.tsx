@@ -45,6 +45,10 @@ export default async function CommunityDetailsPage({
     contributionPeriod: temporaryConfiguration.contributionPeriod || 0,
     validationPeriod: temporaryConfiguration.validationPeriod || 0,
   };
+  const temporaryQourums = {
+    prioritizationQourum: temporaryConfiguration.prioritizationQuorum || 0, // Corrected property name
+    validationQuorum: temporaryConfiguration.validationQuorum || 0,
+  };
 
   return (
     <div className="relative mx-8 overflow-hidden">

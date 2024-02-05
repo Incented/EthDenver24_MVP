@@ -37,45 +37,58 @@ function CommunityInfo({
         <div className="">
           <h1 className="text-lg font-semibold">{communityName}</h1>
           <p className="text-xs text-muted-foreground">
-            {communityMembers} members
+            {/* {communityMembers}  */}
+            100 members
           </p>
         </div>
       </div>
       <p className="mb-4 text-sm leading-6 text-muted-foreground">
         {communityDescription} <span className="text-primary">See more</span>
       </p>
-      <div className="flex flex-col gap-y-4">
-        <Link href="" className="flex items-center gap-2">
+      <div className="flex flex-col gap-y-4 max-w-md">
+        <Link
+          href={communityUrls?.website || ""}
+          className="flex items-center gap-2"
+        >
           <LinkIcon size={24} className="p-1 text-black bg-border rounded-md" />
-          <p className="text-xs text-muted-foreground">
-            {communityUrls?.website}
+          <p className="text-xs text-muted-foreground truncate w-40">
+            {communityUrls?.website || "Not provided"}
           </p>
         </Link>
-        <Link href="" className="flex items-center gap-2">
+        <Link
+          href={communityUrls?.facebook || ""}
+          className="flex items-center gap-2"
+        >
           <Facebook
             size={24}
             className="p-1 text-foreground bg-border rounded-md"
           />
-          <p className="text-xs text-muted-foreground">
-            {communityUrls?.facebook}
+          <p className="text-xs text-muted-foreground truncate w-40">
+            {communityUrls?.facebook || "Not provided"}
           </p>
         </Link>
-        <Link href="" className="flex items-center gap-2">
+        <Link
+          href={communityUrls?.twitter || ""}
+          className="flex items-center gap-2"
+        >
           <Twitter
             size={24}
             className="p-1 text-foreground bg-border rounded-md"
           />
-          <p className="text-xs text-muted-foreground">
-            {communityUrls?.linkedin}
+          <p className="text-xs text-muted-foreground truncate w-40">
+            {communityUrls?.twitter || "Not provided"}
           </p>
         </Link>
-        <Link href="" className="flex items-center gap-2">
+        <Link
+          href={communityUrls?.linkedin || ""}
+          className="flex items-center gap-2"
+        >
           <Linkedin
             size={24}
             className="p-1 text-foreground bg-border rounded-md"
           />
-          <p className="text-xs text-muted-foreground">
-            {communityUrls?.youtube}
+          <p className="text-xs text-muted-foreground truncate w-40">
+            {communityUrls?.linkedin || "Not provided"}
           </p>
         </Link>
       </div>
