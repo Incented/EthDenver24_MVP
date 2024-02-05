@@ -15,6 +15,10 @@ import TaskTab from "../../dashboard/(my-dashboard)/_components/TaskTab";
 import Pagination from "@/components/ui/Pagination";
 import { z } from "zod";
 import { getOrganizationById } from "@/data/user/organizations";
+import {
+  protocolConfigurationSchema,
+  rewardSettingsSchema,
+} from "../create-community/_components/createCommunitySchema";
 
 const paramsSchema = z.object({
   id: z.coerce.string(),
@@ -28,6 +32,19 @@ export default async function CommunityDetailsPage({
   const parsedParams = paramsSchema.parse(params);
   const { id } = parsedParams;
   const community = await getOrganizationById(id);
+
+  const localRewards = localStorage.getItem("rewardSettings");
+  const temporaryRewards = rewardSettingsSchema.parse(
+    JSON.parse(localRewards || "{}")
+  );
+
+  const localConfiguration = localStorage.getItem("protocolConfiguration");
+  const temporaryConfiguration = JSON.parse(localConfiguration || "{}");
+  const temporaryPeriods = {
+    prioritizationPeriod: temporaryConfiguration.prioritizationPeriod || 0,
+    contributionPeriod: temporaryConfiguration.contributionPeriod || 0,
+    validationPeriod: temporaryConfiguration.validationPeriod || 0,
+  };
 
   return (
     <div className="relative mx-8 overflow-hidden">
@@ -54,10 +71,10 @@ export default async function CommunityDetailsPage({
         {/* Details */}
         <div className="h-full overflow-y-auto w-full">
           <div className="flex flex-col gap-4 w-full">
-            <CommunityDetailsTopCards />
+            <CommunityDetailsTopCards rewards={temporaryRewards} />
             <div className="grid grid-cols-4 gap-4 w-full">
               <CarrotPotCard />
-              <PeriodsCard />
+              <PeriodsCard periods={temporaryPeriods} />
               <PriorityCards />
             </div>
             <Card className="w-full p-8 pb-4 bg-muted border-none ">
