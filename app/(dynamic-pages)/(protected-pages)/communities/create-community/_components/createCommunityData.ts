@@ -48,6 +48,34 @@ export const rewardAccordionItems = [
   },
 ];
 
+export const carrotPotItems = [
+  {
+    title: "Community live status",
+    content: `Details about the community's current operational status.`,
+    isOpen: false,
+  },
+  {
+    title: "Token",
+    content: `Information regarding the community's specific token.`,
+    isOpen: false,
+  },
+  {
+    title: "Carrot Pot Address",
+    content: `The address for the community's carrot pot where rewards are stored.`,
+    isOpen: false,
+  },
+  {
+    title: "Purchase token",
+    content: `Options for purchasing the community's token.`,
+    isOpen: false,
+  },
+  {
+    title: "Request from the Incented Ecosystem Fund",
+    content: `Procedure to request funds from the Incented Ecosystem Fund.`,
+    isOpen: false,
+  },
+];
+
 export const rolesAndPermissions = [
   {
     fieldName: "communitySpecificSettings",
