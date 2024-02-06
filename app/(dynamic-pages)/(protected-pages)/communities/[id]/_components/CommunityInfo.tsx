@@ -8,13 +8,14 @@ type CommunityInfoProps = {
   communityName: string;
   communityDescription?: string;
   communityImage?: string;
-  communityMembers?: number;
+  communityMembersCount?: number;
   communityUrls?: {
     website?: string;
     facebook?: string;
     twitter?: string;
     linkedin?: string;
     youtube?: string;
+    instagram?: string;
   };
 };
 
@@ -22,7 +23,7 @@ function CommunityInfo({
   communityName,
   communityDescription,
   communityImage,
-  communityMembers,
+  communityMembersCount,
   communityUrls,
 }: CommunityInfoProps) {
   return (
@@ -38,7 +39,7 @@ function CommunityInfo({
           <h1 className="text-lg font-semibold">{communityName}</h1>
           <p className="text-xs text-muted-foreground">
             {/* {communityMembers}  */}
-            100 members
+            {communityMembersCount} members
           </p>
         </div>
       </div>

@@ -65,20 +65,17 @@ export const protocolConfigurationSchema = z.object({
   prioritizationPeriod: z
     .number()
     .int()
-    .min(0, "Prioritization period must be between 0 and 30")
-    .max(30)
+    .min(0, "Prioritization period must be a number")
     .nullable(),
   contributionPeriod: z
     .number()
     .int()
-    .min(0, "Contribution period must be between 0 and 30")
-    .max(30)
+    .min(0, "Contribution period must be a number")
     .nullable(),
   validationPeriod: z
     .number()
     .int()
-    .min(0, "Validation period must be between 0 and 30")
-    .max(30)
+    .min(0, "Validation period must be a number")
     .nullable(),
 });
 
@@ -107,14 +104,9 @@ export const privilegesSchema = z.object({
   isValidForVetoPower: z.boolean().default(false),
 });
 
-export const communityLiveStatusEnum = z
-  .enum(["live", "testnet"])
-  .optional()
-  .default("live");
-export const communityTokenEnum = z
-  .enum(["carrot", "token_1"])
-  .default("carrot")
-  .optional();
+export const communityLiveStatusEnum = z.enum(["live", "testnet"]);
+
+export const communityTokenEnum = z.enum(["carrot", "token_1"]);
 
 export const carrotPotSchema = z.object({
   community_live_status: communityLiveStatusEnum,
@@ -153,10 +145,14 @@ export const adminSettingsSchema = z.object({
 export type AdminSettingsSchema = z.infer<typeof adminSettingsSchema>;
 
 export const generalDetailsSchema = basicCommunityDetailsSchema
-  .merge(protocolConfigurationSchema)
-  .merge(rewardSettingsSchema);
+  .merge(rewardSettingsSchema)
+  .merge(protocolConfigurationSchema);
 
 export type GeneralDetailsSchema = z.infer<typeof generalDetailsSchema>;
+
+export const privateDetailsSchema = adminSettingsSchema.merge(carrotPotSchema);
+
+export type PrivateDetailsSchema = z.infer<typeof privateDetailsSchema>;
 
 export const createCommunitySchema = basicCommunityDetailsSchema
   .merge(rewardSettingsSchema)

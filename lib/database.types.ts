@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       app_admins: {
@@ -509,24 +509,29 @@ export interface Database {
           claim_lock_period_duration: unknown | null;
           claim_stake_amount_percentage: number | null;
           community_fee_percentage: number | null;
-          contribution_period_duration: unknown | null;
+          contribution_period: number | null;
           created_at: string;
           created_by: string;
+          description: string | null;
+          facebook_url: string | null;
           id: string;
+          instagram_url: string | null;
+          linkedin_url: string | null;
           location: string | null;
-          prioritization_period_duration: unknown | null;
-          prioritization_period_start: string | null;
+          prioritization_period: number | null;
           prioritization_quorum_percentage: number | null;
           prioritization_reward_percentage: number | null;
           proposal_absolute_reward: number | null;
-          proposal_relative_reward: number | null;
           task_expiration_time: string | null;
           title: string;
           total_members: number | null;
           total_tasks: number | null;
-          validation_period_duration: unknown | null;
+          twitter_url: string | null;
+          validation_period: number | null;
           validation_quorum_percentage: number | null;
           validation_reward_percentage: number | null;
+          website_url: string | null;
+          youtube_url: string | null;
         };
         Insert: {
           active_tasks?: number | null;
@@ -535,24 +540,29 @@ export interface Database {
           claim_lock_period_duration?: unknown | null;
           claim_stake_amount_percentage?: number | null;
           community_fee_percentage?: number | null;
-          contribution_period_duration?: unknown | null;
+          contribution_period?: number | null;
           created_at?: string;
           created_by: string;
+          description?: string | null;
+          facebook_url?: string | null;
           id?: string;
+          instagram_url?: string | null;
+          linkedin_url?: string | null;
           location?: string | null;
-          prioritization_period_duration?: unknown | null;
-          prioritization_period_start?: string | null;
+          prioritization_period?: number | null;
           prioritization_quorum_percentage?: number | null;
           prioritization_reward_percentage?: number | null;
           proposal_absolute_reward?: number | null;
-          proposal_relative_reward?: number | null;
           task_expiration_time?: string | null;
           title?: string;
           total_members?: number | null;
           total_tasks?: number | null;
-          validation_period_duration?: unknown | null;
+          twitter_url?: string | null;
+          validation_period?: number | null;
           validation_quorum_percentage?: number | null;
           validation_reward_percentage?: number | null;
+          website_url?: string | null;
+          youtube_url?: string | null;
         };
         Update: {
           active_tasks?: number | null;
@@ -561,24 +571,29 @@ export interface Database {
           claim_lock_period_duration?: unknown | null;
           claim_stake_amount_percentage?: number | null;
           community_fee_percentage?: number | null;
-          contribution_period_duration?: unknown | null;
+          contribution_period?: number | null;
           created_at?: string;
           created_by?: string;
+          description?: string | null;
+          facebook_url?: string | null;
           id?: string;
+          instagram_url?: string | null;
+          linkedin_url?: string | null;
           location?: string | null;
-          prioritization_period_duration?: unknown | null;
-          prioritization_period_start?: string | null;
+          prioritization_period?: number | null;
           prioritization_quorum_percentage?: number | null;
           prioritization_reward_percentage?: number | null;
           proposal_absolute_reward?: number | null;
-          proposal_relative_reward?: number | null;
           task_expiration_time?: string | null;
           title?: string;
           total_members?: number | null;
           total_tasks?: number | null;
-          validation_period_duration?: unknown | null;
+          twitter_url?: string | null;
+          validation_period?: number | null;
           validation_quorum_percentage?: number | null;
           validation_reward_percentage?: number | null;
+          website_url?: string | null;
+          youtube_url?: string | null;
         };
         Relationships: [
           {
@@ -599,6 +614,10 @@ export interface Database {
           claim_lock_period_duration: unknown | null;
           claim_stake_amount_percentage: number | null;
           community_fee_percentage: number | null;
+          community_live_status:
+            | Database["public"]["Enums"]["community_live_status_enum"]
+            | null;
+          community_token: string | null;
           contribution_period_duration: unknown | null;
           id: string;
           location: string | null;
@@ -612,6 +631,7 @@ export interface Database {
           task_expiration_time: string | null;
           total_members: number | null;
           total_tasks: number | null;
+          user_roles: Json | null;
           validation_period_duration: unknown | null;
           validation_quorum_percentage: number | null;
           validation_reward_percentage: number | null;
@@ -624,6 +644,10 @@ export interface Database {
           claim_lock_period_duration?: unknown | null;
           claim_stake_amount_percentage?: number | null;
           community_fee_percentage?: number | null;
+          community_live_status?:
+            | Database["public"]["Enums"]["community_live_status_enum"]
+            | null;
+          community_token?: string | null;
           contribution_period_duration?: unknown | null;
           id: string;
           location?: string | null;
@@ -637,6 +661,7 @@ export interface Database {
           task_expiration_time?: string | null;
           total_members?: number | null;
           total_tasks?: number | null;
+          user_roles?: Json | null;
           validation_period_duration?: unknown | null;
           validation_quorum_percentage?: number | null;
           validation_reward_percentage?: number | null;
@@ -649,6 +674,10 @@ export interface Database {
           claim_lock_period_duration?: unknown | null;
           claim_stake_amount_percentage?: number | null;
           community_fee_percentage?: number | null;
+          community_live_status?:
+            | Database["public"]["Enums"]["community_live_status_enum"]
+            | null;
+          community_token?: string | null;
           contribution_period_duration?: unknown | null;
           id?: string;
           location?: string | null;
@@ -662,6 +691,7 @@ export interface Database {
           task_expiration_time?: string | null;
           total_members?: number | null;
           total_tasks?: number | null;
+          user_roles?: Json | null;
           validation_period_duration?: unknown | null;
           validation_quorum_percentage?: number | null;
           validation_reward_percentage?: number | null;
@@ -1344,6 +1374,7 @@ export interface Database {
         | "all_communities"
         | "my_communities"
         | "bookmarked";
+      community_live_status_enum: "live" | "testnet";
       internal_blog_post_status: "draft" | "published";
       internal_feedback_thread_priority: "low" | "medium" | "high";
       internal_feedback_thread_status:
@@ -1384,7 +1415,7 @@ export interface Database {
       [_ in never]: never;
     };
   };
-}
+};
 
 export type Tables<
   PublicTableNameOrOptions extends

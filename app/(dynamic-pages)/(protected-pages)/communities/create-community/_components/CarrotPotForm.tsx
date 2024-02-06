@@ -12,7 +12,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/Progress";
 import { toast } from "sonner";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import {
   Select,
   SelectContent,
@@ -58,7 +57,7 @@ export default function CarrotPotForm({
   } = useForm<CarrotPotSchema>({
     resolver: zodResolver(carrotPotSchema),
     defaultValues: {
-      community_live_status: carrotPotSettings?.community_live_status || "live",
+      community_live_status: carrotPotSettings?.community_live_status,
       community_token: carrotPotSettings?.community_token,
       // carrot_pot_address: carrotPotSettings?.carrot_pot_address || "",
     },
@@ -69,16 +68,16 @@ export default function CarrotPotForm({
     const newStep = currentStep + 1;
     setCurrentStep(newStep);
     localStorage.setItem("currentStep", String(newStep));
-    localStorage.setItem("carrotPotSettings", JSON.stringify(data));
+    // localStorage.setItem("carrotPotSettings", JSON.stringify(data));
   };
 
-  useEffect(() => {
-    const savedCarrotPotSettings = localStorage.getItem("carrotPotSettings");
-    if (savedCarrotPotSettings) {
-      const parsedDetails = JSON.parse(savedCarrotPotSettings);
-      reset(parsedDetails);
-    }
-  }, [reset]);
+  // useEffect(() => {
+  //   const savedCarrotPotSettings = localStorage.getItem("carrotPotSettings");
+  //   if (savedCarrotPotSettings) {
+  //     const parsedDetails = JSON.parse(savedCarrotPotSettings);
+  //     reset(parsedDetails);
+  //   }
+  // }, [reset]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
@@ -112,7 +111,12 @@ export default function CarrotPotForm({
                       name="community_live_status"
                       control={control}
                       render={({ field }) => (
-                        <Select {...field}>
+                        <Select
+                          {...field}
+                          name={field.name}
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
                           <SelectTrigger
                             aria-label="Community live status"
                             className="pr-2"
@@ -153,7 +157,12 @@ export default function CarrotPotForm({
                       name="community_token"
                       control={control}
                       render={({ field }) => (
-                        <Select {...field}>
+                        <Select
+                          {...field}
+                          name={field.name}
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
                           <SelectTrigger
                             aria-label="Choose token"
                             className="pr-2"

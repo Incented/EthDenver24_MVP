@@ -25,11 +25,24 @@ export default function UserRolesAndPermissionsForm({
   currentStep,
   setCurrentStep,
 }: {
-  permissions: AdminSettingsSchema | undefined;
+  permissions: AdminSettingsSchema;
   setPermissions: (data: AdminSettingsSchema) => void;
   currentStep: number;
   setCurrentStep: (step: number) => void;
 }) {
+  // Initialize default values for all permissions
+  // const defaultPermissions = Object.keys(adminSettingsSchema.shape).reduce(
+  //   (acc, key) => ({
+  //     ...acc,
+  //     [key]: {
+  //       isValidForAdmin: false,
+  //       isValidForMembers: false,
+  //       isValidForVetoPower: false,
+  //     },
+  //   }),
+  //   {}
+  // );
+
   const {
     register,
     handleSubmit,
@@ -40,156 +53,99 @@ export default function UserRolesAndPermissionsForm({
     formState: { errors },
   } = useForm<AdminSettingsSchema>({
     resolver: zodResolver(adminSettingsSchema),
-    defaultValues: {
-      addOrRemoveMembers: {
-        isValidForAdmin:
-          permissions?.addOrRemoveMembers?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.addOrRemoveMembers?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.addOrRemoveMembers?.isValidForVetoPower ?? false,
-      },
-      adjustPersonalSettings: {
-        isValidForAdmin:
-          permissions?.adjustPersonalSettings?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.adjustPersonalSettings?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.adjustPersonalSettings?.isValidForVetoPower ?? false,
-      },
-      approveMembersJoinRequest: {
-        isValidForAdmin:
-          permissions?.approveMembersJoinRequest?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.approveMembersJoinRequest?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.approveMembersJoinRequest?.isValidForVetoPower ?? false,
-      },
-      assignInitialMemberRolesAndPermissions: {
-        isValidForAdmin:
-          permissions?.assignInitialMemberRolesAndPermissions
-            ?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.assignInitialMemberRolesAndPermissions
-            ?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.assignInitialMemberRolesAndPermissions
-            ?.isValidForVetoPower ?? false,
-      },
-      communitySpecificSettings: {
-        isValidForAdmin:
-          permissions?.communitySpecificSettings?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.communitySpecificSettings?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.communitySpecificSettings?.isValidForVetoPower ?? false,
-      },
-      contributeToTasks: {
-        isValidForAdmin:
-          permissions?.contributeToTasks?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.contributeToTasks?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.contributeToTasks?.isValidForVetoPower ?? false,
-      },
-      manageTaskSettings: {
-        isValidForAdmin:
-          permissions?.manageTaskSettings?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.manageTaskSettings?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.manageTaskSettings?.isValidForVetoPower ?? false,
-      },
-      overseeCarrotDistribution: {
-        isValidForAdmin:
-          permissions?.overseeCarrotDistribution?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.overseeCarrotDistribution?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.overseeCarrotDistribution?.isValidForVetoPower ?? false,
-      },
-      participateInTaskValidation: {
-        isValidForAdmin:
-          permissions?.participateInTaskValidation?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.participateInTaskValidation?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.participateInTaskValidation?.isValidForVetoPower ??
-          false,
-      },
-      postOnTaskDiscussion: {
-        isValidForAdmin:
-          permissions?.postOnTaskDiscussion?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.postOnTaskDiscussion?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.postOnTaskDiscussion?.isValidForVetoPower ?? false,
-      },
-      proposeNewTasks: {
-        isValidForAdmin: permissions?.proposeNewTasks?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.proposeNewTasks?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.proposeNewTasks?.isValidForVetoPower ?? false,
-      },
-      reviewCommunityPerformance: {
-        isValidForAdmin:
-          permissions?.reviewCommunityPerformance?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.reviewCommunityPerformance?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.reviewCommunityPerformance?.isValidForVetoPower ?? false,
-      },
-      takesCarrotsToPrioritizeTasks: {
-        isValidForAdmin:
-          permissions?.takesCarrotsToPrioritizeTasks?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.takesCarrotsToPrioritizeTasks?.isValidForMembers ??
-          false,
-        isValidForVetoPower:
-          permissions?.takesCarrotsToPrioritizeTasks?.isValidForVetoPower ??
-          false,
-      },
-      trackRewards: {
-        isValidForAdmin: permissions?.trackRewards?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.trackRewards?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.trackRewards?.isValidForVetoPower ?? false,
-      },
-      vetoInappropriateTasks: {
-        isValidForAdmin:
-          permissions?.vetoInappropriateTasks?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.vetoInappropriateTasks?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.vetoInappropriateTasks?.isValidForVetoPower ?? false,
-      },
-      viewOngoingTasks: {
-        isValidForAdmin:
-          permissions?.viewOngoingTasks?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.viewOngoingTasks?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.viewOngoingTasks?.isValidForVetoPower ?? false,
-      },
-      inviteOtherUsers: {
-        isValidForAdmin:
-          permissions?.inviteOtherUsers?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.inviteOtherUsers?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.inviteOtherUsers?.isValidForVetoPower ?? false,
-      },
-      approveTaskProposal: {
-        isValidForAdmin:
-          permissions?.approveTaskProposal?.isValidForAdmin ?? false,
-        isValidForMembers:
-          permissions?.approveTaskProposal?.isValidForMembers ?? false,
-        isValidForVetoPower:
-          permissions?.approveTaskProposal?.isValidForVetoPower ?? false,
-      },
-    },
+    // defaultValues: {
+    //   addOrRemoveMembers: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   adjustPersonalSettings: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   approveMembersJoinRequest: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   assignInitialMemberRolesAndPermissions: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   communitySpecificSettings: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   contributeToTasks: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   manageTaskSettings: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   overseeCarrotDistribution: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   participateInTaskValidation: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   postOnTaskDiscussion: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   proposeNewTasks: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   reviewCommunityPerformance: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   takesCarrotsToPrioritizeTasks: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   trackRewards: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   vetoInappropriateTasks: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   viewOngoingTasks: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   inviteOtherUsers: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    //   approveTaskProposal: {
+    //     isValidForAdmin: false,
+    //     isValidForMembers: false,
+    //     isValidForVetoPower: false,
+    //   },
+    // },
+    // defaultValues: permissions || defaultPermissions,
   });
 
   const onSubmit: SubmitHandler<AdminSettingsSchema> = (data) => {
@@ -197,16 +153,16 @@ export default function UserRolesAndPermissionsForm({
     const newStep = currentStep + 1;
     setCurrentStep(newStep);
     localStorage.setItem("currentStep", String(newStep));
-    localStorage.setItem("permissions", JSON.stringify(data));
+    // localStorage.setItem("permissions", JSON.stringify(data));
   };
 
-  useEffect(() => {
-    const savedPermissions = localStorage.getItem("permissions");
-    if (savedPermissions) {
-      const parsedDetails = JSON.parse(savedPermissions);
-      reset(parsedDetails); // This sets the form values to the saved data
-    }
-  }, [reset]);
+  // useEffect(() => {
+  //   const savedPermissions = localStorage.getItem("permissions");
+  //   if (savedPermissions) {
+  //     const parsedDetails = JSON.parse(savedPermissions);
+  //     reset(parsedDetails); // This sets the form values to the saved data
+  //   }
+  // }, [reset]);
 
   // const permissionsInLocalStorage = localStorage.getItem("permissions");
   // const parsedPermissions = permissionsInLocalStorage

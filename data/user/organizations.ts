@@ -1,4 +1,8 @@
 "use server";
+import {
+  GeneralDetailsSchema,
+  PrivateDetailsSchema,
+} from "@/app/(dynamic-pages)/(protected-pages)/communities/create-community/_components/createCommunitySchema";
 import { createSupabaseUserServerActionClient } from "@/supabase-clients/user/createSupabaseUserServerActionClient";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 import { Enum, NormalizedSubscription, Table, UnwrapPromise } from "@/types";
@@ -6,13 +10,7 @@ import { toSiteURL } from "@/utils/helpers";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 import { revalidatePath } from "next/cache";
 
-export const createOrganization = async ({
-  name,
-  proposalAbsoluteReward,
-}: {
-  name: string;
-  proposalAbsoluteReward?: number;
-}) => {
+export const createOrganization = async ({ name }: { name: string }) => {
   const supabase = createSupabaseUserServerComponentClient();
   const user = await serverGetLoggedInUser();
   const { data, error } = await supabase
@@ -20,7 +18,56 @@ export const createOrganization = async ({
     .insert({
       title: name,
       created_by: user.id,
-      proposal_absolute_reward: proposalAbsoluteReward,
+    })
+    .select("*")
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+};
+
+export const createPublicOrganization = async (
+  publicData: GeneralDetailsSchema
+) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const user = await serverGetLoggedInUser();
+  const { data, error } = await supabase
+    .from("organizations")
+    .insert({
+      title: publicData.title,
+      description: publicData.description,
+      created_by: user.id,
+      proposal_absolute_reward: publicData.proposalReward,
+      prioritization_reward_percentage: publicData.prioritizationReward,
+      validation_reward_percentage: publicData.validationReward,
+      claim_stake_amount_percentage: publicData.claimStakeAmount,
+      prioritization_quorum_percentage: publicData.prioritizationQourum,
+      validation_quorum_percentage: publicData.validationQuorum,
+      contribution_period: publicData.contributionPeriod,
+      validation_period: publicData.validationPeriod,
+      prioritization_period: publicData.prioritizationPeriod,
+      facebook_url: publicData.socialLinks?.find(
+        (link) => link.type === "facebook"
+      )?.url,
+      twitter_url: publicData.socialLinks?.find(
+        (link) => link.type === "twitter"
+      )?.url,
+      linkedin_url: publicData.socialLinks?.find(
+        (link) => link.type === "linkedin"
+      )?.url,
+      website_url: publicData.socialLinks?.find(
+        (link) => link.type === "website"
+      )?.url,
+      instagram_url: publicData.socialLinks?.find(
+        (link) => link.type === "instagram"
+      )?.url,
+      youtube_url: publicData.socialLinks?.find(
+        (link) => link.type === "youtube"
+      )?.url,
     })
     .select("*")
     .single();

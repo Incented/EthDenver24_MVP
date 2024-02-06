@@ -49,7 +49,7 @@ export default function RewardsSettingsForm({
     const newStep = currentStep + 1;
     setCurrentStep(newStep);
     localStorage.setItem("currentStep", String(newStep));
-    localStorage.setItem("rewardSettings", JSON.stringify(data));
+    // localStorage.setItem("rewardSettings", JSON.stringify(data));
   };
 
   //   useEffect(() => {

@@ -4,8 +4,6 @@ import { ChevronRight } from "lucide-react";
 import { FC } from "react";
 import { ProtocolConfigurationSchema } from "../../create-community/_components/createCommunitySchema";
 
-interface PriorityCardsProps {}
-
 export const PriorityCard = () => {
   return (
     <Card className=" grid grid-rows-[auto,1fr] w-full h-full p-4 ">
@@ -26,14 +24,11 @@ export const PriorityCard = () => {
 };
 
 export function PriorityCards({
-  configuration,
+  prioritizationQourum,
+  validationQuorum,
 }: {
-  configuration?:
-    | {
-        prioritizationQourum: any;
-        validationQuorum: any;
-      }
-    | undefined;
+  prioritizationQourum: number;
+  validationQuorum: number;
 }) {
   return (
     <div className="grid w-full col-span-1 gap-3 grid-row-2">
@@ -44,7 +39,7 @@ export function PriorityCards({
         <div className="flex flex-col items-center justify-center w-full h-full">
           <div className="flex items-center justify-center text-2xl">
             <ChevronRight />
-            <h1>{configuration?.prioritizationQourum} %</h1>
+            <h1>{prioritizationQourum} %</h1>
           </div>
           <p className="font-light text-center text-muted-foreground">
             positive priority
@@ -53,12 +48,12 @@ export function PriorityCards({
       </Card>
       <Card className=" grid grid-rows-[auto,1fr] w-full h-full p-4 ">
         <div className="w-full border-b">
-          <h1 className="text-[16px] mb-2">Prioritization Quorum</h1>
+          <h1 className="text-[16px] mb-2">Validation Quorum</h1>
         </div>
         <div className="flex flex-col items-center justify-center w-full h-full">
           <div className="flex items-center justify-center text-2xl">
             <ChevronRight />
-            <h1>{configuration?.validationQuorum}</h1>
+            <h1>{validationQuorum} %</h1>
           </div>
           <p className="font-light text-center text-muted-foreground">
             positive priority

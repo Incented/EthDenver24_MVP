@@ -48,6 +48,7 @@
     "crypto-js": "^4.2.0",
     "framer-motion": "^10.16.12",
     "lucide-react": "^0.294.0",
+    "moment": "^2.30.1",
     "next": "^14.0.5-canary.58",
     "next-themes": "^0.2.1",
     "nprogress": "^0.2.0",

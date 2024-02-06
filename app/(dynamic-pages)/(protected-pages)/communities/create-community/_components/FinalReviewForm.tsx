@@ -26,12 +26,14 @@ export function FinalReviewForm({
   protocolConfiguration,
   prev,
   onSubmit,
+  isLoading,
 }: {
   basicDetails: BasicCommunityDetailsSchema | undefined;
   rewardSettings: RewardSettingsSchema | undefined;
   protocolConfiguration: ProtocolConfigurationSchema | undefined;
   prev: () => void;
   onSubmit: SubmitHandler<CreateCommunitySchema>;
+  isLoading: boolean;
 }) {
   const temporaryQourums = {
     prioritizationQourum: protocolConfiguration?.prioritizationQourum || 0, // Corrected property name
@@ -80,6 +82,7 @@ export function FinalReviewForm({
             <div className="flex flex-col w-full gap-4 lg:grid lg:grid-cols-2 xl:flex xl:flex-row">
               <CommunityInfo
                 communityName={basicDetails?.title || "Community name"}
+                communityDescription={basicDetails?.description}
                 communityUrls={communityUrls}
               />
               {/* <PeriodsCard
@@ -122,7 +125,12 @@ export function FinalReviewForm({
           >
             Back
           </Button>{" "}
-          <Button variant="default" type="submit" className="w-full">
+          <Button
+            variant="default"
+            type="submit"
+            className="w-full"
+            disabled={isLoading}
+          >
             Create Community
           </Button>
         </div>

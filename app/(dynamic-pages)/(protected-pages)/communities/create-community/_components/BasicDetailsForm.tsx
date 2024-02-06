@@ -21,7 +21,6 @@ import {
   Youtube,
   Plus,
 } from "lucide-react";
-import SelectInput from "@/components/ui/SelectInput/SelectInput";
 import {
   Select,
   SelectContent,
@@ -44,44 +43,6 @@ export default function BasicDetailsForm({
   currentStep: number;
   setCurrentStep: (step: number) => void;
 }) {
-  const {
-    register,
-    setValue,
-    watch,
-    handleSubmit,
-    getValues,
-    reset,
-    control,
-    formState: { errors },
-  } = useForm<BasicCommunityDetailsSchema>({
-    resolver: zodResolver(basicCommunityDetailsSchema),
-    defaultValues: {
-      title: basicDetails?.title || "",
-      description: basicDetails?.description || "",
-      // socialLinks: {
-      //   type: basicDetails?.socialLinks?.type || "website",
-      //   url: basicDetails?.socialLinks?.url || "",
-      // },
-      socialLinks: basicDetails?.socialLinks || [{ type: undefined, url: "" }],
-    },
-  });
-
-  useEffect(() => {
-    const savedBasicDetails = localStorage.getItem("basicDetails");
-    if (savedBasicDetails) {
-      const parsedDetails = JSON.parse(savedBasicDetails);
-      reset(parsedDetails); // This sets the form values to the saved data
-    }
-  }, [reset]);
-
-  const onSubmit: SubmitHandler<BasicCommunityDetailsSchema> = (data) => {
-    setBasicDetails(data);
-    const newStep = currentStep + 1;
-    setCurrentStep(newStep);
-    localStorage.setItem("currentStep", String(newStep));
-    localStorage.setItem("basicDetails", JSON.stringify(data));
-  };
-
   type socialMediaOption = {
     id: number;
     value: string;
@@ -127,6 +88,57 @@ export default function BasicDetailsForm({
       label: "twitter",
     },
   ];
+
+  const defaultSocialLinkType = socialMediaOptions[0].value;
+
+  const {
+    register,
+    setValue,
+    watch,
+    handleSubmit,
+    getValues,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm<BasicCommunityDetailsSchema>({
+    resolver: zodResolver(basicCommunityDetailsSchema),
+    defaultValues: {
+      title: basicDetails?.title || "",
+      description: basicDetails?.description || "",
+      // socialLinks: {
+      //   type: basicDetails?.socialLinks?.type || "website",
+      //   url: basicDetails?.socialLinks?.url || "",
+      // },
+      socialLinks: basicDetails?.socialLinks || [
+        {
+          type: defaultSocialLinkType as
+            | "website"
+            | "facebook"
+            | "twitter"
+            | "linkedin"
+            | "instagram"
+            | "youtube",
+          url: "",
+        },
+      ],
+    },
+  });
+
+  // useEffect(() => {
+  //   const savedBasicDetails = localStorage.getItem("basicDetails");
+  //   if (savedBasicDetails) {
+  //     const parsedDetails = JSON.parse(savedBasicDetails);
+  //     reset(parsedDetails); // This sets the form values to the saved data
+  //   }
+  // }, [reset]);
+
+  const onSubmit: SubmitHandler<BasicCommunityDetailsSchema> = (data) => {
+    setBasicDetails(data);
+    const newStep = currentStep + 1;
+    setCurrentStep(newStep);
+    localStorage.setItem("currentStep", String(newStep));
+    // localStorage.setItem("basicDetails", JSON.stringify(data));
+  };
 
   const [selectedOption, setSelectedOption] = useState<socialMediaOption>(
     socialMediaOptions[0]
