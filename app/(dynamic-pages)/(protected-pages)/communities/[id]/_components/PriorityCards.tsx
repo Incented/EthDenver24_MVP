@@ -2,8 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ChevronRight } from "lucide-react";
 import { FC } from "react";
-
-interface PriorityCardsProps {}
+import { ProtocolConfigurationSchema } from "../../create-community/_components/createCommunitySchema";
 
 export const PriorityCard = () => {
   return (
@@ -24,7 +23,13 @@ export const PriorityCard = () => {
   );
 };
 
-const PriorityCards: FC<PriorityCardsProps> = ({}) => {
+export function PriorityCards({
+  prioritizationQourum,
+  validationQuorum,
+}: {
+  prioritizationQourum: number;
+  validationQuorum: number;
+}) {
   return (
     <div className="grid w-full col-span-1 gap-3 grid-row-2">
       <Card className=" grid grid-rows-[auto,1fr] w-full h-full p-4 ">
@@ -34,7 +39,7 @@ const PriorityCards: FC<PriorityCardsProps> = ({}) => {
         <div className="flex flex-col items-center justify-center w-full h-full">
           <div className="flex items-center justify-center text-2xl">
             <ChevronRight />
-            <h1>75%</h1>
+            <h1>{prioritizationQourum} %</h1>
           </div>
           <p className="font-light text-center text-muted-foreground">
             positive priority
@@ -43,12 +48,12 @@ const PriorityCards: FC<PriorityCardsProps> = ({}) => {
       </Card>
       <Card className=" grid grid-rows-[auto,1fr] w-full h-full p-4 ">
         <div className="w-full border-b">
-          <h1 className="text-[16px] mb-2">Prioritization Quorum</h1>
+          <h1 className="text-[16px] mb-2">Validation Quorum</h1>
         </div>
         <div className="flex flex-col items-center justify-center w-full h-full">
           <div className="flex items-center justify-center text-2xl">
             <ChevronRight />
-            <h1>75%</h1>
+            <h1>{validationQuorum} %</h1>
           </div>
           <p className="font-light text-center text-muted-foreground">
             positive priority
@@ -57,6 +62,6 @@ const PriorityCards: FC<PriorityCardsProps> = ({}) => {
       </Card>
     </div>
   );
-};
+}
 
 export default PriorityCards;

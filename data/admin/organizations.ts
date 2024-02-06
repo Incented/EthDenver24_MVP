@@ -1,6 +1,31 @@
 "use server";
+import {
+  AdminSettingsSchema,
+  CarrotPotSchema,
+  PrivateDetailsSchema,
+} from "@/app/(dynamic-pages)/(protected-pages)/communities/create-community/_components/createCommunitySchema";
 import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
 import { ensureAppAdmin } from "@/utils/route-handlers/ensureAppAdmin";
+
+export const addPrivateInfoForOrganization = async (
+  permissions: AdminSettingsSchema,
+  communityId: string,
+  carrotPotSettings: CarrotPotSchema
+) => {
+  const { error } = await supabaseAdminClient
+    .from("organizations_private_info")
+    .update({
+      user_roles: { ...permissions },
+      community_live_status: carrotPotSettings.community_live_status,
+      community_token: carrotPotSettings.community_token,
+    })
+    .eq("id", communityId);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 export async function getOrganizationsTotalPages({
   query = "",

@@ -8,10 +8,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
+import { TeamMembersTableProps } from "@/types";
 
-interface CommunityMembersProps {}
+type CommunityMembersProps = {
+  communityMembers: TeamMembersTableProps["members"];
+};
 
-const CommunityMembers: FC<CommunityMembersProps> = ({}) => {
+export function CommunityMembers({ communityMembers }: CommunityMembersProps) {
   return (
     <div className="bg-muted rounded-xl">
       <div className="p-8 gap-4 flex  flex-col  border-none min-w-[281px]">
@@ -20,26 +23,13 @@ const CommunityMembers: FC<CommunityMembersProps> = ({}) => {
             Community members
           </h1>
           <div className="flex flex-col mb-10 gap-y-4">
-            <CommunityMember
-              name="Randy Dias"
-              imageUrl="/assets/avatar_3.jpg"
-            />
-            <CommunityMember
-              name="Randy Dias"
-              imageUrl="/assets/avatar_3.jpg"
-            />
-            <CommunityMember
-              name="Randy Dias"
-              imageUrl="/assets/avatar_3.jpg"
-            />
-            <CommunityMember
-              name="Randy Dias"
-              imageUrl="/assets/avatar_3.jpg"
-            />
-            <CommunityMember
-              name="Randy Dias"
-              imageUrl="/assets/avatar_3.jpg"
-            />
+            {communityMembers?.map((member) => (
+              <CommunityMember
+                key={member.id}
+                name={member.name ?? "Community Mmember"}
+                imageUrl=""
+              />
+            ))}
           </div>
         </div>
 
@@ -207,6 +197,6 @@ const CommunityMembers: FC<CommunityMembersProps> = ({}) => {
       </div>
     </div>
   );
-};
+}
 
 export default CommunityMembers;

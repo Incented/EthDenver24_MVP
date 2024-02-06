@@ -52,7 +52,7 @@ export default function ProtocolConfigurationForm({
     const newStep = currentStep + 1;
     setCurrentStep(newStep);
     localStorage.setItem("currentStep", String(newStep));
-    localStorage.setItem("protocolConfiguration", JSON.stringify(data));
+    // localStorage.setItem("protocolConfiguration", JSON.stringify(data));
   };
 
   //   useEffect(() => {

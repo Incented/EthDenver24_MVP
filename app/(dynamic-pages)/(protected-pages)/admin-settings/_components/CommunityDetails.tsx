@@ -28,12 +28,7 @@ const CommunityDetails: FC<CommunityDetailsProps> = ({}) => {
     defaultValues: {
       title: "",
       description: "",
-      website: "",
-      facebook: "",
-      twitter: "",
-      linkedin: "",
-      youtube: "",
-      instagram: "",
+      socialLinks: [{ type: undefined, url: "" }],
     },
   });
 

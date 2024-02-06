@@ -1,5 +1,11 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { CreateCommunitySchema } from "./createCommunitySchema";
+import {
+  CreateCommunitySchema,
+  basicCommunityDetailsSchema,
+  BasicCommunityDetailsSchema,
+  RewardSettingsSchema,
+  ProtocolConfigurationSchema,
+} from "./createCommunitySchema";
 import { Progress } from "@/components/ui/Progress";
 import CommunityInfo from "../../[id]/_components/CommunityInfo";
 import CommunityMembers from "../../[id]/_components/CommunityMembers";
@@ -20,13 +26,28 @@ export function FinalReviewForm({
   protocolConfiguration,
   prev,
   onSubmit,
+  isLoading,
 }: {
-  basicDetails: any;
-  rewardSettings: any;
-  protocolConfiguration: any;
+  basicDetails: BasicCommunityDetailsSchema | undefined;
+  rewardSettings: RewardSettingsSchema | undefined;
+  protocolConfiguration: ProtocolConfigurationSchema | undefined;
   prev: () => void;
   onSubmit: SubmitHandler<CreateCommunitySchema>;
+  isLoading: boolean;
 }) {
+  const temporaryQourums = {
+    prioritizationQourum: protocolConfiguration?.prioritizationQourum || 0, // Corrected property name
+    validationQuorum: protocolConfiguration?.validationQuorum || 0,
+  };
+  const getSocialLink = (type: string) =>
+    basicDetails?.socialLinks?.find((link) => link.type === type)?.url || "";
+  const communityUrls = {
+    website: getSocialLink("website"),
+    facebook: getSocialLink("facebook"),
+    twitter: getSocialLink("twitter"),
+    linkedin: getSocialLink("linkedin"),
+    youtube: getSocialLink("youtube"),
+  };
   const { handleSubmit } = useForm<CreateCommunitySchema>();
   return (
     <form
@@ -34,7 +55,7 @@ export function FinalReviewForm({
       data-tid="create-community-form"
       className="w-full"
     >
-      <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[760px] 2xl:h-[760px] lg:">
+      <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:h-[640px] 2xl:h-[760px] lg:">
         <div className="flex flex-col lg:flex-row items-center justify-between border-b w-full">
           <div className="flex flex-col w-full  pb-4 lg:col-span-2">
             <p className="text-base font-semibold leading-9 text-foreground">
@@ -61,13 +82,8 @@ export function FinalReviewForm({
             <div className="flex flex-col w-full gap-4 lg:grid lg:grid-cols-2 xl:flex xl:flex-row">
               <CommunityInfo
                 communityName={basicDetails?.title || "Community name"}
-                communityUrls={{
-                  website: basicDetails?.website || "",
-                  facebook: basicDetails?.facebook || "",
-                  twitter: basicDetails?.twitter || "",
-                  linkedin: basicDetails?.linkedin || "",
-                  youtube: basicDetails?.youtube || "",
-                }}
+                communityDescription={basicDetails?.description}
+                communityUrls={communityUrls}
               />
               {/* <PeriodsCard
                 periods={{
@@ -109,7 +125,12 @@ export function FinalReviewForm({
           >
             Back
           </Button>{" "}
-          <Button variant="default" type="submit" className="w-full">
+          <Button
+            variant="default"
+            type="submit"
+            className="w-full"
+            disabled={isLoading}
+          >
             Create Community
           </Button>
         </div>

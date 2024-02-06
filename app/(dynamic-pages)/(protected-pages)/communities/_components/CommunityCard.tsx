@@ -6,13 +6,14 @@ import { FC } from "react";
 
 import JoinCommunityModal from "./JoinCommunityModal";
 import {
+  getOrganizationById,
   getTeamMembersCountInOrganization,
   getTeamMembersInOrganization,
 } from "@/data/user/organizations";
 import { Button } from "@/components/ui/button";
 import BookmarkComponent from "./BookMarkComponent";
 
-interface CommunityCardProps {
+type CommunityCardProps = {
   communityName: string;
   communityDescription?: string;
   communityImage?: string;
@@ -22,21 +23,23 @@ interface CommunityCardProps {
   communityCreatedBy?: string;
   userId: string;
   isBookmarked?: boolean;
-}
+};
 
-const CommunityCard: FC<CommunityCardProps> = async ({
+export async function CommunityCard({
   communityName,
+  communityDescription,
+  communityImage,
+  communityTasks,
+  communityAddress,
+  communityId: id,
   communityCreatedBy,
   userId,
-  communityDescription = "Buan is a community of people who are passionate about learning new things.",
-  communityImage,
-  communityTasks = 100,
-  communityAddress = "New York, USA",
-  communityId: id,
   isBookmarked,
-}) => {
-  const communityMembers = await getTeamMembersCountInOrganization(id);
-  const members = await getTeamMembersInOrganization(id);
+}: CommunityCardProps) {
+  const [communityMembers, members] = await Promise.all([
+    getTeamMembersCountInOrganization(id),
+    getTeamMembersInOrganization(id),
+  ]);
   const isMember = members.some((member) => member.member_id === userId);
   return (
     <Card className="p-6 rounded-lg gap-4">
@@ -55,9 +58,11 @@ const CommunityCard: FC<CommunityCardProps> = async ({
             href={`/communities/${id}`}
             className="text-base font-bold text-foreground leading-7"
           >
-            {communityName}
+            {communityName ?? "Community Name"}
           </Link>
-          <p className="text-xs text-muted-foreground">{communityAddress}</p>
+          <p className="text-xs text-muted-foreground">
+            {communityAddress ?? "New York, USA"}
+          </p>
         </div>
         {/* <Button
           variant="outline"
@@ -72,12 +77,14 @@ const CommunityCard: FC<CommunityCardProps> = async ({
         />
       </div>
       <p className="mb-4 text-sm text-muted-foreground">
-        {communityDescription}
+        {communityDescription ?? "Buan onsulting is a community of developers"}
       </p>
 
       <div className="flex items-center gap-3 mb-4">
         <div className="">
-          <p className="text-base leading-7 font-bold">{communityTasks}</p>
+          <p className="text-base leading-7 font-bold">
+            {communityTasks ?? 100}
+          </p>
           <p className="text-xs leading-[14px] text-muted-foreground">
             Active Tasks
           </p>
@@ -87,7 +94,7 @@ const CommunityCard: FC<CommunityCardProps> = async ({
         <div className="">
           <p className="text-base leading-7 font-bold">{communityMembers}</p>
           <p className="text-xs leading-[14px] text-muted-foreground">
-            Total Members
+            Total members
           </p>
         </div>
       </div>
@@ -103,6 +110,6 @@ const CommunityCard: FC<CommunityCardProps> = async ({
       )}
     </Card>
   );
-};
+}
 
 export default CommunityCard;

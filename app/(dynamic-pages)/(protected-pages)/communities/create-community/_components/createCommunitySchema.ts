@@ -1,16 +1,27 @@
 import { z } from "zod";
 
+const socialMediaType = z.enum([
+  "website",
+  "facebook",
+  "twitter",
+  "linkedin",
+  "instagram",
+  "youtube",
+]);
+
+const socialLinkSchema = z.object({
+  type: socialMediaType,
+  url: z.string().url("Please enter a valid URL.").or(z.literal("")).optional(),
+});
+
+export type SocialLinkSchema = z.infer<typeof socialLinkSchema>;
+
 export const basicCommunityDetailsSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters long."),
   description: z
     .string()
     .min(3, "Description must be at least 3 characters long."),
-  website: z.string().url("Please enter a valid URL.").or(z.literal("")),
-  facebook: z.string().url("Please enter a valid URL.").or(z.literal("")),
-  twitter: z.string().url("Please enter a valid URL.").or(z.literal("")),
-  linkedin: z.string().url("Please enter a valid URL.").or(z.literal("")),
-  instagram: z.string().url("Please enter a valid URL.").or(z.literal("")),
-  youtube: z.string().url("Please enter a valid URL.").or(z.literal("")),
+  socialLinks: z.array(socialLinkSchema).optional(),
   // avatarUrl: z.string().url().or(z.literal("")),
 });
 
@@ -54,20 +65,17 @@ export const protocolConfigurationSchema = z.object({
   prioritizationPeriod: z
     .number()
     .int()
-    .min(0, "Prioritization period must be between 0 and 30")
-    .max(30)
+    .min(0, "Prioritization period must be a number")
     .nullable(),
   contributionPeriod: z
     .number()
     .int()
-    .min(0, "Contribution period must be between 0 and 30")
-    .max(30)
+    .min(0, "Contribution period must be a number")
     .nullable(),
   validationPeriod: z
     .number()
     .int()
-    .min(0, "Validation period must be between 0 and 30")
-    .max(30)
+    .min(0, "Validation period must be a number")
     .nullable(),
 });
 
@@ -96,7 +104,24 @@ export const privilegesSchema = z.object({
   isValidForVetoPower: z.boolean().default(false),
 });
 
+export const communityLiveStatusEnum = z.enum(["live", "testnet"]);
+
+export const communityTokenEnum = z.enum(["carrot", "token_1"]);
+
+export const carrotPotSchema = z.object({
+  community_live_status: communityLiveStatusEnum,
+  community_token: communityTokenEnum,
+  // carrot_pot_address: z
+  //   .string()
+  //   .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid address.")
+  //   .optional()
+  //   .transform((val) => (val === "" ? undefined : val)),
+});
+
+export type CarrotPotSchema = z.infer<typeof carrotPotSchema>;
+
 export const adminSettingsSchema = z.object({
+  changeProtocolSettings: privilegesSchema,
   communitySpecificSettings: privilegesSchema,
   inviteOtherUsers: privilegesSchema,
   approveMembersJoinRequest: privilegesSchema,
@@ -120,14 +145,19 @@ export const adminSettingsSchema = z.object({
 export type AdminSettingsSchema = z.infer<typeof adminSettingsSchema>;
 
 export const generalDetailsSchema = basicCommunityDetailsSchema
-  .merge(protocolConfigurationSchema)
-  .merge(rewardSettingsSchema);
+  .merge(rewardSettingsSchema)
+  .merge(protocolConfigurationSchema);
 
 export type GeneralDetailsSchema = z.infer<typeof generalDetailsSchema>;
+
+export const privateDetailsSchema = adminSettingsSchema.merge(carrotPotSchema);
+
+export type PrivateDetailsSchema = z.infer<typeof privateDetailsSchema>;
 
 export const createCommunitySchema = basicCommunityDetailsSchema
   .merge(rewardSettingsSchema)
   .merge(protocolConfigurationSchema)
-  .merge(adminSettingsSchema);
+  .merge(adminSettingsSchema)
+  .merge(carrotPotSchema);
 
 export type CreateCommunitySchema = z.infer<typeof createCommunitySchema>;

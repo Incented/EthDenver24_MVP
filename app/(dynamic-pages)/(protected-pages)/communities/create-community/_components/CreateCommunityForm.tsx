@@ -18,7 +18,10 @@ import { Search } from "@/components/Search";
 import {
   AdminSettingsSchema,
   BasicCommunityDetailsSchema,
+  CarrotPotSchema,
   CreateCommunitySchema,
+  GeneralDetailsSchema,
+  PrivateDetailsSchema,
   ProtocolConfigurationSchema,
   RewardSettingsSchema,
   createCommunitySchema,
@@ -32,10 +35,16 @@ import { usePathname, useRouter } from "next/navigation";
 import CarrotPotForm from "./CarrotPotForm";
 import CreateCommunityStep from "./CreateCommunityStep";
 import { FinalReviewForm } from "./FinalReviewForm";
+import { useToastMutation } from "@/hooks/useToastMutation";
+import {
+  createOrganization,
+  createPublicOrganization,
+} from "@/data/user/organizations";
+import { addPrivateInfoForOrganization } from "@/data/admin/organizations";
 
 export default function CreateCommunityForm() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
-  const pathname = usePathname();
   // Load the current step from localStorage when the component mounts
   useEffect(() => {
     const savedStep = localStorage.getItem("currentStep");
@@ -45,29 +54,29 @@ export default function CreateCommunityForm() {
     }
   }, []);
 
-  useEffect(() => {
-    // Function to clear localStorage items and reset currentStep
-    const clearLocalStorage = () => {
-      localStorage.removeItem("basicDetails");
-      localStorage.removeItem("rewardSettings");
-      localStorage.removeItem("protocolConfiguration");
-      localStorage.removeItem("permissions");
-      localStorage.setItem("currentStep", "0");
-    };
+  // useEffect(() => {
+  //   // Function to clear localStorage items and reset currentStep
+  //   const clearLocalStorage = () => {
+  //     localStorage.removeItem("basicDetails");
+  //     localStorage.removeItem("rewardSettings");
+  //     localStorage.removeItem("protocolConfiguration");
+  //     localStorage.removeItem("permissions");
+  //     localStorage.setItem("currentStep", "0");
+  //   };
 
-    // Event listener to detect route changes
-    const handleRouteChange = () => {
-      clearLocalStorage();
-    };
+  //   // Event listener to detect route changes
+  //   const handleRouteChange = () => {
+  //     clearLocalStorage();
+  //   };
 
-    // Add event listener on route change
-    window.addEventListener("popstate", handleRouteChange);
+  //   // Add event listener on route change
+  //   window.addEventListener("popstate", handleRouteChange);
 
-    // Cleanup function to remove event listener
-    return () => {
-      window.removeEventListener("popstate", handleRouteChange);
-    };
-  }, []);
+  //   // Cleanup function to remove event listener
+  //   return () => {
+  //     window.removeEventListener("popstate", handleRouteChange);
+  //   };
+  // }, []);
 
   const {
     register,
@@ -151,12 +160,12 @@ export default function CreateCommunityForm() {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <g id="trophy" clip-path="url(#clip0_22_469)">
+          <g id="trophy" clipPath="url(#clip0_22_469)">
             <path
               id="Vector"
               d="M4 6.00001H3C2.55797 6.00001 2.13405 5.82442 1.82149 5.51185C1.50893 5.19929 1.33334 4.77537 1.33334 4.33334C1.33334 3.89132 1.50893 3.46739 1.82149 3.15483C2.13405 2.84227 2.55797 2.66668 3 2.66668H4M4 6.00001V1.33334H12V6.00001M4 6.00001C4 7.06088 4.42143 8.07829 5.17158 8.82844C5.92172 9.57858 6.93914 10 8 10C9.06087 10 10.0783 9.57858 10.8284 8.82844C11.5786 8.07829 12 7.06088 12 6.00001M12 6.00001H13C13.442 6.00001 13.866 5.82442 14.1785 5.51185C14.4911 5.19929 14.6667 4.77537 14.6667 4.33334C14.6667 3.89132 14.4911 3.46739 14.1785 3.15483C13.866 2.84227 13.442 2.66668 13 2.66668H12M2.66667 14.6667H13.3333M6.66667 9.77334V11.3333C6.66667 11.7 6.35334 11.9867 6.02 12.14C5.23334 12.5 4.66667 13.4933 4.66667 14.6667M9.33334 9.77334V11.3333C9.33334 11.7 9.64667 11.9867 9.98 12.14C10.7667 12.5 11.3333 13.4933 11.3333 14.6667"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </g>
           <defs>
@@ -244,45 +253,254 @@ export default function CreateCommunityForm() {
     },
   ];
 
-  const [basicDetails, setBasicDetails] =
-    useState<BasicCommunityDetailsSchema>();
+  const [basicDetails, setBasicDetails] = useState<BasicCommunityDetailsSchema>(
+    {
+      title: "",
+      description: "",
+      socialLinks: [
+        {
+          type: "website",
+          url: "",
+        },
+        {
+          type: "facebook",
+          url: "",
+        },
+        {
+          type: "twitter",
+          url: "",
+        },
+        {
+          type: "linkedin",
+          url: "",
+        },
+        {
+          type: "youtube",
+          url: "",
+        },
+      ],
+    }
+  );
 
   const [protocolConfiguration, setProtocolConfiguration] =
-    useState<ProtocolConfigurationSchema>();
+    useState<ProtocolConfigurationSchema>({
+      contributionPeriod: 0,
+      prioritizationPeriod: 0,
+      validationPeriod: 0,
+      validationQuorum: 0,
+      prioritizationQourum: 0,
+    });
 
-  const [rewardSettings, setRewardsSettings] = useState<RewardSettingsSchema>();
+  const [rewardSettings, setRewardsSettings] = useState<RewardSettingsSchema>({
+    prioritizationReward: 0,
+    validationReward: 0,
+    proposalReward: 0,
+    claimStakeAmount: 100,
+  });
 
-  const [permissions, setPermissions] = useState<AdminSettingsSchema>();
+  const [permissions, setPermissions] = useState<AdminSettingsSchema>({
+    addOrRemoveMembers: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    adjustPersonalSettings: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    approveMembersJoinRequest: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    approveTaskProposal: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    assignInitialMemberRolesAndPermissions: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    changeProtocolSettings: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    communitySpecificSettings: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    contributeToTasks: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    inviteOtherUsers: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    manageTaskSettings: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    overseeCarrotDistribution: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    participateInTaskValidation: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    postOnTaskDiscussion: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    proposeNewTasks: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    reviewCommunityPerformance: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    takesCarrotsToPrioritizeTasks: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    trackRewards: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    vetoInappropriateTasks: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    viewOngoingTasks: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+  });
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const localBasicDetails = localStorage.getItem("basicDetails");
-      const parsedLocalBasicDetails = localBasicDetails
-        ? JSON.parse(localBasicDetails)
-        : {};
-      setBasicDetails(parsedLocalBasicDetails);
+  const [carrotPotSettings, setCarrotPotSettings] = useState<CarrotPotSchema>({
+    community_live_status: "live",
+    community_token: "carrot",
+  });
 
-      const localProtocolConfiguration = localStorage.getItem(
-        "protocolConfiguration"
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const localBasicDetails = localStorage.getItem("basicDetails");
+  //     const parsedLocalBasicDetails: BasicCommunityDetailsSchema =
+  //       localBasicDetails ? JSON.parse(localBasicDetails) : {};
+  //     setBasicDetails(parsedLocalBasicDetails);
+
+  //     const localProtocolConfiguration = localStorage.getItem(
+  //       "protocolConfiguration"
+  //     );
+  //     const parsedLocalProtocolConfiguration: ProtocolConfigurationSchema =
+  //       localProtocolConfiguration
+  //         ? JSON.parse(localProtocolConfiguration)
+  //         : {};
+  //     setProtocolConfiguration(parsedLocalProtocolConfiguration);
+
+  //     const localRewardSettings = localStorage.getItem("rewardSettings");
+  //     const parsedLocalRewardSettings: RewardSettingsSchema =
+  //       localRewardSettings ? JSON.parse(localRewardSettings) : {};
+  //     setRewardsSettings(parsedLocalRewardSettings);
+
+  //     const localPermissions = localStorage.getItem("permissions");
+  //     const parsedLocalPermissions: AdminSettingsSchema = localPermissions
+  //       ? JSON.parse(localPermissions)
+  //       : {};
+  //     setPermissions(parsedLocalPermissions);
+
+  //     const localCarrotPotSettings = localStorage.getItem("carrotPotSettings");
+  //     const parsedLocalCarrotPotSettings : = localCarrotPotSettings
+  //       ? JSON.parse(localCarrotPotSettings)
+  //       : {};
+  //     setCarrotPotSettings(parsedLocalCarrotPotSettings);
+  //   }
+  // }, []);
+
+  // const { mutate: addPublicData, isLoading: isAddingPublicData } =
+  //   useToastMutation({
+  //     async(public) {
+  //       return await addPublicData(data);
+  //     },
+  //     loadingMessage: "Adding public data...",
+  //     errorMessage: "Failed to add public data",
+  //     successMessage: "Public data added!",
+  //     onSuccess: (data) => {
+  //       console.log(data);
+  //     },
+  //   });
+
+  // const { mutate, isLoading } = useToastMutation(
+  //   async (organizationTitle: string) => {
+  //     return await createOrganization(organizationTitle);
+  //   },
+  //   {
+  //     loadingMessage: "Creating organization...",
+  //     errorMessage: "Failed to create organization",
+  //     successMessage: "Organization created!",
+  //     onSuccess: (organization) => {
+  //       router.push(`/organization/${organization.id}`);
+  //     },
+  //   }
+  // );
+  type AllData = {
+    publicData: GeneralDetailsSchema;
+    privateData: PrivateDetailsSchema;
+  };
+
+  type PrivateData = {
+    permissions: AdminSettingsSchema;
+    communityId: string;
+    carrotPotSettings: CarrotPotSchema;
+  };
+
+  const { mutate: addPrivateData, isLoading: isAddingPrivateData } =
+    useToastMutation(async (privateData: PrivateData) => {
+      const { permissions, communityId, carrotPotSettings } = privateData;
+      return await addPrivateInfoForOrganization(
+        permissions,
+        communityId,
+        carrotPotSettings
       );
-      const parsedLocalProtocolConfiguration = localProtocolConfiguration
-        ? JSON.parse(localProtocolConfiguration)
-        : {};
-      setProtocolConfiguration(parsedLocalProtocolConfiguration);
+    });
 
-      const localRewardSettings = localStorage.getItem("rewardSettings");
-      const parsedLocalRewardSettings = localRewardSettings
-        ? JSON.parse(localRewardSettings)
-        : {};
-      setRewardsSettings(parsedLocalRewardSettings);
-
-      const localPermissions = localStorage.getItem("permissions");
-      const parsedLocalPermissions = localPermissions
-        ? JSON.parse(localPermissions)
-        : {};
-      setPermissions(parsedLocalPermissions);
+  const { mutate, isLoading } = useToastMutation(
+    async (alldata: AllData) => {
+      const { publicData } = alldata;
+      return await createPublicOrganization(publicData);
+    },
+    {
+      loadingMessage: "Creating Community data...",
+      errorMessage: "Failed to create Community ",
+      successMessage: "Community Created!",
+      onSuccess: (data) => {
+        const { id } = data;
+        console.log(data);
+        addPrivateData({ permissions, communityId: id, carrotPotSettings });
+        router.push(`/communities/${id}`);
+      },
     }
-  }, []);
+  );
+
   const onSubmit: SubmitHandler<CreateCommunitySchema> = (data) => {
     const publicData = {
       ...rewardSettings,
@@ -293,8 +511,10 @@ export default function CreateCommunityForm() {
 
     const privateData = {
       ...permissions,
+      ...carrotPotSettings,
     };
-    console.log(publicData, privateData);
+
+    mutate({ publicData, privateData });
   };
 
   // const [step1Response, set] = useState<Step1FromSchema | undefined>(undefined);
@@ -305,47 +525,6 @@ export default function CreateCommunityForm() {
       localStorage.setItem("currentStep", String(newStep));
     }
   };
-  // const { mutate, isLoading } = useToastMutation(
-  //   async ({
-  //     communityTitle,
-  //     proposalAbsoluteReward,
-  //   }: {
-  //     communityTitle: string;
-  //     proposalAbsoluteReward: number;
-  //   }) => {
-  //     return await createOrganization({
-  //       name: communityTitle,
-  //       proposalAbsoluteReward,
-  //     });
-  //   },
-  //   {
-  //     loadingMessage: "Creating community...",
-  //     errorMessage: "Failed to create community",
-  //     successMessage: "Community created!",
-  //     onSuccess: (community) => {
-  //       const communityId = community.id;
-  //       router.push(`/communities/${communityId}`);
-  //     },
-  //   }
-  // );
-
-  // const onConfirm = ({
-  //   communityTitle,
-  //   proposalAbsoluteReward,
-  // }: {
-  //   communityTitle: string;
-  //   proposalAbsoluteReward: number;
-  // }) => {
-  //   mutate({ communityTitle, proposalAbsoluteReward });
-  // };
-
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   onConfirm({
-  //     communityTitle,
-  //     proposalAbsoluteReward: proposalAbsoluteReward,
-  //   });
-  // };
 
   return (
     <div className="w-full px-6 pt-0">
@@ -399,8 +578,8 @@ export default function CreateCommunityForm() {
             )}
             {currentStep === 3 && (
               <CarrotPotForm
-                rewardSettings={rewardSettings}
-                setRewardsSettings={setRewardsSettings}
+                carrotPotSettings={carrotPotSettings}
+                setCarrotPotSettings={setCarrotPotSettings}
                 currentStep={currentStep}
                 setCurrentStep={setCurrentStep}
               />
@@ -414,93 +593,14 @@ export default function CreateCommunityForm() {
               />
             )}
             {currentStep === 5 && (
-              // <form
-              //   onSubmit={handleSubmit(onSubmit)}
-              //   data-tid="create-community-form"
-              //   className="w-full"
-              // >
-              //   <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
-              //     <div className="flex justify-between items-center pb-4 border-b">
-              //       <div className="flex flex-col w-full">
-              //         <p className="font-semibold text-foreground text-base leading-9">
-              //           Final Review
-              //         </p>
-              //         <p className="text-sm leading-6">
-              //           Assign roles and define permissions within the
-              //           community.
-              //         </p>
-              //       </div>
-              //       <div className="flex flex-col">
-              //         <div className="flex justify-between text-sm text-muted-foreground">
-              //           <p>Step 6/6</p> <p>100%</p>
-              //         </div>
-              //         <div className="py-1.5">
-              //           <Progress value={100} className="h-2 w-[160px]" />
-              //         </div>
-              //       </div>
-              //     </div>
-
-              //     <div className="grid grid-cols-[auto,1fr] gap-4 h-[calc(100vh-400px)]   md:h-[calc(100vh-600px)] xl:h-[calc(100vh-220px)] overflow-hidden w-full ">
-              //       {/* Members */}
-              //       <div className="flex flex-col gap-4 rounded-lg w-[280px]">
-              //         <CommunityInfo
-              //           communityName={basicDetails?.title || "Community name"}
-              //           communityUrls={{
-              //             website: basicDetails?.website || "",
-              //             facebook: basicDetails?.facebook || "",
-              //             twitter: basicDetails?.twitter || "",
-              //             linkedin: basicDetails?.linkedin || "",
-              //             youtube: basicDetails?.youtube || "",
-              //           }}
-              //         />
-              //         <div className="h-20 md:h-20 xl:h-72 rounded-xl overflow-auto">
-              //           <CommunityMembers />
-              //         </div>
-              //       </div>
-              //       {/* Details */}
-              //       <div className="h-full overflow-y-auto w-full">
-              //         <div className="flex flex-col gap-4 w-full">
-              //           <CommunityDetailsTopCards
-              //           //  rewards={rewardSettings}
-              //           />
-              //           <div className="grid grid-cols-4 gap-4 w-full">
-              //             <CarrotPotCard />
-              //             <PeriodsCard
-              //             // periods={{
-              //             //   prioritizationPeriod:
-              //             //     protocolConfiguration?.prioritizationPeriod ||
-              //             //     0,
-              //             //   contributionPeriod:
-              //             //     protocolConfiguration?.contributionPeriod || 0,
-              //             //   validationPeriod:
-              //             //     protocolConfiguration?.validationPeriod || 0,
-              //             // }}
-              //             />
-              //             <PriorityCards />
-              //           </div>
-              //         </div>
-              //       </div>
-              //     </div>
-              //   </div>
-              //   <div className=" flex w-full p-6 py-4 pb-6 rounded-lg rounded-t-none border">
-              //     <div className="mx-auto flex gap-2 justify-start">
-              //       <Button
-              //         variant="outline"
-              //         className="w-[100px]"
-              //         onClick={() => {
-              //           prev();
-              //         }}
-              //         type="button"
-              //       >
-              //         Back
-              //       </Button>{" "}
-              //       <Button variant="default" type="submit" className="w-full">
-              //         Create Community
-              //       </Button>
-              //     </div>
-              //   </div>
-              // </form>
-              <FinalReviewForm basicDetails={basicDetails} rewardSettings={rewardSettings} protocolConfiguration={protocolConfiguration} prev={prev} onSubmit={onSubmit}              />
+              <FinalReviewForm
+                basicDetails={basicDetails}
+                rewardSettings={rewardSettings}
+                protocolConfiguration={protocolConfiguration}
+                prev={prev}
+                onSubmit={onSubmit}
+                isLoading={isLoading}
+              />
             )}
           </div>
         </div>
