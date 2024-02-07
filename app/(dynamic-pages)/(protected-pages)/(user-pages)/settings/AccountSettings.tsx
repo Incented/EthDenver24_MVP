@@ -10,6 +10,7 @@ import UpdateUserForm from "./_components/UpdateUserForm";
 import { Table } from "@/types";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { PrimaryUserDetails } from "./_components/userDetailsSchema";
 
 export function AccountSettings({
   userPrivateInfo,
@@ -21,15 +22,8 @@ export function AccountSettings({
   const router = useRouter();
   const { mutate, isLoading: isUpdatingUserProfileNameAndAvatar } =
     useToastMutation(
-      async ({
-        firstName,
-        lastName,
-        avatarUrl,
-      }: {
-        firstName: string | undefined;
-        lastName: string | undefined;
-        avatarUrl?: string;
-      }) => {
+      async (primaryUserDetails: PrimaryUserDetails) => {
+        const { firstName, lastName, avatarUrl } = primaryUserDetails;
         return await updateUserProfileNameAndAvatar({
           fullName: `${firstName} ${lastName}`,
           firstName,
@@ -48,7 +42,7 @@ export function AccountSettings({
     );
 
   const { mutate: updateUserName, isLoading } = useToastMutation(
-    async ({ userName }: { userName: string | undefined }) => {
+    async (userName: string) => {
       return await updateUserPrivateInfo({
         userName: userName,
       });
@@ -105,7 +99,7 @@ export function AccountSettings({
       userPrivateInfo={userPrivateInfo}
       userProfile={userProfile}
       onUserNameUpload={(userName: string) => {
-        updateUserName({ userName });
+        updateUserName(userName);
       }}
       onFileUpload={(file: File) => {
         console.log("onFileUpload file", file);
@@ -116,10 +110,7 @@ export function AccountSettings({
       setIsNewAvatarImageLoading={setIsNewAvatarImageLoading}
       isUploading={isUploading}
       isLoading={isLoading ?? isUploading ?? isUpdatingUserProfileNameAndAvatar}
-      onSubmit={(
-        firstName: string | undefined,
-        lastName: string | undefined
-      ) => {
+      onSubmit={(firstName: string, lastName: string) => {
         mutate({
           firstName,
           lastName,

@@ -6,7 +6,6 @@ import {
   TabsTrigger,
 } from "@/components/ui/vertical-tabs";
 import { FC } from "react";
-import UpdateUserForm from "./UpdateUserForm";
 import { Separator } from "@/components/ui/separator";
 import WalletSetting from "./WalletSetting";
 import { Button } from "@/components/ui/button";
