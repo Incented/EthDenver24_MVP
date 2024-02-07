@@ -1,48 +1,43 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import { FC } from "react";
 
 interface CreateCommunityStepProps {
   step: {
-    id: number;
-    name: string;
+    name: string; // Use the enum here
     icon: JSX.Element;
   };
-  setCurrentStep: (value: React.SetStateAction<number>) => void;
-  currentStep: number;
+  currentStepName: string; // Use the enum for current step name
 }
 
 const CreateCommunityStep: FC<CreateCommunityStepProps> = ({
   step,
-  setCurrentStep,
-  currentStep,
+  currentStepName,
 }) => {
+  const isCurrentStep = step.name === currentStepName;
+
   return (
     <div
-      key={step.id}
-      onClick={() => setCurrentStep(step.id)}
       className={cn(
-        "relative w-full text-base leading-9 whitespace-nowrap px-0 bg-transparent shadow-none ",
-        currentStep === step.id
-          ? "text-foreground font-medium "
+        "relative w-full text-base leading-9 whitespace-nowrap px-0 bg-transparent shadow-none",
+        isCurrentStep
+          ? "text-foreground font-medium"
           : "text-muted-foreground font-normal hover:text-foreground"
       )}
     >
       <div className="flex gap-2 items-center">
-        {step.icon ? (
+        {step.icon && (
           <div
             className={cn(
               "border rounded-full h-10 w-10 bg-background flex items-center justify-center",
-              currentStep === step.id
+              isCurrentStep
                 ? "bg-primary stroke-background"
                 : "bg-background stroke-foreground"
             )}
           >
-            {currentStep > step.id ? <Check size={16} /> : step.icon}
+            {step.icon}
           </div>
-        ) : null}
+        )}
         <span className="hidden leading-9 md:flex">{step.name}</span>
       </div>
     </div>

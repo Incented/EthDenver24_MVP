@@ -11,29 +11,21 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/Progress";
 
 export default function RewardsSettingsForm({
-  rewardSettings,
-  setRewardsSettings,
-  currentStep,
-  setCurrentStep,
-}: {
-  rewardSettings: RewardSettingsSchema | undefined;
-  setRewardsSettings: (data: RewardSettingsSchema) => void;
-  currentStep: number;
-  setCurrentStep: (step: number) => void;
-}) {
+  initialFormValues,
+  onFormSubmit,
+  moveToPrevStep,
+}: FormProps<RewardSettingsSchema>) {
   const {
     register,
     handleSubmit,
-    getValues,
-    reset,
     formState: { errors },
   } = useForm<RewardSettingsSchema>({
     resolver: zodResolver(rewardSettingsSchema),
     defaultValues: {
-      proposalReward: rewardSettings?.proposalReward ?? 0,
-      prioritizationReward: rewardSettings?.prioritizationReward ?? 0,
-      validationReward: rewardSettings?.validationReward ?? 0,
-      claimStakeAmount: rewardSettings?.claimStakeAmount ?? 100,
+      proposalReward: initialFormValues?.proposalReward ?? 0,
+      prioritizationReward: initialFormValues?.prioritizationReward ?? 0,
+      validationReward: initialFormValues?.validationReward ?? 0,
+      claimStakeAmount: initialFormValues?.claimStakeAmount ?? 100,
     },
   });
 
@@ -45,20 +37,8 @@ export default function RewardsSettingsForm({
       validationReward: Number(data.validationReward),
       claimStakeAmount: Number(data.claimStakeAmount),
     };
-    setRewardsSettings(numericData);
-    const newStep = currentStep + 1;
-    setCurrentStep(newStep);
-    localStorage.setItem("currentStep", String(newStep));
-    // localStorage.setItem("rewardSettings", JSON.stringify(data));
+    onFormSubmit(numericData);
   };
-
-  //   useEffect(() => {
-  //     const savedRewardSettings = localStorage.getItem("rewardSettings");
-  //     if (savedRewardSettings) {
-  //       const parsedDetails = JSON.parse(savedRewardSettings);
-  //       reset(parsedDetails); // This sets the form values to the saved data
-  //     }
-  //   }, [reset]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
@@ -170,16 +150,7 @@ export default function RewardsSettingsForm({
           <Button
             variant="outline"
             className="w-[100px]"
-            onClick={() => {
-              setCurrentStep(currentStep - 1);
-              const savedStep = localStorage.getItem("currentStep");
-              if (savedStep !== null) {
-                localStorage.setItem(
-                  "currentStep",
-                  String(Number(savedStep) - 1)
-                );
-              }
-            }}
+            onClick={moveToPrevStep}
             type="button"
           >
             Back

@@ -33,16 +33,10 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 export default function BasicDetailsForm({
-  basicDetails,
-  setBasicDetails,
-  currentStep,
-  setCurrentStep,
-}: {
-  basicDetails: BasicCommunityDetailsSchema | undefined;
-  setBasicDetails: (data: BasicCommunityDetailsSchema) => void;
-  currentStep: number;
-  setCurrentStep: (step: number) => void;
-}) {
+  initialFormValues,
+  onFormSubmit,
+  moveToPrevStep,
+}: FormProps<BasicCommunityDetailsSchema>) {
   type socialMediaOption = {
     id: number;
     value: string;
@@ -103,13 +97,9 @@ export default function BasicDetailsForm({
   } = useForm<BasicCommunityDetailsSchema>({
     resolver: zodResolver(basicCommunityDetailsSchema),
     defaultValues: {
-      title: basicDetails?.title || "",
-      description: basicDetails?.description || "",
-      // socialLinks: {
-      //   type: basicDetails?.socialLinks?.type || "website",
-      //   url: basicDetails?.socialLinks?.url || "",
-      // },
-      socialLinks: basicDetails?.socialLinks || [
+      title: initialFormValues?.title || "",
+      description: initialFormValues?.description || "",
+      socialLinks: initialFormValues?.socialLinks || [
         {
           type: defaultSocialLinkType as
             | "website"
@@ -124,29 +114,9 @@ export default function BasicDetailsForm({
     },
   });
 
-  // useEffect(() => {
-  //   const savedBasicDetails = localStorage.getItem("basicDetails");
-  //   if (savedBasicDetails) {
-  //     const parsedDetails = JSON.parse(savedBasicDetails);
-  //     reset(parsedDetails); // This sets the form values to the saved data
-  //   }
-  // }, [reset]);
-
   const onSubmit: SubmitHandler<BasicCommunityDetailsSchema> = (data) => {
-    setBasicDetails(data);
-    const newStep = currentStep + 1;
-    setCurrentStep(newStep);
-    localStorage.setItem("currentStep", String(newStep));
-    // localStorage.setItem("basicDetails", JSON.stringify(data));
+    onFormSubmit(data);
   };
-
-  const [selectedOption, setSelectedOption] = useState<socialMediaOption>(
-    socialMediaOptions[0]
-  );
-
-  const [socialLinks, setSocialLinks] = useState([
-    { type: "website", url: "" },
-  ]);
 
   const addNewSocialLink = () => {
     const currentLinks = getValues("socialLinks") || [];
@@ -234,7 +204,6 @@ export default function BasicDetailsForm({
                     {...register("title")}
                     type="text"
                     placeholder="Community Name"
-                    defaultValue={basicDetails?.title || ""}
                   />
                   {errors.title?.message && (
                     <p className="text-sm text-red-600 dark:text-red-500">
@@ -248,7 +217,6 @@ export default function BasicDetailsForm({
                     {...register("description")}
                     className="h-24"
                     placeholder="Community description"
-                    defaultValue={basicDetails?.description || ""}
                   />
                   {errors.description?.message && (
                     <p className="text-sm text-red-600 dark:text-red-500">
@@ -259,65 +227,6 @@ export default function BasicDetailsForm({
                 <p className="text-sm font-medium leading-[14px]">
                   Social Media links
                 </p>
-
-                {/* <div className="relative">
-                  <Controller
-                    control={control}
-                    name="socialLinks"
-                    render={({ field }) => {
-                      return (
-                        <div className="relative">
-                          <div className="absolute">
-                            <Select
-                              value={field.value?.type || ""}
-                              onValueChange={(newValue) => {
-                                // Assuming you want to update the url inside field.value
-                                // Update the field with the new object containing the updated url
-                                field.onChange({
-                                  ...field.value,
-                                  type: newValue,
-                                });
-                              }}
-                            >
-                              <SelectTrigger
-                                aria-label="Social media"
-                                className=""
-                              >
-                                <SelectValue
-                                  placeholder={selectedOption.icon}
-                                />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectGroup>
-                                  {socialMediaOptions.map((option) => (
-                                    <SelectItem
-                                      key={option.value}
-                                      value={option.value}
-                                    >
-                                      {option.icon}
-                                    </SelectItem>
-                                  ))}
-                                </SelectGroup>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                          <Input
-                            {...register("socialLinks.url")}
-                            type="text"
-                            placeholder={field.value?.type || "Website"}
-                            className="pl-20"
-                            defaultValue={field.value?.url || ""}
-                          />
-                          {errors.socialLinks?.url?.message && (
-                            <p className="text-sm text-red-600 dark:text-red-500">
-                              {errors.socialLinks?.url?.message}
-                            </p>
-                          )}
-                        </div>
-                      );
-                    }}
-                  ></Controller>
-                </div> */}
 
                 {(watch("socialLinks") ?? []).map((link, index) => (
                   <div key={index} className="relative">
@@ -414,8 +323,9 @@ export default function BasicDetailsForm({
         <div className="flex justify-start gap-2 mx-auto">
           <Button
             variant="outline"
+            onClick={moveToPrevStep}
             className="w-[100px]"
-            disabled
+            disabled={!moveToPrevStep}
             type="button"
           >
             Back

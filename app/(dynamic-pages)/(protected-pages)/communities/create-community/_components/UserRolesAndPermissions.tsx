@@ -20,154 +20,21 @@ import { rolesAndPermissions } from "./createCommunityData";
 import { toast } from "sonner";
 
 export default function UserRolesAndPermissionsForm({
-  permissions,
-  setPermissions,
-  currentStep,
-  setCurrentStep,
-}: {
-  permissions: AdminSettingsSchema;
-  setPermissions: (data: AdminSettingsSchema) => void;
-  currentStep: number;
-  setCurrentStep: (step: number) => void;
-}) {
-  // Initialize default values for all permissions
-  // const defaultPermissions = Object.keys(adminSettingsSchema.shape).reduce(
-  //   (acc, key) => ({
-  //     ...acc,
-  //     [key]: {
-  //       isValidForAdmin: false,
-  //       isValidForMembers: false,
-  //       isValidForVetoPower: false,
-  //     },
-  //   }),
-  //   {}
-  // );
-
+  initialFormValues,
+  onFormSubmit,
+  moveToPrevStep,
+}: FormProps<AdminSettingsSchema>) {
   const {
-    register,
     handleSubmit,
-    getValues,
-    reset,
-    watch,
     control,
     formState: { errors },
   } = useForm<AdminSettingsSchema>({
     resolver: zodResolver(adminSettingsSchema),
-    // defaultValues: {
-    //   addOrRemoveMembers: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   adjustPersonalSettings: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   approveMembersJoinRequest: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   assignInitialMemberRolesAndPermissions: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   communitySpecificSettings: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   contributeToTasks: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   manageTaskSettings: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   overseeCarrotDistribution: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   participateInTaskValidation: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   postOnTaskDiscussion: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   proposeNewTasks: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   reviewCommunityPerformance: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   takesCarrotsToPrioritizeTasks: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   trackRewards: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   vetoInappropriateTasks: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   viewOngoingTasks: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   inviteOtherUsers: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    //   approveTaskProposal: {
-    //     isValidForAdmin: false,
-    //     isValidForMembers: false,
-    //     isValidForVetoPower: false,
-    //   },
-    // },
-    // defaultValues: permissions || defaultPermissions,
   });
 
   const onSubmit: SubmitHandler<AdminSettingsSchema> = (data) => {
-    setPermissions(data);
-    const newStep = currentStep + 1;
-    setCurrentStep(newStep);
-    localStorage.setItem("currentStep", String(newStep));
-    // localStorage.setItem("permissions", JSON.stringify(data));
+    onFormSubmit(data);
   };
-
-  // useEffect(() => {
-  //   const savedPermissions = localStorage.getItem("permissions");
-  //   if (savedPermissions) {
-  //     const parsedDetails = JSON.parse(savedPermissions);
-  //     reset(parsedDetails); // This sets the form values to the saved data
-  //   }
-  // }, [reset]);
-
-  // const permissionsInLocalStorage = localStorage.getItem("permissions");
-  // const parsedPermissions = permissionsInLocalStorage
-  //   ? JSON.parse(permissionsInLocalStorage)
-  //   : {};
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -225,9 +92,9 @@ export default function UserRolesAndPermissionsForm({
                           name={field.name}
                           ref={field.ref}
                           defaultChecked={
-                            (permissions &&
+                            (initialFormValues &&
                               (
-                                permissions as {
+                                initialFormValues as {
                                   [key: string]: { isValidForAdmin: boolean };
                                 }
                               )[role.fieldName]?.isValidForAdmin) ||
@@ -249,9 +116,9 @@ export default function UserRolesAndPermissionsForm({
                           name={field.name}
                           ref={field.ref}
                           defaultChecked={
-                            (permissions &&
+                            (initialFormValues &&
                               (
-                                permissions as {
+                                initialFormValues as {
                                   [key: string]: { isValidForMembers: boolean };
                                 }
                               )[role.fieldName]?.isValidForMembers) ||
@@ -273,9 +140,9 @@ export default function UserRolesAndPermissionsForm({
                           name={field.name}
                           ref={field.ref}
                           defaultChecked={
-                            (permissions &&
+                            (initialFormValues &&
                               (
-                                permissions as {
+                                initialFormValues as {
                                   [key: string]: {
                                     isValidForVetoPower: boolean;
                                   };
@@ -299,17 +166,9 @@ export default function UserRolesAndPermissionsForm({
           <Button
             variant="outline"
             className="w-[100px]"
-            onClick={() => {
-              setCurrentStep(currentStep - 1);
-              const savedStep = localStorage.getItem("currentStep");
-              if (savedStep !== null) {
-                localStorage.setItem(
-                  "currentStep",
-                  String(Number(savedStep) - 1)
-                );
-              }
-            }}
+            onClick={moveToPrevStep}
             type="button"
+            disabled={!moveToPrevStep}
           >
             Back
           </Button>{" "}
