@@ -25,16 +25,10 @@ import TokenPurchaseModal from "@/components/ui/token-purchase-modal";
 import { set } from "nprogress";
 
 export default function CarrotPotForm({
-  carrotPotSettings,
-  setCarrotPotSettings,
-  currentStep,
-  setCurrentStep,
-}: {
-  carrotPotSettings: CarrotPotSchema | undefined;
-  setCarrotPotSettings: (data: CarrotPotSchema) => void;
-  currentStep: number;
-  setCurrentStep: (step: number) => void;
-}) {
+  initialFormValues,
+  onFormSubmit,
+  moveToPrevStep,
+}: FormProps<CarrotPotSchema>) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -43,7 +37,6 @@ export default function CarrotPotForm({
     if (input) {
       input.select(); // Select the text
       document.execCommand("copy"); // Copy the text
-      // Optionally, you can show a tooltip or a message confirming the copy action
     }
   };
 
@@ -57,27 +50,15 @@ export default function CarrotPotForm({
   } = useForm<CarrotPotSchema>({
     resolver: zodResolver(carrotPotSchema),
     defaultValues: {
-      community_live_status: carrotPotSettings?.community_live_status,
-      community_token: carrotPotSettings?.community_token,
+      community_live_status: initialFormValues?.community_live_status,
+      community_token: initialFormValues?.community_token,
       // carrot_pot_address: carrotPotSettings?.carrot_pot_address || "",
     },
   });
 
   const onSubmit: SubmitHandler<CarrotPotSchema> = (data) => {
-    setCarrotPotSettings(data);
-    const newStep = currentStep + 1;
-    setCurrentStep(newStep);
-    localStorage.setItem("currentStep", String(newStep));
-    // localStorage.setItem("carrotPotSettings", JSON.stringify(data));
+    onFormSubmit(data);
   };
-
-  // useEffect(() => {
-  //   const savedCarrotPotSettings = localStorage.getItem("carrotPotSettings");
-  //   if (savedCarrotPotSettings) {
-  //     const parsedDetails = JSON.parse(savedCarrotPotSettings);
-  //     reset(parsedDetails);
-  //   }
-  // }, [reset]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
@@ -308,17 +289,9 @@ export default function CarrotPotForm({
           <Button
             variant="outline"
             className="w-[100px]"
-            onClick={() => {
-              setCurrentStep(currentStep - 1);
-              const savedStep = localStorage.getItem("currentStep");
-              if (savedStep !== null) {
-                localStorage.setItem(
-                  "currentStep",
-                  String(Number(savedStep) - 1)
-                );
-              }
-            }}
+            onClick={moveToPrevStep}
             type="button"
+            disabled={!moveToPrevStep}
           >
             Back
           </Button>{" "}

@@ -1,22 +1,14 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   CreateCommunitySchema,
-  basicCommunityDetailsSchema,
   BasicCommunityDetailsSchema,
   RewardSettingsSchema,
   ProtocolConfigurationSchema,
 } from "./createCommunitySchema";
 import { Progress } from "@/components/ui/Progress";
 import CommunityInfo from "../../[id]/_components/CommunityInfo";
-import CommunityMembers from "../../[id]/_components/CommunityMembers";
 import CommunityDetailsTopCards from "../../[id]/_components/CommunityDetailsTopCards";
-import CarrotPotCard from "../../[id]/_components/CarrotPotCard";
-import PeriodsCard from "../../[id]/_components/PeriodsCard";
-import PriorityCards, {
-  PriorityCard,
-} from "../../[id]/_components/PriorityCards";
-import { Card } from "@/components/ui/card";
-import { Search } from "@/components/Search";
+import { PriorityCardsForDisplay } from "../../[id]/_components/PriorityCards";
 import { Button } from "@/components/ui/button";
 import PeriodsCardSlim from "../../[id]/_components/PeriodsCardSlim";
 
@@ -24,21 +16,17 @@ export function FinalReviewForm({
   basicDetails,
   rewardSettings,
   protocolConfiguration,
-  prev,
+  moveToPrevStep,
   onSubmit,
   isLoading,
 }: {
   basicDetails: BasicCommunityDetailsSchema | undefined;
   rewardSettings: RewardSettingsSchema | undefined;
   protocolConfiguration: ProtocolConfigurationSchema | undefined;
-  prev: () => void;
+  moveToPrevStep: () => void;
   onSubmit: SubmitHandler<CreateCommunitySchema>;
   isLoading: boolean;
 }) {
-  const temporaryQourums = {
-    prioritizationQourum: protocolConfiguration?.prioritizationQourum || 0, // Corrected property name
-    validationQuorum: protocolConfiguration?.validationQuorum || 0,
-  };
   const getSocialLink = (type: string) =>
     basicDetails?.socialLinks?.find((link) => link.type === type)?.url || "";
   const communityUrls = {
@@ -85,16 +73,6 @@ export function FinalReviewForm({
                 communityDescription={basicDetails?.description}
                 communityUrls={communityUrls}
               />
-              {/* <PeriodsCard
-                periods={{
-                  prioritizationPeriod:
-                    protocolConfiguration?.prioritizationPeriod || 0,
-                  contributionPeriod:
-                    protocolConfiguration?.contributionPeriod || 0,
-                  validationPeriod:
-                    protocolConfiguration?.validationPeriod || 0,
-                }}
-              /> */}
               <PeriodsCardSlim
                 periods={{
                   prioritizationPeriod:
@@ -105,10 +83,12 @@ export function FinalReviewForm({
                     protocolConfiguration?.validationPeriod || 0,
                 }}
               />
-              <div className="flex flex-col col-span-2 gap-4 w-full md:flex-row xl:flex-col">
-                <PriorityCard />
-                <PriorityCard />
-              </div>
+              <PriorityCardsForDisplay
+                prioritizationQourum={
+                  protocolConfiguration?.prioritizationQourum ?? 25
+                }
+                validationQuorum={protocolConfiguration?.validationQuorum ?? 25}
+              />
             </div>
           </div>
         </div>
@@ -118,10 +98,9 @@ export function FinalReviewForm({
           <Button
             variant="outline"
             className="w-[100px]"
-            onClick={() => {
-              prev();
-            }}
+            onClick={moveToPrevStep}
             type="button"
+            disabled={!moveToPrevStep || isLoading}
           >
             Back
           </Button>{" "}

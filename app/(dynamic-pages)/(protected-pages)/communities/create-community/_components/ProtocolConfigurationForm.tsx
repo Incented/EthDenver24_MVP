@@ -12,16 +12,10 @@ import { Progress } from "@/components/ui/Progress";
 import { useEffect } from "react";
 
 export default function ProtocolConfigurationForm({
-  protocolConfiguration,
-  setProtocolConfiguration,
-  currentStep,
-  setCurrentStep,
-}: {
-  protocolConfiguration: ProtocolConfigurationSchema | undefined;
-  setProtocolConfiguration: (data: ProtocolConfigurationSchema) => void;
-  currentStep: number;
-  setCurrentStep: (step: number) => void;
-}) {
+  initialFormValues,
+  onFormSubmit,
+  moveToPrevStep,
+}: FormProps<ProtocolConfigurationSchema>) {
   const {
     register,
     handleSubmit,
@@ -31,11 +25,11 @@ export default function ProtocolConfigurationForm({
   } = useForm<ProtocolConfigurationSchema>({
     resolver: zodResolver(protocolConfigurationSchema),
     defaultValues: {
-      prioritizationQourum: protocolConfiguration?.prioritizationQourum ?? 0,
-      validationQuorum: protocolConfiguration?.validationQuorum ?? 0,
-      prioritizationPeriod: protocolConfiguration?.prioritizationPeriod ?? 0,
-      contributionPeriod: protocolConfiguration?.contributionPeriod ?? 0,
-      validationPeriod: protocolConfiguration?.validationPeriod ?? 0,
+      prioritizationQourum: initialFormValues?.prioritizationQourum ?? 0,
+      validationQuorum: initialFormValues?.validationQuorum ?? 0,
+      prioritizationPeriod: initialFormValues?.prioritizationPeriod ?? 0,
+      contributionPeriod: initialFormValues?.contributionPeriod ?? 0,
+      validationPeriod: initialFormValues?.validationPeriod ?? 0,
     },
   });
 
@@ -48,22 +42,8 @@ export default function ProtocolConfigurationForm({
       contributionPeriod: Number(data.contributionPeriod),
       validationPeriod: Number(data.validationPeriod),
     };
-    setProtocolConfiguration(numericData);
-    const newStep = currentStep + 1;
-    setCurrentStep(newStep);
-    localStorage.setItem("currentStep", String(newStep));
-    // localStorage.setItem("protocolConfiguration", JSON.stringify(data));
+    onFormSubmit(numericData);
   };
-
-  //   useEffect(() => {
-  //     const savedProtocolConfiguration = localStorage.getItem(
-  //       "protocolConfiguration"
-  //     );
-  //     if (savedProtocolConfiguration) {
-  //       const parsedDetails = JSON.parse(savedProtocolConfiguration);
-  //       reset(parsedDetails); // This sets the form values to the saved data
-  //     }
-  //   }, [reset]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
@@ -195,16 +175,7 @@ export default function ProtocolConfigurationForm({
           <Button
             variant="outline"
             className="w-[100px]"
-            onClick={() => {
-              setCurrentStep(currentStep - 1);
-              const savedStep = localStorage.getItem("currentStep");
-              if (savedStep !== null) {
-                localStorage.setItem(
-                  "currentStep",
-                  String(Number(savedStep) - 1)
-                );
-              }
-            }}
+            onClick={moveToPrevStep}
             type="button"
           >
             Back
