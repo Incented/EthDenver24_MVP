@@ -10,7 +10,7 @@ import UpdateUserForm from "./_components/UpdateUserForm";
 import { Table } from "@/types";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { PrimaryUserDetails } from "./_components/userDetailsSchema";
+import { PrimaryUserDetailsSchema } from "./_components/userDetailsSchema";
 
 export function AccountSettings({
   userPrivateInfo,
@@ -22,7 +22,7 @@ export function AccountSettings({
   const router = useRouter();
   const { mutate, isLoading: isUpdatingUserProfileNameAndAvatar } =
     useToastMutation(
-      async (primaryUserDetails: PrimaryUserDetails) => {
+      async (primaryUserDetails: PrimaryUserDetailsSchema) => {
         const { firstName, lastName, avatarUrl } = primaryUserDetails;
         return await updateUserProfileNameAndAvatar({
           fullName: `${firstName} ${lastName}`,

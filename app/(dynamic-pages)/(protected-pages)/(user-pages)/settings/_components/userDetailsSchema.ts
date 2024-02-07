@@ -7,7 +7,10 @@ export const primaryUserDetailsSchema = z.object({
   lastName: z.string().min(3, "Last name must be at least 3 characters long."),
   avatarUrl: z.string().url().or(z.literal("")).optional(),
   fullName: z.string().optional(),
-  username: z.string().min(3, "Username must be at least 3 characters long."),
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters long.")
+    .optional(),
 });
 
 export type PrimaryUserDetailsSchema = z.infer<typeof primaryUserDetailsSchema>;

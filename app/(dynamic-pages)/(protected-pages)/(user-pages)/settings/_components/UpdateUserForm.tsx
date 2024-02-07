@@ -79,7 +79,7 @@ function UpdateUserForm({
     <form
       onSubmit={handleSubmit((values) => {
         onSubmit(values.firstName, values.lastName);
-        onUserNameUpload(values.username);
+        onUserNameUpload(values.username ?? userUserName ?? "");
       })}
       className="w-full md:h-full h-full overflow-auto md:overflow-hidden"
     >
@@ -204,7 +204,6 @@ function UpdateUserForm({
                   className=""
                   disabled={isLoading}
                   placeholder={userUserName ?? "User Name"}
-                  id="userName"
                 />
               </div>
               <div className="flex flex-col gap-2 col-span-2">

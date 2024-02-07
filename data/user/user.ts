@@ -181,8 +181,8 @@ export const updateUserProfileNameAndAvatar = async ({
   avatarUrl,
 }: {
   fullName: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   avatarUrl?: string;
 }) => {
   "use server";
