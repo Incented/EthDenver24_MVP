@@ -36,15 +36,6 @@ import BasicDetailsForm from "./BasicDetailsForm";
 
 export default function CreateCommunityForm() {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState(0);
-
-  useEffect(() => {
-    const savedStep = localStorage.getItem("currentStep");
-    if (savedStep !== null) {
-      localStorage.setItem("currentStep", String(savedStep));
-      setCurrentStep(Number(savedStep));
-    }
-  }, []);
 
   const {
     formState: { errors },
@@ -409,14 +400,6 @@ export default function CreateCommunityForm() {
     };
 
     mutate({ publicData, privateData });
-  };
-
-  const prev = () => {
-    if (currentStep > 0) {
-      const newStep = currentStep - 1;
-      setCurrentStep((step) => step - 1);
-      localStorage.setItem("currentStep", String(newStep));
-    }
   };
 
   return (
