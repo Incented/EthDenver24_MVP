@@ -28,7 +28,7 @@ interface CommandItemProps {
   icon: ReactNode;
 }
 
-interface CommandProps {
+export interface CommandProps {
   editor: Editor;
   range: Range;
 }

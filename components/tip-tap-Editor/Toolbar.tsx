@@ -7,13 +7,14 @@ import {
   Bold,
   ChevronDown,
   Code,
+  ImageIcon,
   Italic,
   PaintBucket,
   Plus,
   Strikethrough,
+  Table as TableIcon,
   Underline,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Toggle } from "../ui/toggle";
 import {
   DropdownMenu,
@@ -33,7 +34,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { ColorSelector } from "./components/color-selector";
+import { ColorSelect } from "./components/color-selector-select";
+import Table from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
+import { startImageUpload } from "./plugins/upload-images";
+import { CommandProps } from "./extensions/slash-command";
 
 interface ToolbarProps {
   editor: Editor | null;
@@ -152,13 +159,7 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
         <Code size={16} />
       </Toggle>
 
-      {/* <ColorSelector
-        editor={editor}
-        isOpen={isColorSelectorOpen}
-        setIsOpen={() => {
-          setIsColorSelectorOpen(!isColorSelectorOpen);
-        }}
-      /> */}
+      <ColorSelect editor={editor} />
       <Toggle size="sm">
         <div className="relative">
           <PaintBucket size={16} />
@@ -338,6 +339,45 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
           <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />
         </svg>
       </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("table")}
+        onClick={() =>
+          editor
+            .chain()
+            .focus()
+            .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+            .run()
+        }
+      >
+        <TableIcon size={16} />
+      </Toggle>
+
+      <div
+        className="hover:bg-muted p-2 flex items-center justify-center rounded-md"
+        onClick={() => {
+          if (!editor) return;
+          const range = {
+            from: editor.view.state.selection.from,
+            to: editor.view.state.selection.to,
+          };
+          editor.chain().focus().deleteRange(range).run();
+          // upload image
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = "image/*";
+          input.onchange = async () => {
+            if (input.files?.length) {
+              const file = input.files[0];
+              const pos = editor.view.state.selection.from;
+              startImageUpload(file, editor.view, pos);
+            }
+          };
+          input.click();
+        }}
+      >
+        <ImageIcon size={16} />
+      </div>
 
       <DropdownMenu>
         <DropdownMenuTrigger className="flex items-center gap-2">
