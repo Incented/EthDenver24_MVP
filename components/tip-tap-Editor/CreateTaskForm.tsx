@@ -1,21 +1,13 @@
 "use client";
 
 import { ChangeEvent, FC, useState } from "react";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@/components/ui/label";
-import { createFormSchema } from "./CreateFormSchema";
+import { CreateFormSchema, createFormSchema } from "./CreateFormSchema";
 import {
   Select,
   SelectContent,
@@ -25,17 +17,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import TipTap from "./TipTap";
+// import { TipTap } from "./TipTap";
 import { Card } from "../ui/card";
-import { Upload } from "lucide-react";
 import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
+import { AddTaskTypeDialog } from "../presentational/AddTaskTypeDialog";
+import { createTaskType } from "@/data/user/tasks";
+import dynamic from "next/dynamic";
 
-interface CreateTaskFormProps {}
+const TipTap = dynamic(() => import("./TipTap"), { ssr: false });
 
-const CreateTaskForm: FC<CreateTaskFormProps> = ({}) => {
+export function CreateTaskForm({
+  taskTypes,
+  communityNames,
+}: {
+  taskTypes: Array<{ name: string }>;
+  communityNames: Array<{ title: string }>;
+}) {
   const [files, setFiles] = useState<File[]>([]);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
+  const toggleTypeSelection = (typeName: string) => {
+    setSelectedTypes((currentTypes) => {
+      if (currentTypes.includes(typeName)) {
+        return currentTypes.filter((type) => type !== typeName); // Remove the type if it's already selected
+      } else {
+        return [...currentTypes, typeName]; // Add the type if it's not selected
+      }
+    });
+  };
   const handleImage = (
     e: ChangeEvent<HTMLInputElement>,
     fieldChange: (value: string) => void
@@ -58,269 +67,212 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({}) => {
     }
   };
 
-  const form = useForm<z.infer<typeof createFormSchema>>({
-    resolver: zodResolver(createFormSchema),
-    mode: "onChange",
-    defaultValues: {
-      // community: "",
-      // taskTitle: "",
-      taskDescription: "",
-      taskType: "",
-      reward: "",
-      effort: "",
-      image: "",
-    },
-  });
+  const { register, control, handleSubmit, formState } =
+    useForm<CreateFormSchema>({
+      resolver: zodResolver(createFormSchema),
+      mode: "onChange",
+      defaultValues: {
+        // community: "",
+        // taskTitle: "",
+        taskDescription: "",
+        taskType: [""],
+        reward: "",
+        effort: "",
+        imageUrl: "",
+      },
+    });
 
   const onSubmit = async (values: z.infer<typeof createFormSchema>) => {
     console.log(values);
   };
 
-  const isLoading = form.formState.isSubmitting;
+  const isLoading = formState.isSubmitting;
 
   return (
     <div className="">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="grid gap-6 md:grid-cols-2"
-        >
-          <FormField
-            control={form.control}
+      {/* <AddTaskTypeDialog createTaskType={createTaskType} /> */}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid gap-6 md:grid-cols-1"
+      >
+        <div className="w-56 space-y-1">
+          <Label>Community</Label>
+          <Controller
             name="community"
+            control={control}
             render={({ field }) => (
-              <FormItem className="col-span-2 sm:w-1/3">
-                <FormLabel className="">Community</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl className="">
-                    <SelectTrigger className="w-full">
-                      <SelectValue
-                        placeholder="Community"
-                        defaultValue={field.value}
-                      />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="Bunan Fund">Bunan Fund </SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <FormMessage className="text-red-400" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            name="taskTitle"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="col-span-2 sm:w-1/2">
-                <FormLabel>Title</FormLabel>
-                <FormControl className="">
-                  <Input
-                    {...field}
-                    placeholder="Task title"
-                    className="w-full"
+              <Select
+                {...field}
+                name={field.name}
+                value={field.value}
+                onValueChange={field.onChange}
+              >
+                <SelectTrigger aria-label="Select community" className="pr-2">
+                  <SelectValue
+                    placeholder="Select community"
+                    defaultValue={field.value}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="col-span-2">
-            <Label>Task Description</Label>
-            <Card className="mt-1">
-              <FormField
-                name="taskDescription"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl className="">
-                      <TipTap
-                        description="Describe the task here"
-                        onChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </Card>
-          </div>
-
-          <FormField
-            control={form.control}
-            name="taskType"
-            render={({ field }) => (
-              <FormItem className="col-span-2">
-                <FormLabel>Task Type</FormLabel>
-
-                <div className="flex flex-wrap gap-3">
-                  <Badge variant="outline">Software Dev</Badge>
-                  <Badge variant="outline">Hardware Dev</Badge>
-                  <Badge variant="outline">Legal</Badge>
-                  <Badge variant="outline">Marketing</Badge>
-                  <Badge variant="outline">Marketing</Badge>
-                  <Badge variant="outline">Marketing</Badge>
-                  <Badge variant="outline">Marketing</Badge>
-                  <Badge variant="outline">Marketing</Badge>
-                  <Badge variant="outline">Marketing</Badge>
-                  <Badge variant="outline">Marketing</Badge>
-                </div>
-                {/* <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl className="">
-                    <SelectTrigger className="w-full">
-                      <SelectValue
-                        placeholder="Task Type"
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {communityNames.map((community, index) => (
+                      <SelectItem
+                        key={community.title || `Community ${index + 1}`}
+                        value={community.title || `Community ${index + 1}`}
                         defaultValue={field.value}
-                      />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="software Dev">Software Dev</SelectItem>
-                      <SelectItem value="hardware Dev">Hardware Dev</SelectItem>
-                      <SelectItem value="legal">Legal</SelectItem>
-                      <SelectItem value="Marketing">Marketing</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select> */}
-                <FormMessage className="text-red-400" />
-              </FormItem>
+                      >
+                        {community.title || `Community ${index + 1}`}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             )}
           />
+        </div>
 
-          <FormField
-            name="reward"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="">
-                <FormLabel>Rewards</FormLabel>
-                <FormControl className="">
-                  <Input {...field} placeholder="Rewards" className="w-full" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+        <div className=" w-56 space-y-1">
+          <Label>Title</Label>
+          <Input
+            {...register("taskTitle")}
+            placeholder="Task title"
+            className="w-full"
           />
-          <FormField
-            name="effort"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="">
-                <FormLabel>Efforts</FormLabel>
-                <FormControl className="">
-                  <Input {...field} placeholder="Efforts" className="w-full" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        </div>
 
-          <div className="col-span-2">
-            <Label>Upload</Label>
-            <Card className="relative mt-1 outline-dashed outline-gray-600">
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                  <FormItem className="relative">
-                    <FormControl className="">
-                      <>
-                        <div className="flex items-center justify-center w-full h-[200px] mx-auto outline-0">
-                          <Input
-                            type="file"
-                            accept="image/*"
-                            placeholder=""
-                            className="z-40 w-full h-full p-4 rounded-full opacity-0 cursor-pointer "
-                            onChange={(e) => handleImage(e, field.onChange)}
-                          />
+        <div className="">
+          <Label>Task Description</Label>
+          <Card className="mt-1">
+            <Controller
+              name="taskDescription"
+              control={control}
+              render={({ field }) => <TipTap {...field} />}
+            />
+          </Card>
+        </div>
+
+        <div className=" space-y-2">
+          <Label>Task Types</Label>
+          <div className="flex flex-wrap w-full gap-3">
+            {taskTypes.map((type) => (
+              <Button
+                key={type.name}
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleTypeSelection(type.name);
+                }}
+                className={`cursor-pointer rounded-full border-none hover:border hover:border-1 text-xs font-medium leading-4 h-5 p-0 px-[10px] ${
+                  selectedTypes.includes(type.name)
+                    ? "bg-foreground text-background hover:bg-foreground/50 hover:text-background"
+                    : "bg-secondary hover:bg-secondary/50"
+                }`}
+                variant="outline"
+              >
+                {type.name}
+              </Button>
+            ))}
+          </div>
+        </div>
+        <div className="flex gap-6">
+          <div className="space-y-1">
+            <Label>Rewards</Label>
+            <Input
+              {...register("reward")}
+              placeholder="Amount of carrots"
+              className="w-full"
+            />
+          </div>
+          <div className="space-y-1">
+            <Label>Efforts (days)</Label>
+            <Input
+              {...register("effort")}
+              placeholder="Total days to effort"
+              className="w-full"
+            />
+          </div>
+        </div>
+
+        <div className="">
+          <Label>Upload</Label>
+          <Card className="relative mt-1 outline-dashed outline-gray-600">
+            {/* <FormField
+              control={control}
+              name="image"
+              render={({ field }) => (
+                <FormItem className="relative">
+                  <FormControl className="">
+                    <>
+                      <div className="flex items-center justify-center w-full h-[200px] mx-auto outline-0">
+                        <Input
+                          type="file"
+                          accept="image/*"
+                          placeholder=""
+                          className="z-40 w-full h-full p-4 rounded-full opacity-0 cursor-pointer "
+                          onChange={(e) => handleImage(e, field.onChange)}
+                        />
+                        <div
+                          className={cn(
+                            "h-full w-full absolute flex justify-center bg-cover bg-center group",
+                            field.value
+                              ? "bg-[rgba(22, 28, 36, 0.64)]"
+                              : "bg-default-100"
+                          )}
+                          style={{
+                            backgroundImage: `url(${field.value})`,
+                            objectFit: "contain",
+                          }}
+                        >
                           <div
                             className={cn(
-                              "h-full w-full absolute flex justify-center bg-cover bg-center group",
-                              field.value
-                                ? "bg-[rgba(22, 28, 36, 0.64)]"
-                                : "bg-default-100"
+                              "flex  justify-center items-center flex-col gap-1 text-default-400",
+                              field.value ? "opacity-0" : "opacity-1"
                             )}
-                            style={{
-                              backgroundImage: `url(${field.value})`,
-                              objectFit: "contain",
-                            }}
                           >
-                            <div
-                              className={cn(
-                                "flex  justify-center items-center flex-col gap-1 text-default-400",
-                                field.value ? "opacity-0" : "opacity-1"
-                              )}
-                            >
-                              <Upload />
-                              <p className="text-tiny">
-                                {field.value ? "Update Photo" : "Upload photo"}
-                              </p>
-                            </div>
+                            <Upload />
+                            <p className="text-tiny">
+                              {field.value ? "Update Photo" : "Upload photo"}
+                            </p>
                           </div>
                         </div>
-                      </>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </Card>
-          </div>
+                      </div>
+                    </>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            /> */}
+          </Card>
+        </div>
 
-          <div className="col-span-2">
-            <Label>Attachments</Label>
-            <Card className="relative mt-1 outline-dashed outline-gray-600">
-              <FormField
-                control={form.control}
-                name="attchament"
-                render={({ field }) => (
-                  <FormItem className="relative">
-                    <FormControl className="">
-                      <>
-                        <div className="items-center w-full outline-0">
-                          <Input
-                            type="file"
-                            accept="/*"
-                            placeholder=""
-                            className="z-50 w-full h-full rounded-full opacity-0 cursor-pointer "
-                            onChange={(e) => handleImage(e, field.onChange)}
-                          />
-                          <div className="absolute flex gap-8 px-4 bottom-2">
-                            <p className="text-tiny">
-                              {field.value ? "Update File" : "Chose File"}
-                            </p>
-                            <p className="text-tiny">
-                              {field.value?.slice(5, 20)}
-                            </p>
-                          </div>
-                        </div>
-                      </>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+        <div className="">
+          <Label>Attachments</Label>
+          {/* <Card className="relative mt-1 outline-dashed outline-gray-600">
+            <div className="items-center w-full outline-0">
+              <Input
+                type="file"
+                accept="/*"
+                placeholder=""
+                className="z-50 w-full h-full rounded-full opacity-0 cursor-pointer "
+                onChange={(e) => handleImage(e, field.onChange)}
               />
-            </Card>
-          </div>
-          <div className="absolute flex gap-4 top-8 right-4">
-            <Button type="button" variant="outline">
-              Save draft
-            </Button>
-            <Button type="submit">Create Task</Button>
-          </div>
-        </form>
-      </Form>
+              <div className="absolute flex gap-8 px-4 bottom-2">
+                <p className="text-tiny">
+                  {field.value ? "Update File" : "Chose File"}
+                </p>
+                <p className="text-tiny">{field.value?.slice(5, 20)}</p>
+              </div>
+            </div>
+          </Card> */}
+        </div>
+        <div className="absolute flex gap-4 top-8 right-4">
+          <Button type="button" variant="outline">
+            Save draft
+          </Button>
+          <Button type="submit">Create Task</Button>
+        </div>
+      </form>
     </div>
   );
-};
+}
 
 export default CreateTaskForm;

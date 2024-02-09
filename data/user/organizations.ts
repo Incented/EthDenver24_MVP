@@ -215,6 +215,19 @@ export async function getAllOrganizationsCount() {
   return data.length;
 }
 
+export async function getAllOrganizationNames() {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+
+  const { data, error } = await supabaseClient
+    .from("organizations")
+    .select("title");
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
 export async function getPaginatedOrganizationsList({
   limit = 10,
   page = 1,

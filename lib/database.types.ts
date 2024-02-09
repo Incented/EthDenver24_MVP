@@ -921,6 +921,27 @@ export type Database = {
           }
         ];
       };
+      task_types: {
+        Row: {
+          description: string | null;
+          id: number;
+          name: string;
+          slug: string;
+        };
+        Insert: {
+          description?: string | null;
+          id?: never;
+          name: string;
+          slug: string;
+        };
+        Update: {
+          description?: string | null;
+          id?: never;
+          name?: string;
+          slug?: string;
+        };
+        Relationships: [];
+      };
       team_members: {
         Row: {
           created_at: string | null;

@@ -2,7 +2,7 @@
 
 import { Editor } from "@tiptap/react";
 
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   Bold,
   ChevronDown,
@@ -25,6 +25,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { ColorSelector } from "./components/color-selector";
 
 interface ToolbarProps {
   editor: Editor | null;
@@ -34,6 +43,36 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
   if (!editor) {
     return null;
   }
+
+  const headings = [
+    {
+      name: "Paragraph",
+      command: () =>
+        editor.chain().focus().toggleNode("paragraph", "paragraph").run(),
+      // I feel like there has to be a more efficient way to do this – feel free to PR if you know how!
+      isActive: () =>
+        editor.isActive("paragraph") &&
+        !editor.isActive("bulletList") &&
+        !editor.isActive("orderedList"),
+    },
+    {
+      name: "Heading 1",
+      command: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
+      isActive: () => editor.isActive("heading", { level: 1 }),
+    },
+    {
+      name: "Heading 2",
+      command: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
+      isActive: () => editor.isActive("heading", { level: 2 }),
+    },
+    {
+      name: "Heading 3",
+      command: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
+      isActive: () => editor.isActive("heading", { level: 3 }),
+    },
+  ];
+
+  const [isColorSelectorOpen, setIsColorSelectorOpen] = useState(false);
 
   return (
     <div className="flex flex-wrap items-center px-2 py-1 space-x-2 border-b-2">
@@ -51,19 +90,27 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
           <DropdownMenuItem>Select 4</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center gap-2">
-          <p className="text-xs">h1</p>
-          <ChevronDown className="w-4 h-4" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem> h2</DropdownMenuItem>
-          <DropdownMenuItem>h3</DropdownMenuItem>
-          <DropdownMenuItem>h4</DropdownMenuItem>
-          <DropdownMenuItem>h5</DropdownMenuItem>
-          <DropdownMenuItem>h6</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Select
+        onValueChange={(value) => {
+          const selectedHeading = headings.find(
+            (heading) => heading.name === value
+          );
+          selectedHeading?.command();
+        }}
+      >
+        <SelectTrigger className="flex items-center w-fit gap-2 border-none">
+          <SelectValue defaultValue="Paragraph" placeholder="Paragraph" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {headings.map((heading, index) => (
+              <SelectItem key={index} value={heading.name}>
+                {heading.name}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
 
       <Separator orientation="vertical" className="h-8" />
 
@@ -93,7 +140,7 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
       <Toggle
         size="sm"
         pressed={editor.isActive("strike")}
-        onPressedChange={() => editor.commands.toggleUnderline()}
+        onPressedChange={() => editor.commands.toggleStrike()}
       >
         <Strikethrough size={16} />
       </Toggle>
@@ -104,6 +151,14 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
       >
         <Code size={16} />
       </Toggle>
+
+      {/* <ColorSelector
+        editor={editor}
+        isOpen={isColorSelectorOpen}
+        setIsOpen={() => {
+          setIsColorSelectorOpen(!isColorSelectorOpen);
+        }}
+      /> */}
       <Toggle size="sm">
         <div className="relative">
           <PaintBucket size={16} />

@@ -1,60 +1,37 @@
-import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import { FC } from "react";
+"use client";
+
+import { EditorContent, generateJSON, useEditor } from "@tiptap/react";
 import Toolbar from "./Toolbar";
-import Heading from "@tiptap/extension-heading";
-import { Color } from "@tiptap/extension-color";
-import TextStyle from "@tiptap/extension-text-style";
-import Text from "@tiptap/extension-text";
-import Underline from "@tiptap/extension-underline";
+import { TiptapExtensions } from "./extensions";
+import { TiptapEditorProps } from "./props";
 
 interface TipTapProps {
-  description: string;
-  onChange: (richText: string) => void;
+  value: string;
+  onChange: (value: string) => void;
+  onBlur?: () => void;
 }
 
-const TipTap: FC<TipTapProps> = ({ description, onChange }) => {
+export default function TipTap({ value, onChange, onBlur }: TipTapProps) {
   const editor = useEditor({
-    extensions: [
-      StarterKit.configure({}),
-      Color,
-      TextStyle,
-      Text,
-      Underline.configure({
-        HTMLAttributes: {
-          class: "underline",
-        },
-      }),
-      Heading.configure({
-        HTMLAttributes: {
-          class: "text-xl font-bold",
-          levels: [2],
-        },
-      }),
-    ],
-    content: description,
-    editorProps: {
-      attributes: {
-        class: "min-h-[150px] p-2 text-gray-400",
-      },
+    extensions: TiptapExtensions,
+    content: generateJSON(value, TiptapExtensions),
+    editorProps: TiptapEditorProps,
+    autofocus: "end",
+    onUpdate(e) {
+      onChange(e.editor.getHTML());
     },
-    onUpdate({ editor }) {
-      onChange(editor.getHTML());
-    },
+    onBlur,
   });
   return (
-    <div className="flex flex-col border-none justify-stretch">
+    <div
+      className="flex flex-col border-none justify-stretch"
+      onClick={() => {
+        editor?.chain().focus().run();
+      }}
+    >
+      {/* {editor && <EditorBubbleMenu editor={editor} />} */}
       <Toolbar editor={editor} />
-      <EditorContent
-        editor={editor}
-        style={{
-          outlineColor: "transparent",
-          borderColor: "transparent",
-          height: "100%",
-        }}
-      />
+      <EditorContent editor={editor} />
     </div>
   );
-};
-
-export default TipTap;
+}
