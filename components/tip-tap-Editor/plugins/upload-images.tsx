@@ -105,6 +105,7 @@ export function startImageUpload(file: File, view: EditorView, pos: number) {
     // When BLOB_READ_WRITE_TOKEN is not valid or unavailable, read
     // the image locally
     const imageSrc = typeof src === "object" ? reader.result : src;
+    console.log("handleImageUpload imageSrc", imageSrc);
 
     const node = schema.nodes.image.create({ src: imageSrc });
     const transaction = view.state.tr
@@ -118,17 +119,17 @@ export const handleImageUpload = (file: File) => {
   // upload to Vercel Blob
   const formData = new FormData();
   formData.append("file", file);
+  console.log("image formData", formData);
   return new Promise((resolve) => {
     toast.promise(
       axios
-        .post("/api/app_admin/internal_blog/uploadImage", formData, {
+        .post("/api/tasks/uploadImage", formData, {
           withCredentials: true,
         })
         .then(async ({ data }) => {
           const { publicUrl: url } = data as unknown as {
             publicUrl: string;
           };
-          console.log(data);
           // preload the image
           const image = new Image();
           image.src = url;

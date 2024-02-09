@@ -18,13 +18,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 // import { TipTap } from "./TipTap";
-import { Card } from "../ui/card";
-import { Button } from "../ui/button";
-import { AddTaskTypeDialog } from "../presentational/AddTaskTypeDialog";
+import { Card } from "../../../../../../../components/ui/card";
+import { Button } from "../../../../../../../components/ui/button";
+import { AddTaskTypeDialog } from "../../../../../../../components/presentational/AddTaskTypeDialog";
 import { createTaskType } from "@/data/user/tasks";
 import dynamic from "next/dynamic";
 
-const TipTap = dynamic(() => import("./TipTap"), { ssr: false });
+const TipTap = dynamic(
+  () => import("../../../../../../../components/tip-tap-Editor/TipTap"),
+  { ssr: false }
+);
 
 export function CreateTaskForm({
   taskTypes,

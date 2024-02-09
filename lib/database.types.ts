@@ -942,6 +942,36 @@ export type Database = {
         };
         Relationships: [];
       };
+      tasks: {
+        Row: {
+          created_at: string;
+          id: string;
+          name: string;
+          organization_id: string;
+          project_status: Database["public"]["Enums"]["project_status"];
+          team_id: number | null;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          name: string;
+          organization_id: string;
+          project_status?: Database["public"]["Enums"]["project_status"];
+          team_id?: number | null;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          name?: string;
+          organization_id?: string;
+          project_status?: Database["public"]["Enums"]["project_status"];
+          team_id?: number | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       team_members: {
         Row: {
           created_at: string | null;

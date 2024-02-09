@@ -1,4 +1,4 @@
-import CreateTaskForm from "@/components/tip-tap-Editor/CreateTaskForm";
+import CreateTaskForm from "@/app/(dynamic-pages)/(protected-pages)/dashboard/(task)/edit-proposal/components/CreateTaskForm";
 import GoBack from "@/components/ui/GoBack";
 import { getAllNamesOfTaskTypes } from "@/data/user/tasks";
 import {
