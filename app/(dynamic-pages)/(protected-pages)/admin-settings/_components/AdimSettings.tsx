@@ -13,11 +13,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import RewardSettingsForm from "../../communities/create-community/_components/RewardSettingsForm";
+
+import CarrotPotForm from "../../communities/create-community/_components/CarrotPotForm";
+
+import ProtocolConfigurationForm from "../../communities/create-community/_components/ProtocolConfigurationForm";
+import {
+  AdminSettingsSchema,
+  CarrotPotSchema,
+  ProtocolConfigurationSchema,
+  RewardSettingsSchema,
+} from "../../communities/create-community/_components/createCommunitySchema";
+import UserRolesAndPermissionsForm from "../../communities/create-community/_components/UserRolesAndPermissions";
 
 interface AdimSettingsProps {}
 
 const AdimSettings: FC<AdimSettingsProps> = ({}) => {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(1);
   const steps = [
     {
       id: 1,
@@ -25,6 +37,10 @@ const AdimSettings: FC<AdimSettingsProps> = ({}) => {
     },
     {
       id: 2,
+      name: "Protocol Configuration",
+    },
+    {
+      id: 3,
       name: "Reward Settings",
 
       feilds: [
@@ -35,7 +51,7 @@ const AdimSettings: FC<AdimSettingsProps> = ({}) => {
       ],
     },
     {
-      id: 3,
+      id: 4,
       name: "Configure Carrot Pot",
 
       feilds: [
@@ -46,14 +62,132 @@ const AdimSettings: FC<AdimSettingsProps> = ({}) => {
       ],
     },
     {
-      id: 4,
+      id: 5,
       name: "User Roles & Permissions",
     },
     {
-      id: 5,
+      id: 6,
       name: "Member Management",
     },
   ];
+
+  const [protocolConfiguration, setProtocolConfiguration] =
+    useState<ProtocolConfigurationSchema>({
+      contributionPeriod: 0,
+      prioritizationPeriod: 0,
+      validationPeriod: 0,
+      validationQuorum: 0,
+      prioritizationQourum: 0,
+    });
+  const [rewardSettings, setRewardsSettings] = useState<RewardSettingsSchema>({
+    prioritizationReward: 0,
+    validationReward: 0,
+    proposalReward: 0,
+    claimStakeAmount: 100,
+  });
+
+  const [permissions, setPermissions] = useState<AdminSettingsSchema>({
+    addOrRemoveMembers: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    adjustPersonalSettings: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    approveMembersJoinRequest: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    approveTaskProposal: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    assignInitialMemberRolesAndPermissions: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    changeProtocolSettings: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    communitySpecificSettings: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    contributeToTasks: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    inviteOtherUsers: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    manageTaskSettings: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    overseeCarrotDistribution: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    participateInTaskValidation: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    postOnTaskDiscussion: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    proposeNewTasks: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    reviewCommunityPerformance: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    takesCarrotsToPrioritizeTasks: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    trackRewards: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    vetoInappropriateTasks: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+    viewOngoingTasks: {
+      isValidForMembers: false,
+      isValidForAdmin: false,
+      isValidForVetoPower: false,
+    },
+  });
+
+  const [carrotPotSettings, setCarrotPotSettings] = useState<CarrotPotSchema>({
+    community_live_status: "live",
+    community_token: "carrot",
+  });
 
   return (
     <div className="w-full px-6 pt-0">
@@ -96,28 +230,42 @@ const AdimSettings: FC<AdimSettingsProps> = ({}) => {
           })}
         </div>
         <div className="w-full">
-          {currentStep === 0 && (
-            <div>
-              <h1>Choose Community</h1>
-            </div>
-          )}
           {currentStep === 1 ? <CommunityDetails /> : null}
-          {currentStep === 2 && (
-            <div>
-              <h1>Reward Settings</h1>
-            </div>
-          )}
-          {currentStep === 3 && (
-            <div>
-              <h1>Configure Carrot Pot</h1>
-            </div>
-          )}
-          {currentStep === 4 && (
-            <div>
-              <h1>User Roles & Permissions</h1>
-            </div>
-          )}
-          {currentStep === 5 ? <MemberManagement /> : null}
+          {currentStep === 2 ? (
+            <ProtocolConfigurationForm
+              initialFormValues={protocolConfiguration}
+              onFormSubmit={(formData: ProtocolConfigurationSchema): void => {
+                // Perform state update with formData
+                setProtocolConfiguration(formData);
+              }}
+              withStep={false}
+            />
+          ) : null}
+          {currentStep === 3 ? (
+            <RewardSettingsForm
+              initialFormValues={rewardSettings}
+              onFormSubmit={(formData: RewardSettingsSchema): void => {
+                setRewardsSettings(formData);
+              }}
+            />
+          ) : null}
+          {currentStep === 4 ? (
+            <CarrotPotForm
+              initialFormValues={carrotPotSettings}
+              onFormSubmit={(formData: CarrotPotSchema): void => {
+                setCarrotPotSettings(formData);
+              }}
+            />
+          ) : null}
+          {currentStep === 5 ? (
+            <UserRolesAndPermissionsForm
+              initialFormValues={permissions}
+              onFormSubmit={(formData: AdminSettingsSchema): void => {
+                setPermissions(formData);
+              }}
+            />
+          ) : null}
+          {currentStep === 6 ? <MemberManagement /> : null}
         </div>
       </div>
     </div>

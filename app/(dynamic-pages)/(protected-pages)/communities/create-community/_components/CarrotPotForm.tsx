@@ -1,16 +1,12 @@
+"use client";
+
 import { Input } from "@/components/ui/input";
 import { AccordionList } from "./Accordion";
 import { carrotPotItems, rewardAccordionItems } from "./createCommunityData";
-import {
-  RewardSettingsSchema,
-  rewardSettingsSchema,
-  carrotPotSchema,
-  CarrotPotSchema,
-} from "./createCommunitySchema";
+import { carrotPotSchema, CarrotPotSchema } from "./createCommunitySchema";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/Progress";
 import { toast } from "sonner";
 import {
   Select,
@@ -22,12 +18,12 @@ import {
 } from "@/components/ui/select";
 import { useEffect, useRef, useState } from "react";
 import TokenPurchaseModal from "@/components/ui/token-purchase-modal";
-import { set } from "nprogress";
 
-export default function CarrotPotForm({
+function CarrotPotForm({
   initialFormValues,
   onFormSubmit,
   moveToPrevStep,
+  withStep = true,
 }: FormProps<CarrotPotSchema>) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -37,9 +33,9 @@ export default function CarrotPotForm({
     if (input) {
       input.select(); // Select the text
       document.execCommand("copy"); // Copy the text
+      // Optionally, you can show a tooltip or a message confirming the copy action
     }
   };
-
   const {
     register,
     handleSubmit,
@@ -59,33 +55,15 @@ export default function CarrotPotForm({
   const onSubmit: SubmitHandler<CarrotPotSchema> = (data) => {
     onFormSubmit(data);
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
-        <div className="flex flex-col lg:flex-row items-center justify-between border-b w-full">
-          <div className="flex flex-col w-full  pb-4 lg:col-span-2">
-            <p className="text-base font-semibold leading-9 text-foreground">
-              Carrot Pot
-            </p>
-            <p className="text-sm leading-6">
-              Manage the task reward for your community members.
-            </p>
-          </div>
-          <div className="flex flex-col pt-[10px] md:justify-between w-full pb-4 lg:pb-0 lg:w-[160px]">
-            <div className="flex justify-between text-sm text-muted-foreground">
-              <p>Step 4/6</p> <p>60%</p>
-            </div>
-            <div className="py-1.5">
-              <Progress value={60} className="w-full h-2" />
-            </div>
-          </div>
-        </div>
-
+      <div className="flex flex-col w-full gap-4 rounded-b-none rounded-lg md:h-[640px] 2xl:h-[760px] lg:">
         <div className="h-full overflow-hidden">
-          <div className="h-full flex flex-col md:flex-row gap-8">
+          <div className="flex flex-col h-full gap-8 lg:flex-row">
             <div className="flex-1 space-y-6">
               <div>
-                <div className="mt-2 grid grid-cols-1 gap-4 w-64">
+                <div className="grid w-full grid-cols-1 gap-4 mt-2">
                   <div className="relative space-y-1">
                     <span className="text-sm">Community live status</span>
                     <Controller
@@ -128,7 +106,7 @@ export default function CarrotPotForm({
                         </SelectGroup>
                       </SelectContent>
                     </Select> */}
-                    <p className="text-muted-foreground text-sm">
+                    <p className="text-sm text-muted-foreground">
                       Choose the status
                     </p>
                   </div>
@@ -173,7 +151,7 @@ export default function CarrotPotForm({
                         </SelectGroup>
                       </SelectContent>
                     </Select> */}
-                    <p className="text-muted-foreground text-sm">
+                    <p className="text-sm text-muted-foreground">
                       {`Choose the token you'd like to use`}
                     </p>
                   </div>
@@ -215,7 +193,7 @@ export default function CarrotPotForm({
                           });
                           handleCopy();
                         }}
-                        className="absolute right-2 top-1/3 text-sm text-muted-foreground"
+                        className="absolute text-sm right-2 top-1/3 text-muted-foreground"
                       >
                         <svg
                           width="16"
@@ -284,22 +262,24 @@ export default function CarrotPotForm({
           </div>
         </div>
       </div>
-      <div className=" flex w-full p-6 py-4 pb-6 rounded-lg rounded-t-none border">
-        <div className="mx-auto flex gap-2 justify-start">
+      <div className="flex w-full p-6 py-4 pb-6 border rounded-lg rounded-t-none ">
+        <div className="flex justify-start gap-2 mx-auto">
           <Button
             variant="outline"
             className="w-[100px]"
-            onClick={moveToPrevStep}
+            onClick={withStep ? moveToPrevStep : () => {}}
             type="button"
-            disabled={!moveToPrevStep}
           >
-            Back
-          </Button>{" "}
+            {withStep ? "Back" : "Cancel"}
+          </Button>
+
           <Button type="submit" className="w-[100px]">
-            Next
+            {withStep ? "Next" : "Save"}
           </Button>
         </div>
       </div>
     </form>
   );
 }
+
+export default CarrotPotForm;

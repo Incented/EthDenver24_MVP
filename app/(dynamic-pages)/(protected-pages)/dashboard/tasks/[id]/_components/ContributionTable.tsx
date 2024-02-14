@@ -1,5 +1,8 @@
+"use client";
+
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -17,23 +20,22 @@ const contributions = [1];
 
 const ContributionTable: FC<ContributionTableProps> = ({}) => {
   return (
-    <div className="border rounded-md overflow-hidden w-full">
-      <Table className="mb-4">
+    <Card className="border-none">
+      <h1 className="mb-2 text-lg font-bold leading-8">Contributions</h1>
+      <Table className="border rounded-md">
         <TableHeader>
           <TableRow>
-            <TableHead className="px-6 whitespace-nowrap">
+            <TableHead className="whitespace-nowrap">
               Solution Description
             </TableHead>
-            <TableHead className="px-6 whitespace-nowrap">Member</TableHead>
-            <TableHead className="px-6 whitespace-nowrap">
+            <TableHead className="">Member</TableHead>
+            <TableHead className="text-center whitespace-nowrap">
               Attachment File
             </TableHead>
-            <TableHead className="px-6 whitespace-nowrap">
+            <TableHead className="text-center whitespace-nowrap">
               Total Validators
             </TableHead>
-            <TableHead className="px-6 text-center whitespace-nowrap">
-              Action
-            </TableHead>
+            <TableHead className="text-center">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -47,10 +49,10 @@ const ContributionTable: FC<ContributionTableProps> = ({}) => {
             </TableRow>
           ) : (
             <TableRow>
-              <TableCell className="px-6 whitespace-nowrap">
+              <TableCell className="px-6">
                 Try to calculate the EXE fee...
               </TableCell>
-              <TableCell className="whitespace-nowrap">
+              <TableCell className="">
                 <div className="flex items-center gap-1">
                   <Avatar>
                     <AvatarImage src="/assets/avatar_1.jpg" />
@@ -75,7 +77,7 @@ const ContributionTable: FC<ContributionTableProps> = ({}) => {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="bg-white text-foreground"
+                    className="text-foreground"
                   >
                     View Details
                   </Button>
@@ -86,7 +88,7 @@ const ContributionTable: FC<ContributionTableProps> = ({}) => {
           )}
         </TableBody>
       </Table>
-    </div>
+    </Card>
   );
 };
 

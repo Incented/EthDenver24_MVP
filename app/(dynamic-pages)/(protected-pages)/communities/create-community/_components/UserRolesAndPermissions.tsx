@@ -1,3 +1,5 @@
+"use client";
+
 import {
   AdminSettingsSchema,
   adminSettingsSchema,
@@ -14,15 +16,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Switch } from "@/components/ui/Switch";
-import { Progress } from "@/components/ui/Progress";
-import { useEffect } from "react";
 import { rolesAndPermissions } from "./createCommunityData";
-import { toast } from "sonner";
 
-export default function UserRolesAndPermissionsForm({
+function UserRolesAndPermissionsForm({
   initialFormValues,
   onFormSubmit,
   moveToPrevStep,
+  withStep = true,
 }: FormProps<AdminSettingsSchema>) {
   const {
     handleSubmit,
@@ -38,32 +38,13 @@ export default function UserRolesAndPermissionsForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
-        <div className="flex flex-col lg:flex-row items-center justify-between border-b w-full">
-          <div className="flex flex-col w-full  pb-4 lg:col-span-2">
-            <p className="text-base font-semibold leading-9 text-foreground">
-              User Roles and Permissions
-            </p>
-            <p className="text-sm leading-6">
-              Assign roles and define permissions within the community.
-            </p>
-          </div>
-          <div className="flex flex-col pt-[10px] md:justify-between w-full pb-4 lg:pb-0 lg:w-[160px]">
-            <div className="flex justify-between text-sm text-muted-foreground">
-              <p>Step 5/6</p> <p>80%</p>
-            </div>
-            <div className="py-1.5">
-              <Progress value={80} className="w-full h-2" />
-            </div>
-          </div>
-        </div>
-
+      <div className="flex flex-col w-full gap-4 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
         {/* <div className="grid grid-cols-5 gap-4"> */}
         <div className="w-full overflow-auto">
           <Table className="w-full ">
             <TableHeader>
               <TableRow className="border-none">
-                <TableHead className="pl-0 w-full sm:w-auto font-normal">
+                <TableHead className="w-full pl-0 font-normal sm:w-auto">
                   Roles and Permissions
                 </TableHead>
                 <TableHead className="font-normal">Admin</TableHead>
@@ -74,7 +55,7 @@ export default function UserRolesAndPermissionsForm({
             <TableBody>
               {rolesAndPermissions.map((role) => (
                 <TableRow className="border-0" key={role.fieldName}>
-                  <TableCell className="pl-0 whitespace-nowrap text-sm leading-[14px] lg:whitespace-normal">
+                  <TableCell className="pl-0 text-sm leading-[14px] whitespace-normal">
                     {role.title}
                   </TableCell>
                   <TableCell>
@@ -161,22 +142,24 @@ export default function UserRolesAndPermissionsForm({
           </Table>
         </div>
       </div>
-      <div className=" flex w-full p-6 py-4 pb-6 rounded-lg rounded-t-none border">
-        <div className="mx-auto flex gap-2 justify-start">
+      <div className="flex w-full p-6 py-4 pb-6 border rounded-lg rounded-t-none ">
+        <div className="flex justify-start gap-2 mx-auto">
           <Button
             variant="outline"
             className="w-[100px]"
-            onClick={moveToPrevStep}
+            onClick={withStep ? moveToPrevStep : () => {}}
             type="button"
-            disabled={!moveToPrevStep}
           >
-            Back
-          </Button>{" "}
+            {withStep ? "Back" : "Cancel"}
+          </Button>
+
           <Button type="submit" className="w-[100px]">
-            Next
+            {withStep ? "Next" : "Save"}
           </Button>
         </div>
       </div>
     </form>
   );
 }
+
+export default UserRolesAndPermissionsForm;

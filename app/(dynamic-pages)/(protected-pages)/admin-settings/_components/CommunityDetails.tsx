@@ -56,7 +56,7 @@ const CommunityDetails: FC<CommunityDetailsProps> = ({}) => {
           <div className="h-fit">
             <div className="overflow-scroll">
               <div className="flex flex-col gap-6 mt-2 lg:flex-row">
-                <div className="bg-muted w-full md:w-[228px] h-fit rounded-xl flex flex-col justify-center items-center p-6 px-4">
+                <div className="bg-muted w-full lg:w-[228px] h-fit rounded-xl flex flex-col justify-center items-center p-6 px-4">
                   <div className="flex items-center justify-center w-24 h-24 p-4 mb-4 rounded-full bg-background">
                     <svg
                       width="40"
@@ -81,7 +81,7 @@ const CommunityDetails: FC<CommunityDetailsProps> = ({}) => {
                   </p>
                   <Button className="px-8">Update</Button>
                 </div>
-                <div className="space-y-4 w-full md:w-[300px] pb-[10px]">
+                <div className="space-y-4 w-full lg:w-[300px] pb-[10px]">
                   <div className="space-y-2">
                     <Label htmlFor="title">Community Name</Label>
                     <Input

@@ -13,7 +13,15 @@ import {
 } from "@/components/ui/tooltip";
 
 import { cn } from "@/lib/utils";
-import { Carrot, Copy, File, Info, MoreVertical, Plus } from "lucide-react";
+import {
+  Carrot,
+  Copy,
+  File,
+  Info,
+  MoreVertical,
+  Plus,
+  Settings,
+} from "lucide-react";
 import { FC } from "react";
 import Pagination from "@/components/ui/Pagination";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -22,6 +30,7 @@ import { Button } from "@/components/ui/button";
 import PriDepriButton from "./PriDepriButton";
 import ContributionTable from "./ContributionTable";
 import Image from "next/image";
+import AddContribution from "./AddContribution";
 
 interface TaskDetailProps {
   id: string;
@@ -58,8 +67,8 @@ const TaskDetail: FC<TaskDetailProps> = async ({
   }
 
   return (
-    <div className="flex gap-4 mt-4">
-      <section className="flex-1">
+    <div className="w-full gap-4 mt-4 md:grid md:grid-cols-3 xl:grid-cols-4">
+      <section className="md:col-span-2 xl:col-span-3">
         <Card className="relative mb-4 overflow-hidden border">
           <div
             className={cn(
@@ -134,11 +143,9 @@ const TaskDetail: FC<TaskDetailProps> = async ({
           </div>
         </Card>
 
-        <Card className="p-4 mb-4 overflow-hidden border-none">
-          <h1 className="mb-2 text-lg font-bold leading-8">Contributions</h1>
+        <div className="mb-4">
           <ContributionTable />
-          {/* <Pagination currentPage={0} title="contribution" totalPages={0} /> */}
-        </Card>
+        </div>
 
         <Card className="p-8 mb-4 overflow-hidden border-none">
           <div className="flex items-center justify-between mb-2">
@@ -158,9 +165,13 @@ const TaskDetail: FC<TaskDetailProps> = async ({
         </Card>
       </section>
 
-      <section>
-        <div className="mb-4">
-          <PriDepriButton />
+      <section className="w-full">
+        <div className="flex items-center gap-2 mb-4">
+          <Button className="bg-gray-600 ">Claim</Button>
+          <AddContribution />
+          <Button size="icon" variant="outline">
+            <Settings />
+          </Button>
         </div>
         <Card className="p-4 mb-4 ">
           <h1 className="mb-2 text-lg font-bold">Proposer</h1>

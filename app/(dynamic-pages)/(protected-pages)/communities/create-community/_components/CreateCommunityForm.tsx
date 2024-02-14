@@ -1,9 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Progress } from "@/components/ui/Progress";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
@@ -18,18 +16,21 @@ import {
   RewardSettingsSchema,
   createCommunitySchema,
 } from "./createCommunitySchema";
-import ProtocolConfigurationForm from "./ProtocolConfigurationForm";
-import RewardsSettingsForm from "./RewardSettingsForm";
-import UserRolesAndPermissionsForm from "./UserRolesAndPermissions";
-import { Check } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import CarrotPotForm from "./CarrotPotForm";
+import { useRouter } from "next/navigation";
 import CreateCommunityStep from "./CreateCommunityStep";
 import { FinalReviewForm } from "./FinalReviewForm";
 import { useToastMutation } from "@/hooks/useToastMutation";
-import { createPublicOrganization } from "@/data/user/organizations";
+import {
+  createOrganization,
+  createPublicOrganization,
+} from "@/data/user/organizations";
 import { addPrivateInfoForOrganization } from "@/data/admin/organizations";
-import BasicDetailsForm from "./BasicDetailsForm";
+import CreateCommnityHeader from "./CreateCommnityHeader";
+import CommunityDetailsForm from "./CommunityDetailsForm";
+import ProtocolConfigurationForm from "./ProtocolConfigurationForm";
+import CarrotPotForm from "./CarrotPotForm";
+import RewardSettingsForm from "./RewardSettingsForm";
+import UserRolesAndPermissionsForm from "./UserRolesAndPermissions";
 
 export default function CreateCommunityForm() {
   const router = useRouter();
@@ -196,7 +197,6 @@ export default function CreateCommunityForm() {
     UserRolesPermissions = "User Roles & Permissions",
     FinalReview = "Final Review",
   }
-
   const newSteps = [
     {
       name: CreateCommunityStepName.CommunityDetails,
@@ -340,7 +340,6 @@ export default function CreateCommunityForm() {
       ),
     },
   ];
-
   const [currentStepName, setCurrentStepName] =
     useState<CreateCommunityStepName>(CreateCommunityStepName.CommunityDetails);
 
@@ -416,7 +415,7 @@ export default function CreateCommunityForm() {
             return (
               <CreateCommunityStep
                 step={step}
-                currentStepName={currentStepName} // This should be a state variable of type CreateCommunityStepName
+                currentStepName={currentStepName}
                 key={step.name}
               />
             );
@@ -425,102 +424,167 @@ export default function CreateCommunityForm() {
         <div className="w-full">
           <div className="w-full">
             {currentStepName === CreateCommunityStepName.CommunityDetails && (
-              <BasicDetailsForm
-                initialFormValues={basicDetails}
-                onFormSubmit={(formData: BasicCommunityDetailsSchema): void => {
-                  // Perform state update with formData
-                  setBasicDetails(formData);
+              <div className="p-6 border border-b-0">
+                <CreateCommnityHeader
+                  heading="Community Details"
+                  subHeading="Basic information about the community."
+                  stepText="Step 1/6"
+                  stepPercent="0%"
+                  stepValue={0}
+                />
+                <CommunityDetailsForm
+                  initialFormValues={basicDetails}
+                  onFormSubmit={(
+                    formData: BasicCommunityDetailsSchema
+                  ): void => {
+                    // Perform state update with formData
+                    setBasicDetails(formData);
 
-                  // Move to the next step
-                  setCurrentStepName(
-                    CreateCommunityStepName.ProtocolConfiguration
-                  );
-                }}
-              />
+                    // Move to the next step
+                    setCurrentStepName(
+                      CreateCommunityStepName.ProtocolConfiguration
+                    );
+                  }}
+                />
+              </div>
             )}
             {currentStepName ===
               CreateCommunityStepName.ProtocolConfiguration && (
-              <ProtocolConfigurationForm
-                initialFormValues={protocolConfiguration}
-                onFormSubmit={(formData: ProtocolConfigurationSchema): void => {
-                  // Perform state update with formData
-                  setProtocolConfiguration(formData);
+              <div className="p-6 border border-b-0">
+                <CreateCommnityHeader
+                  heading="Protocol Configuration"
+                  subHeading="Manage your community parameters such as protocol fees,
+              carrot-pot, validation quorum, etc."
+                  stepText="Step 2/6"
+                  stepPercent="20%"
+                  stepValue={20}
+                />
 
-                  // Move to the next step
-                  setCurrentStepName(CreateCommunityStepName.RewardSettings);
-                }}
-                moveToPrevStep={() => {
-                  setCurrentStepName(CreateCommunityStepName.CommunityDetails);
-                }}
-              />
+                <ProtocolConfigurationForm
+                  initialFormValues={protocolConfiguration}
+                  onFormSubmit={(
+                    formData: ProtocolConfigurationSchema
+                  ): void => {
+                    // Perform state update with formData
+                    setProtocolConfiguration(formData);
+
+                    // Move to the next step
+                    setCurrentStepName(CreateCommunityStepName.RewardSettings);
+                  }}
+                  moveToPrevStep={() => {
+                    setCurrentStepName(
+                      CreateCommunityStepName.CommunityDetails
+                    );
+                  }}
+                />
+              </div>
             )}
             {currentStepName === CreateCommunityStepName.RewardSettings && (
-              <RewardsSettingsForm
-                initialFormValues={rewardSettings}
-                onFormSubmit={(formData: RewardSettingsSchema): void => {
-                  // Perform state update with formData
-                  setRewardsSettings(formData);
+              <div className="p-6 border border-b-0">
+                <CreateCommnityHeader
+                  heading="Reward Settings"
+                  subHeading="Manage the task reward for your community members."
+                  stepText="Step 3/6"
+                  stepPercent="40%"
+                  stepValue={40}
+                />
 
-                  // Move to the next step
-                  setCurrentStepName(
-                    CreateCommunityStepName.ConfigureCarrotPot
-                  );
-                }}
-                moveToPrevStep={() => {
-                  setCurrentStepName(
-                    CreateCommunityStepName.ProtocolConfiguration
-                  );
-                }}
-              />
+                <RewardSettingsForm
+                  initialFormValues={rewardSettings}
+                  onFormSubmit={(formData: RewardSettingsSchema): void => {
+                    // Perform state update with formData
+                    setRewardsSettings(formData);
+
+                    // Move to the next step
+                    setCurrentStepName(
+                      CreateCommunityStepName.ConfigureCarrotPot
+                    );
+                  }}
+                  moveToPrevStep={() => {
+                    setCurrentStepName(
+                      CreateCommunityStepName.ProtocolConfiguration
+                    );
+                  }}
+                />
+              </div>
             )}
             {currentStepName === CreateCommunityStepName.ConfigureCarrotPot && (
-              <CarrotPotForm
-                initialFormValues={carrotPotSettings}
-                onFormSubmit={(formData: CarrotPotSchema): void => {
-                  // Perform state update with formData
-                  setCarrotPotSettings(formData);
+              <div className="p-6 border border-b-0">
+                <CreateCommnityHeader
+                  heading="Carrot Pot"
+                  subHeading="Manage the task reward for your community members."
+                  stepText="Step 4/6"
+                  stepPercent="60%"
+                  stepValue={60}
+                />
 
-                  // Move to the next step
-                  setCurrentStepName(
-                    CreateCommunityStepName.UserRolesPermissions
-                  );
-                }}
-                moveToPrevStep={() => {
-                  setCurrentStepName(CreateCommunityStepName.RewardSettings);
-                }}
-              />
+                <CarrotPotForm
+                  initialFormValues={carrotPotSettings}
+                  onFormSubmit={(formData: CarrotPotSchema): void => {
+                    // Perform state update with formData
+                    setCarrotPotSettings(formData);
+
+                    // Move to the next step
+                    setCurrentStepName(
+                      CreateCommunityStepName.UserRolesPermissions
+                    );
+                  }}
+                  moveToPrevStep={() => {
+                    setCurrentStepName(CreateCommunityStepName.RewardSettings);
+                  }}
+                />
+              </div>
             )}
             {currentStepName ===
               CreateCommunityStepName.UserRolesPermissions && (
-              <UserRolesAndPermissionsForm
-                initialFormValues={permissions}
-                onFormSubmit={(formData: AdminSettingsSchema): void => {
-                  // Perform state update with formData
-                  setPermissions(formData);
+              <div className="p-6 border border-b-0">
+                <CreateCommnityHeader
+                  heading="User Roles and Permissions"
+                  subHeading=" Assign roles and define permissions within the community."
+                  stepText="Step 5/6"
+                  stepPercent="80%"
+                  stepValue={80}
+                />
 
-                  // Move to the next step
-                  setCurrentStepName(CreateCommunityStepName.FinalReview);
-                }}
-                moveToPrevStep={() => {
-                  setCurrentStepName(
-                    CreateCommunityStepName.ConfigureCarrotPot
-                  );
-                }}
-              />
+                <UserRolesAndPermissionsForm
+                  initialFormValues={permissions}
+                  onFormSubmit={(formData: AdminSettingsSchema): void => {
+                    // Perform state update with formData
+                    setPermissions(formData);
+
+                    // Move to the next step
+                    setCurrentStepName(CreateCommunityStepName.FinalReview);
+                  }}
+                  moveToPrevStep={() => {
+                    setCurrentStepName(
+                      CreateCommunityStepName.ConfigureCarrotPot
+                    );
+                  }}
+                />
+              </div>
             )}
             {currentStepName === CreateCommunityStepName.FinalReview && (
-              <FinalReviewForm
-                basicDetails={basicDetails}
-                rewardSettings={rewardSettings}
-                protocolConfiguration={protocolConfiguration}
-                moveToPrevStep={() => {
-                  setCurrentStepName(
-                    CreateCommunityStepName.UserRolesPermissions
-                  );
-                }}
-                onSubmit={onSubmit}
-                isLoading={isLoading}
-              />
+              <div className="p-6 border border-b-0">
+                <CreateCommnityHeader
+                  heading="Final Review"
+                  subHeading="Assign roles and define permissions within the community."
+                  stepText="Step 6/6"
+                  stepPercent="100%"
+                  stepValue={100}
+                />
+                <FinalReviewForm
+                  basicDetails={basicDetails}
+                  rewardSettings={rewardSettings}
+                  protocolConfiguration={protocolConfiguration}
+                  moveToPrevStep={() => {
+                    setCurrentStepName(
+                      CreateCommunityStepName.UserRolesPermissions
+                    );
+                  }}
+                  onSubmit={onSubmit}
+                  isLoading={isLoading}
+                />
+              </div>
             )}
           </div>
         </div>

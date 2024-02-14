@@ -1,3 +1,5 @@
+"use client";
+
 import { Input } from "@/components/ui/input";
 import { AccordionList } from "./Accordion";
 import { rewardAccordionItems } from "./createCommunityData";
@@ -8,12 +10,12 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/Progress";
 
 export default function RewardsSettingsForm({
   initialFormValues,
   onFormSubmit,
   moveToPrevStep,
+  withStep = true,
 }: FormProps<RewardSettingsSchema>) {
   const {
     register,
@@ -39,43 +41,25 @@ export default function RewardsSettingsForm({
     };
     onFormSubmit(numericData);
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col w-full gap-4 p-6 border border-b-0 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
-        <div className="flex flex-col lg:flex-row items-center justify-between border-b w-full">
-          <div className="flex flex-col w-full  pb-4 lg:col-span-2">
-            <p className="text-base font-semibold leading-9 text-foreground">
-              Reward Settings
-            </p>
-            <p className="text-sm leading-6">
-              Manage the task reward for your community members.
-            </p>
-          </div>
-          <div className="flex flex-col pt-[10px] md:justify-between w-full pb-4 lg:pb-0 lg:w-[160px]">
-            <div className="flex justify-between text-sm text-muted-foreground">
-              <p>Step 3/6</p> <p>40%</p>
-            </div>
-            <div className="py-1.5">
-              <Progress value={40} className="w-full h-2" />
-            </div>
-          </div>
-        </div>
-
+      <div className="flex flex-col w-full gap-4 rounded-b-none rounded-lg md:md:h-[640px] 2xl:h-[760px] lg:">
         <div className="h-full overflow-hidden">
-          <div className="h-full flex flex-col md:flex-row gap-8">
+          <div className="flex flex-col h-full gap-8 md:flex-row">
             <div className="flex-1 space-y-6">
               <div>
-                <div className="mt-2 grid grid-cols-1 md:grid-cols-1 xl:grid-cols-2 gap-4 max-w-md">
+                <div className="grid max-w-md grid-cols-1 gap-4 mt-2 md:grid-cols-1 xl:grid-cols-2">
                   <div className="relative w-40 space-y-1">
                     <span className="text-sm">Proposal Reward</span>
                     <Input
                       placeholder="0"
-                      className=" pr-2"
+                      className="pr-2 "
                       {...register("proposalReward", {
                         valueAsNumber: true,
                       })}
                     />
-                    <p className="absolute right-2 top-1/2 text-sm text-muted-foreground">
+                    <p className="absolute text-sm right-2 top-1/2 text-muted-foreground">
                       %
                     </p>
                     {errors.proposalReward?.message && (
@@ -88,12 +72,12 @@ export default function RewardsSettingsForm({
                     <span className="text-sm">Prioritization Reward</span>
                     <Input
                       placeholder="0"
-                      className=" pr-2"
+                      className="pr-2 "
                       {...register("prioritizationReward", {
                         valueAsNumber: true,
                       })}
                     />
-                    <p className="absolute right-2 top-1/2 text-sm text-muted-foreground">
+                    <p className="absolute text-sm right-2 top-1/2 text-muted-foreground">
                       %
                     </p>
                     {errors.prioritizationReward?.message && (
@@ -106,12 +90,12 @@ export default function RewardsSettingsForm({
                     <span className="text-sm">Validation Reward</span>
                     <Input
                       placeholder="0"
-                      className=" pr-2"
+                      className="pr-2 "
                       {...register("validationReward", {
                         valueAsNumber: true,
                       })}
                     />
-                    <p className="absolute right-2 top-1/2 text-sm text-muted-foreground">
+                    <p className="absolute text-sm right-2 top-1/2 text-muted-foreground">
                       %
                     </p>
                     {errors.validationReward?.message && (
@@ -124,12 +108,12 @@ export default function RewardsSettingsForm({
                     <span className="text-sm">Claim Stake Amount</span>
                     <Input
                       placeholder="100"
-                      className=" pr-2"
+                      className="pr-2 "
                       {...register("claimStakeAmount", {
                         valueAsNumber: true,
                       })}
                     />
-                    <p className="absolute right-2 top-1/2 text-sm text-muted-foreground">
+                    <p className="absolute text-sm right-2 top-1/2 text-muted-foreground">
                       %
                     </p>
                     {errors.claimStakeAmount?.message && (
@@ -145,18 +129,19 @@ export default function RewardsSettingsForm({
           </div>
         </div>
       </div>
-      <div className=" flex w-full p-6 py-4 pb-6 rounded-lg rounded-t-none border">
-        <div className="mx-auto flex gap-2 justify-start">
+      <div className="flex w-full p-6 py-4 pb-6 border rounded-lg rounded-t-none ">
+        <div className="flex justify-start gap-2 mx-auto">
           <Button
             variant="outline"
             className="w-[100px]"
-            onClick={moveToPrevStep}
+            onClick={withStep ? moveToPrevStep : () => {}}
             type="button"
           >
-            Back
-          </Button>{" "}
+            {withStep ? "Back" : "Cancel"}
+          </Button>
+
           <Button type="submit" className="w-[100px]">
-            Next
+            {withStep ? "Next" : "Save"}
           </Button>
         </div>
       </div>

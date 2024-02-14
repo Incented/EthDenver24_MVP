@@ -14,7 +14,7 @@ const MemberManagementTopCard: FC<MemberManagementTopCardProps> = ({
   Icon,
 }) => {
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
         <div className="flex items-center justify-between">
           <h1 className="text-2xl">{value}</h1>

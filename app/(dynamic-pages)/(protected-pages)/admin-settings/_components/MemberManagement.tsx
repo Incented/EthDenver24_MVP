@@ -26,6 +26,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import Pagination from "@/components/ui/Pagination";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface MemberManagementProps {}
 
@@ -63,16 +64,19 @@ const MemberManagement: FC<MemberManagementProps> = ({}) => {
           <Button>Save</Button>
         </div>
       </div>
-      <ul className="grid gap-4 mb-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {[...Array(4)].map((arr, i) => (
-          <MemberManagementTopCard
-            value="122"
-            text="Total Members"
-            Icon={Users}
-            key={i}
-          />
-        ))}
-      </ul>
+      <ScrollArea className="w-full">
+        <ul className="flex gap-4">
+          {[...Array(4)].map((arr, i) => (
+            <MemberManagementTopCard
+              value="122"
+              text="Total Members"
+              Icon={Users}
+              key={i}
+            />
+          ))}
+        </ul>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
       <div className="flex items-center justify-between mb-4">
         <h1 className="font-semibold">All Members</h1>
         <Button>
