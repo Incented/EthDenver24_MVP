@@ -33,7 +33,13 @@ const formSchema = z.object({
   description: z.string().min(5, {
     message: "Description must be at least 5 characters.",
   }),
-  link: z.string().min(5, {
+  link1: z.string().min(5, {
+    message: "Provide a valid Link.",
+  }),
+  link2: z.string().min(5, {
+    message: "Provide a valid Link.",
+  }),
+  link3: z.string().min(5, {
     message: "Provide a valid Link.",
   }),
   image: z.string().optional(),
@@ -41,11 +47,22 @@ const formSchema = z.object({
 });
 
 const AddContribution: FC<AddContributionProps> = ({}) => {
+  const [addedLink, setAddedLink] = useState<any[]>([]);
+  const [linkNum, setLinkNum] = useState<number>(2);
+
+  function handleAddLink(link: string) {
+    if (addedLink.length === 2) return;
+    setLinkNum((pre) => (pre += 1));
+    setAddedLink((pre) => [...pre, link]);
+  }
+  console.log(addedLink);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       description: "",
-      link: "",
+      link1: "",
+      link2: "",
+      link3: "",
       image: "",
     },
   });
@@ -175,24 +192,46 @@ const AddContribution: FC<AddContributionProps> = ({}) => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="link"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Add Link(s)</FormLabel>
-                    <FormControl>
-                      <div className="flex gap-2">
+              {addedLink.map((link, i) => (
+                <FormField
+                  key={i}
+                  control={form.control}
+                  name={link}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Add Link(s)</FormLabel>
+                      <FormControl>
                         <Input {...field} placeholder="https://" />
-                        <Button type="button" size="icon" variant="outline">
-                          <Plus />
-                        </Button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
+              <div className="flex gap-2">
+                <FormField
+                  control={form.control}
+                  name="link1"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Add Link(s)</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="https://" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  onClick={() => handleAddLink(`link${linkNum}`)}
+                  type="button"
+                  size="icon"
+                  variant="outline"
+                  className="mt-8"
+                >
+                  <Plus />
+                </Button>
+              </div>
               <Button className="w-full" type="submit">
                 Submit
               </Button>

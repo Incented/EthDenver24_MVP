@@ -1,7 +1,3 @@
-"use client";
-
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   Table,
@@ -11,8 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { File, User } from "lucide-react";
 import { FC } from "react";
+import Contribution from "./Contribution";
 
 interface ContributionTableProps {}
 
@@ -48,43 +44,10 @@ const ContributionTable: FC<ContributionTableProps> = ({}) => {
               </TableCell>
             </TableRow>
           ) : (
-            <TableRow>
-              <TableCell className="px-6">
-                Try to calculate the EXE fee...
-              </TableCell>
-              <TableCell className="">
-                <div className="flex items-center gap-1">
-                  <Avatar>
-                    <AvatarImage src="/assets/avatar_1.jpg" />
-                  </Avatar>
-                  <p>Randy Dias</p>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="flex items-center justify-center gap-1">
-                  <File />
-                  <p className="text-lg text-primary">3</p>
-                </div>
-              </TableCell>
-              <TableCell className="">
-                <div className="flex items-center justify-center gap-1">
-                  <User />
-                  <p className="text-lg text-primary">3</p>
-                </div>
-              </TableCell>
-              <TableCell className="text-center">
-                <div className="flex justify-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-foreground"
-                  >
-                    View Details
-                  </Button>
-                  <Button size="sm">Validate</Button>
-                </div>
-              </TableCell>
-            </TableRow>
+            <>
+              <Contribution />
+              <Contribution />
+            </>
           )}
         </TableBody>
       </Table>
