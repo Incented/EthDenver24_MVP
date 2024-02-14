@@ -2,18 +2,19 @@
 
 import { Editor } from "@tiptap/react";
 
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   Bold,
   ChevronDown,
   Code,
+  ImageIcon,
   Italic,
   PaintBucket,
   Plus,
   Strikethrough,
+  Table as TableIcon,
   Underline,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Toggle } from "../ui/toggle";
 import {
   DropdownMenu,
@@ -25,6 +26,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { ColorSelect } from "./components/color-selector-select";
+import Table from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
+import { startImageUpload } from "./plugins/upload-images";
+import { CommandProps } from "./extensions/slash-command";
 
 interface ToolbarProps {
   editor: Editor | null;
@@ -34,6 +50,36 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
   if (!editor) {
     return null;
   }
+
+  const headings = [
+    {
+      name: "Paragraph",
+      command: () =>
+        editor.chain().focus().toggleNode("paragraph", "paragraph").run(),
+      // I feel like there has to be a more efficient way to do this – feel free to PR if you know how!
+      isActive: () =>
+        editor.isActive("paragraph") &&
+        !editor.isActive("bulletList") &&
+        !editor.isActive("orderedList"),
+    },
+    {
+      name: "Heading 1",
+      command: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
+      isActive: () => editor.isActive("heading", { level: 1 }),
+    },
+    {
+      name: "Heading 2",
+      command: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
+      isActive: () => editor.isActive("heading", { level: 2 }),
+    },
+    {
+      name: "Heading 3",
+      command: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
+      isActive: () => editor.isActive("heading", { level: 3 }),
+    },
+  ];
+
+  const [isColorSelectorOpen, setIsColorSelectorOpen] = useState(false);
 
   return (
     <div className="flex flex-wrap items-center px-2 py-1 space-x-2 border-b-2">
@@ -51,19 +97,27 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
           <DropdownMenuItem>Select 4</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center gap-2">
-          <p className="text-xs">h1</p>
-          <ChevronDown className="w-4 h-4" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem> h2</DropdownMenuItem>
-          <DropdownMenuItem>h3</DropdownMenuItem>
-          <DropdownMenuItem>h4</DropdownMenuItem>
-          <DropdownMenuItem>h5</DropdownMenuItem>
-          <DropdownMenuItem>h6</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Select
+        onValueChange={(value) => {
+          const selectedHeading = headings.find(
+            (heading) => heading.name === value
+          );
+          selectedHeading?.command();
+        }}
+      >
+        <SelectTrigger className="flex items-center w-fit gap-2 border-none">
+          <SelectValue defaultValue="Paragraph" placeholder="Paragraph" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {headings.map((heading, index) => (
+              <SelectItem key={index} value={heading.name}>
+                {heading.name}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
 
       <Separator orientation="vertical" className="h-8" />
 
@@ -93,7 +147,7 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
       <Toggle
         size="sm"
         pressed={editor.isActive("strike")}
-        onPressedChange={() => editor.commands.toggleUnderline()}
+        onPressedChange={() => editor.commands.toggleStrike()}
       >
         <Strikethrough size={16} />
       </Toggle>
@@ -104,6 +158,8 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
       >
         <Code size={16} />
       </Toggle>
+
+      <ColorSelect editor={editor} />
       <Toggle size="sm">
         <div className="relative">
           <PaintBucket size={16} />
@@ -283,6 +339,53 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
           <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />
         </svg>
       </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("table")}
+        onClick={() =>
+          editor
+            .chain()
+            .focus()
+            .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+            .run()
+        }
+      >
+        <TableIcon size={16} />
+      </Toggle>
+
+      <div
+        className="hover:bg-muted p-2 flex items-center justify-center rounded-md"
+        onClick={() => {
+          if (!editor) return;
+          const range = {
+            from: editor.view.state.selection.from,
+            to: editor.view.state.selection.to,
+          };
+          editor.chain().focus().deleteRange(range).run();
+          // upload image
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = "image/*";
+          input.onchange = async () => {
+            if (input.files?.length) {
+              const file = input.files[0];
+              const pos = editor.view.state.selection.from;
+              startImageUpload(file, editor.view, pos);
+            }
+          };
+          input.click();
+          // input.multiple = true; // Allow multiple file selection
+          // input.onchange = async () => {
+          //   if (input.files?.length) {
+          //     const filesArray = Array.from(input.files);
+          //     setDescriptionImages(filesArray); // Pass the array of files to setDescriptionImages
+          //   }
+          // };
+          // input.click();
+        }}
+      >
+        <ImageIcon size={16} />
+      </div>
 
       <DropdownMenu>
         <DropdownMenuTrigger className="flex items-center gap-2">

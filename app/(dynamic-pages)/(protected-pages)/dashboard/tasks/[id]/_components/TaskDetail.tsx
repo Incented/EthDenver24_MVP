@@ -1,4 +1,3 @@
-"use client";
 import {
   CarrotStrikIcon,
   CarrotStrikIconDark,
@@ -25,6 +24,7 @@ import ContributionTable from "./ContributionTable";
 import Image from "next/image";
 
 interface TaskDetailProps {
+  id: string;
   taskTitle?: string;
   taskDescription?: string;
   taskStatus?: "New Task" | "In Progress" | "Prioritized";
@@ -35,7 +35,8 @@ interface TaskDetailProps {
   efforts?: string;
   imageUrl?: string;
 }
-const TaskDetail: FC<TaskDetailProps> = ({
+const TaskDetail: FC<TaskDetailProps> = async ({
+  id,
   taskTitle = "Generate a Landing Page Design for Shoe brand called “Walkers”",
   taskDescription = "The brand “Walkers” is looking for a redesign of their landing page. The current page can be found here at walker.com. They are looking for a more whimsical design that highlights their super comfy shoes. Include a 3D rendering of their new shoe design (link to shoe) that floats on the hero section.",
   taskStatus = "New Task",
@@ -55,6 +56,7 @@ const TaskDetail: FC<TaskDetailProps> = ({
   } else {
     taskStatusBg = "bg-black";
   }
+
   return (
     <div className="flex gap-4 mt-4">
       <section className="flex-1">

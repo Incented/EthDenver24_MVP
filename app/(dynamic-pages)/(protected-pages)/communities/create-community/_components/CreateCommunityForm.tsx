@@ -27,10 +27,7 @@ import CarrotPotForm from "./CarrotPotForm";
 import CreateCommunityStep from "./CreateCommunityStep";
 import { FinalReviewForm } from "./FinalReviewForm";
 import { useToastMutation } from "@/hooks/useToastMutation";
-import {
-  createOrganization,
-  createPublicOrganization,
-} from "@/data/user/organizations";
+import { createPublicOrganization } from "@/data/user/organizations";
 import { addPrivateInfoForOrganization } from "@/data/admin/organizations";
 import BasicDetailsForm from "./BasicDetailsForm";
 
