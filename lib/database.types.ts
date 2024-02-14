@@ -945,30 +945,51 @@ export type Database = {
       tasks: {
         Row: {
           created_at: string;
+          description: string | null;
+          efforts: number | null;
+          files: Json | null;
           id: string;
           name: string;
           organization_id: string;
           project_status: Database["public"]["Enums"]["project_status"];
+          rewards: number | null;
+          task_status: Database["public"]["Enums"]["task_status"] | null;
+          task_types: Json | null;
           team_id: number | null;
           updated_at: string;
+          user_id: string | null;
         };
         Insert: {
           created_at?: string;
+          description?: string | null;
+          efforts?: number | null;
+          files?: Json | null;
           id?: string;
           name: string;
           organization_id: string;
           project_status?: Database["public"]["Enums"]["project_status"];
+          rewards?: number | null;
+          task_status?: Database["public"]["Enums"]["task_status"] | null;
+          task_types?: Json | null;
           team_id?: number | null;
           updated_at?: string;
+          user_id?: string | null;
         };
         Update: {
           created_at?: string;
+          description?: string | null;
+          efforts?: number | null;
+          files?: Json | null;
           id?: string;
           name?: string;
           organization_id?: string;
           project_status?: Database["public"]["Enums"]["project_status"];
+          rewards?: number | null;
+          task_status?: Database["public"]["Enums"]["task_status"] | null;
+          task_types?: Json | null;
           team_id?: number | null;
           updated_at?: string;
+          user_id?: string | null;
         };
         Relationships: [];
       };
@@ -1461,6 +1482,16 @@ export type Database = {
         | "past_due"
         | "unpaid"
         | "paused";
+      task_status:
+        | "draft"
+        | "published"
+        | "prioritized"
+        | "claimed"
+        | "in_progress"
+        | "in_review"
+        | "completed"
+        | "failed"
+        | "expired";
     };
     CompositeTypes: {
       [_ in never]: never;

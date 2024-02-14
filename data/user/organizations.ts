@@ -220,7 +220,7 @@ export async function getAllOrganizationNames() {
 
   const { data, error } = await supabaseClient
     .from("organizations")
-    .select("title");
+    .select("title, id");
   if (error) {
     throw error;
   }

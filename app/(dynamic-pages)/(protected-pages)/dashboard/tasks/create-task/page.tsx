@@ -1,4 +1,4 @@
-import CreateTaskForm from "@/app/(dynamic-pages)/(protected-pages)/dashboard/(task)/edit-proposal/components/CreateTaskForm";
+import CreateTaskForm from "@/app/(dynamic-pages)/(protected-pages)/dashboard/tasks/create-task/components/CreateTaskForm";
 import GoBack from "@/components/ui/GoBack";
 import { getAllNamesOfTaskTypes } from "@/data/user/tasks";
 import {
@@ -7,7 +7,7 @@ import {
 } from "@/data/user/organizations";
 
 export default async function CreateTask() {
-  const [taskTypes, communityNames] = await Promise.all([
+  const [taskTypes, communities] = await Promise.all([
     getAllNamesOfTaskTypes(),
     getAllOrganizationNames(),
   ]);
@@ -20,7 +20,7 @@ export default async function CreateTask() {
         Edit proposal
       </h1>
 
-      <CreateTaskForm taskTypes={taskTypes} communityNames={communityNames} />
+      <CreateTaskForm taskTypes={taskTypes} communities={communities} />
     </main>
   );
 }

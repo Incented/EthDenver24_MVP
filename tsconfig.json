@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/(dynamic-pages)/(protected-pages)/dashboard/(task)/task-details"
+    "app/(dynamic-pages)/(protected-pages)/dashboard/tasks/task-details"
   ],
   "exclude": ["node_modules"]
 }

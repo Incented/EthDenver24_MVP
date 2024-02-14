@@ -374,6 +374,14 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
             }
           };
           input.click();
+          // input.multiple = true; // Allow multiple file selection
+          // input.onchange = async () => {
+          //   if (input.files?.length) {
+          //     const filesArray = Array.from(input.files);
+          //     setDescriptionImages(filesArray); // Pass the array of files to setDescriptionImages
+          //   }
+          // };
+          // input.click();
         }}
       >
         <ImageIcon size={16} />

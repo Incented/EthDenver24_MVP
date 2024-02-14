@@ -5,7 +5,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import slugify from "slugify";
 import fs from "fs";
 import util from "util";
-import { supabaseUserClientComponentClient } from "@/supabase-clients/user/supabaseUserClientComponentClient";
 import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
 export const config = {
   api: {
