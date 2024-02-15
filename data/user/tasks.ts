@@ -92,3 +92,18 @@ export const createDraftTaskAction = async ({
   revalidatePath(`/dashboard/tasks/${task.id}`);
   return task;
 };
+
+export const getTaskById = async (taskId: string) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data: task, error } = await supabase
+    .from("tasks")
+    .select("*")
+    .eq("id", taskId)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return task;
+};
