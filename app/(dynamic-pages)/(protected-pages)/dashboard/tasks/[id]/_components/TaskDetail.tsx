@@ -27,7 +27,6 @@ import Pagination from "@/components/ui/Pagination";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import PriDepriButton from "./PriDepriButton";
 import ContributionTable from "./ContributionTable";
 import Image from "next/image";
 import AddContribution from "./AddContribution";
