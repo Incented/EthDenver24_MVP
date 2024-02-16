@@ -3,7 +3,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./tooltip";
+} from "@/components/ui/tooltip";
 
 interface TooltipWrapperProps {
   tooltipTrigger: React.ReactNode;
@@ -17,12 +17,7 @@ export const TooltipWrapper: React.FC<TooltipWrapperProps> = ({
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger
-          asChild
-          // className="cursor-pointer"
-        >
-          {tooltipTrigger}
-        </TooltipTrigger>
+        <TooltipTrigger asChild>{tooltipTrigger}</TooltipTrigger>
         <TooltipContent>{tooltipContent}</TooltipContent>
       </Tooltip>
     </TooltipProvider>

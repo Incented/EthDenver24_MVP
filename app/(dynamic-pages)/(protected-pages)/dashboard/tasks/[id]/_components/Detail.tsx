@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { Info } from "lucide-react";
-import { TooltipWrapper } from "@/components/ui/tooltip";
 import TaksAttributes from "@/components/presentational/Tasks/TaksAttributes";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Attachment } from "./Attachment";
+import { TooltipWrapper } from "@/components/TooltipWrapper";
 interface DetailProps {
   taskTitle: string;
   taskDescription: string | null | undefined;
@@ -55,16 +55,22 @@ const Detail: FC<DetailProps> = ({
       <h1 className="mb-6 text-2xl font-semibold">{taskTitle}</h1>
       {/* TODO: re-think a way for height of image style - h-[165px] in the div below */}
       <div className="relative w-full h-[165px] mb-6 rounded-md overflow-hidden">
-        <Image
+        {/* <Image
           src={imageUrl}
           alt={imageUrl}
           fill
           className="object-cover object-center"
-        />
+        /> */}
+        <div
+          className="h-full w-full"
+          style={{
+            backgroundImage: `url(${imageUrl})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        ></div>
       </div>
-      <p className="mb-6 text-sm font-normal leading-6 text-gray-500">
-        {taskDescription}
-      </p>
+      <div className="mb-6 text-gray-500">{taskDescription}</div>
       {
         <div className="w-64 mb-6">
           <TaksAttributes
