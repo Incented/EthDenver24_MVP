@@ -1,3 +1,4 @@
+import Detail from "./Detail";
 import {
   CarrotStrikIcon,
   CarrotStrikIconDark,
@@ -78,68 +79,16 @@ const TaskDetail: FC<TaskDetailProps> = async ({
             {taskStatus}
           </div>
 
-          <div className="p-8 mt-6">
-            <div className="flex items-center gap-2 mb-6 text-sm">
-              <p>{rabbitHole}</p>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild className="cursor-pointer">
-                    <Info size={18} />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <div className="">
-                      <p className="mb-2 text-sm">Community Details</p>
-                      <p className="mb-1 text-xs">
-                        Prioritization Reward Percentage 10%
-                      </p>
-                      <p className="text-xs">
-                        Validation Reward Percentage 10%
-                      </p>
-                    </div>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <Badge className="mb-4 text-xs text-black bg-white border border-gray-200 shadow-sm hover:bg-white">
-              {taskType}
-            </Badge>
-            <p className="text-xs text-gray-400">Posted 5 days ago</p>
-            <h1 className="mb-6 text-2xl font-semibold">{taskTitle}</h1>
-            <div className="relative w-full h-[165px] mb-6 rounded-md overflow-hidden">
-              <Image
-                src={imageUrl}
-                alt={imageUrl}
-                fill
-                className="object-cover object-center"
-              />
-            </div>
-            <p className="mb-6 text-sm font-normal leading-6 text-gray-500">
-              {taskDescription}
-            </p>
-            <div className="w-64 mb-6">
-              <TaksAttributes
-                rewards={rewards}
-                efforts={efforts}
-                deadline={deadLine}
-              />
-            </div>
-
-            <div className="">
-              <h4 className="mb-2 text-sm font-medium ">Attachment files</h4>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 px-2 py-2.5 border rounded-md w-fit">
-                  <File size={16} />
-                  <samp className="text-xs">description_123.pdf</samp>
-                  <MoreVertical size={16} className="ml-2" />
-                </div>
-                <div className="flex items-center gap-1 px-2 py-2.5 border rounded-md w-fit">
-                  <File size={16} />
-                  <samp className="text-xs">description_123.pdf</samp>
-                  <MoreVertical size={16} className="ml-2" />
-                </div>
-              </div>
-            </div>
-          </div>
+          <Detail
+            taskTitle={taskTitle}
+            taskDescription={taskDescription}
+            taskType={taskType}
+            rabbitHole={rabbitHole}
+            imageUrl={imageUrl}
+            deadLine={deadLine}
+            rewards={rewards}
+            efforts={efforts}
+          />
         </Card>
 
         <div className="mb-4">

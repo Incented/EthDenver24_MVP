@@ -11,6 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Detail from "./Detail";
 
 import { cn } from "@/lib/utils";
 import {
@@ -91,67 +92,16 @@ const DraftTaskDetail: FC<TaskDetailProps> = async ({ id }: { id: string }) => {
       <section className="md:col-span-2 md:8 md:gap-6 xl:col-span-3">
         <Card className="relative mb-4 overflow-hidden border-none bg-muted">
           <div className="mt-4 bg-secondary text-center rounded-md">Draft</div>
-          <div className="p-8 mt-6">
-            <div className="flex items-center gap-2 mb-6 text-sm">
-              <p className=" text-foreground">{rabbitHole}</p>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild className="cursor-pointer">
-                    <Info size={18} />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <div className="">
-                      <p className="mb-2 text-sm">Community Details</p>
-                      <p className="mb-1 text-xs">
-                        Prioritization Reward Percentage 10%
-                      </p>
-                      <p className="text-xs">
-                        Validation Reward Percentage 10%
-                      </p>
-                    </div>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <Badge className="mb-4 text-xs text-foreground bg-transparent border border-border shadow-sm hover:bg-background">
-              {taskType}
-            </Badge>
-            <h1 className="mb-6 text-2xl font-semibold">{task.name}</h1>
-            <div className="relative w-full h-[165px] mb-6 rounded-md overflow-hidden">
-              <Image
-                src={featuredImageUrl}
-                alt={featuredImageAlt}
-                fill
-                className="object-cover object-center"
-              />
-            </div>
-            <p className="mb-6 text-sm font-normal leading-6 text-gray-500">
-              {task.description}
-            </p>
-            <div className="w-64 mb-6">
-              <TaksAttributes
-                rewards={String(task.rewards) ?? undefined}
-                efforts={String(task.efforts) ?? undefined}
-                deadline={"3 days 7 hours"}
-              />
-            </div>
-
-            <div className="">
-              <h4 className="mb-2 text-sm font-medium ">Attachment files</h4>
-              <div className="space-y-2 md:flex items-center md:space-y-0 md:gap-2">
-                <div className="flex items-center gap-1 px-2 py-2.5 border rounded-md w-fit">
-                  <File size={16} />
-                  <samp className="text-xs">description_123.pdf</samp>
-                  <MoreVertical size={16} className="ml-2" />
-                </div>
-                <div className="flex items-center gap-1 px-2 py-2.5 border rounded-md w-fit">
-                  <File size={16} />
-                  <samp className="text-xs">description_123.pdf</samp>
-                  <MoreVertical size={16} className="ml-2" />
-                </div>
-              </div>
-            </div>
-          </div>
+          <Detail
+            taskTitle={task.name}
+            taskDescription={task.description}
+            taskType={taskType}
+            rabbitHole={rabbitHole}
+            imageUrl={featuredImageUrl}
+            deadLine={"3 days 7 hours"}
+            rewards={String(task.rewards) ?? undefined}
+            efforts={String(task.efforts) ?? undefined}
+          />
         </Card>
       </section>
     </div>
