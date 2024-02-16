@@ -71,36 +71,29 @@ const DraftTaskDetail: FC<TaskDetailProps> = async ({ id }: { id: string }) => {
   const featuredImageAlt = firstFile?.name ?? task.name;
   const featuredImageUrl = firstFile?.url ?? imageUrl;
   return (
-    <div className="w-full gap-4 mt-4">
-      <div className="flex items-center justify-between">
-        <h1 className="col-span-2 font-medium row-start-2 mt-4 text-3xl md:col-span-1">
+    <div className="w-full space-y-4 mt-4">
+      <div className="space-y-[10px] md:gap-0 md:flex md:items-center md:justify-between">
+        <h1 className="col-span-2 font-medium rounded-md row-start-2 mt-4 text-3xl md:col-span-1">
           Draft Preview
         </h1>
-        <div className="ml-auto">
-          <Button className="w-32">Join</Button>
+        <div className="ml-auto flex justify-between md:gap-2">
+          <Button className="px-2 py-3 " variant={"outline"}>
+            Edit Draft Proposal
+          </Button>
+          <Button className="w-32">Submit Proposal</Button>
         </div>
       </div>
-      <div className="mt-4 bg-gray-200 text-center">Draft</div>
 
-      {/* Placeholder content taken from figma design */}
-      <div>
+      {/* <div>
         <p className="text-sm text-muted-foreground">{task.name}</p>
-      </div>
+    </div> */}
 
-      <section className="md:col-span-2 xl:col-span-3">
-        <Card className="relative mb-4 overflow-hidden border">
-          <div
-            className={cn(
-              "absolute top-0 left-0 px-6 py-1 text-sm text-white rounded-br-md ",
-              "bg-black"
-            )}
-          >
-            Draft
-          </div>
-
+      <section className="md:col-span-2 md:8 md:gap-6 xl:col-span-3">
+        <Card className="relative mb-4 overflow-hidden border-none bg-muted">
+          <div className="mt-4 bg-secondary text-center rounded-md">Draft</div>
           <div className="p-8 mt-6">
             <div className="flex items-center gap-2 mb-6 text-sm">
-              <p>{rabbitHole}</p>
+              <p className=" text-foreground">{rabbitHole}</p>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild className="cursor-pointer">
@@ -120,10 +113,9 @@ const DraftTaskDetail: FC<TaskDetailProps> = async ({ id }: { id: string }) => {
                 </Tooltip>
               </TooltipProvider>
             </div>
-            <Badge className="mb-4 text-xs text-black bg-white border border-gray-200 shadow-sm hover:bg-white">
+            <Badge className="mb-4 text-xs text-foreground bg-transparent border border-border shadow-sm hover:bg-background">
               {taskType}
             </Badge>
-            <p className="text-xs text-gray-400">Posted 5 days ago</p>
             <h1 className="mb-6 text-2xl font-semibold">{task.name}</h1>
             <div className="relative w-full h-[165px] mb-6 rounded-md overflow-hidden">
               <Image
@@ -146,7 +138,7 @@ const DraftTaskDetail: FC<TaskDetailProps> = async ({ id }: { id: string }) => {
 
             <div className="">
               <h4 className="mb-2 text-sm font-medium ">Attachment files</h4>
-              <div className="flex items-center gap-2">
+              <div className="space-y-2 md:flex items-center md:space-y-0 md:gap-2">
                 <div className="flex items-center gap-1 px-2 py-2.5 border rounded-md w-fit">
                   <File size={16} />
                   <samp className="text-xs">description_123.pdf</samp>
@@ -158,78 +150,6 @@ const DraftTaskDetail: FC<TaskDetailProps> = async ({ id }: { id: string }) => {
                   <MoreVertical size={16} className="ml-2" />
                 </div>
               </div>
-            </div>
-          </div>
-        </Card>
-
-        <div className="mb-4">
-          <ContributionTable />
-        </div>
-
-        <Card className="p-8 mb-4 overflow-hidden border-none">
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-lg font-bold ">Discussion</h1>
-            <Button variant="ghost" className="text-primary">
-              <Plus size={16} />
-              Add New Topic
-            </Button>
-          </div>
-          <div className="flex gap-3">
-            <Avatar>
-              <AvatarImage src="/assets/avatar_1.jpg" />
-            </Avatar>
-
-            <Textarea placeholder="Type a new topic here." />
-          </div>
-        </Card>
-      </section>
-
-      <section className="w-full">
-        <div className="flex items-center gap-2 mb-4">
-          <Button className="bg-gray-600 ">Claim</Button>
-          <AddContribution />
-          <Button size="icon" variant="outline">
-            <Settings />
-          </Button>
-        </div>
-        <Card className="p-4 mb-4 ">
-          <h1 className="mb-2 text-lg font-bold">Proposer</h1>
-          <div className="flex items-center gap-[10px]">
-            <Avatar>
-              <AvatarImage src="/assets/avatar_1.jpg" />
-            </Avatar>
-            <p>Randy Dias</p>
-          </div>
-        </Card>
-        <Card className="p-4 mb-4">
-          <h1 className="mb-2 text-lg font-bold">Priority</h1>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center space-x-2">
-              <p>Lower</p>
-              <CarrotStrikIconDark />
-              <p>0</p>
-            </div>
-            <div className="w-[2px] h-5 bg-gray-300" />
-            <div className="flex items-center space-x-2">
-              <p>0</p>
-              <Carrot className="text-primary" />
-              <p>higer</p>
-            </div>
-          </div>
-        </Card>
-        <Card className="p-4 mb-4">
-          <h1 className="mb-2 text-lg font-bold">Validation</h1>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center space-x-2">
-              <p>Rejected</p>
-              <CarrotStrikIconDark />
-              <p>0</p>
-            </div>
-            <div className="w-[2px] h-5 bg-gray-300" />
-            <div className="flex items-center space-x-2">
-              <p>0</p>
-              <Carrot className="text-primary" />
-              <p>Approved</p>
             </div>
           </div>
         </Card>
