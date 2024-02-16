@@ -5,6 +5,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
+  TooltipWrapper,
 } from "@/components/ui/tooltip";
 import TaksAttributes from "@/components/presentational/Tasks/TaksAttributes";
 import { Badge } from "@/components/ui/badge";
@@ -24,26 +25,20 @@ const Detail: FC<DetailProps> = (props) => {
     <div className="p-8 mt-6">
       <div className="flex items-center gap-2 mprops.b-6 text-sm">
         <p>{props.rabbitHole}</p>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild className="cursor-pointer">
-              <Info size={18} />
-            </TooltipTrigger>
-            <TooltipContent>
-              <div className="">
-                <p className="mb-2 text-sm">Community Details</p>
-                <p className="mb-1 text-xs">
-                  Prioritization Reward Percentage 10%
-                </p>
-                <p className="text-xs">Validation Reward Percentage 10%</p>
-              </div>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <TooltipWrapper
+          tooltipTrigger={<Info size={18} className="cursor-pointer" />}
+          tooltipContent={
+            <div>
+              <p className="mb-2 text-sm">Community Details</p>
+              <p className="mb-1 text-xs">
+                Prioritization Reward Percentage 10%
+              </p>
+              <p className="text-xs">Validation Reward Percentage 10%</p>
+            </div>
+          }
+        />
       </div>
-      <Badge className="mb-4 text-xs text-black bg-white border border-gray-200 shadow-sm hover:bg-white">
-        {props.taskType}
-      </Badge>
+      <Badge variant={"outline"}>{props.taskType}</Badge>
       <p className="text-xs text-gray-400">Posted 5 days ago</p>
       <h1 className="mb-6 text-2xl font-semibold">{props.taskTitle}</h1>
       <div className="relative w-full h-[165px] mb-6 rounded-md overflow-hidden">
