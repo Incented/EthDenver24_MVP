@@ -149,7 +149,7 @@ export default function BasicDetailsForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full h-auto">
-      <div className="flex flex-col w-full gap-4 border-b-0 rounded-b-none rounded-lg md:h-[600px] 2xl:h-[760px] overflow-hidden">
+      <div className="flex flex-col w-full gap-4 border-b-0 rounded-b-none rounded-lg md:h-[600px] overflow-hidden">
         <div className="overflow-auto h-fit">
           <div className="w-full overflow-auto">
             <div className="flex flex-col gap-6 mt-2 lg:flex-row">

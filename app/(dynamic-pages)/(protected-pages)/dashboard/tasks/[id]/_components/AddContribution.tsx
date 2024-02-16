@@ -96,8 +96,8 @@ const AddContribution: FC<AddContributionProps> = ({}) => {
   };
   return (
     <Sheet>
-      <SheetTrigger>
-        <Button className="">Contribute</Button>
+      <SheetTrigger className="w-full">
+        <Button className="w-full">Contribute</Button>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
