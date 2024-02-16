@@ -37,7 +37,7 @@ interface TaskDetailProps {
   taskTitle?: string;
   taskDescription?: string;
   taskStatus?: "New Task" | "In Progress" | "Prioritized";
-  taskType?: string;
+  taskTypes?: string[];
   rabbitHole?: string;
   deadLine?: string;
   rewards?: string;
@@ -49,7 +49,7 @@ const TaskDetail: FC<TaskDetailProps> = async ({
   taskTitle = "Generate a Landing Page Design for Shoe brand called “Walkers”",
   taskDescription = "The brand “Walkers” is looking for a redesign of their landing page. The current page can be found here at walker.com. They are looking for a more whimsical design that highlights their super comfy shoes. Include a 3D rendering of their new shoe design (link to shoe) that floats on the hero section.",
   taskStatus = "New Task",
-  taskType = "Constructive",
+  taskTypes = ["Constructive"],
   rabbitHole = "Buan Fund",
   deadLine = "3 days 7hours",
   rewards = "250 carrots",
@@ -82,12 +82,13 @@ const TaskDetail: FC<TaskDetailProps> = async ({
           <Detail
             taskTitle={taskTitle}
             taskDescription={taskDescription}
-            taskType={taskType}
+            taskTypes={taskTypes}
             rabbitHole={rabbitHole}
             imageUrl={imageUrl}
             deadLine={deadLine}
             rewards={rewards}
             efforts={efforts}
+            attachments={[]}
           />
         </Card>
 
