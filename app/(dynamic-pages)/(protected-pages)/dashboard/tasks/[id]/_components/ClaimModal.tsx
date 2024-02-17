@@ -29,7 +29,11 @@ const ClaimModal: FC<ClaimModalProps> = ({}) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Claim this Task to reserver it</DialogTitle>
+          <DialogTitle>Claim</DialogTitle>
+          <DialogDescription>
+            You will stake the full “Claim-Stake” amount to reserve the right to
+            contribute.
+          </DialogDescription>
         </DialogHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -37,7 +41,7 @@ const ClaimModal: FC<ClaimModalProps> = ({}) => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild className="cursor-pointer">
-                  <Info size={18} className="" />
+                  <Info size={14} className="" />
                 </TooltipTrigger>
                 <TooltipContent>
                   <div className="">
@@ -58,11 +62,11 @@ const ClaimModal: FC<ClaimModalProps> = ({}) => {
         </div>
 
         <div className="flex items-center justify-between">
-          <p>$ 560926.30</p>
+          <p className="text-muted-foreground">$ 560926.30</p>
 
           <div className="flex items-center gap-2">
             <Wallet size={20} className="text-primary" />
-            <p>300.00</p>
+            <p className="text-muted-foreground">300.00</p>
           </div>
         </div>
         <Button className="w-full bg-gray-600 hover:bg-gray-700">Claim</Button>
