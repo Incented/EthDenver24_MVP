@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "./dialog";
 import { Input } from "./input";
 import { RadioGroup } from "./radio-group";
 import { Button } from "./button";
