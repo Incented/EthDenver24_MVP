@@ -21,9 +21,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 // import { TipTap } from "./TipTap";
-import { Card } from "../../../../../../../components/ui/card";
-import { Button } from "../../../../../../../components/ui/button";
-import { AddTaskTypeDialog } from "../../../../../../../components/presentational/AddTaskTypeDialog";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { AddTaskTypeDialog } from "@/components/presentational/AddTaskTypeDialog";
 import { createDraftTaskAction, createTaskType } from "@/data/user/tasks";
 import dynamic from "next/dynamic";
 import { File, Upload, XIcon } from "lucide-react";
@@ -32,11 +32,11 @@ import axios from "axios";
 import { useToastMutation } from "@/hooks/useToastMutation";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
+import { Attachment, FilePreview } from "./Attachment";
 
-const TipTap = dynamic(
-  () => import("../../../../../../../components/tip-tap-Editor/TipTap"),
-  { ssr: false }
-);
+const TipTap = dynamic(() => import("@/components/tip-tap-Editor/TipTap"), {
+  ssr: false,
+});
 
 export function CreateTaskForm({
   taskTypes,
@@ -45,19 +45,6 @@ export function CreateTaskForm({
   taskTypes: Array<{ name: string; id: number; slug: string }>;
   communities: Array<{ title: string; id: string }>;
 }) {
-  interface BasicFilePreview {
-    name: string;
-    url: string;
-    path: string;
-  }
-
-  interface ExtendedFilePreview {
-    file: File;
-    previewUrl: string;
-    path: string;
-  }
-
-  type FilePreview = BasicFilePreview | ExtendedFilePreview;
   const [filePreviews, setFilePreviews] = useState<FilePreview[]>([]);
 
   const [taskFileUrls, setTaskFilesUrls] = useState<
@@ -512,30 +499,13 @@ export function CreateTaskForm({
           <div>
             <div className="flex flex-wrap gap-2">
               {filePreviews.map((preview, index) => (
-                <div
-                  key={index}
-                  className="flex w-fit items-center justify-between p-2 border rounded-lg bg-gradient-to-r from-muted to-transparent"
-                >
-                  <button
-                    className="flex items-center space-x-2"
-                    onClick={() => openPreview(preview)}
-                  >
-                    <File
-                      className="w-4 h-4 text-foreground"
-                      aria-hidden="true"
-                    />
-                    <span className="truncate text-sm">
-                      {"file" in preview ? preview.file.name : preview.name}
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteFile(preview.path, index)}
-                    className="text-destructive pl-2"
-                  >
-                    <XIcon className="w-5 h-5" aria-hidden="true" />
-                  </button>
-                </div>
+                <Attachment
+                  key={preview.path}
+                  preview={preview}
+                  openPreview={openPreview}
+                  handleDeleteFile={handleDeleteFile}
+                  index={index}
+                />
               ))}
             </div>
 
