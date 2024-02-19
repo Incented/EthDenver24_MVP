@@ -1,4 +1,3 @@
-"use client";
 import {
   Tooltip,
   TooltipContent,
@@ -12,40 +11,46 @@ import { Card } from "@/components/ui/card";
 import { Carrot, Info } from "lucide-react";
 import { FC } from "react";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { Anchor } from "@/components/Anchor";
 import Image from "next/image";
+import { Enum } from "@/types";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface TaskCardProps {
+  taskId: string;
   taskTitle?: string;
-  taskDescription?: string;
-  taskStatus?: "New Task" | "In Progress" | "Prioritized";
-  taskType?: string;
+  taskCommunity?: string;
+  // taskDescription?: string;
+  taskStatus: Enum<"task_status">;
+  taskType: string[];
   rabbitHole?: string;
   deadLine?: string;
   rewards?: string;
   efforts?: string;
   imageUrl?: string;
   isVertical?: boolean;
+  isPublished?: boolean;
 }
 
 const TaskCard: FC<TaskCardProps> = ({
+  taskId,
   taskTitle = "Buy a trash container",
-  taskDescription = "To eradicate invasive species, reintroduce native species and",
-  taskStatus = "New Task",
-  taskType = "Constructive",
-  rabbitHole = "Buan Fund",
+  // taskDescription = "To eradicate invasive species, reintroduce native species and",
+  taskStatus,
+  taskType,
+  taskCommunity,
   deadLine = "3 days 7hours",
   rewards = "250 carrots",
   efforts = "7 days",
   imageUrl = "/images/task1.jpeg",
   isVertical,
+  isPublished,
 }: TaskCardProps) => {
   let taskStatusBg = "bg-black";
 
-  if (taskStatus === "In Progress") {
-    taskStatusBg = "bg-[#1B7CDF]";
-  } else if (taskStatus === "Prioritized") {
+  if (taskStatus === "in_progress") {
+    taskStatusBg = "bg-blue-500";
+  } else if (taskStatus === "prioritized") {
     taskStatusBg = "bg-primary";
   } else {
     taskStatusBg = "bg-black";
@@ -60,7 +65,11 @@ const TaskCard: FC<TaskCardProps> = ({
               taskStatusBg
             )}
           >
-            {taskStatus}
+            {taskStatus
+              .split("-")
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" ")
+              .replace("_", " ")}
           </div>
           <div className="relative w-[400px] h-full ">
             <Image
@@ -72,7 +81,7 @@ const TaskCard: FC<TaskCardProps> = ({
           </div>
           <div className="relative w-full h-full px-6 py-6 text-foreground">
             <div className="flex items-center gap-2 text-sm">
-              <p className="text-xs font-medium leading-6">{rabbitHole}</p>
+              <p className="text-xs font-medium leading-6">{taskCommunity}</p>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild className="cursor-pointer">
@@ -93,24 +102,39 @@ const TaskCard: FC<TaskCardProps> = ({
               </TooltipProvider>
             </div>
             <div className="mt-2">
-              <div className="flex items-center justify-between w-full my-1">
-                <Badge className="text-xs text-foreground bg-secondary hover:bg-white">
-                  {taskType}
-                </Badge>
-              </div>
+              <ScrollArea className="h-fit max-w-xs">
+                {" "}
+                <div className="flex items-center gap-2 whitespace-nowrap my-1">
+                  {taskType.map((type, index) => (
+                    <Badge
+                      key={index}
+                      className="text-xs text-foreground bg-secondary hover:bg-secondary"
+                    >
+                      {type
+                        .split("-")
+                        .map(
+                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                        )
+                        .join(" ")
+                        .replace("_", " ")}
+                    </Badge>
+                  ))}
+                </div>{" "}
+              </ScrollArea>
+
               <div className="mt-2">
                 <Anchor
-                  href="/dashboard/tasks/id"
+                  href={`/dashboard/tasks/${taskId}`}
                   className="text-base font-semibold leading-7 text-foreground dark:text-white"
                 >
                   {taskTitle}
                 </Anchor>
               </div>
-              <div className="mt-2 ">
+              {/* <div className="mt-2 ">
                 <p className="w-full text-sm text-muted-foreground">
                   {`${taskDescription}`}...
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -134,7 +158,12 @@ const TaskCard: FC<TaskCardProps> = ({
           </div>
         </Card>
       ) : (
-        <Card className="overflow-hidden rounded-lg">
+        <Card className="relative rounded-lg">
+          {!isPublished && (
+            <div className="w-full absolute top-0 z-10 flex justify-center  px-4 py-2 text-xs font-medium text-foreground bg-secondary">
+              Draft
+            </div>
+          )}
           <div
             className={`w-full h-[116px] bg-cover bg-center relative rounded-md`}
           >
@@ -156,12 +185,16 @@ const TaskCard: FC<TaskCardProps> = ({
                   taskStatusBg
                 )}
               >
-                {taskStatus}
+                {taskStatus
+                  .split("-")
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(" ")
+                  .replace("_", " ")}
               </div>
 
               <div className="flex items-center gap-2 text-sm px-6 py-[10px]">
                 <p className="text-xs font-medium leading-6 text-background">
-                  {rabbitHole}
+                  {taskCommunity}
                 </p>
                 <TooltipProvider>
                   <Tooltip>
@@ -184,10 +217,41 @@ const TaskCard: FC<TaskCardProps> = ({
               </div>
               <div className="px-6 ">
                 <div className="flex items-center justify-between w-full mt-4">
-                  <Badge className="text-xs text-foreground bg-background hover:bg-background">
-                    {taskType}
-                  </Badge>
-
+                  <ScrollArea className="h-fit whitespace-no-wrap w-full">
+                    <div className="h-fit flex gap-2 whitespace-nowrap">
+                      {taskType.map((type, index) => (
+                        <Badge
+                          key={index}
+                          className="text-xs text-foreground bg-background hover:bg-background"
+                        >
+                          {type
+                            .split("-")
+                            .map(
+                              (word) =>
+                                word.charAt(0).toUpperCase() + word.slice(1)
+                            )
+                            .join(" ")
+                            .replace("_", " ")}
+                        </Badge>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                  {/* <div className="h-fit flex gap-2 w-full whitespace-nowrap">
+                    {taskType.map((type, index) => (
+                      <Badge
+                        key={index}
+                        className="text-xs text-foreground bg-background hover:bg-background"
+                      >
+                        {type
+                          .split("-")
+                          .map(
+                            (word) =>
+                              word.charAt(0).toUpperCase() + word.slice(1)
+                          )
+                          .join(" ")}
+                      </Badge>
+                    ))}
+                  </div> */}
                   <div className="flex items-center gap-1 ml-auto">
                     <Carrot size={20} />
                     <p className="mr-4">0</p>
@@ -197,7 +261,7 @@ const TaskCard: FC<TaskCardProps> = ({
                 </div>
                 <div className="mt-4">
                   <Anchor
-                    href="/dashboard/task-details"
+                    href={`/dashboard/tasks/${taskId}`}
                     className="text-base font-semibold leading-7 text-foreground"
                   >
                     {taskTitle}
@@ -206,11 +270,11 @@ const TaskCard: FC<TaskCardProps> = ({
               </div>
             </div>
           </div>
-          <div className="px-6 mt-3">
+          {/* <div className="px-6 mt-3">
             <p className="w-full text-sm text-muted-foreground">
               {`${taskDescription.slice(0, 60)}`}...
             </p>
-          </div>
+          </div> */}
 
           <div className="mx-6 my-6 mt-4">
             <TaksAttributes

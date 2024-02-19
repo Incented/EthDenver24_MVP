@@ -12,8 +12,12 @@ import SelectCommunity from "./_components/SelectCommunity";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { CardLayoutSwitcher } from "@/components/ui/card-layout-switcher";
 import { Anchor } from "@/components/Anchor";
+import { getAllTasks, getAllTasksOfUser } from "@/data/user/tasks";
+import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 
-const DashboardPage = () => {
+const DashboardPage = async () => {
+  const { id } = await serverGetLoggedInUser();
+  const tasks = await getAllTasksOfUser(id);
   return (
     <main className="px-8 pb-40 ">
       <h1 className="mt-8 text-3xl font-medium">My Home</h1>
@@ -50,7 +54,7 @@ const DashboardPage = () => {
           </Anchor>
         </div>
 
-        <TaskTab />
+        <TaskTab tasks={tasks} />
       </div>
 
       {/* <div className="mt-10">

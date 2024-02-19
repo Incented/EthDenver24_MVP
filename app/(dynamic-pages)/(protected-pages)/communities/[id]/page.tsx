@@ -27,6 +27,8 @@ import {
   rewardSettingsSchema,
 } from "../create-community/_components/createCommunitySchema";
 import { TeamMembersTableProps } from "@/types";
+import { CardLayoutSwitcher } from "@/components/ui/card-layout-switcher";
+import { getCommunityTasks } from "@/data/user/tasks";
 
 const paramsSchema = z.object({
   id: z.coerce.string(),
@@ -39,11 +41,13 @@ export default async function CommunityDetailsPage({
 }) {
   const parsedParams = paramsSchema.parse(params);
   const { id } = parsedParams;
-  const [community, members, communityMembersCount] = await Promise.all([
-    getOrganizationById(id),
-    getTeamMembersInOrganization(id),
-    getTeamMembersCountInOrganization(id),
-  ]);
+  const [community, members, communityMembersCount, communityTasks] =
+    await Promise.all([
+      getOrganizationById(id),
+      getTeamMembersInOrganization(id),
+      getTeamMembersCountInOrganization(id),
+      getCommunityTasks(id),
+    ]);
 
   const normalizedMembers: TeamMembersTableProps["members"] = members.map(
     (member, index) => {
@@ -129,13 +133,14 @@ export default async function CommunityDetailsPage({
             <Card className="w-full p-8 pb-4 bg-muted border-none ">
               <div className="flex items-center w-full mb-4">
                 <h1 className="text-[20px] font-semibold">Tasks</h1>
-                <div className="flex gap-4 ml-auto">
+                <div className="flex gap-2 ml-auto">
                   <Search placeholder="Search Tasks..." />
                   <Button variant="outline">Filter</Button>
+                  <CardLayoutSwitcher />
                 </div>
               </div>
               <div>
-                <TaskTab />
+                <TaskTab tasks={communityTasks} />
                 <div className="pt-4">
                   <Pagination
                     count={20}

@@ -28,44 +28,50 @@ import {
   getOrganizationTitle,
 } from "@/data/user/organizations";
 import { Table } from "@/types";
+import { TaskFileArray, filesSchema } from "./DraftTaskDetail";
+import { taskTypesSchema } from "../../create-task/components/CreateTaskFormSchema";
 
 interface TaskDetailProps {
   id: string;
   task: Table<"tasks">;
-  taskTitle?: string;
-  taskDescription?: string;
-  taskStatus?: "New Task" | "In Progress" | "Prioritized";
-  taskTypes?: string[];
-  deadLine?: string;
-  rewards?: string;
-  efforts?: string;
-  imageUrl?: string;
 }
-const TaskDetail: FC<TaskDetailProps> = async ({
-  taskTitle = "Generate a Landing Page Design for Shoe brand called “Walkers”",
-  taskDescription = "The brand “Walkers” is looking for a redesign of their landing page. The current page can be found here at walker.com. They are looking for a more whimsical design that highlights their super comfy shoes. Include a 3D rendering of their new shoe design (link to shoe) that floats on the hero section.",
-  taskStatus = "New Task",
-  taskTypes = ["Constructive"],
-  deadLine = "3 days 7hours",
-  rewards = "250 carrots",
-  efforts = "7 days",
-  imageUrl = "/images/task1.jpeg",
-  task,
-}) => {
+const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
+  const imageUrl = "/images/task1.jpeg";
   const community = await getOrganizationById(task.organization_id);
   const communityName = community.title;
   const communityPrioritizationReward =
     community.prioritization_reward_percentage;
   const communityValidationReward = community.validation_reward_percentage;
+
   let taskStatusBg = "bg-black";
 
-  if (taskStatus === "In Progress") {
+  if (task.task_status === "in_progress") {
     taskStatusBg = "bg-green-500";
-  } else if (taskStatus === "Prioritized") {
+  } else if (task.task_status === "prioritized") {
     taskStatusBg = "bg-primary";
   } else {
     taskStatusBg = "bg-black";
   }
+
+  let files: TaskFileArray = [];
+  console.log("task", task);
+  let taskTypes: string[] = [];
+
+  try {
+    const arg =
+      typeof task.files === "string" ? JSON.parse(task.files) : task.files;
+    files = filesSchema.parse(arg);
+    const extractedTypes =
+      typeof task.task_types === "string"
+        ? JSON.parse(task.task_types)
+        : task.task_types;
+    taskTypes = taskTypesSchema.parse(extractedTypes);
+  } catch (error) {
+    console.log(error);
+  }
+
+  const firstFile = files[0];
+  const featuredImageUrl = firstFile?.url ?? imageUrl;
 
   return (
     <div className="w-full gap-4 mt-4 md:grid md:grid-cols-3 xl:grid-cols-4">
@@ -77,20 +83,19 @@ const TaskDetail: FC<TaskDetailProps> = async ({
               taskStatusBg
             )}
           >
-            {taskStatus}
+            {task.task_status}
           </div>
 
           <Detail
-            taskTitle={taskTitle}
+            taskTitle={task.name}
             communityName={communityName}
             communityPrioritizationReward={communityPrioritizationReward}
             communityValidationReward={communityValidationReward}
-            taskDescription={taskDescription}
+            taskDescription={task.description}
             taskTypes={taskTypes}
-            imageUrl={imageUrl}
-            deadLine={deadLine}
-            rewards={rewards}
-            efforts={efforts}
+            imageUrl={featuredImageUrl}
+            deadLine={String(task.efforts)}
+            rewards={String(task.rewards)}
             attachments={[]}
           />
         </Card>

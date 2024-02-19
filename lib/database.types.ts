@@ -954,6 +954,7 @@ export type Database = {
           organization_id: string;
           project_status: Database["public"]["Enums"]["project_status"];
           rewards: number | null;
+          task_community: string | null;
           task_status: Database["public"]["Enums"]["task_status"] | null;
           task_types: Json | null;
           team_id: number | null;
@@ -971,6 +972,7 @@ export type Database = {
           organization_id: string;
           project_status?: Database["public"]["Enums"]["project_status"];
           rewards?: number | null;
+          task_community?: string | null;
           task_status?: Database["public"]["Enums"]["task_status"] | null;
           task_types?: Json | null;
           team_id?: number | null;
@@ -988,6 +990,7 @@ export type Database = {
           organization_id?: string;
           project_status?: Database["public"]["Enums"]["project_status"];
           rewards?: number | null;
+          task_community?: string | null;
           task_status?: Database["public"]["Enums"]["task_status"] | null;
           task_types?: Json | null;
           team_id?: number | null;

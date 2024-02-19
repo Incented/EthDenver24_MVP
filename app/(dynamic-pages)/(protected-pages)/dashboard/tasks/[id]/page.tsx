@@ -13,7 +13,7 @@ export default async function TaskDetailsPage({ params }: { params: unknown }) {
       <GoBack />
       {/* TODO: draft task component. NOTE: This is a placeholder for actual condition. After figuring out rendering logic, modify accordingly */}
       {!isTaskPublished ? (
-        <DraftTaskDetail task={task} />
+        <DraftTaskDetail id={id} task={task} />
       ) : (
         <TaskDetail id={id} task={task} />
       )}

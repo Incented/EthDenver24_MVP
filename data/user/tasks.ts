@@ -48,7 +48,7 @@ export const getAllNamesOfTaskTypes = async () => {
   return data;
 };
 
-export const createDraftTaskAction = async ({
+export const createTaskAction = async ({
   community_id,
   task_title,
   task_description,
@@ -80,11 +80,62 @@ export const createDraftTaskAction = async ({
       description: task_description,
       rewards: task_rewards,
       efforts: task_efforts,
-      files: JSON.stringify(task_files),
-      task_types: JSON.stringify(task_types),
+      files: task_files,
+      task_types: task_types,
       task_status: task_status,
       is_task_published: is_task_published,
     })
+    .select("*")
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  revalidatePath(`/dashboard/tasks/${task.id}`);
+  return task;
+};
+
+export const editTaskForm = async ({
+  id,
+  community_id,
+  task_title,
+  task_description,
+  task_rewards,
+  task_efforts,
+  task_files,
+  task_types,
+  is_task_published,
+  task_status,
+}: {
+  id: string;
+  community_id: string;
+  task_title: string;
+  task_description: string;
+  task_rewards: number;
+  task_efforts: number;
+  task_files?: { name: string; url: string }[];
+  task_types: {};
+  is_task_published: boolean;
+  task_status: Enum<"task_status">;
+}) => {
+  const user = await serverGetLoggedInUser();
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: task, error } = await supabaseClient
+    .from("tasks")
+    .upsert({
+      organization_id: community_id,
+      user_id: user.id,
+      name: task_title,
+      description: task_description,
+      rewards: task_rewards,
+      efforts: task_efforts,
+      files: task_files,
+      task_types: task_types,
+      task_status: task_status,
+      is_task_published: is_task_published,
+    })
+    .eq("id", id)
     .select("*")
     .single();
 
@@ -139,4 +190,57 @@ export const getTaskById = async (taskId: string) => {
   }
 
   return task;
+};
+
+export const getTasksCreatedByUser = async (userId: string) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data: tasks, error } = await supabase
+    .from("tasks")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (error) {
+    throw error;
+  }
+
+  return tasks;
+};
+
+export const getCommunityTasks = async (communityId: string) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data: tasks, error } = await supabase
+    .from("tasks")
+    .select("*")
+    .eq("organization_id", communityId);
+
+  if (error) {
+    throw error;
+  }
+
+  return tasks;
+};
+
+export const getAllTasks = async () => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data: tasks, error } = await supabase.from("tasks").select("*");
+
+  if (error) {
+    throw error;
+  }
+
+  return tasks;
+};
+
+export const getAllTasksOfUser = async (userId: string) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data: tasks, error } = await supabase
+    .from("tasks")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (error) {
+    throw error;
+  }
+
+  return tasks;
 };

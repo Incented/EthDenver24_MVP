@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import {
   CreateTaskFormSchema,
   createTaskFormSchema,
+  taskTypesSchema,
 } from "./CreateTaskFormSchema";
 import {
   Select,
@@ -24,7 +25,11 @@ import {
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AddTaskTypeDialog } from "@/components/presentational/AddTaskTypeDialog";
-import { createTaskAction, createTaskType } from "@/data/user/tasks";
+import {
+  createTaskAction,
+  createTaskType,
+  editTaskForm,
+} from "@/data/user/tasks";
 import dynamic from "next/dynamic";
 import { File, Upload, XIcon } from "lucide-react";
 import { UploadFiles } from "./uploadFile";
@@ -34,6 +39,8 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { Attachment } from "@/components/Attachment";
 import { AttachmentDialog } from "@/components/AttachmentDialog";
+import { Table } from "@/types";
+import { Json } from "@/lib/database.types";
 
 export interface BasicFilePreview {
   name: string;
@@ -53,25 +60,31 @@ const TipTap = dynamic(() => import("@/components/tip-tap-Editor/TipTap"), {
   ssr: false,
 });
 
-export function CreateTaskForm({
+export function EditTaskForm({
   id,
   initialData,
   taskTypes,
   communities,
 }: {
-  id?: string;
-  initialData?: CreateTaskFormSchema;
+  id: string;
+  initialData: Table<"tasks">;
   taskTypes: Array<{ name: string; id: number; slug: string }>;
   communities: Array<{ title: string; id: string }>;
 }) {
   const [isSubmittingProposal, setIsSubmittingProposal] =
     useState<boolean>(false);
 
+  const fileSchema = z.object({
+    name: z.string(),
+    url: z.string(),
+  });
+
+  const filesSchema = z.array(fileSchema);
+
   const [filePreviews, setFilePreviews] = useState<FilePreview[]>([]);
 
-  const [taskFileUrls, setTaskFilesUrls] = useState<
-    { name: string; url: string }[]
-  >([]);
+  const [taskFileUrls, setTaskFilesUrls] =
+    useState<{ name: string; url: string }[]>();
 
   interface Attachment {
     file: File;
@@ -103,7 +116,9 @@ export function CreateTaskForm({
     setSelectedAttachment(null);
   };
 
-  const [communityid, setCommunityId] = useState<string>("");
+  const [communityid, setCommunityId] = useState<string>(
+    initialData.organization_id
+  );
 
   const handleFiles = (files: File[], paths: string[]) => {
     const newFilePreviews = files.map((file, index) => ({
@@ -186,6 +201,38 @@ export function CreateTaskForm({
     }
   };
 
+  const parseJsonToTaskTypes = (
+    json: unknown
+  ): Array<(typeof taskTypesSchema._type)[number]> => {
+    if (typeof json === "string") {
+      try {
+        const parsed = JSON.parse(json);
+        return taskTypesSchema.parse(parsed);
+      } catch (error) {
+        console.error("Failed to parse task types JSON data", error);
+        return []; // or return a default value as per your requirements
+      }
+    }
+    // If it's already in the expected format (not a string), just return it
+    return taskTypesSchema.parse(json);
+  };
+
+  const parseJsonToTaskFiles = (
+    json: unknown
+  ): { name: string; url: string }[] => {
+    if (typeof json === "string") {
+      try {
+        const parsed = JSON.parse(json);
+        // Assuming that your Zod schema correctly validates the parsed data
+        return filesSchema.parse(parsed);
+      } catch (error) {
+        console.error("Failed to parse task files JSON data", error);
+        return []; // Return an empty array or a default value as per your requirements
+      }
+    }
+    // If it's already an array of objects with name and url, validate it
+    return filesSchema.parse(json);
+  };
   const {
     register,
     control,
@@ -196,12 +243,16 @@ export function CreateTaskForm({
     resolver: zodResolver(createTaskFormSchema),
     mode: "onChange",
     defaultValues: {
-      community_id: initialData?.community_id || "",
-      task_description: initialData?.task_description || "",
-      task_types: initialData?.task_types || [],
-      task_rewards: initialData?.task_rewards || 0,
-      task_efforts: initialData?.task_efforts || 0,
-      task_files: initialData?.task_files || [],
+      community_id: initialData?.organization_id || "",
+      task_description: initialData?.description || "",
+      task_types:
+        parseJsonToTaskTypes(initialData.task_types) || "software-dev",
+      task_rewards: initialData?.rewards || 0,
+      task_efforts: initialData?.efforts || 0,
+      task_files: parseJsonToTaskFiles(initialData.files) || [
+        { name: "", url: "" },
+      ],
+      task_title: initialData?.name || "",
     },
   });
 
@@ -231,7 +282,8 @@ export function CreateTaskForm({
       const description = taskData.task_description;
       const types = taskData.task_types;
 
-      return await createTaskAction({
+      return await editTaskForm({
+        id: id,
         community_id,
         task_title: title,
         task_description: description,
@@ -244,11 +296,10 @@ export function CreateTaskForm({
       });
     },
     {
-      loadingMessage: "Creating..",
+      loadingMessage: "Updating..",
       errorMessage: "Failed ",
       successMessage: "Successful",
       onSuccess: (data) => {
-        console.log("Task created", data);
         router.push(`/dashboard/tasks/${data.id}`);
       },
     }
@@ -564,4 +615,4 @@ export function CreateTaskForm({
   );
 }
 
-export default CreateTaskForm;
+export default EditTaskForm;

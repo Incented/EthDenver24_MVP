@@ -17,7 +17,6 @@ interface DetailProps {
   imageUrl: string;
   deadLine: string;
   rewards: string;
-  efforts: string;
   attachments: Array<{
     name: string;
     url: string;
@@ -32,11 +31,9 @@ const Detail: FC<DetailProps> = async ({
   taskDescription,
   imageUrl,
   rewards,
-  efforts,
   deadLine,
   attachments,
 }) => {
-  console.log(taskDescription);
   return (
     <div className="p-8 bg-accent/50">
       <div className="flex items-center gap-2 mb-6 text-sm">
@@ -116,7 +113,7 @@ const Detail: FC<DetailProps> = async ({
       <div className="w-64 mb-6">
         <TaksAttributes
           rewards={rewards}
-          efforts={efforts}
+          efforts={deadLine}
           deadline={deadLine}
         />
       </div>
