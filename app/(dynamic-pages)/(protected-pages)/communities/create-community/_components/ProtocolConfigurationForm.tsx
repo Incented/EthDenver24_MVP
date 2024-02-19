@@ -50,7 +50,7 @@ function ProtocolConfigurationForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col w-full gap-4 rounded-b-none rounded-lg md:h-[550px] 2xl:h-[760px] lg:">
+      <div className="flex flex-col w-full gap-4 rounded-b-none rounded-lg md:h-[550px]">
         <div className=" h-[484px] overflow-auto ">
           <div className="flex flex-col gap-8 md:flex-row">
             <div className="flex-1 space-y-6">

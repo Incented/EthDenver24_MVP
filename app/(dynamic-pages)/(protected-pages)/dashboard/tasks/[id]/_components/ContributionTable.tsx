@@ -24,10 +24,6 @@ const ContributionTable: FC<ContributionTableProps> = ({}) => {
             <TableHead className="whitespace-nowrap">
               Solution Description
             </TableHead>
-            <TableHead className="">Member</TableHead>
-            <TableHead className="text-center whitespace-nowrap">
-              Attachment File
-            </TableHead>
             <TableHead className="text-center whitespace-nowrap">
               Total Validators
             </TableHead>

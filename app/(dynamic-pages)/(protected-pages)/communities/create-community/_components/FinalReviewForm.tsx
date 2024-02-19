@@ -43,7 +43,7 @@ export function FinalReviewForm({
       data-tid="create-community-form"
       className="w-full"
     >
-      <div className="flex flex-col w-full gap-4 rounded-b-none rounded-lg md:h-[640px] 2xl:h-[760px] lg:">
+      <div className="flex flex-col w-full gap-4 rounded-b-none rounded-lg md:h-[640px]">
         <div className="w-full overflow-y-auto ">
           {/* Members */}
           <div className="flex flex-col w-full gap-4">

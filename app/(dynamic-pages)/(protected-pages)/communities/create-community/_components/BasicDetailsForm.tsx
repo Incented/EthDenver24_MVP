@@ -169,9 +169,9 @@ export default function BasicDetailsForm({
             </div>
           </div>
         </div>
-        <div className="h-fit overflow-auto">
+        <div className="overflow-auto h-fit">
           <div className="w-full overflow-auto">
-            <div className="flex flex-col md:flex-row gap-6 mt-2">
+            <div className="flex flex-col gap-6 mt-2 md:flex-row">
               <div className="bg-muted w-full md:w-[228px] h-fit rounded-xl flex flex-col justify-center items-center p-6 px-4">
                 <div className="flex items-center justify-center w-24 h-24 p-4 mb-4 rounded-full bg-background">
                   <svg
@@ -305,7 +305,7 @@ export default function BasicDetailsForm({
                 ))}
                 <Button
                   variant="ghost"
-                  className="text-primary px-0 py-0 hover:bg-transparent"
+                  className="px-0 py-0 text-primary hover:bg-transparent"
                   onClick={(event) => {
                     event.preventDefault();
                     addNewSocialLink();
