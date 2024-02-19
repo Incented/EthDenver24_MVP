@@ -32,7 +32,22 @@ import axios from "axios";
 import { useToastMutation } from "@/hooks/useToastMutation";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
-import { Attachment, FilePreview } from "./Attachment";
+import { Attachment } from "@/components/Attachment";
+import { AttachmentDialog } from "@/components/AttachmentDialog";
+
+export interface BasicFilePreview {
+  name: string;
+  url: string;
+  path: string;
+}
+
+export interface ExtendedFilePreview {
+  file: File;
+  previewUrl: string;
+  path: string;
+}
+
+export type FilePreview = BasicFilePreview | ExtendedFilePreview;
 
 const TipTap = dynamic(() => import("@/components/tip-tap-Editor/TipTap"), {
   ssr: false,
@@ -45,6 +60,9 @@ export function CreateTaskForm({
   taskTypes: Array<{ name: string; id: number; slug: string }>;
   communities: Array<{ title: string; id: string }>;
 }) {
+  const [isSubmittingProposal, setIsSubmittingProposal] =
+    useState<boolean>(false);
+
   const [filePreviews, setFilePreviews] = useState<FilePreview[]>([]);
 
   const [taskFileUrls, setTaskFilesUrls] = useState<
@@ -116,13 +134,15 @@ export function CreateTaskForm({
   );
 
   // Function to handle file deletion
-  const handleDeleteFile = (path: string, index: number) => {
+  const handleDeleteFile = (path: string) => {
     deleteFileMutation.mutate(
       { path },
       {
         onSuccess: () => {
           // Remove the file preview from the state after successful deletion
-          setFilePreviews((prev) => prev.filter((_, i) => i !== index));
+          setFilePreviews((prev) =>
+            prev.filter((preview) => preview.path !== path)
+          );
         },
         // Optionally handle onError to customize error handling
       }
@@ -216,12 +236,13 @@ export function CreateTaskForm({
         task_files: task_files,
         task_types: types,
         task_status: "draft",
+        is_task_published: isSubmittingProposal,
       });
     },
     {
-      loadingMessage: "Creating task draft...",
-      errorMessage: "Failed to create draft ",
-      successMessage: "Draft task created!",
+      loadingMessage: "Creating..",
+      errorMessage: "Failed ",
+      successMessage: "Successful",
       onSuccess: (data) => {
         console.log("Task created", data);
         router.push(`/dashboard/tasks/${data.id}`);
@@ -248,6 +269,12 @@ export function CreateTaskForm({
     console.log("Task data", taskData);
 
     mutate(taskData);
+  };
+
+  // Adjusted form submission handler
+  const handleSubmitClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const submitType = e.currentTarget.getAttribute("data-submit-type");
+    setIsSubmittingProposal(submitType === "publish");
   };
 
   return (
@@ -501,50 +528,32 @@ export function CreateTaskForm({
               {filePreviews.map((preview, index) => (
                 <Attachment
                   key={preview.path}
-                  preview={preview}
-                  openPreview={openPreview}
-                  handleDeleteFile={handleDeleteFile}
-                  index={index}
+                  name={"file" in preview ? preview.file.name : preview.name}
+                  onClick={() => openPreview(preview)}
+                  onRemove={() => handleDeleteFile(preview.path)}
                 />
               ))}
             </div>
 
             {selectedAttachment && (
-              <Dialog open={!!selectedAttachment} onOpenChange={closePreview}>
-                <DialogContent className="w-auto h-auto max-w-4xl max-h-screen overflow-y-auto p-4">
-                  {/* Image Preview */}
-                  {selectedAttachment.file.type.startsWith("image/") && (
-                    <img
-                      src={selectedAttachment.previewUrl}
-                      alt={selectedAttachment.file.name}
-                      className="max-w-full max-h-screen"
-                    />
-                  )}
-
-                  {/* PDF Preview */}
-                  {selectedAttachment.file.type === "application/pdf" && (
-                    <iframe
-                      src={selectedAttachment.previewUrl}
-                      title="PDF Preview"
-                      style={{ width: "100%", height: "500px" }} // Adjust size as needed
-                    />
-                  )}
-
-                  {/* Fallback for Unsupported File Types */}
-                  {!(
-                    selectedAttachment.file.type.startsWith("image/") ||
-                    selectedAttachment.file.type === "application/pdf"
-                  ) && <p>Unsupported file type</p>}
-                </DialogContent>
-              </Dialog>
+              <AttachmentDialog
+                onOpenChange={closePreview}
+                attachment={selectedAttachment}
+              />
             )}
           </div>
         </div>
         <div className="absolute flex gap-4 top-8 right-4">
-          <Button type="button" variant="outline">
-            Save draft
+          <Button variant="outline" type="submit" data-submit-type="draft">
+            Save as draft
           </Button>
-          <Button type="submit">Create Task</Button>
+          <Button
+            type="submit"
+            data-submit-type="publish"
+            onClick={handleSubmitClick}
+          >
+            Submit Proposal
+          </Button>
         </div>
       </form>
     </div>

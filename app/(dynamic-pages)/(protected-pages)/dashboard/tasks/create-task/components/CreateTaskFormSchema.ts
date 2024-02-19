@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-const TaskType = z.enum([
+export const TaskType = z.enum([
   "software-dev",
   "hardware-dev",
   "legal",

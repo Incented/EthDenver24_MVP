@@ -3,15 +3,7 @@ import {
   CarrotStrikIcon,
   CarrotStrikIconDark,
 } from "@/components/Icons/CustomIcons";
-import TaksAttributes from "@/components/presentational/Tasks/TaksAttributes";
-import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 import { cn } from "@/lib/utils";
 import {
@@ -31,31 +23,40 @@ import { Button } from "@/components/ui/button";
 import ContributionTable from "./ContributionTable";
 import Image from "next/image";
 import AddContribution from "./AddContribution";
+import {
+  getOrganizationById,
+  getOrganizationTitle,
+} from "@/data/user/organizations";
+import { Table } from "@/types";
 
 interface TaskDetailProps {
   id: string;
+  task: Table<"tasks">;
   taskTitle?: string;
   taskDescription?: string;
   taskStatus?: "New Task" | "In Progress" | "Prioritized";
   taskTypes?: string[];
-  rabbitHole?: string;
   deadLine?: string;
   rewards?: string;
   efforts?: string;
   imageUrl?: string;
 }
 const TaskDetail: FC<TaskDetailProps> = async ({
-  id,
   taskTitle = "Generate a Landing Page Design for Shoe brand called “Walkers”",
   taskDescription = "The brand “Walkers” is looking for a redesign of their landing page. The current page can be found here at walker.com. They are looking for a more whimsical design that highlights their super comfy shoes. Include a 3D rendering of their new shoe design (link to shoe) that floats on the hero section.",
   taskStatus = "New Task",
   taskTypes = ["Constructive"],
-  rabbitHole = "Buan Fund",
   deadLine = "3 days 7hours",
   rewards = "250 carrots",
   efforts = "7 days",
   imageUrl = "/images/task1.jpeg",
+  task,
 }) => {
+  const community = await getOrganizationById(task.organization_id);
+  const communityName = community.title;
+  const communityPrioritizationReward =
+    community.prioritization_reward_percentage;
+  const communityValidationReward = community.validation_reward_percentage;
   let taskStatusBg = "bg-black";
 
   if (taskStatus === "In Progress") {
@@ -81,9 +82,11 @@ const TaskDetail: FC<TaskDetailProps> = async ({
 
           <Detail
             taskTitle={taskTitle}
+            communityName={communityName}
+            communityPrioritizationReward={communityPrioritizationReward}
+            communityValidationReward={communityValidationReward}
             taskDescription={taskDescription}
             taskTypes={taskTypes}
-            rabbitHole={rabbitHole}
             imageUrl={imageUrl}
             deadLine={deadLine}
             rewards={rewards}

@@ -56,6 +56,7 @@ export const createDraftTaskAction = async ({
   task_efforts,
   task_files,
   task_types,
+  is_task_published,
   task_status,
 }: {
   community_id: string;
@@ -65,6 +66,7 @@ export const createDraftTaskAction = async ({
   task_efforts: number;
   task_files?: { name: string; url: string }[];
   task_types: {};
+  is_task_published: boolean;
   task_status: Enum<"task_status">;
 }) => {
   const user = await serverGetLoggedInUser();
@@ -81,6 +83,7 @@ export const createDraftTaskAction = async ({
       files: JSON.stringify(task_files),
       task_types: JSON.stringify(task_types),
       task_status: task_status,
+      is_task_published: is_task_published,
     })
     .select("*")
     .single();
@@ -90,6 +93,36 @@ export const createDraftTaskAction = async ({
   }
 
   revalidatePath(`/dashboard/tasks/${task.id}`);
+  return task;
+};
+
+export const publishTaskAction = async (id: string) => {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: task, error } = await supabaseClient
+    .from("tasks")
+    .update({ is_task_published: true })
+    .eq("id", id);
+
+  if (error) {
+    throw error;
+  }
+
+  revalidatePath(`/dashboard/tasks/${id}`);
+  return task;
+};
+
+export const unPublishTaskAction = async (id: string) => {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: task, error } = await supabaseClient
+    .from("tasks")
+    .update({ is_task_published: false })
+    .eq("id", id);
+
+  if (error) {
+    throw error;
+  }
+
+  revalidatePath(`/dashboard/tasks/${id}`);
   return task;
 };
 

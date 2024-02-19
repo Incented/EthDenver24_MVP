@@ -949,6 +949,7 @@ export type Database = {
           efforts: number | null;
           files: Json | null;
           id: string;
+          is_task_published: boolean | null;
           name: string;
           organization_id: string;
           project_status: Database["public"]["Enums"]["project_status"];
@@ -965,6 +966,7 @@ export type Database = {
           efforts?: number | null;
           files?: Json | null;
           id?: string;
+          is_task_published?: boolean | null;
           name: string;
           organization_id: string;
           project_status?: Database["public"]["Enums"]["project_status"];
@@ -981,6 +983,7 @@ export type Database = {
           efforts?: number | null;
           files?: Json | null;
           id?: string;
+          is_task_published?: boolean | null;
           name?: string;
           organization_id?: string;
           project_status?: Database["public"]["Enums"]["project_status"];

@@ -2,11 +2,14 @@ import Detail from "./Detail";
 import { Card } from "@/components/ui/card";
 import { FC } from "react";
 import { Button } from "@/components/ui/button";
-import { getTaskById } from "@/data/user/tasks";
 import { z } from "zod";
 import { taskTypesSchema } from "../../create-task/components/CreateTaskFormSchema";
+import { Table } from "@/types";
+import {
+  getOrganizationById,
+  getOrganizationTitle,
+} from "@/data/user/organizations";
 
-const rabbitHole = "Buan Fund";
 const imageUrl = "/images/task1.jpeg";
 // const taskTypes = ["Construction", "Validation", "Prioritization"];
 
@@ -22,13 +25,22 @@ const filesSchema = z
 type TaskFileArray = z.infer<typeof filesSchema>;
 
 interface TaskDetailProps {
-  id: string;
+  task: Table<"tasks">;
 }
 // http://localhost:3000/dashboard/tasks/b9af7c90-f276-449d-a14b-511f12524e9d
-const DraftTaskDetail: FC<TaskDetailProps> = async ({ id }: { id: string }) => {
-  const task = await getTaskById(id);
-  console.log("task", task);
+const DraftTaskDetail: FC<TaskDetailProps> = async ({
+  task,
+}: {
+  task: Table<"tasks">;
+}) => {
+  const community = await getOrganizationById(task.organization_id);
+  const communityName = community.title;
+  const communityPrioritizationReward =
+    community.prioritization_reward_percentage;
+  const communityValidationReward = community.validation_reward_percentage;
+
   let files: TaskFileArray = [];
+  console.log("task", task);
   let taskTypes: string[] = [];
 
   try {
@@ -61,19 +73,21 @@ const DraftTaskDetail: FC<TaskDetailProps> = async ({ id }: { id: string }) => {
       </div>
       <section className="md:col-span-2 md:8 md:gap-6 xl:col-span-3">
         <Card className="relative mb-4 border-none">
-          <h3 className="text-center bg-muted rounded-t-md font-semibold text-muted-foreground text-xs py-1.5">
+          <h3 className="text-center bg-secondary rounded-t-md font-semibold text-muted-foreground text-xs py-1.5">
             Draft
           </h3>
           <Detail
             taskTitle={task.name}
+            communityName={communityName}
+            communityPrioritizationReward={communityPrioritizationReward}
+            communityValidationReward={communityValidationReward}
             taskDescription={task.description}
             taskTypes={taskTypes}
-            rabbitHole={rabbitHole}
             imageUrl={featuredImageUrl}
             deadLine={"3 days 7 hours"}
             rewards={String(task.rewards) ?? undefined}
             efforts={String(task.efforts) ?? undefined}
-            attachments={files.map((file) => file.url)}
+            attachments={files}
           />
         </Card>
       </section>
