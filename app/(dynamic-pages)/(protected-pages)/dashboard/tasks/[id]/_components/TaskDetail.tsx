@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import ContributionTable from "./ContributionTable";
 import Image from "next/image";
 import AddContribution from "./AddContribution";
+
 import {
   getOrganizationById,
   getOrganizationTitle,
@@ -30,6 +31,8 @@ import {
 import { Table } from "@/types";
 import { TaskFileArray, filesSchema } from "./DraftTaskDetail";
 import { taskTypesSchema } from "../../create-task/components/CreateTaskFormSchema";
+import ClaimModal from "./ClaimModal";
+
 
 interface TaskDetailProps {
   id: string;
@@ -74,8 +77,12 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
   const featuredImageUrl = firstFile?.url ?? imageUrl;
 
   return (
-    <div className="w-full gap-4 mt-4 md:grid md:grid-cols-3 xl:grid-cols-4">
-      <section className="md:col-span-2 xl:col-span-3">
+    <div className="w-full gap-2 mt-4 md:grid md:grid-cols-3 xl:grid-cols-4">
+      <div className="flex w-full gap-2 mb-4 md:col-start-3 xl:col-start-4 ">
+        <ClaimModal />
+        <AddContribution />
+      </div>
+      <section className="md:col-span-2 xl:col-span-3 md:-mt-[61px]">
         <Card className="relative mb-4 overflow-hidden border">
           <div
             className={cn(
@@ -123,13 +130,6 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
       </section>
 
       <section className="w-full">
-        <div className="flex items-center gap-2 mb-4">
-          <Button className="bg-gray-600 ">Claim</Button>
-          <AddContribution />
-          <Button size="icon" variant="outline">
-            <Settings />
-          </Button>
-        </div>
         <Card className="p-4 mb-4 ">
           <h1 className="mb-2 text-lg font-bold">Proposer</h1>
           <div className="flex items-center gap-[10px]">
