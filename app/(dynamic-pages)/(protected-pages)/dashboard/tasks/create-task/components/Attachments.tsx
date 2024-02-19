@@ -1,6 +1,6 @@
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { File, XIcon } from "lucide-react";
+import { AttachmentDialog } from "@/components/AttachmentDialog";
 
 export function Attachments({
   filePreviews,
@@ -44,28 +44,10 @@ export function Attachments({
         </div>
 
         {selectedAttachment && (
-          <Dialog open={!!selectedAttachment} onOpenChange={closePreview}>
-            <DialogTrigger asChild>
-              <button aria-label="Open attachment preview">Open Preview</button>
-            </DialogTrigger>
-            <DialogContent className="w-fit">
-              {/* Render content based on the file type */}
-              {selectedAttachment.file.type.includes("image/") && (
-                <img
-                  src={selectedAttachment.previewUrl}
-                  alt={selectedAttachment.file.name}
-                />
-              )}
-              {selectedAttachment.file.type.includes("application/pdf") && (
-                // Use a PDF viewer component or iframe for PDFs
-                <iframe
-                  src={selectedAttachment.previewUrl}
-                  title="PDF Preview"
-                />
-              )}
-              {/* Add more conditions for other file types as needed */}
-            </DialogContent>
-          </Dialog>
+          <AttachmentDialog
+            onOpenChange={closePreview}
+            attachment={selectedAttachment}
+          />
         )}
       </div>
     </div>

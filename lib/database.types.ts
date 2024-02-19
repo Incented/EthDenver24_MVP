@@ -949,10 +949,12 @@ export type Database = {
           efforts: number | null;
           files: Json | null;
           id: string;
+          is_task_published: boolean | null;
           name: string;
           organization_id: string;
           project_status: Database["public"]["Enums"]["project_status"];
           rewards: number | null;
+          task_community: string | null;
           task_status: Database["public"]["Enums"]["task_status"] | null;
           task_types: Json | null;
           team_id: number | null;
@@ -965,10 +967,12 @@ export type Database = {
           efforts?: number | null;
           files?: Json | null;
           id?: string;
+          is_task_published?: boolean | null;
           name: string;
           organization_id: string;
           project_status?: Database["public"]["Enums"]["project_status"];
           rewards?: number | null;
+          task_community?: string | null;
           task_status?: Database["public"]["Enums"]["task_status"] | null;
           task_types?: Json | null;
           team_id?: number | null;
@@ -981,10 +985,12 @@ export type Database = {
           efforts?: number | null;
           files?: Json | null;
           id?: string;
+          is_task_published?: boolean | null;
           name?: string;
           organization_id?: string;
           project_status?: Database["public"]["Enums"]["project_status"];
           rewards?: number | null;
+          task_community?: string | null;
           task_status?: Database["public"]["Enums"]["task_status"] | null;
           task_types?: Json | null;
           team_id?: number | null;

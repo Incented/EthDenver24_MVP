@@ -1,16 +1,9 @@
+import Detail from "./Detail";
 import {
   CarrotStrikIcon,
   CarrotStrikIconDark,
 } from "@/components/Icons/CustomIcons";
-import TaksAttributes from "@/components/presentational/Tasks/TaksAttributes";
-import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 import { cn } from "@/lib/utils";
 import {
@@ -30,41 +23,58 @@ import { Button } from "@/components/ui/button";
 import ContributionTable from "./ContributionTable";
 import Image from "next/image";
 import AddContribution from "./AddContribution";
+
+import {
+  getOrganizationById,
+  getOrganizationTitle,
+} from "@/data/user/organizations";
+import { Table } from "@/types";
+import { TaskFileArray, filesSchema } from "./DraftTaskDetail";
+import { taskTypesSchema } from "../../create-task/components/CreateTaskFormSchema";
 import ClaimModal from "./ClaimModal";
+
 
 interface TaskDetailProps {
   id: string;
-  taskTitle?: string;
-  taskDescription?: string;
-  taskStatus?: "New Task" | "In Progress" | "Prioritized";
-  taskType?: string;
-  rabbitHole?: string;
-  deadLine?: string;
-  rewards?: string;
-  efforts?: string;
-  imageUrl?: string;
+  task: Table<"tasks">;
 }
-const TaskDetail: FC<TaskDetailProps> = async ({
-  id,
-  taskTitle = "Generate a Landing Page Design for Shoe brand called “Walkers”",
-  taskDescription = "The brand “Walkers” is looking for a redesign of their landing page. The current page can be found here at walker.com. They are looking for a more whimsical design that highlights their super comfy shoes. Include a 3D rendering of their new shoe design (link to shoe) that floats on the hero section.",
-  taskStatus = "New Task",
-  taskType = "Constructive",
-  rabbitHole = "Buan Fund",
-  deadLine = "3 days 7hours",
-  rewards = "250 carrots",
-  efforts = "7 days",
-  imageUrl = "/images/task1.jpeg",
-}) => {
+const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
+  const imageUrl = "/images/task1.jpeg";
+  const community = await getOrganizationById(task.organization_id);
+  const communityName = community.title;
+  const communityPrioritizationReward =
+    community.prioritization_reward_percentage;
+  const communityValidationReward = community.validation_reward_percentage;
+
   let taskStatusBg = "bg-black";
 
-  if (taskStatus === "In Progress") {
+  if (task.task_status === "in_progress") {
     taskStatusBg = "bg-green-500";
-  } else if (taskStatus === "Prioritized") {
+  } else if (task.task_status === "prioritized") {
     taskStatusBg = "bg-primary";
   } else {
     taskStatusBg = "bg-black";
   }
+
+  let files: TaskFileArray = [];
+  console.log("task", task);
+  let taskTypes: string[] = [];
+
+  try {
+    const arg =
+      typeof task.files === "string" ? JSON.parse(task.files) : task.files;
+    files = filesSchema.parse(arg);
+    const extractedTypes =
+      typeof task.task_types === "string"
+        ? JSON.parse(task.task_types)
+        : task.task_types;
+    taskTypes = taskTypesSchema.parse(extractedTypes);
+  } catch (error) {
+    console.log(error);
+  }
+
+  const firstFile = files[0];
+  const featuredImageUrl = firstFile?.url ?? imageUrl;
 
   return (
     <div className="w-full gap-2 mt-4 md:grid md:grid-cols-3 xl:grid-cols-4">
@@ -80,71 +90,21 @@ const TaskDetail: FC<TaskDetailProps> = async ({
               taskStatusBg
             )}
           >
-            {taskStatus}
+            {task.task_status}
           </div>
 
-          <div className="p-8 mt-6">
-            <div className="flex items-center gap-2 mb-6 text-sm">
-              <p>{rabbitHole}</p>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild className="cursor-pointer">
-                    <Info size={18} />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <div className="">
-                      <p className="mb-2 text-sm">Community Details</p>
-                      <p className="mb-1 text-xs">
-                        Prioritization Reward Percentage 10%
-                      </p>
-                      <p className="text-xs">
-                        Validation Reward Percentage 10%
-                      </p>
-                    </div>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <Badge className="mb-4 text-xs text-black bg-white border border-gray-200 shadow-sm hover:bg-white">
-              {taskType}
-            </Badge>
-            <p className="text-xs text-gray-400">Posted 5 days ago</p>
-            <h1 className="mb-6 text-2xl font-semibold">{taskTitle}</h1>
-            <div className="relative w-full h-[165px] mb-6 rounded-md overflow-hidden">
-              <Image
-                src={imageUrl}
-                alt={imageUrl}
-                fill
-                className="object-cover object-center"
-              />
-            </div>
-            <p className="mb-6 text-sm font-normal leading-6 text-gray-500">
-              {taskDescription}
-            </p>
-            <div className="w-64 mb-6">
-              <TaksAttributes
-                rewards={rewards}
-                efforts={efforts}
-                deadline={deadLine}
-              />
-            </div>
-
-            <div className="">
-              <h4 className="mb-2 text-sm font-medium ">Attachment files</h4>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 px-2 py-2.5 border rounded-md w-fit">
-                  <File size={16} />
-                  <samp className="text-xs">description_123.pdf</samp>
-                  <MoreVertical size={16} className="ml-2" />
-                </div>
-                <div className="flex items-center gap-1 px-2 py-2.5 border rounded-md w-fit">
-                  <File size={16} />
-                  <samp className="text-xs">description_123.pdf</samp>
-                  <MoreVertical size={16} className="ml-2" />
-                </div>
-              </div>
-            </div>
-          </div>
+          <Detail
+            taskTitle={task.name}
+            communityName={communityName}
+            communityPrioritizationReward={communityPrioritizationReward}
+            communityValidationReward={communityValidationReward}
+            taskDescription={task.description}
+            taskTypes={taskTypes}
+            imageUrl={featuredImageUrl}
+            deadLine={String(task.efforts)}
+            rewards={String(task.rewards)}
+            attachments={[]}
+          />
         </Card>
 
         <div className="mb-4">

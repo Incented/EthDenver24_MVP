@@ -33,9 +33,13 @@ export default async function Layout({ children }: { children: ReactNode }) {
       <LoggedInUserProvider user={user}>
         <div className="">
           <Suspense>
-            <Navbar userProfile={userProfile} />
+            <div className="">
+              <Navbar userProfile={userProfile} />
+            </div>
           </Suspense>
-          <ClientLayout userProfile={userProfile}>{children}</ClientLayout>
+          <div>
+            <ClientLayout userProfile={userProfile}>{children}</ClientLayout>
+          </div>
         </div>
       </LoggedInUserProvider>
     );
