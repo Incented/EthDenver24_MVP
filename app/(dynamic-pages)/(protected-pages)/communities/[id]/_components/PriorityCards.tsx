@@ -31,7 +31,7 @@ export function PriorityCards({
   validationQuorum: number;
 }) {
   return (
-    <div className="grid w-full col-span-1 gap-3 grid-row-2">
+    <div className="grid w-full lg:col-span-2 xl:col-span-1">
       <Card className=" grid grid-rows-[auto,1fr] w-full h-full p-4 ">
         <div className="w-full border-b">
           <h1 className="text-[16px] mb-2">Prioritization Quorum</h1>
@@ -72,7 +72,7 @@ export function PriorityCardsForDisplay({
   validationQuorum: number;
 }) {
   return (
-    <div className="flex flex-col col-span-2 gap-4 w-full md:flex-row xl:flex-col">
+    <div className="flex flex-col w-full col-span-2 gap-4 md:flex-row xl:flex-col">
       <Card className=" grid grid-rows-[auto,1fr] w-full h-full p-4 ">
         <div className="w-full border-b">
           <h1 className="text-[16px] mb-2">Prioritization Quorum</h1>

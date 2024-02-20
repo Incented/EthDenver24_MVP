@@ -1,9 +1,10 @@
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+"use client";
+
 import { TableCell, TableRow } from "@/components/ui/table";
-import { File, User } from "lucide-react";
-import { FC } from "react";
+import { Button } from "@/components/ui/button";
 import ValidateDrawer from "./ValidateDrawer";
+import { User } from "lucide-react";
+import { FC } from "react";
 
 interface ContributionProps {
   description?: string;
@@ -13,8 +14,6 @@ interface ContributionProps {
 }
 const Contribution: FC<ContributionProps> = ({
   description = "Try to calculate the EXE fee...",
-  member = { name: "Randy Dias", imageUrl: "/assets/avatar_1.jpg" },
-  attchedFiles = [],
   validators = [],
 }) => {
   return (

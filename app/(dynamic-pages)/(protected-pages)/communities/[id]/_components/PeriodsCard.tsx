@@ -4,16 +4,12 @@ import { Periods } from "../../create-community/_components/createCommunitySchem
 
 export function PeriodsCard({ periods }: { periods: Periods }) {
   return (
-    <Card className="bg-muted grid grid-cols-2 border-none col-span-2 p-6 w-full ">
-      <div className="mb-4 flex flex-col gap-4 h-full justify-between ">
-        <div className="flex space-x-4">
-          <h1 className="text-3xl leading-9 font-medium">Periods</h1>
-        </div>
-        <div className="flex flex-col gap-4">
-          {/* <Timer size={89} /> */}
+    <Card className="w-full p-8 border-none bg-muted ">
+      <div className="flex flex-col justify-between gap-4 mb-4 ">
+        <div className="flex items-center space-x-2">
           <svg
-            width="89px"
-            height="89px"
+            width="62px"
+            height="62px"
             viewBox="0 0 16 16"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -26,16 +22,18 @@ export function PeriodsCard({ periods }: { periods: Periods }) {
               />
             </g>
           </svg>
-
+          <h1 className="text-[32px] font-medium leading-9">Periods</h1>
+        </div>
+        <div className="flex flex-col gap-4">
           <p className="text-base leading-[26px] pb-[10px] text-foreground ">
             Duration for users to prioritize, contribute and validate the task
           </p>
         </div>
       </div>
 
-      <div className="grid grid-rows-3 gap-3">
+      <div className="space-y-3">
         <Card className="bg-transparent shadow-none flex-col justify-center items-center py-3.5 p-4 h-full border border-primary text-primary">
-          <p className="text-xl leading-9 font-semibold">
+          <p className="text-xl font-semibold leading-9">
             {periods.prioritizationPeriod} days
           </p>
           <div className="flex items-center gap-1">
@@ -46,7 +44,7 @@ export function PeriodsCard({ periods }: { periods: Periods }) {
           </div>
         </Card>
         <Card className="bg-transparent shadow-none flex-col justify-center items-center py-3.5 p-4 h-full border border-primary text-primary">
-          <p className="text-xl leading-9 font-semibold">
+          <p className="text-xl font-semibold leading-9">
             {periods.contributionPeriod} days
           </p>
           <div className="flex items-center gap-1">
@@ -57,7 +55,7 @@ export function PeriodsCard({ periods }: { periods: Periods }) {
           </div>
         </Card>
         <Card className="bg-transparent shadow-none flex-col justify-center items-center py-3.5 p-4 h-full border border-primary text-primary">
-          <p className="text-xl leading-9 font-semibold">
+          <p className="text-xl font-semibold leading-9">
             {periods.validationPeriod} days
           </p>
           <div className="flex items-center gap-1">

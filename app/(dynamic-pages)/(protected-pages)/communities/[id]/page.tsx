@@ -1,6 +1,5 @@
 import GoBack from "@/components/ui/GoBack";
 import { Button } from "@/components/ui/button";
-import { FC } from "react";
 import CommunityInfo from "./_components/CommunityInfo";
 import CommunityMembers from "./_components/CommunityMembers";
 
@@ -29,6 +28,12 @@ import {
 import { TeamMembersTableProps } from "@/types";
 import { CardLayoutSwitcher } from "@/components/ui/card-layout-switcher";
 import { getCommunityTasks } from "@/data/user/tasks";
+import TotalTasks from "./_components/TotalTasks";
+import TotalRewards from "./_components/TotalRewards";
+import { Filter } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Admin from "./_components/Admin";
+import VetoPower from "./_components/VetoPower";
 
 const paramsSchema = z.object({
   id: z.coerce.string(),
@@ -90,68 +95,76 @@ export default async function CommunityDetailsPage({
   };
 
   return (
-    <div className="relative mx-8 overflow-hidden">
+    <div className="relative mx-8 mb-10">
       <div className="grid items-center grid-cols-2 mt-8 mb-4">
         <div className="md:col-span-2 h-9">
           <GoBack />
         </div>
-        <h1 className="col-span-2 font-medium row-start-2 mt-4 text-3xl md:col-span-1">
+        <h1 className="col-span-2 row-start-2 mt-4 text-3xl font-medium md:col-span-1">
           Community Details
         </h1>
         <div className="ml-auto ">
           <Button className="w-32">Join</Button>
         </div>
       </div>
-      {/* Content */}
-      <div className="grid grid-cols-[auto,1fr] gap-4 h-[calc(100vh-400px)]   md:h-[calc(100vh-600px)] xl:h-[calc(100vh-220px)] overflow-hidden w-full ">
-        {/* Members */}
-        <div className="flex flex-col gap-4 rounded-lg w-[280px]">
+      <div className="flex flex-col gap-4 md:grid md:grid-cols-3 2xl:grid-cols-4">
+        <div className="space-y-4 md:col-span-2 lg:grid lg:grid-cols-2 lg:gap-3 xl:grid-cols-3 2xl:col-span-3">
+          <CommunityDetailsTopCards rewards={rewards} />
+          <CarrotPotCard />
+          <PeriodsCard periods={periods} />
+          <PriorityCards
+            prioritizationQourum={
+              community.prioritization_quorum_percentage ?? 25
+            }
+            validationQuorum={community.validation_quorum_percentage ?? 25}
+          />
+          <div className="grid gap-3 lg:grid-cols-2 lg:col-span-2 xl:col-span-3">
+            <TotalTasks />
+            <TotalRewards />
+          </div>
+          <Card className="w-full p-4 pb-4 border-none bg-muted lg:col-span-2 xl:col-span-3">
+            <h1 className="text-[20px] font-semibold mb-4">Tasks</h1>
+            <div className="flex items-center w-full mb-4">
+              <div className="flex gap-2">
+                <Search placeholder="Search Tasks..." />
+                <Button variant="outline">
+                  <Filter className="mr-2" />
+                  Filter
+                </Button>
+              </div>
+            </div>
+            <div>
+              <TaskTab tasks={communityTasks} />
+              <div className="hidden pt-4 md:flex">
+                <Pagination
+                  count={20}
+                  title="Tasks"
+                  totalPages={10}
+                  className="bg-transparent"
+                />
+              </div>
+              <Button
+                variant="ghost"
+                className="justify-center w-full text-primary md:hidden"
+                size="lg"
+              >
+                Show More
+              </Button>
+            </div>
+          </Card>
+        </div>
+
+        <div className="space-y-4 md:col-span-1 md:row-start-1 2xl:col-span-1">
           <CommunityInfo
             communityName={community.title}
             communityDescription={community.description ?? ""}
             communityUrls={communityUrls}
             communityMembersCount={communityMembersCount}
           />
-          <div className="h-20 md:h-20 xl:h-72 rounded-xl overflow-auto">
-            <CommunityMembers communityMembers={normalizedMembers} />
-          </div>
-        </div>
-        {/* Details */}
-        <div className="h-full overflow-y-auto w-full">
-          <div className="flex flex-col gap-4 w-full">
-            <CommunityDetailsTopCards rewards={rewards} />
-            <div className="grid grid-cols-4 gap-4 w-full">
-              <CarrotPotCard />
-              <PeriodsCard periods={periods} />
-              <PriorityCards
-                prioritizationQourum={
-                  community.prioritization_quorum_percentage ?? 25
-                }
-                validationQuorum={community.validation_quorum_percentage ?? 25}
-              />
-            </div>
-            <Card className="w-full p-8 pb-4 bg-muted border-none ">
-              <div className="flex items-center w-full mb-4">
-                <h1 className="text-[20px] font-semibold">Tasks</h1>
-                <div className="flex gap-2 ml-auto">
-                  <Search placeholder="Search Tasks..." />
-                  <Button variant="outline">Filter</Button>
-                  <CardLayoutSwitcher />
-                </div>
-              </div>
-              <div>
-                <TaskTab tasks={communityTasks} />
-                <div className="pt-4">
-                  <Pagination
-                    count={20}
-                    title="Tasks"
-                    totalPages={10}
-                    className="bg-transparent"
-                  />
-                </div>
-              </div>
-            </Card>
-          </div>
+          <Admin communityMembers={normalizedMembers} />
+
+          <CommunityMembers communityMembers={normalizedMembers} />
+          <VetoPower />
         </div>
       </div>
     </div>

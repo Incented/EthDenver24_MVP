@@ -1,8 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card } from "@/components/ui/card";
 import { Facebook, Link as LinkIcon, Linkedin, Twitter } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { FC } from "react";
 
 type CommunityInfoProps = {
   communityName: string;
@@ -27,32 +27,40 @@ function CommunityInfo({
   communityUrls,
 }: CommunityInfoProps) {
   return (
-    <Card className="col-span-1 w-full lg:min-w-[281px] border-none bg-muted p-8">
-      <div className="flex items-center gap-4 mb-4">
-        <Avatar className="w-16 h-16">
+    <Card className="col-span-1 w-full lg:min-w-[281px] border-none bg-muted p-6">
+      <div className="flex items-center gap-3 mb-4">
+        <Avatar className="w-[80px] h-[80px]">
           <AvatarImage src={communityImage} className="object-cover" />
-          <AvatarFallback className=" bg-background">
+          <AvatarFallback className="bg-background">
             {communityName.slice(0, 2).toUpperCase()}
           </AvatarFallback>
         </Avatar>
-        <div className="">
+        <div>
           <h1 className="text-lg font-semibold">{communityName}</h1>
           <p className="text-xs text-muted-foreground">
-            {/* {communityMembers}  */}
             {communityMembersCount} members
           </p>
         </div>
       </div>
+      <div className="flex items-center justify-center gap-3 p-1 mb-2 text-xs rounded-md bg-background">
+        <h4>Protocol Fee : </h4> <span>1%</span>
+      </div>
+      <div className="flex items-center justify-center gap-3 p-1 mb-3 text-xs rounded-md bg-background">
+        <h4>Community Fee : </h4> <span>1%</span>
+      </div>
       <p className="mb-4 text-sm leading-6 text-muted-foreground">
-        {communityDescription} <span className="text-primary">See more</span>
+        {communityDescription}
+        {communityDescription && communityDescription?.length > 100 && (
+          <span className="text-primary">See more</span>
+        )}
       </p>
-      <div className="flex flex-col gap-y-4 max-w-md">
+      <div className="flex flex-col max-w-md gap-y-4">
         <Link
           href={communityUrls?.website || ""}
           className="flex items-center gap-2"
         >
-          <LinkIcon size={24} className="p-1 text-black bg-border rounded-md" />
-          <p className="text-xs text-muted-foreground truncate w-40">
+          <LinkIcon size={24} className="p-1 rounded-md bg-border" />
+          <p className="w-40 text-xs truncate text-muted-foreground">
             {communityUrls?.website || "Not provided"}
           </p>
         </Link>
@@ -62,9 +70,9 @@ function CommunityInfo({
         >
           <Facebook
             size={24}
-            className="p-1 text-foreground bg-border rounded-md"
+            className="p-1 rounded-md text-foreground bg-border"
           />
-          <p className="text-xs text-muted-foreground truncate w-40">
+          <p className="w-40 text-xs truncate text-muted-foreground">
             {communityUrls?.facebook || "Not provided"}
           </p>
         </Link>
@@ -74,9 +82,9 @@ function CommunityInfo({
         >
           <Twitter
             size={24}
-            className="p-1 text-foreground bg-border rounded-md"
+            className="p-1 rounded-md text-foreground bg-border"
           />
-          <p className="text-xs text-muted-foreground truncate w-40">
+          <p className="w-40 text-xs truncate text-muted-foreground">
             {communityUrls?.twitter || "Not provided"}
           </p>
         </Link>
@@ -86,22 +94,22 @@ function CommunityInfo({
         >
           <Linkedin
             size={24}
-            className="p-1 text-foreground bg-border rounded-md"
+            className="p-1 rounded-md text-foreground bg-border"
           />
-          <p className="text-xs text-muted-foreground truncate w-40">
+          <p className="w-40 text-xs truncate text-muted-foreground">
             {communityUrls?.linkedin || "Not provided"}
           </p>
         </Link>
       </div>
+      <Button
+        variant="ghost"
+        className="p-0 text-primary hover:text-primary/80"
+      >
+        {" "}
+        View Roles / Permissions
+      </Button>
     </Card>
   );
 }
 
 export default CommunityInfo;
-
-// communityName = "Buan",
-// communityDescription = "Buan is a community of people who are passionate about learning new things.",
-// communityImage = "/assets/avatar_2.jpg",
-// communityMembers = 100,
-// communityTasks = 100,
-// communityUrl = "www.buanfund.com",
