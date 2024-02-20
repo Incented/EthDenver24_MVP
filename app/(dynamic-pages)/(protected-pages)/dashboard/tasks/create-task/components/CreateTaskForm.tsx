@@ -260,7 +260,7 @@ export function CreateTaskForm({
   };
 
   const handleOpenSubmitDialog = (submitType: 'publish') => {
-    setIsSubmittingProposal(true);
+    setIsSubmittingProposal(submitType === "publish");
     setIsDialogOpen(true); // Open the dialog to confirm submission
   };
 

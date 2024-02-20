@@ -4,7 +4,7 @@ import {
 import { Card } from "@/components/ui/card";
 import Detail from "./Detail";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -13,44 +13,48 @@ import {
   Plus
 } from "lucide-react";
 import { FC } from "react";
-import AddContribution from "./AddContribution";
 import ContributionTable from "./ContributionTable";
 
+import { getUserProfile } from "@/data/user/user";
 import { Table } from "@/types";
+import AddContribution from "./AddContribution";
 import ClaimModal from "./ClaimModal";
+
 
 interface TaskDetailProps {
   id: string;
   task: Table<"tasks">;
 }
 const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
-  let taskStatusBg = "bg-black";
+  const taskCreator = task.user_id ? await getUserProfile(task.user_id) : null;
+  let taskStatusBg = "bg-muted text-foreground";
 
   if (task.task_status === "in_progress") {
-    taskStatusBg = "bg-green-500";
+    taskStatusBg = "bg-blue-500 text-foreground";
   } else if (task.task_status === "prioritized") {
-    taskStatusBg = "bg-primary";
+    taskStatusBg = "bg-primary text-background";
+  } else if (task.task_status === "new_task") {
+    taskStatusBg = "bg-zinc-300 dark:bg-zinc-700 text-foreground";
   } else {
-    taskStatusBg = "bg-black";
+    taskStatusBg = "bg-muted text-foreground";
   }
 
   return (
-    <div className="w-full gap-2 mt-4 md:grid md:grid-cols-3 xl:grid-cols-4">
-      <div className="flex w-full gap-2 mb-4 md:col-start-3 xl:col-start-4 ">
-        <ClaimModal />
-        <AddContribution />
-      </div>
-      <section className="md:col-span-2 xl:col-span-3 md:-mt-[61px]">
-        <Card className="relative mb-4 overflow-hidden border">
+
+    <div className="w-full gap-4 mt-4 md:grid md:grid-cols-3 xl:grid-cols-4">
+      <section className="md:col-span-2 xl:col-span-3">
+        <Card className="relative mb-4 bg-accent/50 overflow-hidden border-none">
           <div
             className={cn(
-              "absolute top-0 left-0 px-6 py-1 text-sm text-white rounded-br-md ",
+              " px-6 py-1 text-sm w-fit text-white rounded-br-md ",
               taskStatusBg
             )}
           >
-            {task.task_status}
+            {task.task_status?.split("-")
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" ")
+              .replace("_", " ")}
           </div>
-
           <Detail task={task} />
         </Card>
 
@@ -77,17 +81,29 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
       </section>
 
       <section className="w-full">
-        <Card className="p-4 mb-4 ">
-          <h1 className="mb-2 text-lg font-bold">Proposer</h1>
+        {task.task_status === "prioritized" && (<div className="flex w-full gap-2 mb-4 md:col-start-3 xl:col-start-4 ">
+          <ClaimModal />
+          <AddContribution />
+        </div>)}
+        {task.task_status === "new_task" && (
+          <div className="flex w-full gap-2 mb-4 md:col-start-3 xl:col-start-4 ">
+            <Button className="w-full">
+              Prioritize
+            </Button>
+          </div>
+        )}
+        <Card className="p-4 mb-4 flex flex-col gap-4">
+          <h1 className="text-sm leading-[14px] font-medium">Proposer</h1>
           <div className="flex items-center gap-[10px]">
             <Avatar>
-              <AvatarImage src="/assets/avatar_1.jpg" />
+              <AvatarImage src={taskCreator?.avatar_url || ""} />
+              <AvatarFallback>U</AvatarFallback>
             </Avatar>
-            <p>Randy Dias</p>
+            <p className="text-sm text-foreground">{taskCreator?.full_name}</p>
           </div>
         </Card>
         <Card className="p-4 mb-4">
-          <h1 className="mb-2 text-lg font-bold">Priority</h1>
+          <h1 className="mb-2 text-sm leading-[14px] font-medium">Priority</h1>
           <div className="flex items-center gap-4">
             <div className="flex items-center space-x-2">
               <p>Lower</p>
@@ -103,7 +119,7 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
           </div>
         </Card>
         <Card className="p-4 mb-4">
-          <h1 className="mb-2 text-lg font-bold">Validation</h1>
+          <h1 className="mb-2 text-sm leading-[14px] font-medium">Validation</h1>
           <div className="flex items-center gap-4">
             <div className="flex items-center space-x-2">
               <p>Rejected</p>

@@ -6,6 +6,7 @@ import { FC, Suspense } from "react";
 
 import { getOrganizationById } from "@/data/user/organizations";
 import { Table } from "@/types";
+import moment from "moment";
 import { z } from "zod";
 import { AttachmentClient } from "../../create-task/components/AttachmentClient";
 import { taskTypesSchema } from "../../create-task/components/CreateTaskFormSchema";
@@ -106,6 +107,9 @@ const Detail: FC<DetailProps> = async ({ task }) => {
   } catch (error) {
     console.log(error);
   }
+
+  const createdAt = moment(task.created_at);
+  const timeSincePosted = createdAt.fromNow();
   return (
     <div className="p-8 bg-accent/50">
       <Suspense fallback={<div>Loading...</div>}>
@@ -121,6 +125,7 @@ const Detail: FC<DetailProps> = async ({ task }) => {
           </Badge>
         ))}
       </div>
+      <p className="text-sm text-muted-foreground">Posted {timeSincePosted}</p>
       <h1 className="mb-6 text-2xl font-semibold">{task.name}</h1>
       <div className="relative w-full h-[165px] mb-6 rounded-md overflow-hidden">
         <div
