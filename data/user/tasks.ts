@@ -28,7 +28,6 @@ export const createTaskType = async ({
 
   revalidatePath("/");
 
-  console.log("Task type created", data);
   return data;
 };
 
@@ -194,7 +193,8 @@ export const getTasksCreatedByUser = async (userId: string) => {
   const { data: tasks, error } = await supabase
     .from("tasks")
     .select("*")
-    .eq("user_id", userId);
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
 
   if (error) {
     throw error;

@@ -1,15 +1,15 @@
-import { FC, Suspense } from "react";
-import { Info } from "lucide-react";
+import { TooltipWrapper } from "@/components/TooltipWrapper";
 import TaksAttributes from "@/components/presentational/Tasks/TaksAttributes";
 import { Badge } from "@/components/ui/badge";
-import { TooltipWrapper } from "@/components/TooltipWrapper";
+import { Info } from "lucide-react";
+import { FC, Suspense } from "react";
 
-import { AttachmentClient } from "../../create-task/components/AttachmentClient";
 import { getOrganizationById } from "@/data/user/organizations";
 import { Table } from "@/types";
 import { z } from "zod";
-import { TaskFileArray } from "./DraftTaskDetail";
+import { AttachmentClient } from "../../create-task/components/AttachmentClient";
 import { taskTypesSchema } from "../../create-task/components/CreateTaskFormSchema";
+import { TaskFileArray } from "./DraftTaskDetail";
 
 async function CommunityDetails({
   organizationId,
@@ -74,8 +74,22 @@ const Detail: FC<DetailProps> = async ({ task }) => {
   }
 
   let files: TaskFileArray = [];
-  console.log("task", task);
   let taskTypes: string[] = [];
+
+  try {
+    const arg =
+      typeof task.files === "string" ? JSON.parse(task.files) : task.files;
+    files = filesSchema.parse(arg);
+    const extractedTypes =
+      typeof task.task_types === "string"
+        ? JSON.parse(task.task_types)
+        : task.task_types;
+    taskTypes = taskTypesSchema.parse(extractedTypes);
+  } catch (error) {
+    console.log(error);
+  }
+  const firstFile = files[0];
+  const featuredImageUrl = firstFile?.url ?? imageUrl;
 
   const deadLine = String(task.efforts);
   const rewards = String(task.rewards);
@@ -112,7 +126,7 @@ const Detail: FC<DetailProps> = async ({ task }) => {
         <div
           className="h-full w-full"
           style={{
-            backgroundImage: `url(${imageUrl})`,
+            backgroundImage: `url(${featuredImageUrl})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

@@ -90,10 +90,10 @@ const TaskCard: FC<TaskCardProps> = ({
               <p className="text-xs font-medium leading-6">{taskCommunity}</p>
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger asChild className="cursor-pointer">
+                  <TooltipTrigger asChild className="cursor-pointer z-20">
                     <Info size={18} />
                   </TooltipTrigger>
-                  <TooltipContent>
+                  <TooltipContent className="z-50">
                     <div className="">
                       <p className="mb-2 text-sm">Community Details</p>
                       <p className="mb-1 text-xs">
@@ -164,24 +164,24 @@ const TaskCard: FC<TaskCardProps> = ({
           </div>
         </Card>
       ) : (
-        <Card className="relative overflow-hidden rounded-lg">
+        <Card className="relative rounded-lg overflow-visible">
           {!isPublished && (
-            <div className="w-full absolute top-0 z-10 flex justify-center  px-4 py-2 text-xs font-medium text-foreground bg-secondary">
+            <div className="w-full absolute top-0 z-10 rounded-t-lg flex justify-center  px-4 py-2 text-xs font-medium text-foreground bg-secondary">
               Draft
             </div>
           )}
           <div
-            className={`w-full h-[116px] bg-cover bg-center relative rounded-md`}
+            className={`w-full h-[116px] bg-cover bg-center relative rounded-t-lg`}
           >
-            <div className="w-full h-full text-white backdrop-brightness-75">
+            <div className="w-full h-full text-white backdrop-brightness-75 rounded-t-lg">
               <div className="absolute top-0 left-0 w-full -z-50">
-                <div className="relative w-full h-[116px] ">
-                  <div className="absolute bottom-0 z-50 w-full h-[116px] bg-gradient-to-b from-foreground/75  via-background/25 to-background"></div>
+                <div className="relative w-full h-[116px]  ">
+                  <div className="absolute bottom-0 z-50  w-full h-[116px] bg-gradient-to-b from-foreground/75  via-background/25 to-background"></div>
                   <Image
                     src={imageUrl}
                     alt={imageUrl}
                     fill
-                    className="object-cover object-center"
+                    className="object-cover object-center rounded-t-lg"
                   />
                 </div>
               </div>
@@ -200,7 +200,7 @@ const TaskCard: FC<TaskCardProps> = ({
               </div>
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger asChild className="cursor-pointer">
+                  <TooltipTrigger asChild className="cursor-pointer z-20">
                     <div className="flex w-fit items-center gap-2 text-sm px-6 py-[10px]">
                       <p className="text-xs font-medium leading-6 text-background">
                         {taskCommunity}
@@ -208,7 +208,7 @@ const TaskCard: FC<TaskCardProps> = ({
                       <Info size={18} className="text-background" />
                     </div>
                   </TooltipTrigger>
-                  <TooltipContent className="ml-4 -mb-3">
+                  <TooltipContent className="ml-4 -mb-3 z-50">
                     <div className="flex flex-col">
                       <p className="mb-2 text-sm">Community Details</p>
                       <p className="mb-1 text-xs">
@@ -268,7 +268,7 @@ const TaskCard: FC<TaskCardProps> = ({
                     <p>0</p>
                   </div>
                 </div>
-                <div className="mt-4">
+                <div className="mt-4 ">
                   <Anchor
                     href={`/dashboard/tasks/${taskId}`}
                     className="text-base font-semibold leading-7 text-foreground"
