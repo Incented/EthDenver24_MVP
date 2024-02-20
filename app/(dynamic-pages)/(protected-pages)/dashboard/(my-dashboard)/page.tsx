@@ -6,7 +6,7 @@ import DashboardCard from "@/components/ui/DashboardCard";
 import { CardLayoutSwitcher } from "@/components/ui/card-layout-switcher";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { getAllOrganizationNames } from "@/data/user/organizations";
-import { getAllNamesOfTaskTypes, getAllTasksWithCommunityNames } from "@/data/user/tasks";
+import { getAllNamesOfTaskTypes, getAllTasks } from "@/data/user/tasks";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 import { Suspense } from "react";
 import FilterTypeMenu from "../FilterTypeMenu";
@@ -16,7 +16,7 @@ import { taskData } from "./data";
 
 async function TaskList() {
   const { id } = await serverGetLoggedInUser();
-  const tasks = await getAllTasksWithCommunityNames(id);
+  const tasks = await getAllTasks();
   return <TaskTab tasks={tasks} userId={id} />
 }
 

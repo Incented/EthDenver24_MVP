@@ -242,8 +242,19 @@ export const getAllTasksOfUser = async (userId: string) => {
   return tasks;
 };
 
-export async function getAllTasksWithCommunityNames(userId: string) {
+export async function getAllTasksOfUserWithCommunityNames(userId: string) {
   const tasks = await getAllTasksOfUser(userId);
+  const tasksWithCommunityNames = await Promise.all(
+    tasks.map(async (task) => {
+      const communityName = await getOrganizationTitle(task.organization_id);
+      return { ...task, task_community_name: communityName };
+    })
+  );
+  return tasksWithCommunityNames;
+}
+
+export async function getAllTasksWithCommunityNames(userId: string) {
+  const tasks = await getAllTasks();
   const tasksWithCommunityNames = await Promise.all(
     tasks.map(async (task) => {
       const communityName = await getOrganizationTitle(task.organization_id);
