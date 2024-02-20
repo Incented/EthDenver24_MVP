@@ -11,7 +11,9 @@ const CommunityMember: FC<CommunityMemberProps> = ({ name, imageUrl }) => {
     <div className="flex items-center gap-2">
       <Avatar>
         <AvatarImage src={imageUrl} className="object-cover" />
-        <AvatarFallback>{name?.slice(0, 2)}</AvatarFallback>
+        <AvatarFallback className="bg-background">
+          {name?.slice(0, 2)}
+        </AvatarFallback>
       </Avatar>
       <p className="text-sm">{name}</p>
     </div>

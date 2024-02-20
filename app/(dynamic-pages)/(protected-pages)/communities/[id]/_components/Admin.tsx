@@ -9,7 +9,7 @@ type CommunityMembersProps = {
 
 const Admin = ({ communityMembers }: CommunityMembersProps) => {
   return (
-    <Card className="p-4">
+    <Card className="p-4 bg-muted">
       <h1 className="mb-2">Admin</h1>
       <div className="flex items-center gap-3 mb-4">
         <Avatar className="w-[60px] h-[60px]">
@@ -17,7 +17,7 @@ const Admin = ({ communityMembers }: CommunityMembersProps) => {
             src={communityMembers[0].avatar_url || ""}
             className="object-cover"
           />
-          <AvatarFallback className="">
+          <AvatarFallback className="bg-background">
             {communityMembers?.[0]?.name?.slice(0, 2).toUpperCase()}
           </AvatarFallback>
         </Avatar>

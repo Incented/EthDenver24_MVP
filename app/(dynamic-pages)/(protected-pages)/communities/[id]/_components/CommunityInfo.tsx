@@ -31,7 +31,7 @@ function CommunityInfo({
       <div className="flex items-center gap-3 mb-4">
         <Avatar className="w-[80px] h-[80px]">
           <AvatarImage src={communityImage} className="object-cover" />
-          <AvatarFallback className=" bg-background">
+          <AvatarFallback className="bg-background">
             {communityName.slice(0, 2).toUpperCase()}
           </AvatarFallback>
         </Avatar>
