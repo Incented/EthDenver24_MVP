@@ -9,9 +9,5 @@ export default async function CommunityDetailsLayout({
 }) {
   const communityCount = await getAllOrganizationsCount();
   const params = new URLSearchParams();
-  return (
-    <main className="h-screen flex flex-col min-h-screen overflow-hidden">
-      {children}
-    </main>
-  );
+  return <main className="flex flex-col ">{children}</main>;
 }

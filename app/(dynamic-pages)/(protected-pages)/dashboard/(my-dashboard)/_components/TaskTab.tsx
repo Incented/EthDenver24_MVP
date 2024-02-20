@@ -130,10 +130,10 @@ const TaskTab = ({ tasks }: TaskTabProps) => {
       <TabsContent value="all tasks">
         <div
           className={cn(
-            "grid gap-4 mt-4 sm:grid-cols-2 md:grid-cols-3",
+            "grid gap-4 mt-4 sm:grid-cols-2",
             isVertical
               ? "sm:grid-cols-1 md:grid-cols-1"
-              : "sm:grid-cols-2 md:grid-cols-3"
+              : "sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3"
           )}
         >
           {tasks.map((filteredTask, i) => (
