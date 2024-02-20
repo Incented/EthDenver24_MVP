@@ -145,7 +145,7 @@ const TaskTab = ({ userId, tasks }: TaskTabProps) => {
               communityId={filteredTask.organization_id}
               imageUrl={getTaskFeaturedImage(filteredTask)}
               taskTitle={filteredTask.name}
-              taskCommunity="Community Name"
+              taskCommunity={filteredTask.task_community_name || "Community Name"}
               taskType={parseJsonToStringArray(filteredTask.task_types)}
               rewards={
                 filteredTask.rewards
@@ -184,7 +184,7 @@ const TaskTab = ({ userId, tasks }: TaskTabProps) => {
                   communityId={filteredTask.organization_id}
                   imageUrl={getTaskFeaturedImage(filteredTask)}
                   taskTitle={filteredTask.name}
-                  taskCommunity="Community Name"
+                  taskCommunity={filteredTask.task_community_name || "Community Name"}
                   taskType={parseJsonToStringArray(filteredTask.task_types)}
                   rewards={
                     filteredTask.rewards

@@ -314,7 +314,6 @@ export function EditTaskForm({
       task_status: "draft", // Assuming "draft" is a valid value for your task_status enum
     };
 
-    console.log("Task data", taskData);
 
     mutate(taskData);
   };
@@ -432,8 +431,8 @@ export function EditTaskForm({
                         field.onChange(newSelectedTypes);
                       }}
                       className={`cursor-pointer rounded-full border-none hover:border hover:border-1 text-xs font-medium leading-4 h-5 p-0 px-[10px] ${field.value.includes(type.slug as task_slug)
-                          ? "bg-foreground text-background hover:bg-foreground/50 hover:text-background"
-                          : "bg-secondary hover:bg-secondary/50"
+                        ? "bg-foreground text-background hover:bg-foreground/50 hover:text-background"
+                        : "bg-secondary hover:bg-secondary/50"
                         }`}
                       variant="outline"
                     >
