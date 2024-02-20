@@ -2,13 +2,13 @@ import { AlarmClock, Calendar, Carrot, LucideIcon } from "lucide-react";
 import { FC } from "react";
 
 interface TaksAttributesProps {
-  rewards?: string;
+  rewards: string;
   efforts?: string;
   deadline?: string;
 }
 
 const TaksAttributes: FC<TaksAttributesProps> = ({
-  rewards = "",
+  rewards,
   efforts = "",
   deadline = "",
 }) => {

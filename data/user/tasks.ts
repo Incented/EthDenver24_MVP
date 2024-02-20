@@ -1,13 +1,10 @@
 "use server";
 
-import { CreateTaskFormSchema } from "@/app/(dynamic-pages)/(protected-pages)/dashboard/tasks/create-task/components/CreateTaskFormSchema";
-import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
-import { createSupabaseUserServerActionClient } from "@/supabase-clients/user/createSupabaseUserServerActionClient";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
-import { supabaseUserClientComponentClient } from "@/supabase-clients/user/supabaseUserClientComponentClient";
-import { Enum, Table, TableInsertPayload } from "@/types";
+import { Enum } from "@/types";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 import { revalidatePath } from "next/cache";
+import { getOrganizationTitle } from "./organizations";
 
 export const createTaskType = async ({
   name,
@@ -244,3 +241,14 @@ export const getAllTasksOfUser = async (userId: string) => {
 
   return tasks;
 };
+
+export async function getAllTasksWithCommunityNames(userId: string) {
+  const tasks = await getAllTasksOfUser(userId);
+  const tasksWithCommunityNames = await Promise.all(
+    tasks.map(async (task) => {
+      const communityName = await getOrganizationTitle(task.organization_id);
+      return { ...task, task_community_name: communityName };
+    })
+  );
+  return tasksWithCommunityNames;
+}

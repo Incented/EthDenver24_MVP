@@ -1,64 +1,102 @@
-import { FC } from "react";
+import { FC, Suspense } from "react";
 import { Info } from "lucide-react";
 import TaksAttributes from "@/components/presentational/Tasks/TaksAttributes";
 import { Badge } from "@/components/ui/badge";
 import { TooltipWrapper } from "@/components/TooltipWrapper";
-import { customMDXComponents } from "@/components/mdxComponents";
-import { MDXRemote } from "next-mdx-remote/rsc";
-import { cn } from "@/lib/utils";
+
 import { AttachmentClient } from "../../create-task/components/AttachmentClient";
-interface DetailProps {
-  taskTitle: string;
-  communityPrioritizationReward: number | null;
-  communityValidationReward: number | null;
-  communityName: string;
-  taskDescription: string | null | undefined;
-  taskTypes: string[];
-  imageUrl: string;
-  deadLine: string;
-  rewards: string;
-  attachments: Array<{
-    name: string;
-    url: string;
-  }>;
+import { getOrganizationById } from "@/data/user/organizations";
+import { Table } from "@/types";
+import { z } from "zod";
+import { TaskFileArray } from "./DraftTaskDetail";
+import { taskTypesSchema } from "../../create-task/components/CreateTaskFormSchema";
+
+async function CommunityDetails({
+  organizationId,
+}: {
+  organizationId: string;
+}) {
+  const community = await getOrganizationById(organizationId);
+  const communityName = community.title;
+  const communityPrioritizationReward =
+    community.prioritization_reward_percentage;
+  const communityValidationReward = community.validation_reward_percentage;
+  return (
+    <div className="flex items-center gap-2 mb-6 text-sm">
+      <p>{communityName}</p>
+      <TooltipWrapper
+        tooltipTrigger={<Info size={18} className="cursor-pointer" />}
+        tooltipContent={
+          <div>
+            <p className="mb-2 text-sm">Community Details</p>
+            <p className="mb-1 text-xs">
+              Prioritization Reward Percentage{" "}
+              {communityPrioritizationReward
+                ? `${communityPrioritizationReward}%`
+                : "Not specified"}
+            </p>
+            <p className="text-xs">
+              Validation Reward Percentage{" "}
+              {communityValidationReward
+                ? `${communityValidationReward}%`
+                : "Not specified"}
+            </p>
+          </div>
+        }
+      />
+    </div>
+  );
 }
-const Detail: FC<DetailProps> = async ({
-  taskTypes,
-  communityName,
-  communityPrioritizationReward,
-  communityValidationReward,
-  taskTitle,
-  taskDescription,
-  imageUrl,
-  rewards,
-  deadLine,
-  attachments,
-}) => {
+interface DetailProps {
+  task: Table<"tasks">;
+}
+
+export const filesSchema = z
+  .array(
+    z.object({
+      name: z.string(),
+      url: z.string(),
+    })
+  )
+  .default([]);
+const Detail: FC<DetailProps> = async ({ task }) => {
+  const organizationId = task.organization_id;
+  const imageUrl = "/images/task1.jpeg";
+
+  let taskStatusBg = "bg-black";
+
+  if (task.task_status === "in_progress") {
+    taskStatusBg = "bg-green-500";
+  } else if (task.task_status === "prioritized") {
+    taskStatusBg = "bg-primary";
+  } else {
+    taskStatusBg = "bg-black";
+  }
+
+  let files: TaskFileArray = [];
+  console.log("task", task);
+  let taskTypes: string[] = [];
+
+  const deadLine = String(task.efforts);
+  const rewards = String(task.rewards);
+
+  try {
+    const arg =
+      typeof task.files === "string" ? JSON.parse(task.files) : task.files;
+    files = filesSchema.parse(arg);
+    const extractedTypes =
+      typeof task.task_types === "string"
+        ? JSON.parse(task.task_types)
+        : task.task_types;
+    taskTypes = taskTypesSchema.parse(extractedTypes);
+  } catch (error) {
+    console.log(error);
+  }
   return (
     <div className="p-8 bg-accent/50">
-      <div className="flex items-center gap-2 mb-6 text-sm">
-        <p>{communityName}</p>
-        <TooltipWrapper
-          tooltipTrigger={<Info size={18} className="cursor-pointer" />}
-          tooltipContent={
-            <div>
-              <p className="mb-2 text-sm">Community Details</p>
-              <p className="mb-1 text-xs">
-                Prioritization Reward Percentage{" "}
-                {communityPrioritizationReward
-                  ? `${communityPrioritizationReward}%`
-                  : "Not specified"}
-              </p>
-              <p className="text-xs">
-                Validation Reward Percentage{" "}
-                {communityValidationReward
-                  ? `${communityValidationReward}%`
-                  : "Not specified"}
-              </p>
-            </div>
-          }
-        />
-      </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <CommunityDetails organizationId={organizationId} />
+      </Suspense>
       <div className="mb-4 flex flex-wrap gap-3">
         {taskTypes.map((taskType) => (
           <Badge variant={"outline"} key={taskType}>
@@ -69,7 +107,7 @@ const Detail: FC<DetailProps> = async ({
           </Badge>
         ))}
       </div>
-      <h1 className="mb-6 text-2xl font-semibold">{taskTitle}</h1>
+      <h1 className="mb-6 text-2xl font-semibold">{task.name}</h1>
       <div className="relative w-full h-[165px] mb-6 rounded-md overflow-hidden">
         <div
           className="h-full w-full"
@@ -80,10 +118,10 @@ const Detail: FC<DetailProps> = async ({
           }}
         ></div>
       </div>
-      {taskDescription && (
+      {task.description && (
         <div
           className="prose prose-lg prose-slate  dark:prose-invert prose-headings:font-display font-default focus:outline-none max-w-full mb-6"
-          dangerouslySetInnerHTML={{ __html: taskDescription as string }}
+          dangerouslySetInnerHTML={{ __html: task.description as string }}
         />
         // <div
         //   className={cn(
@@ -117,7 +155,7 @@ const Detail: FC<DetailProps> = async ({
           deadline={deadLine}
         />
       </div>
-      <AttachmentClient attachments={attachments} />
+      <AttachmentClient attachments={files} />
     </div>
   );
 };
