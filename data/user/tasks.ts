@@ -253,7 +253,7 @@ export async function getAllTasksOfUserWithCommunityNames(userId: string) {
   return tasksWithCommunityNames;
 }
 
-export async function getAllTasksWithCommunityNames(userId: string) {
+export async function getAllTasksWithCommunityNames() {
   const tasks = await getAllTasks();
   const tasksWithCommunityNames = await Promise.all(
     tasks.map(async (task) => {
