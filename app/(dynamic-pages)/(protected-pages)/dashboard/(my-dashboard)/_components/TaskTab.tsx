@@ -121,7 +121,7 @@ const TaskTab = ({ userId, tasks }: TaskTabProps) => {
               }
               taskCommunity={filteredTask.task_community_name || "Community Name"}
               taskType={parseJsonToStringArray(filteredTask.task_types)}
-              taskStatus={filteredTask.task_status || "in_progress"}
+              taskStatus={filteredTask.task_status || "new_task"}
               isVertical={isVertical}
               isPublished={filteredTask.is_task_published || false}
             />
@@ -157,7 +157,7 @@ const TaskTab = ({ userId, tasks }: TaskTabProps) => {
                   ? `${filteredTask.efforts} days`
                   : "0 days"
               }
-              taskStatus={filteredTask.task_status || "in_progress"}
+              taskStatus={filteredTask.task_status || "new_task"}
               isVertical={isVertical}
               isPublished={filteredTask.is_task_published || false}
             />

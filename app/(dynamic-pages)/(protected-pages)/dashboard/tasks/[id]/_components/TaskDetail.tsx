@@ -1,36 +1,22 @@
-import Detail from "./Detail";
 import {
-  CarrotStrikIcon,
-  CarrotStrikIconDark,
+  CarrotStrikIconDark
 } from "@/components/Icons/CustomIcons";
 import { Card } from "@/components/ui/card";
+import Detail from "./Detail";
 
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import {
   Carrot,
-  Copy,
-  File,
-  Info,
-  MoreVertical,
-  Plus,
-  Settings,
+  Plus
 } from "lucide-react";
 import { FC } from "react";
-import Pagination from "@/components/ui/Pagination";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import ContributionTable from "./ContributionTable";
-import Image from "next/image";
 import AddContribution from "./AddContribution";
+import ContributionTable from "./ContributionTable";
 
-import {
-  getOrganizationById,
-  getOrganizationTitle,
-} from "@/data/user/organizations";
 import { Table } from "@/types";
-import { TaskFileArray, filesSchema } from "./DraftTaskDetail";
-import { taskTypesSchema } from "../../create-task/components/CreateTaskFormSchema";
 import ClaimModal from "./ClaimModal";
 
 interface TaskDetailProps {
@@ -62,7 +48,7 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
               taskStatusBg
             )}
           >
-            {task.task_status === "published" ? "New task" : task.task_status}
+            {task.task_status}
           </div>
 
           <Detail task={task} />

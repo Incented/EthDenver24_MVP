@@ -1490,14 +1490,15 @@ export type Database = {
         | "paused";
       task_status:
         | "draft"
-        | "published"
+        | "new_task"
         | "prioritized"
         | "claimed"
         | "in_progress"
         | "in_review"
         | "completed"
         | "failed"
-        | "expired";
+        | "expired"
+        | "protocol_update";
     };
     CompositeTypes: {
       [_ in never]: never;

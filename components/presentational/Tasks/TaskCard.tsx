@@ -55,7 +55,7 @@ const TaskCard: FC<TaskCardProps> = ({
     taskStatusBg = "bg-blue-500 text-foreground";
   } else if (taskStatus === "prioritized") {
     taskStatusBg = "bg-primary text-background";
-  } else if (taskStatus === "published") {
+  } else if (taskStatus === "new_task") {
     taskStatusBg = "bg-zinc-300 dark:bg-zinc-700 text-foreground";
   } else {
     taskStatusBg = "bg-muted text-foreground";

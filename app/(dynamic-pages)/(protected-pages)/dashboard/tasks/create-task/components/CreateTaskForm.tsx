@@ -216,7 +216,7 @@ export function CreateTaskForm({
         task_efforts: efforts,
         task_files: task_files,
         task_types: types,
-        task_status: isSubmittingProposal ? "published" : "draft",
+        task_status: isSubmittingProposal ? "new_task" : "draft",
         is_task_published: isSubmittingProposal,
       });
     },
