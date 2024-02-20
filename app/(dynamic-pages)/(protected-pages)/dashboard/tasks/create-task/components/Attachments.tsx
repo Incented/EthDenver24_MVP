@@ -1,6 +1,7 @@
 import { Label } from "@/components/ui/label";
 import { File, XIcon } from "lucide-react";
 import { AttachmentDialog } from "@/components/AttachmentDialog";
+import { Button } from "@/components/ui/button";
 
 export function Attachments({
   filePreviews,
@@ -25,20 +26,26 @@ export function Attachments({
               key={index}
               className="flex w-fit items-center justify-between p-2 border rounded-lg bg-gradient-to-r from-muted to-transparent"
             >
-              <button
+              <Button
                 className="flex items-center space-x-2"
-                onClick={() => openPreview({ file, previewUrl })}
+                onClick={(e) => {
+                  e.preventDefault();
+                  openPreview({ file, previewUrl });
+                }}
               >
                 <File className="w-4 h-4 text-foreground" aria-hidden="true" />
                 <span className="truncate text-sm">{file.name}</span>
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
-                onClick={() => removeFile(index)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  removeFile(index);
+                }}
                 className="text-destructive pl-2"
               >
                 <XIcon className="w-5 h-5" aria-hidden="true" />
-              </button>
+              </Button>
             </div>
           ))}
         </div>

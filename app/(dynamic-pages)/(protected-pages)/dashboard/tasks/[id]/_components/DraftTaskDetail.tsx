@@ -10,8 +10,6 @@ import {
   getOrganizationTitle,
 } from "@/data/user/organizations";
 import Link from "next/link";
-import { useToastMutation } from "@/hooks/useToastMutation";
-import { publishTaskAction } from "@/data/user/tasks";
 
 const imageUrl = "/images/task1.jpeg";
 // const taskTypes = ["Construction", "Validation", "Prioritization"];
@@ -39,37 +37,12 @@ const DraftTaskDetail: FC<TaskDetailProps> = async ({
   id: string;
   task: Table<"tasks">;
 }) => {
-  const community = await getOrganizationById(task.organization_id);
-  const communityName = community.title;
-  const communityPrioritizationReward =
-    community.prioritization_reward_percentage;
-  const communityValidationReward = community.validation_reward_percentage;
-
-  let files: TaskFileArray = [];
-  console.log("task", task);
-  let taskTypes: string[] = [];
-
-  try {
-    const arg =
-      typeof task.files === "string" ? JSON.parse(task.files) : task.files;
-    files = filesSchema.parse(arg);
-    const extractedTypes =
-      typeof task.task_types === "string"
-        ? JSON.parse(task.task_types)
-        : task.task_types;
-    taskTypes = taskTypesSchema.parse(extractedTypes);
-  } catch (error) {
-    console.log(error);
-  }
-
-  const firstFile = files[0];
-  const featuredImageUrl = firstFile?.url ?? imageUrl;
   return (
     <div className="w-full space-y-4 mt-4">
       {/* TODO: adjust the space-y-[10px] */}
       <form>
         <div className="space-y-[10px] md:gap-0 md:flex md:items-center md:justify-between">
-          <h1 className="col-span-2 font-medium rounded-md row-start-2 mt-4 text-3xl md:col-span-1">
+          <h1 className="col-span-2 h-[54px] font-medium rounded-md row-start-2 mt-4 text-3xl md:col-span-1">
             Draft Preview
           </h1>
           <div className="ml-auto flex justify-between md:gap-2">
@@ -88,18 +61,7 @@ const DraftTaskDetail: FC<TaskDetailProps> = async ({
             <h3 className="text-center bg-secondary rounded-t-md font-semibold text-muted-foreground text-xs py-1.5">
               Draft
             </h3>
-            <Detail
-              taskTitle={task.name}
-              communityName={communityName}
-              communityPrioritizationReward={communityPrioritizationReward}
-              communityValidationReward={communityValidationReward}
-              taskDescription={task.description}
-              taskTypes={taskTypes}
-              imageUrl={featuredImageUrl}
-              deadLine={`${task.efforts} days`}
-              rewards={String(task.rewards) ?? undefined}
-              attachments={files}
-            />
+            <Detail task={task} />
           </Card>
         </section>
       </form>

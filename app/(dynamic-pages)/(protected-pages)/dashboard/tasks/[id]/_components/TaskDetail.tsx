@@ -33,19 +33,11 @@ import { TaskFileArray, filesSchema } from "./DraftTaskDetail";
 import { taskTypesSchema } from "../../create-task/components/CreateTaskFormSchema";
 import ClaimModal from "./ClaimModal";
 
-
 interface TaskDetailProps {
   id: string;
   task: Table<"tasks">;
 }
 const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
-  const imageUrl = "/images/task1.jpeg";
-  const community = await getOrganizationById(task.organization_id);
-  const communityName = community.title;
-  const communityPrioritizationReward =
-    community.prioritization_reward_percentage;
-  const communityValidationReward = community.validation_reward_percentage;
-
   let taskStatusBg = "bg-black";
 
   if (task.task_status === "in_progress") {
@@ -55,26 +47,6 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
   } else {
     taskStatusBg = "bg-black";
   }
-
-  let files: TaskFileArray = [];
-  console.log("task", task);
-  let taskTypes: string[] = [];
-
-  try {
-    const arg =
-      typeof task.files === "string" ? JSON.parse(task.files) : task.files;
-    files = filesSchema.parse(arg);
-    const extractedTypes =
-      typeof task.task_types === "string"
-        ? JSON.parse(task.task_types)
-        : task.task_types;
-    taskTypes = taskTypesSchema.parse(extractedTypes);
-  } catch (error) {
-    console.log(error);
-  }
-
-  const firstFile = files[0];
-  const featuredImageUrl = firstFile?.url ?? imageUrl;
 
   return (
     <div className="w-full gap-2 mt-4 md:grid md:grid-cols-3 xl:grid-cols-4">
@@ -90,21 +62,10 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
               taskStatusBg
             )}
           >
-            {task.task_status}
+            {task.task_status === "published" ? "New task" : task.task_status}
           </div>
 
-          <Detail
-            taskTitle={task.name}
-            communityName={communityName}
-            communityPrioritizationReward={communityPrioritizationReward}
-            communityValidationReward={communityValidationReward}
-            taskDescription={task.description}
-            taskTypes={taskTypes}
-            imageUrl={featuredImageUrl}
-            deadLine={String(task.efforts)}
-            rewards={String(task.rewards)}
-            attachments={[]}
-          />
+          <Detail task={task} />
         </Card>
 
         <div className="mb-4">

@@ -1,31 +1,33 @@
+import { Anchor } from "@/components/Anchor";
+import { CarrotStrikIcon } from "@/components/Icons/CustomIcons";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { CarrotStrikIcon } from "@/components/Icons/CustomIcons";
-import { Badge } from "@/components/ui/badge";
-import TaksAttributes from "./TaksAttributes";
-import { Card } from "@/components/ui/card";
-import { Carrot, Info } from "lucide-react";
-import { FC } from "react";
 import { cn } from "@/lib/utils";
-import { Anchor } from "@/components/Anchor";
-import Image from "next/image";
 import { Enum } from "@/types";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Carrot, Info } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { FC } from "react";
+import TaksAttributes from "./TaksAttributes";
 
 interface TaskCardProps {
   taskId: string;
+  communityId: string;
   taskTitle?: string;
-  taskCommunity?: string;
-  // taskDescription?: string;
+  taskCommunity: string;
+  taskDescription?: string;
   taskStatus: Enum<"task_status">;
   taskType: string[];
   rabbitHole?: string;
   deadLine?: string;
-  rewards?: string;
+  rewards: string;
   efforts?: string;
   imageUrl?: string;
   isVertical?: boolean;
@@ -34,26 +36,29 @@ interface TaskCardProps {
 
 const TaskCard: FC<TaskCardProps> = ({
   taskId,
+  communityId,
   taskTitle = "Buy a trash container",
-  // taskDescription = "To eradicate invasive species, reintroduce native species and",
+  taskDescription = "To eradicate invasive species, reintroduce native species and",
   taskStatus,
   taskType,
   taskCommunity,
   deadLine = "3 days 7hours",
-  rewards = "250 carrots",
+  rewards,
   efforts = "7 days",
   imageUrl = "/images/task1.jpeg",
   isVertical,
   isPublished,
 }: TaskCardProps) => {
-  let taskStatusBg = "bg-black";
+  let taskStatusBg = "bg-muted text-foreground";
 
   if (taskStatus === "in_progress") {
-    taskStatusBg = "bg-blue-500";
+    taskStatusBg = "bg-blue-500 text-foreground";
   } else if (taskStatus === "prioritized") {
-    taskStatusBg = "bg-primary";
+    taskStatusBg = "bg-primary text-background";
+  } else if (taskStatus === "published") {
+    taskStatusBg = "bg-zinc-300 dark:bg-zinc-700 text-foreground";
   } else {
-    taskStatusBg = "bg-black";
+    taskStatusBg = "bg-muted text-foreground";
   }
   return (
     <>
@@ -66,6 +71,7 @@ const TaskCard: FC<TaskCardProps> = ({
             )}
           >
             {taskStatus
+              .replace("published", "new_task")
               .split("-")
               .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
               .join(" ")
@@ -130,11 +136,11 @@ const TaskCard: FC<TaskCardProps> = ({
                   {taskTitle}
                 </Anchor>
               </div>
-              {/* <div className="mt-2 ">
+              <div className="mt-2 ">
                 <p className="w-full text-sm text-muted-foreground">
                   {`${taskDescription}`}...
                 </p>
-              </div> */}
+              </div>
             </div>
           </div>
 
@@ -158,7 +164,7 @@ const TaskCard: FC<TaskCardProps> = ({
           </div>
         </Card>
       ) : (
-        <Card className="relative rounded-lg">
+        <Card className="relative overflow-hidden rounded-lg">
           {!isPublished && (
             <div className="w-full absolute top-0 z-10 flex justify-center  px-4 py-2 text-xs font-medium text-foreground bg-secondary">
               Draft
@@ -181,40 +187,43 @@ const TaskCard: FC<TaskCardProps> = ({
               </div>
               <div
                 className={cn(
-                  "absolute top-0 right-0 px-4 py-2 text-xs font-medium text-white rounded-tr-md rounded-bl-md",
+                  "absolute top-0 right-0 px-4 py-2 text-xs font-medium rounded-tr-md rounded-bl-md",
                   taskStatusBg
                 )}
               >
                 {taskStatus
+                  .replace("published", "new_task")
                   .split("-")
                   .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                   .join(" ")
                   .replace("_", " ")}
               </div>
-
-              <div className="flex items-center gap-2 text-sm px-6 py-[10px]">
-                <p className="text-xs font-medium leading-6 text-background">
-                  {taskCommunity}
-                </p>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild className="cursor-pointer">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild className="cursor-pointer">
+                    <div className="flex w-fit items-center gap-2 text-sm px-6 py-[10px]">
+                      <p className="text-xs font-medium leading-6 text-background">
+                        {taskCommunity}
+                      </p>
                       <Info size={18} className="text-background" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <div className="">
-                        <p className="mb-2 text-sm">Community Details</p>
-                        <p className="mb-1 text-xs">
-                          Prioritization Reward Percentage 10%
-                        </p>
-                        <p className="text-xs">
-                          Validation Reward Percentage 10%
-                        </p>
-                      </div>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent className="ml-4 -mb-3">
+                    <div className="flex flex-col">
+                      <p className="mb-2 text-sm">Community Details</p>
+                      <p className="mb-1 text-xs">
+                        Prioritization Reward Percentage 10%
+                      </p>
+                      <p className="text-xs">
+                        Validation Reward Percentage 10%
+                      </p>
+                      <Link href={`/communities/${communityId}`} className=" text-xs pt-4 text-muted-foreground underline hover:text-foreground">
+                        View community
+                      </Link>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               <div className="px-6 ">
                 <div className="flex items-center justify-between w-full mt-4">
                   <ScrollArea className="h-fit whitespace-no-wrap w-full">
@@ -270,11 +279,11 @@ const TaskCard: FC<TaskCardProps> = ({
               </div>
             </div>
           </div>
-          {/* <div className="px-6 mt-3">
+          <div className="px-6 mt-3">
             <p className="w-full text-sm text-muted-foreground">
               {`${taskDescription.slice(0, 60)}`}...
             </p>
-          </div> */}
+          </div>
 
           <div className="mx-6 my-6 mt-4">
             <TaksAttributes
