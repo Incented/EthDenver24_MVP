@@ -27,7 +27,7 @@ function CommunityInfo({
   communityUrls,
 }: CommunityInfoProps) {
   return (
-    <Card className="col-span-1 w-full lg:min-w-[281px] border-none bg-muted p-6">
+    <Card className="col-span-1 w-full lg:min-w-[281px] border-none bg-muted-foreground/10 p-6">
       <div className="flex items-center gap-3 mb-4">
         <Avatar className="w-[80px] h-[80px]">
           <AvatarImage src={communityImage} className="object-cover" />
@@ -42,11 +42,11 @@ function CommunityInfo({
           </p>
         </div>
       </div>
-      <div className="flex items-center justify-center gap-3 p-1 mb-2 text-xs rounded-md bg-background">
+      <div className="flex items-center justify-center gap-3 p-1 mb-2 text-xs rounded-md shadow-md bg-muted-foreground/10">
         <h4>Protocol Fee : </h4> <span>1%</span>
       </div>
-      <div className="flex items-center justify-center gap-3 p-1 mb-3 text-xs rounded-md bg-background">
-        <h4>Community Fee : </h4> <span>1%</span>
+      <div className="flex items-center justify-center gap-3 p-1 mb-3 text-xs rounded-md bg-muted-foreground/10">
+        <h4>Community Fee : </h4> <span>{}%</span>
       </div>
       <p className="mb-4 text-sm leading-6 text-muted-foreground">
         {communityDescription}

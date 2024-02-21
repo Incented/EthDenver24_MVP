@@ -10,7 +10,7 @@ type CommunityMembersProps = {
 
 export function CommunityMembers({ communityMembers }: CommunityMembersProps) {
   return (
-    <div className="bg-muted rounded-xl">
+    <div className="bg-muted-foreground/10 rounded-md max-h-[338px] overflow-y-scroll">
       <div className="p-8 gap-4 flex  flex-col  border-none min-w-[281px]">
         <div className="flex flex-col gap-6">
           <h1 className="leading-[14px] text-sm font-semibold">

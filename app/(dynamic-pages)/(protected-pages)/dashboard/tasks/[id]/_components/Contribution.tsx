@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import ValidateDrawer from "./ValidateDrawer";
 import { User } from "lucide-react";
 import { FC } from "react";
+import ContributionDetailsSheet from "./ContributionDetailsSheet";
 
 interface ContributionProps {
   description?: string;
@@ -28,9 +29,7 @@ const Contribution: FC<ContributionProps> = ({
       </TableCell>
       <TableCell className="text-center">
         <div className="flex justify-center space-x-2">
-          <Button variant="outline" size="sm" className="text-foreground">
-            View Details
-          </Button>
+          <ContributionDetailsSheet />
           <ValidateDrawer />
         </div>
       </TableCell>

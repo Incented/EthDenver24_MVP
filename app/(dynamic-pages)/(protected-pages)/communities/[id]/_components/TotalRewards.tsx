@@ -39,7 +39,7 @@ const TotalRewards: FC<TotalRewardsProps> = ({}) => {
       </div>
       <Separator className="my-4" />
 
-      <div className="grid gap-4">
+      <div className="space-y-6">
         <RewardProgress status=" Proposition Rewards" value="600" />
         <RewardProgress status="Prioritization Rewards" value="600" />
         <RewardProgress status="Contribution Rewards" value="200" />

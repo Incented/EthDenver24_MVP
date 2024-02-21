@@ -64,6 +64,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "crypto-js": "^4.2.0",
+    "embla-carousel-react": "^8.0.0-rc23",
     "formidable": "^3.5.1",
     "framer-motion": "^10.16.12",
     "lucide-react": "^0.294.0",

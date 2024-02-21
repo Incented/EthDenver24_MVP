@@ -22,7 +22,6 @@ import { ChangeEvent, FC, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import {
@@ -33,6 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { File, MoreVertical } from "lucide-react";
+
 import {
   Carousel,
   CarouselContent,
@@ -40,8 +40,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Card, CardContent } from "@/components/ui/card";
+import ContributionDiscussion from "./ContributionDiscussion";
 
-interface ValidateDrawerProps {}
+interface ContributionDetailsSheetProps {}
 
 const formSchema = z.object({
   description: z.string().min(5, {
@@ -57,7 +59,7 @@ const formSchema = z.object({
   attchament: z.string().optional(),
 });
 
-const ValidateDrawer: FC<ValidateDrawerProps> = ({}) => {
+const ContributionDetailsSheet: FC<ContributionDetailsSheetProps> = ({}) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -97,12 +99,14 @@ const ValidateDrawer: FC<ValidateDrawerProps> = ({}) => {
   return (
     <Sheet>
       <SheetTrigger>
-        <Button className="">Validate</Button>
+        <Button variant="outline" size="sm" className="text-foreground">
+          View Details
+        </Button>
       </SheetTrigger>
-      <SheetContent className="overflow-y-scroll">
+      <SheetContent className="overflow-scroll">
         <SheetHeader>
           <SheetTitle className="mb-4 text-start">
-            Validate Contribution
+            Contribution Details
           </SheetTitle>
           <div className="flex items-center gap-1">
             <Avatar>
@@ -246,9 +250,25 @@ const ValidateDrawer: FC<ValidateDrawerProps> = ({}) => {
             </form>
           </Form>
         </Card>
+        <div className="space-y-3">
+          <ContributionDiscussion
+            details="Building bridges between communities, fostering innovation, and empowering individuals to reach their full potential. Together, we strive to create a brighter future where every voice is heard, every dream is nurtured, and every opportunity is embraced."
+            contributionCarrots={20}
+            contributorId="23"
+            contributorImage="/assets/avatar_1.jpg"
+            contributorName="Jeph chisom"
+          />
+          <ContributionDiscussion
+            details="Building bridges between communities, fostering innovation, and empowering individuals to reach their full potential. Together, we strive to create a brighter future where every voice is heard, every dream is nurtured, and every opportunity is embraced."
+            contributionCarrots={20}
+            contributorId="23"
+            contributorImage="/assets/avatar_1.jpg"
+            contributorName="Jeph chisom"
+          />
+        </div>
       </SheetContent>
     </Sheet>
   );
 };
 
-export default ValidateDrawer;
+export default ContributionDetailsSheet;

@@ -31,8 +31,8 @@ export function PriorityCards({
   validationQuorum: number;
 }) {
   return (
-    <div className="grid w-full lg:col-span-2 xl:col-span-1">
-      <Card className=" grid grid-rows-[auto,1fr] w-full h-full p-4 ">
+    <div className="grid w-full gap-3 lg:col-span-2 xl:col-span-1">
+      <Card className="w-full p-4 ">
         <div className="w-full border-b">
           <h1 className="text-[16px] mb-2">Prioritization Quorum</h1>
         </div>
@@ -41,12 +41,12 @@ export function PriorityCards({
             <ChevronRight />
             <h1>{prioritizationQourum} %</h1>
           </div>
-          <p className="font-light text-center text-muted-foreground">
+          <p className="mb-2 font-light text-center text-muted-foreground">
             positive priority
           </p>
         </div>
       </Card>
-      <Card className=" grid grid-rows-[auto,1fr] w-full h-full p-4 ">
+      <Card className="w-full p-4 ">
         <div className="w-full border-b">
           <h1 className="text-[16px] mb-2">Validation Quorum</h1>
         </div>
@@ -55,7 +55,7 @@ export function PriorityCards({
             <ChevronRight />
             <h1>{validationQuorum} %</h1>
           </div>
-          <p className="font-light text-center text-muted-foreground">
+          <p className="mb-2 font-light text-center text-muted-foreground">
             positive priority
           </p>
         </div>

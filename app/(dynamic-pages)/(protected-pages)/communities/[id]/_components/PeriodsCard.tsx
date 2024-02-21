@@ -4,7 +4,7 @@ import { Periods } from "../../create-community/_components/createCommunitySchem
 
 export function PeriodsCard({ periods }: { periods: Periods }) {
   return (
-    <Card className="w-full p-8 border-none bg-muted ">
+    <Card className="w-full p-8 border-none bg-muted-foreground/10">
       <div className="flex flex-col justify-between gap-4 mb-4 ">
         <div className="flex items-center space-x-2">
           <svg
