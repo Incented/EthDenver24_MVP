@@ -122,6 +122,7 @@ export default async function CommunityDetailsPage({
         <h1 className="col-span-2 row-start-2 mt-4 text-3xl font-medium md:col-span-1">
           Community Details
         </h1>
+
         <div className="ml-auto ">
           <Button className="w-32">Join</Button>
         </div>
@@ -179,6 +180,7 @@ export default async function CommunityDetailsPage({
             communityDescription={community.description ?? ""}
             communityUrls={communityUrls}
             communityMembersCount={communityMembersCount}
+            commuityFee={community.community_fee_percentage}
           />
           <Admin communityMembers={normalizedAdmins} />
 
