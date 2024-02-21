@@ -1,7 +1,7 @@
 import GoBack from "@/components/ui/GoBack";
-import TaskDetail from "./_components/TaskDetail";
-import DraftTaskDetail from "./_components/DraftTaskDetail";
 import { getTaskById } from "@/data/user/tasks";
+import DraftTaskDetail from "./_components/DraftTaskDetail";
+import TaskDetail from "./_components/TaskDetail";
 
 export default async function TaskDetailsPage({ params }: { params: unknown }) {
   const parsedParams = params as { id: string };
@@ -17,8 +17,6 @@ export default async function TaskDetailsPage({ params }: { params: unknown }) {
       ) : (
         <TaskDetail id={id} task={task} />
       )}
-      {/* <TaskDetail id={id} /> */}
-      {/* <TaskDetail id={id} /> */}
     </main>
   );
 }

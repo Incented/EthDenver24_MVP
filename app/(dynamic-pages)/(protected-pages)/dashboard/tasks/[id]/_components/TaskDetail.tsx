@@ -19,6 +19,7 @@ import { getUserProfile } from "@/data/user/user";
 import { Table } from "@/types";
 import AddContribution from "./AddContribution";
 import ClaimModal from "./ClaimModal";
+import { PrioritizeDialog } from "./PrioritizeDialog";
 
 
 interface TaskDetailProps {
@@ -59,7 +60,9 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
         </Card>
 
         <div className="mb-4">
-          <ContributionTable />
+          <ContributionTable
+            task_status={task.task_status || "new_task"}
+          />
         </div>
 
         <Card className="p-8 mb-4 overflow-hidden border-none">
@@ -87,9 +90,10 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
         </div>)}
         {task.task_status === "new_task" && (
           <div className="flex w-full gap-2 mb-4 md:col-start-3 xl:col-start-4 ">
-            <Button className="w-full">
+            {/* <Button className="w-full">
               Prioritize
-            </Button>
+            </Button> */}
+            <PrioritizeDialog />
           </div>
         )}
         <Card className="p-4 mb-4 flex flex-col gap-4">
