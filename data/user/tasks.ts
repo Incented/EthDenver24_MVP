@@ -220,6 +220,27 @@ export const checkIfUserPrioritizedTask = async (
   return prioritizedTask !== null;
 };
 
+export const updateTaskStatus = async ({
+  status,
+  task_id,
+}: {
+  status: Enum<"task_status">;
+  task_id: string;
+}) => {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { error } = await supabaseClient
+    .from("tasks")
+    .update({ task_status: status })
+    .eq("id", task_id)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  revalidatePath(`/dashboard/tasks/${task_id}`);
+};
+
 export const getPrioritizationDetails = async (task_id: string) => {
   const supabaseClient = createSupabaseUserServerComponentClient();
   const { data: prioritizationDetails, error: prioritizationError } =

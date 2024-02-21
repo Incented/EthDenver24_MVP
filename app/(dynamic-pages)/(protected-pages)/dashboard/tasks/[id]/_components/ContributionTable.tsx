@@ -29,7 +29,7 @@ const contributions = [{
 
 const ContributionTable: FC<ContributionTableProps> = ({ task_status }) => {
   return (
-    <Card className="border-none">
+    <Card className="border-none bg-transparent">
       <h1 className="mb-2 text-lg font-bold leading-8">Contributions</h1>
       <div className="w-full border rounded-md overflow-hidden">
         <Table className="">

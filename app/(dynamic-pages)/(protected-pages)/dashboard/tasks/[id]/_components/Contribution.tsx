@@ -1,10 +1,10 @@
 "use client";
 
-import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import ValidateDrawer from "./ValidateDrawer";
+import { TableCell, TableRow } from "@/components/ui/table";
 import { User } from "lucide-react";
 import { FC } from "react";
+import ValidateDrawer from "./ValidateDrawer";
 
 interface ContributionProps {
   description?: string;
@@ -28,7 +28,7 @@ const Contribution: FC<ContributionProps> = ({
       </TableCell>
       <TableCell className="text-center">
         <div className="flex justify-center space-x-2">
-          <Button variant="outline" size="sm" className="text-foreground">
+          <Button variant="outline" className="text-foreground">
             View Details
           </Button>
           <ValidateDrawer />

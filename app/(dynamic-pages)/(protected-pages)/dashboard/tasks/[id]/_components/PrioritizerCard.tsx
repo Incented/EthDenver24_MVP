@@ -9,7 +9,7 @@ export function PrioritizerCard(detail: { full_name: string | null; avatar_url: 
         <div className="py-4 border-b flex gap-3 items-center w-full">
             <Avatar>
                 <AvatarImage src={detail.avatar_url || ""} alt={detail.full_name || ""} />
-                <AvatarFallback />
+                <AvatarFallback>{detail.full_name ? detail.full_name.substring(0, 2) : 'U'}</AvatarFallback>
             </Avatar>
             <div>
                 <div className="font-semibold text-sm">{detail.full_name || 'Unknown'}</div>
