@@ -9,7 +9,7 @@ type CommunityMembersProps = {
 
 const Admin = ({ communityMembers }: CommunityMembersProps) => {
   return (
-    <Card className="p-4 bg-muted">
+    <Card className="p-4 bg-muted-foreground/10">
       <h1 className="mb-2">Admin</h1>
       {communityMembers.map((member, index) => (
         <div key={index} className="flex items-center gap-3 mb-4">

@@ -39,13 +39,13 @@ const TotalTasks: FC<TotalTasksProps> = ({}) => {
       </div>
       <Separator className="my-4" />
 
-      <div className="grid gap-4">
-        <TaskProgress status="Prioritized" value="4" />
-        <TaskProgress status="Claimed" value="1" />
-        <TaskProgress status="In Progress" value="5" />
-        <TaskProgress status="In Review" value="2" />
+      <div className="space-y-1">
+        <TaskProgress status="New" value="4" />
+        <TaskProgress status="Prioritized" value="1" />
+        <TaskProgress status="Claimed" value="2" />
+        <TaskProgress status="In Progress" value="2" />
+        <TaskProgress status="In Review" value="4" />
         <TaskProgress status="Complete" value="4" />
-        <TaskProgress status="Expired" value="3" />
       </div>
     </Card>
   );
@@ -58,7 +58,7 @@ function TaskProgress({ value, status }: { value: string; status: string }) {
     <div className="">
       <p className="ml-1">{value}</p>
       <div className="flex items-center justify-between">
-        <Progress value={Number(value) * 5} className="w-1/2" />
+        <Progress value={Number(value) * 5} className="w-1/2 h-2" />
         <h4 className="text-muted-foreground">
           {Number(value) * 5}% {status}
         </h4>

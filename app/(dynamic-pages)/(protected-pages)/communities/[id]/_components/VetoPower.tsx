@@ -14,7 +14,7 @@ interface VetoPowerProps {}
 
 const VetoPower: FC<VetoPowerProps> = ({}) => {
   return (
-    <Card className="flex flex-col gap-4 p-8">
+    <Card className="flex flex-col gap-4 p-8 max-h-[338px] overflow-y-scroll bg-muted-foreground/10 border-0">
       <div className="flex items-center gap-2 mb-6 text-sm font-semibold">
         <p>Veto Power</p>
         <TooltipProvider>

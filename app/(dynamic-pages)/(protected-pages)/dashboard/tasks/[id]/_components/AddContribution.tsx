@@ -99,7 +99,7 @@ const AddContribution: FC<AddContributionProps> = ({}) => {
       <SheetTrigger className="w-full">
         <Button className="w-full">Contribute</Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="overflow-y-scroll">
         <SheetHeader>
           <SheetTitle className="text-start">Contribution</SheetTitle>
         </SheetHeader>

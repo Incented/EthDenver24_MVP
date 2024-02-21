@@ -8,11 +8,12 @@ import { Card } from "@/components/ui/card";
 import { Search } from "@/components/Search";
 import Pagination from "@/components/ui/Pagination";
 import {
+  getOrganizationAdmins,
   getOrganizationById,
   getTeamMembersCountInOrganization,
   getTeamMembersInOrganization,
 } from "@/data/user/organizations";
-import { getCommunityTasksWithCommunityNames } from "@/data/user/tasks";
+import { getCommunityTasks, getCommunityTasksWithCommunityNames } from "@/data/user/tasks";
 import { TeamMembersTableProps } from "@/types";
 import { Filter } from "lucide-react";
 import moment from "moment";
@@ -42,11 +43,13 @@ export default async function CommunityDetailsPage({
 }) {
   const parsedParams = paramsSchema.parse(params);
   const { id } = parsedParams;
-  const [community, members, communityMembersCount, communityTasks] =
+  const [community, members, communityMembersCount, communityTasks, admins] =
     await Promise.all([
       getOrganizationById(id),
       getTeamMembersInOrganization(id),
       getTeamMembersCountInOrganization(id),
+      getCommunityTasks(id),
+      getOrganizationAdmins(id),
       getCommunityTasksWithCommunityNames(id),
     ]);
 
@@ -68,27 +71,25 @@ export default async function CommunityDetailsPage({
       };
     }
   );
-
-  const normalizedAdmins: TeamMembersTableProps["members"] = members
-    .filter(member => member.member_role === "owner" || member.member_role === "admin")
-    .map(
-      (member, index) => {
-        const userProfile = Array.isArray(member.user_profiles)
-          ? member.user_profiles[0]
-          : member.user_profiles;
-        if (!userProfile) {
-          throw new Error("User profile not found");
-        }
-        return {
-          index: index + 1,
-          id: userProfile.id,
-          avatar_url: userProfile.avatar_url,
-          name: userProfile.full_name ?? `User ${userProfile.id}`,
-          role: member.member_role,
-          created_at: moment(member.created_at).format("DD MMM YYYY"),
-        };
+  const normalizedAdmins: TeamMembersTableProps["members"] = admins.map(
+    (member, index) => {
+      const userProfile = Array.isArray(member.user_profiles)
+        ? member.user_profiles[0]
+        : member.user_profiles;
+      if (!userProfile) {
+        throw new Error("User profile not found");
       }
-    );
+      return {
+        index: index + 1,
+        id: userProfile.id,
+        name: userProfile.full_name ?? `User ${userProfile.id}`,
+        role: member.member_role,
+        created_at: moment(member.created_at).format("DD MMM YYYY"),
+      };
+    }
+  );
+
+
 
   const rewards: RewardSettingsSchema = {
     proposalReward: community.proposal_absolute_reward ?? 0,
@@ -121,12 +122,13 @@ export default async function CommunityDetailsPage({
         <h1 className="col-span-2 row-start-2 mt-4 text-3xl font-medium md:col-span-1">
           Community Details
         </h1>
+
         <div className="ml-auto ">
           <Button className="w-32">Join</Button>
         </div>
       </div>
-      <div className="flex flex-col gap-4 md:grid md:grid-cols-3 2xl:grid-cols-4">
-        <div className="space-y-4 md:col-span-2 lg:grid lg:grid-cols-2 lg:gap-3 xl:grid-cols-3 2xl:col-span-3">
+      <div className="flex flex-col gap-4 md:grid md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+        <div className="space-y-4 md:col-span-2 lg:grid lg:grid-cols-2 lg:gap-3 xl:grid-cols-3 xl:col-span-3 2xl:col-span-4">
           <CommunityDetailsTopCards rewards={rewards} />
           <CarrotPotCard />
           <PeriodsCard periods={periods} />
@@ -140,7 +142,7 @@ export default async function CommunityDetailsPage({
             <TotalTasks />
             <TotalRewards />
           </div>
-          <Card className="w-full p-4 pb-4 border-none bg-muted lg:col-span-2 xl:col-span-3">
+          <Card className="w-full p-4 pb-4 border-none bg-muted-foreground/10 lg:col-span-2 xl:col-span-3">
             <h1 className="text-[20px] font-semibold mb-4">Tasks</h1>
             <div className="flex items-center w-full mb-4">
               <div className="flex gap-2">
@@ -178,6 +180,7 @@ export default async function CommunityDetailsPage({
             communityDescription={community.description ?? ""}
             communityUrls={communityUrls}
             communityMembersCount={communityMembersCount}
+            commuityFee={community.community_fee_percentage}
           />
           <Admin communityMembers={normalizedAdmins} />
 
