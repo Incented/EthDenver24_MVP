@@ -1,117 +1,124 @@
-import Detail from "./Detail";
 import {
-  CarrotStrikIcon,
-  CarrotStrikIconDark,
+  CarrotStrikIconDark
 } from "@/components/Icons/CustomIcons";
 import { Card } from "@/components/ui/card";
+import Detail from "./Detail";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import {
   Carrot,
-  Copy,
-  File,
-  Info,
-  MoreVertical,
-  Plus,
-  Settings,
+  Plus
 } from "lucide-react";
-import { FC } from "react";
-import Pagination from "@/components/ui/Pagination";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { FC, Suspense } from "react";
 import ContributionTable from "./ContributionTable";
-import Image from "next/image";
-import AddContribution from "./AddContribution";
 
-import {
-  getOrganizationById,
-  getOrganizationTitle,
-} from "@/data/user/organizations";
+import { updateTaskStatus } from "@/data/user/tasks";
 import { Table } from "@/types";
-import { TaskFileArray, filesSchema } from "./DraftTaskDetail";
-import { taskTypesSchema } from "../../create-task/components/CreateTaskFormSchema";
+import AddContribution from "./AddContribution";
 import ClaimModal from "./ClaimModal";
+import { PrioritizeDialog } from "./PrioritizeDialog";
+import { PrioritizerCards } from "./PrioritizerCards";
 
 
 interface TaskDetailProps {
   id: string;
+  user_id: string;
   task: Table<"tasks">;
-}
-const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
-  const imageUrl = "/images/task1.jpeg";
-  const community = await getOrganizationById(task.organization_id);
-  const communityName = community.title;
-  const communityPrioritizationReward =
-    community.prioritization_reward_percentage;
-  const communityValidationReward = community.validation_reward_percentage;
+  isUserMemberOfCommunity: boolean;
+  prioritizationPeriod: number;
+  prioritizationQuorum: number;
+  taskCreator: {
+    avatar_url: string | null;
+    created_at: string;
+    first_name: string | null;
+    full_name: string | null;
+    id: string;
+    last_name: string | null;
+  } | null;
+  isPrioritizedByUser: boolean;
+  taskPrioritizationDetails: {
+    full_name: string | null;
+    avatar_url: string | null;
+    count: number;
+    created_at: string;
+    user_id: string;
+  }[];
 
-  let taskStatusBg = "bg-black";
+}
+const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, prioritizationPeriod, prioritizationQuorum, isUserMemberOfCommunity,
+  taskCreator, isPrioritizedByUser, taskPrioritizationDetails
+}) => {
+  let taskStatusBg = "bg-muted text-foreground";
+
+
+  // Can be used to check if the task is within the prioritization period
+  const isWithinPrioritizedPeriod = Date.now() < new Date(task.new_task_created_at).getTime() + prioritizationPeriod * 24 * 60 * 60 * 1000;
+
+  let lowerPriority = 0;
+  let higherPriority = 0;
+
+  taskPrioritizationDetails.forEach(detail => {
+    if (detail.count < 0) {
+      lowerPriority += Math.abs(detail.count);
+    } else {
+      higherPriority += detail.count;
+    }
+  });
+
+  const currentPrioritizationQuorum = (higherPriority / (lowerPriority + higherPriority)) * 100;
+
+  if (task.task_status === "new_task" && currentPrioritizationQuorum >= prioritizationQuorum) {
+    await updateTaskStatus({ status: "prioritized", task_id: task.id });
+  }
+
+  // if (task.task_status === "new_task" && currentPrioritizationQuorum >= prioritizationQuorum && !isWithinPrioritizedPeriod) {
+  //   await updateTaskStatus({ status: "prioritized", task_id: task.id });
+  // }
+
+
+  // check if taskCreator is the same as the logged in user
+  const isTaskCreator = user_id === task.user_id;
 
   if (task.task_status === "in_progress") {
-    taskStatusBg = "bg-green-500";
+    taskStatusBg = "bg-blue-500 text-foreground";
   } else if (task.task_status === "prioritized") {
-    taskStatusBg = "bg-primary";
+    taskStatusBg = "bg-primary text-background";
+  } else if (task.task_status === "new_task") {
+    taskStatusBg = "bg-zinc-300 dark:bg-zinc-700 text-foreground";
   } else {
-    taskStatusBg = "bg-black";
+    taskStatusBg = "bg-muted text-foreground";
   }
 
-  let files: TaskFileArray = [];
-  console.log("task", task);
-  let taskTypes: string[] = [];
-
-  try {
-    const arg =
-      typeof task.files === "string" ? JSON.parse(task.files) : task.files;
-    files = filesSchema.parse(arg);
-    const extractedTypes =
-      typeof task.task_types === "string"
-        ? JSON.parse(task.task_types)
-        : task.task_types;
-    taskTypes = taskTypesSchema.parse(extractedTypes);
-  } catch (error) {
-    console.log(error);
-  }
-
-  const firstFile = files[0];
-  const featuredImageUrl = firstFile?.url ?? imageUrl;
 
   return (
-    <div className="w-full gap-2 mt-4 md:grid md:grid-cols-3 xl:grid-cols-4">
-      <div className="flex w-full gap-2 mb-4 md:col-start-3 xl:col-start-4 ">
-        <ClaimModal />
-        <AddContribution />
-      </div>
-      <section className="md:col-span-2 xl:col-span-3 md:-mt-[61px]">
-        <Card className="relative mb-4 overflow-hidden border">
+
+    <div className="w-full gap-4 mt-4 md:grid md:grid-cols-3 xl:grid-cols-4">
+      <div className="md:col-span-2 xl:col-span-3">
+        <Card className="relative mb-4 bg-accent/50 overflow-hidden border-none">
           <div
             className={cn(
-              "absolute top-0 left-0 px-6 py-1 text-sm text-white rounded-br-md ",
+              " px-6 py-1 text-sm w-fit text-white rounded-br-md ",
               taskStatusBg
             )}
           >
-            {task.task_status}
+            {task.task_status?.split("-")
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" ")
+              .replace("_", " ")}
           </div>
-
-          <Detail
-            taskTitle={task.name}
-            communityName={communityName}
-            communityPrioritizationReward={communityPrioritizationReward}
-            communityValidationReward={communityValidationReward}
-            taskDescription={task.description}
-            taskTypes={taskTypes}
-            imageUrl={featuredImageUrl}
-            deadLine={String(task.efforts)}
-            rewards={String(task.rewards)}
-            attachments={[]}
-          />
+          <Detail task={task} />
         </Card>
 
-        <div className="mb-4">
-          <ContributionTable />
+        <div className="mb-4 p-8 bg-muted rounded-lg">
+          <ContributionTable
+            task_status={task.task_status || "new_task"}
+          />
         </div>
 
-        <Card className="p-8 mb-4 overflow-hidden border-none">
+        <Card className="p-8 mb-4 overflow-hidden border-none bg-muted rounded-lg">
           <div className="flex items-center justify-between mb-2">
             <h1 className="text-lg font-bold ">Discussion</h1>
             <Button variant="ghost" className="text-primary">
@@ -127,51 +134,68 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
             <Textarea placeholder="Type a new topic here." />
           </div>
         </Card>
-      </section>
+      </div>
 
-      <section className="w-full">
-        <Card className="p-4 mb-4 ">
-          <h1 className="mb-2 text-lg font-bold">Proposer</h1>
+      <div className="w-full">
+        {task.task_status === "prioritized" && (
+          <div className="flex w-full gap-2 mb-4 md:col-start-3 xl:col-start-4 ">
+            <ClaimModal />
+            <AddContribution />
+          </div>)}
+        {task.task_status === "new_task" && (
+          <div className="flex w-full gap-2 mb-4 md:col-start-3 xl:col-start-4 ">
+            <PrioritizeDialog isTaskCreator={isTaskCreator} task_id={task.id} isPrioritizedByUser={isPrioritizedByUser} isWithinPrioritizedPeriod={isWithinPrioritizedPeriod} isUserMemberOfCommunity={isUserMemberOfCommunity} />
+          </div>
+        )}
+
+        <Card className="p-4 mb-4 flex flex-col gap-4">
+          <h1 className="text-sm leading-[14px] font-medium">Proposer</h1>
           <div className="flex items-center gap-[10px]">
             <Avatar>
-              <AvatarImage src="/assets/avatar_1.jpg" />
+              <AvatarImage src={taskCreator?.avatar_url || ""} />
+              <AvatarFallback>U</AvatarFallback>
             </Avatar>
-            <p>Randy Dias</p>
+            <p className="text-sm text-foreground">{taskCreator?.full_name}</p>
           </div>
         </Card>
         <Card className="p-4 mb-4">
-          <h1 className="mb-2 text-lg font-bold">Priority</h1>
-          <div className="flex items-center gap-4">
+          <h1 className="mb-2 text-sm leading-[14px] font-medium">Priority</h1>
+          <div className="flex items-center gap-4 mb-2 border-b pb-2">
             <div className="flex items-center space-x-2">
-              <p>Lower</p>
+              <p className="text-sm text-muted-foreground">Lower</p>
               <CarrotStrikIconDark />
-              <p>0</p>
+              <p className="text-sm font-semibold text-foreground">0</p>
             </div>
             <div className="w-[2px] h-5 bg-gray-300" />
             <div className="flex items-center space-x-2">
-              <p>0</p>
+              <p className="text-sm font-semibold text-foreground">100</p>
               <Carrot className="text-primary" />
-              <p>higer</p>
+              <p className="text-sm text-muted-foreground">Higher</p>
             </div>
           </div>
+          <Suspense>
+            <PrioritizerCards prioritizations={taskPrioritizationDetails} />
+          </Suspense>
         </Card>
-        <Card className="p-4 mb-4">
-          <h1 className="mb-2 text-lg font-bold">Validation</h1>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center space-x-2">
-              <p>Rejected</p>
-              <CarrotStrikIconDark />
-              <p>0</p>
+        {task.task_status === "in_review" && (
+          <Card className="p-4 mb-4">
+            <h1 className="mb-2 text-sm leading-[14px] font-medium">Validation</h1>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center space-x-2">
+                <p>Rejected</p>
+                <CarrotStrikIconDark />
+                <p>0</p>
+              </div>
+              <div className="w-[2px] h-5 bg-gray-300" />
+              <div className="flex items-center space-x-2">
+                <p>0</p>
+                <Carrot className="text-primary" />
+                <p>Approved</p>
+              </div>
             </div>
-            <div className="w-[2px] h-5 bg-gray-300" />
-            <div className="flex items-center space-x-2">
-              <p>0</p>
-              <Carrot className="text-primary" />
-              <p>Approved</p>
-            </div>
-          </div>
-        </Card>
-      </section>
+          </Card>
+        )}
+      </div>
     </div>
   );
 };

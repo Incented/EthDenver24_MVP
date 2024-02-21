@@ -1,11 +1,10 @@
 "use client";
 
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import ValidateDrawer from "./ValidateDrawer";
 import { User } from "lucide-react";
 import { FC } from "react";
 import ContributionDetailsSheet from "./ContributionDetailsSheet";
+import ValidateDrawer from "./ValidateDrawer";
 
 interface ContributionProps {
   description?: string;

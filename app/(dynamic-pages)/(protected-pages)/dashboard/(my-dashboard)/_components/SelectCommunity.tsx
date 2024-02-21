@@ -11,9 +11,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ChevronDown } from "lucide-react";
 import { FC } from "react";
 
-interface SelectCommunityProps {}
+interface SelectCommunityProps {
+  communities: {
+    title: string;
+    id: string;
+  }[]
+}
 
-const SelectCommunity: FC<SelectCommunityProps> = ({}) => {
+const SelectCommunity: FC<SelectCommunityProps> = ({ communities }) => {
   return (
     <div className="flex w-[176px] items-center px-2 py-1 rounded-md overflow-hidden bg-secondary dark:bg-accent min-w-fit max-h-fit h-10">
       <Popover>

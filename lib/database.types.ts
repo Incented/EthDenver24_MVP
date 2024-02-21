@@ -69,6 +69,84 @@ export type Database = {
         };
         Relationships: [];
       };
+      claimed_tasks: {
+        Row: {
+          created_at: string;
+          task_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          task_id?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          task_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_claimed_tasks_task_id_fkey";
+            columns: ["task_id"];
+            isOneToOne: true;
+            referencedRelation: "tasks";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "public_claimed_tasks_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "user_profiles";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      contributions: {
+        Row: {
+          created_at: string;
+          description: string;
+          files: Json;
+          id: string;
+          links: Json;
+          task_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          description: string;
+          files: Json;
+          id?: string;
+          links: Json;
+          task_id?: string;
+          user_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string;
+          files?: Json;
+          id?: string;
+          links?: Json;
+          task_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_contributions_task_id_fkey";
+            columns: ["task_id"];
+            isOneToOne: false;
+            referencedRelation: "tasks";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "public_contributions_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "user_profiles";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
       customers: {
         Row: {
           organization_id: string;
@@ -760,6 +838,45 @@ export type Database = {
           }
         ];
       };
+      prioritizations: {
+        Row: {
+          count: number;
+          created_at: string;
+          id: string;
+          task_id: string;
+          user_id: string;
+        };
+        Insert: {
+          count: number;
+          created_at?: string;
+          id?: string;
+          task_id?: string;
+          user_id?: string;
+        };
+        Update: {
+          count?: number;
+          created_at?: string;
+          id?: string;
+          task_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_prioritizations_task_id_fkey";
+            columns: ["task_id"];
+            isOneToOne: false;
+            referencedRelation: "tasks";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "public_prioritizations_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "user_profiles";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
       products: {
         Row: {
           active: boolean | null;
@@ -951,6 +1068,7 @@ export type Database = {
           id: string;
           is_task_published: boolean | null;
           name: string;
+          new_task_created_at: string;
           organization_id: string;
           project_status: Database["public"]["Enums"]["project_status"];
           rewards: number | null;
@@ -969,6 +1087,7 @@ export type Database = {
           id?: string;
           is_task_published?: boolean | null;
           name: string;
+          new_task_created_at: string;
           organization_id: string;
           project_status?: Database["public"]["Enums"]["project_status"];
           rewards?: number | null;
@@ -987,6 +1106,7 @@ export type Database = {
           id?: string;
           is_task_published?: boolean | null;
           name?: string;
+          new_task_created_at?: string;
           organization_id?: string;
           project_status?: Database["public"]["Enums"]["project_status"];
           rewards?: number | null;
@@ -1198,6 +1318,51 @@ export type Database = {
             columns: ["id"];
             isOneToOne: true;
             referencedRelation: "users";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      validations: {
+        Row: {
+          count: number;
+          created_at: string;
+          description: string;
+          files: Json;
+          id: string;
+          task_id: string;
+          user_id: string;
+        };
+        Insert: {
+          count: number;
+          created_at?: string;
+          description: string;
+          files: Json;
+          id?: string;
+          task_id?: string;
+          user_id?: string;
+        };
+        Update: {
+          count?: number;
+          created_at?: string;
+          description?: string;
+          files?: Json;
+          id?: string;
+          task_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_validations_task_id_fkey";
+            columns: ["task_id"];
+            isOneToOne: false;
+            referencedRelation: "tasks";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "public_validations_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "user_profiles";
             referencedColumns: ["id"];
           }
         ];

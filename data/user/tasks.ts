@@ -1,13 +1,10 @@
 "use server";
 
-import { CreateTaskFormSchema } from "@/app/(dynamic-pages)/(protected-pages)/dashboard/tasks/create-task/components/CreateTaskFormSchema";
-import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
-import { createSupabaseUserServerActionClient } from "@/supabase-clients/user/createSupabaseUserServerActionClient";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
-import { supabaseUserClientComponentClient } from "@/supabase-clients/user/supabaseUserClientComponentClient";
-import { Enum, Table, TableInsertPayload } from "@/types";
+import { Enum } from "@/types";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 import { revalidatePath } from "next/cache";
+import { getOrganizationTitle } from "./organizations";
 
 export const createTaskType = async ({
   name,
@@ -31,7 +28,6 @@ export const createTaskType = async ({
 
   revalidatePath("/");
 
-  console.log("Task type created", data);
   return data;
 };
 
@@ -84,6 +80,7 @@ export const createTaskAction = async ({
       task_types: task_types,
       task_status: task_status,
       is_task_published: is_task_published,
+      new_task_created_at: new Date().toISOString(),
     })
     .select("*")
     .single();
@@ -134,6 +131,7 @@ export const editTaskForm = async ({
       task_types: task_types,
       task_status: task_status,
       is_task_published: is_task_published,
+      new_task_created_at: new Date().toISOString(),
     })
     .eq("id", id)
     .select("*")
@@ -149,9 +147,14 @@ export const editTaskForm = async ({
 
 export const publishTaskAction = async (id: string) => {
   const supabaseClient = createSupabaseUserServerComponentClient();
+  const currentTime = new Date().toISOString();
   const { data: task, error } = await supabaseClient
     .from("tasks")
-    .update({ is_task_published: true })
+    .update({
+      is_task_published: true,
+      new_task_created_at: currentTime,
+      task_status: "new_task",
+    })
     .eq("id", id);
 
   if (error) {
@@ -177,6 +180,102 @@ export const unPublishTaskAction = async (id: string) => {
   return task;
 };
 
+export const prioritizeTaskAction = async ({
+  stakeAmount,
+  task_id,
+}: {
+  stakeAmount: number;
+  task_id: string;
+}) => {
+  const user = await serverGetLoggedInUser();
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: prioritizedTask, error } = await supabaseClient
+    .from("prioritizations")
+    .insert({ count: stakeAmount, task_id, user_id: user.id });
+
+  if (error) {
+    throw error;
+  }
+
+  revalidatePath(`/dashboard/tasks/${task_id}`);
+  return prioritizedTask;
+};
+
+export const checkIfUserPrioritizedTask = async (
+  task_id: string
+): Promise<boolean> => {
+  const user = await serverGetLoggedInUser();
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: prioritizedTask, error } = await supabaseClient
+    .from("prioritizations")
+    .select("*")
+    .eq("task_id", task_id)
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  return prioritizedTask !== null;
+};
+
+export const updateTaskStatus = async ({
+  status,
+  task_id,
+}: {
+  status: Enum<"task_status">;
+  task_id: string;
+}) => {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { error } = await supabaseClient
+    .from("tasks")
+    .update({ task_status: status })
+    .eq("id", task_id)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  revalidatePath(`/dashboard/tasks/${task_id}`);
+};
+
+export const getPrioritizationDetails = async (task_id: string) => {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: prioritizationDetails, error: prioritizationError } =
+    await supabaseClient
+      .from("prioritizations")
+      .select("count, created_at, user_id")
+      .eq("task_id", task_id);
+
+  if (prioritizationError) {
+    throw prioritizationError;
+  }
+  const userIds = prioritizationDetails.map((detail) => detail.user_id);
+  const { data: userProfiles, error: userProfilesError } = await supabaseClient
+    .from("user_profiles")
+    .select("id, full_name, avatar_url")
+    .in("id", userIds);
+
+  if (userProfilesError) {
+    throw userProfilesError;
+  }
+
+  const prioritizationDetailsWithUser = prioritizationDetails.map((detail) => {
+    const userProfile = userProfiles.find(
+      (profile) => profile.id === detail.user_id
+    );
+    return {
+      ...detail,
+      full_name: userProfile ? userProfile.full_name : null,
+      avatar_url: userProfile ? userProfile.avatar_url : null,
+    };
+  });
+
+  return prioritizationDetailsWithUser;
+};
+
 export const getTaskById = async (taskId: string) => {
   const supabase = createSupabaseUserServerComponentClient();
   const { data: task, error } = await supabase
@@ -197,7 +296,8 @@ export const getTasksCreatedByUser = async (userId: string) => {
   const { data: tasks, error } = await supabase
     .from("tasks")
     .select("*")
-    .eq("user_id", userId);
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
 
   if (error) {
     throw error;
@@ -218,6 +318,19 @@ export const getCommunityTasks = async (communityId: string) => {
   }
 
   return tasks;
+};
+
+export const getCommunityTasksWithCommunityNames = async (
+  communityId: string
+) => {
+  const tasks = await getCommunityTasks(communityId);
+  const tasksWithCommunityNames = await Promise.all(
+    tasks.map(async (task) => {
+      const communityName = await getOrganizationTitle(task.organization_id);
+      return { ...task, task_community_name: communityName };
+    })
+  );
+  return tasksWithCommunityNames;
 };
 
 export const getAllTasks = async () => {
@@ -244,3 +357,25 @@ export const getAllTasksOfUser = async (userId: string) => {
 
   return tasks;
 };
+
+export async function getAllTasksOfUserWithCommunityNames(userId: string) {
+  const tasks = await getAllTasksOfUser(userId);
+  const tasksWithCommunityNames = await Promise.all(
+    tasks.map(async (task) => {
+      const communityName = await getOrganizationTitle(task.organization_id);
+      return { ...task, task_community_name: communityName };
+    })
+  );
+  return tasksWithCommunityNames;
+}
+
+export async function getAllTasksWithCommunityNames() {
+  const tasks = await getAllTasks();
+  const tasksWithCommunityNames = await Promise.all(
+    tasks.map(async (task) => {
+      const communityName = await getOrganizationTitle(task.organization_id);
+      return { ...task, task_community_name: communityName };
+    })
+  );
+  return tasksWithCommunityNames;
+}

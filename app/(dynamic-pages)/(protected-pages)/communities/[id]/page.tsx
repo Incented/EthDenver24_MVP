@@ -6,34 +6,30 @@ import CommunityMembers from "./_components/CommunityMembers";
 import { Card } from "@/components/ui/card";
 
 import { Search } from "@/components/Search";
-import CarrotPotCard from "./_components/CarrotPotCard";
-import CommunityDetailsTopCards from "./_components/CommunityDetailsTopCards";
-import PeriodsCard from "./_components/PeriodsCard";
-import PriorityCards from "./_components/PriorityCards";
-import TaskTab from "../../dashboard/(my-dashboard)/_components/TaskTab";
 import Pagination from "@/components/ui/Pagination";
-import { z } from "zod";
-import moment from "moment";
 import {
   getOrganizationAdmins,
   getOrganizationById,
   getTeamMembersCountInOrganization,
   getTeamMembersInOrganization,
 } from "@/data/user/organizations";
+import { getCommunityTasks, getCommunityTasksWithCommunityNames } from "@/data/user/tasks";
+import { TeamMembersTableProps } from "@/types";
+import { Filter } from "lucide-react";
+import moment from "moment";
+import { z } from "zod";
+import TaskTab from "../../dashboard/(my-dashboard)/_components/TaskTab";
 import {
   Periods,
-  RewardSettingsSchema,
-  protocolConfigurationSchema,
-  rewardSettingsSchema,
+  RewardSettingsSchema
 } from "../create-community/_components/createCommunitySchema";
-import { TeamMembersTableProps } from "@/types";
-import { CardLayoutSwitcher } from "@/components/ui/card-layout-switcher";
-import { getCommunityTasks } from "@/data/user/tasks";
-import TotalTasks from "./_components/TotalTasks";
-import TotalRewards from "./_components/TotalRewards";
-import { Filter } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Admin from "./_components/Admin";
+import CarrotPotCard from "./_components/CarrotPotCard";
+import CommunityDetailsTopCards from "./_components/CommunityDetailsTopCards";
+import PeriodsCard from "./_components/PeriodsCard";
+import PriorityCards from "./_components/PriorityCards";
+import TotalRewards from "./_components/TotalRewards";
+import TotalTasks from "./_components/TotalTasks";
 import VetoPower from "./_components/VetoPower";
 
 const paramsSchema = z.object({
@@ -54,6 +50,7 @@ export default async function CommunityDetailsPage({
       getTeamMembersCountInOrganization(id),
       getCommunityTasks(id),
       getOrganizationAdmins(id),
+      getCommunityTasksWithCommunityNames(id),
     ]);
 
   const normalizedMembers: TeamMembersTableProps["members"] = members.map(
@@ -67,6 +64,7 @@ export default async function CommunityDetailsPage({
       return {
         index: index + 1,
         id: userProfile.id,
+        avatar_url: userProfile.avatar_url,
         name: userProfile.full_name ?? `User ${userProfile.id}`,
         role: member.member_role,
         created_at: moment(member.created_at).format("DD MMM YYYY"),
@@ -90,6 +88,8 @@ export default async function CommunityDetailsPage({
       };
     }
   );
+
+
 
   const rewards: RewardSettingsSchema = {
     proposalReward: community.proposal_absolute_reward ?? 0,

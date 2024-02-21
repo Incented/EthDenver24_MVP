@@ -1,39 +1,36 @@
 "use client";
 
-import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import { Controller, useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@/components/ui/label";
-import {
-  CreateTaskFormSchema,
-  createTaskFormSchema,
-} from "./CreateTaskFormSchema";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import {
+  CreateTaskFormSchema,
+  createTaskFormSchema,
+} from "./CreateTaskFormSchema";
 // import { TipTap } from "./TipTap";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { AddTaskTypeDialog } from "@/components/presentational/AddTaskTypeDialog";
-import { createTaskAction, createTaskType } from "@/data/user/tasks";
-import dynamic from "next/dynamic";
-import { File, Upload, XIcon } from "lucide-react";
-import { UploadFiles } from "./uploadFile";
-import axios from "axios";
-import { useToastMutation } from "@/hooks/useToastMutation";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { useRouter } from "next/navigation";
 import { Attachment } from "@/components/Attachment";
 import { AttachmentDialog } from "@/components/AttachmentDialog";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import { createTaskAction } from "@/data/user/tasks";
+import { useToastMutation } from "@/hooks/useToastMutation";
+import axios from "axios";
+import { File } from "lucide-react";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { task_slug } from "../../../FilterTypeMenu";
+import { UploadFiles } from "./uploadFile";
 
 export interface BasicFilePreview {
   name: string;
@@ -66,6 +63,8 @@ export function CreateTaskForm({
 }) {
   const [isSubmittingProposal, setIsSubmittingProposal] =
     useState<boolean>(false);
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [filePreviews, setFilePreviews] = useState<FilePreview[]>([]);
 
@@ -153,26 +152,7 @@ export function CreateTaskForm({
     );
   };
 
-  type task_slug =
-    | "software-dev"
-    | "hardware-dev"
-    | "legal"
-    | "marketing"
-    | "labor"
-    | "finance"
-    | "design"
-    | "manufacturing"
-    | "research"
-    | "communications"
-    | "interview"
-    | "translation"
-    | "writing"
-    | "data-analytics"
-    | "operations"
-    | "administrative"
-    | "planning"
-    | "construction"
-    | "other";
+
 
   const toggleTypeSelection = (
     typeName: task_slug,
@@ -239,16 +219,15 @@ export function CreateTaskForm({
         task_efforts: efforts,
         task_files: task_files,
         task_types: types,
-        task_status: isSubmittingProposal ? "published" : "draft",
+        task_status: isSubmittingProposal ? "new_task" : "draft",
         is_task_published: isSubmittingProposal,
       });
     },
     {
       loadingMessage: "Creating..",
-      errorMessage: "Failed ",
+      errorMessage: "Failed to submit proposal",
       successMessage: "Successful",
       onSuccess: (data) => {
-        console.log("Task created", data);
         router.push(`/dashboard/tasks/${data.id}`);
       },
     }
@@ -270,7 +249,6 @@ export function CreateTaskForm({
       task_status: "draft", // Assuming "draft" is a valid value for your task_status enum
     };
 
-    console.log("Task data", taskData);
 
     mutate(taskData);
   };
@@ -279,6 +257,11 @@ export function CreateTaskForm({
   const handleSubmitClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const submitType = e.currentTarget.getAttribute("data-submit-type");
     setIsSubmittingProposal(submitType === "publish");
+  };
+
+  const handleOpenSubmitDialog = (submitType: 'publish') => {
+    setIsSubmittingProposal(submitType === "publish");
+    setIsDialogOpen(true); // Open the dialog to confirm submission
   };
 
   return (
@@ -387,11 +370,10 @@ export function CreateTaskForm({
                         );
                         field.onChange(newSelectedTypes);
                       }}
-                      className={`cursor-pointer rounded-full border-none hover:border hover:border-1 text-xs font-medium leading-4 h-5 p-0 px-[10px] ${
-                        field.value.includes(type.slug as task_slug)
-                          ? "bg-foreground text-background hover:bg-foreground/50 hover:text-background"
-                          : "bg-secondary hover:bg-secondary/50"
-                      }`}
+                      className={`cursor-pointer rounded-full border-none hover:border hover:border-1 text-xs font-medium leading-4 h-5 p-0 px-[10px] ${field.value.includes(type.slug as task_slug)
+                        ? "bg-foreground text-background hover:bg-foreground/50 hover:text-background"
+                        : "bg-secondary hover:bg-secondary/50"
+                        }`}
                       variant="outline"
                     >
                       {type.name}
@@ -551,13 +533,32 @@ export function CreateTaskForm({
           <Button variant="outline" type="submit" data-submit-type="draft">
             Save as draft
           </Button>
-          <Button
-            type="submit"
-            data-submit-type="publish"
-            onClick={handleSubmitClick}
-          >
-            Submit Proposal
-          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild><Button
+              data-submit-type="publish"
+              onClick={() => handleOpenSubmitDialog('publish')}>
+              Submit Proposal
+            </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                Are you sure you want to create this proposal?
+              </DialogHeader>
+              <div className="flex gap-2">
+                <Button className="w-full" variant="outline" onClick={() => {
+                  setIsDialogOpen(false);
+                }}>
+                  Cancel
+                </Button>
+                <Button className="w-full" type="button" onClick={() => {
+                  setIsDialogOpen(false); // Close the dialog first
+                  handleSubmit(onSubmit)(); // Programmatically submit the form
+                }}>
+                  Submit Proposal
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </form>
     </div>

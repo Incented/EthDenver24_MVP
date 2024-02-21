@@ -1,46 +1,39 @@
 "use client";
 
-import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import { Controller, useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@/components/ui/label";
-import {
-  CreateTaskFormSchema,
-  createTaskFormSchema,
-  taskTypesSchema,
-} from "./CreateTaskFormSchema";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select";
-// import { TipTap } from "./TipTap";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { AddTaskTypeDialog } from "@/components/presentational/AddTaskTypeDialog";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
 import {
-  createTaskAction,
-  createTaskType,
-  editTaskForm,
-} from "@/data/user/tasks";
-import dynamic from "next/dynamic";
-import { File, Upload, XIcon } from "lucide-react";
-import { UploadFiles } from "./uploadFile";
-import axios from "axios";
-import { useToastMutation } from "@/hooks/useToastMutation";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { useRouter } from "next/navigation";
+  CreateTaskFormSchema,
+  createTaskFormSchema,
+  taskTypesSchema,
+} from "./CreateTaskFormSchema";
+// import { TipTap } from "./TipTap";
 import { Attachment } from "@/components/Attachment";
 import { AttachmentDialog } from "@/components/AttachmentDialog";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
+  editTaskForm
+} from "@/data/user/tasks";
+import { useToastMutation } from "@/hooks/useToastMutation";
 import { Table } from "@/types";
-import { Json } from "@/lib/database.types";
+import axios from "axios";
+import { File } from "lucide-react";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { UploadFiles } from "./uploadFile";
 
 export interface BasicFilePreview {
   name: string;
@@ -291,7 +284,7 @@ export function EditTaskForm({
         task_efforts: efforts,
         task_files: task_files,
         task_types: types,
-        task_status: isSubmittingProposal ? "published" : "draft",
+        task_status: isSubmittingProposal ? "new_task" : "draft",
         is_task_published: isSubmittingProposal,
       });
     },
@@ -321,7 +314,6 @@ export function EditTaskForm({
       task_status: "draft", // Assuming "draft" is a valid value for your task_status enum
     };
 
-    console.log("Task data", taskData);
 
     mutate(taskData);
   };
@@ -438,11 +430,10 @@ export function EditTaskForm({
                         );
                         field.onChange(newSelectedTypes);
                       }}
-                      className={`cursor-pointer rounded-full border-none hover:border hover:border-1 text-xs font-medium leading-4 h-5 p-0 px-[10px] ${
-                        field.value.includes(type.slug as task_slug)
-                          ? "bg-foreground text-background hover:bg-foreground/50 hover:text-background"
-                          : "bg-secondary hover:bg-secondary/50"
-                      }`}
+                      className={`cursor-pointer rounded-full border-none hover:border hover:border-1 text-xs font-medium leading-4 h-5 p-0 px-[10px] ${field.value.includes(type.slug as task_slug)
+                        ? "bg-foreground text-background hover:bg-foreground/50 hover:text-background"
+                        : "bg-secondary hover:bg-secondary/50"
+                        }`}
                       variant="outline"
                     >
                       {type.name}
