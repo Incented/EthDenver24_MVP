@@ -1,16 +1,15 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import {
-  CreateCommunitySchema,
-  basicCommunityDetailsSchema,
-  BasicCommunityDetailsSchema,
-  RewardSettingsSchema,
-  ProtocolConfigurationSchema,
-} from "./createCommunitySchema";
-import CommunityInfo from "../../[id]/_components/CommunityInfo";
-import CommunityDetailsTopCards from "../../[id]/_components/CommunityDetailsTopCards";
-import { PriorityCard } from "../../[id]/_components/PriorityCards";
 import { Button } from "@/components/ui/button";
+import { SubmitHandler, useForm } from "react-hook-form";
+import CommunityDetailsTopCards from "../../[id]/_components/CommunityDetailsTopCards";
+import CommunityInfo from "../../[id]/_components/CommunityInfo";
 import PeriodsCardSlim from "../../[id]/_components/PeriodsCardSlim";
+import { PriorityCard } from "../../[id]/_components/PriorityCards";
+import {
+  BasicCommunityDetailsSchema,
+  CreateCommunitySchema,
+  ProtocolConfigurationSchema,
+  RewardSettingsSchema
+} from "./createCommunitySchema";
 
 export function FinalReviewForm({
   basicDetails,
@@ -50,6 +49,7 @@ export function FinalReviewForm({
             <CommunityDetailsTopCards rewards={rewardSettings} />
             <div className="flex flex-col w-full gap-4 lg:grid lg:grid-cols-2 xl:flex xl:flex-row">
               <CommunityInfo
+                commuityFee={24}
                 communityName={basicDetails?.title || "Community name"}
                 communityDescription={basicDetails?.description}
                 communityUrls={communityUrls}

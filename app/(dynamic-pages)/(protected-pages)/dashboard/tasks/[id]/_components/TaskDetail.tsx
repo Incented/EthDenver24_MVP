@@ -164,11 +164,11 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, prioritizationPe
             <div className="flex items-center space-x-2">
               <p className="text-sm text-muted-foreground">Lower</p>
               <CarrotStrikIconDark />
-              <p className="text-sm font-semibold text-foreground">0</p>
+              <p className="text-sm font-semibold text-foreground">{lowerPriority}</p>
             </div>
             <div className="w-[2px] h-5 bg-gray-300" />
             <div className="flex items-center space-x-2">
-              <p className="text-sm font-semibold text-foreground">100</p>
+              <p className="text-sm font-semibold text-foreground">{higherPriority}</p>
               <Carrot className="text-primary" />
               <p className="text-sm text-muted-foreground">Higher</p>
             </div>
