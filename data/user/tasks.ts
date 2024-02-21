@@ -80,6 +80,7 @@ export const createTaskAction = async ({
       task_types: task_types,
       task_status: task_status,
       is_task_published: is_task_published,
+      new_task_created_at: new Date().toISOString(),
     })
     .select("*")
     .single();
@@ -130,6 +131,7 @@ export const editTaskForm = async ({
       task_types: task_types,
       task_status: task_status,
       is_task_published: is_task_published,
+      new_task_created_at: new Date().toISOString(),
     })
     .eq("id", id)
     .select("*")
@@ -145,9 +147,14 @@ export const editTaskForm = async ({
 
 export const publishTaskAction = async (id: string) => {
   const supabaseClient = createSupabaseUserServerComponentClient();
+  const currentTime = new Date().toISOString();
   const { data: task, error } = await supabaseClient
     .from("tasks")
-    .update({ is_task_published: true })
+    .update({
+      is_task_published: true,
+      new_task_created_at: currentTime,
+      task_status: "new_task",
+    })
     .eq("id", id);
 
   if (error) {
@@ -171,6 +178,81 @@ export const unPublishTaskAction = async (id: string) => {
 
   revalidatePath(`/dashboard/tasks/${id}`);
   return task;
+};
+
+export const prioritizeTaskAction = async ({
+  stakeAmount,
+  task_id,
+}: {
+  stakeAmount: number;
+  task_id: string;
+}) => {
+  const user = await serverGetLoggedInUser();
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: prioritizedTask, error } = await supabaseClient
+    .from("prioritizations")
+    .insert({ count: stakeAmount, task_id, user_id: user.id });
+
+  if (error) {
+    throw error;
+  }
+
+  revalidatePath(`/dashboard/tasks/${task_id}`);
+  return prioritizedTask;
+};
+
+export const checkIfUserPrioritizedTask = async (
+  task_id: string
+): Promise<boolean> => {
+  const user = await serverGetLoggedInUser();
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: prioritizedTask, error } = await supabaseClient
+    .from("prioritizations")
+    .select("*")
+    .eq("task_id", task_id)
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  return prioritizedTask !== null;
+};
+
+export const getPrioritizationDetails = async (task_id: string) => {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: prioritizationDetails, error: prioritizationError } =
+    await supabaseClient
+      .from("prioritizations")
+      .select("count, created_at, user_id")
+      .eq("task_id", task_id);
+
+  if (prioritizationError) {
+    throw prioritizationError;
+  }
+  const userIds = prioritizationDetails.map((detail) => detail.user_id);
+  const { data: userProfiles, error: userProfilesError } = await supabaseClient
+    .from("user_profiles")
+    .select("id, full_name, avatar_url")
+    .in("id", userIds);
+
+  if (userProfilesError) {
+    throw userProfilesError;
+  }
+
+  const prioritizationDetailsWithUser = prioritizationDetails.map((detail) => {
+    const userProfile = userProfiles.find(
+      (profile) => profile.id === detail.user_id
+    );
+    return {
+      ...detail,
+      full_name: userProfile ? userProfile.full_name : null,
+      avatar_url: userProfile ? userProfile.avatar_url : null,
+    };
+  });
+
+  return prioritizationDetailsWithUser;
 };
 
 export const getTaskById = async (taskId: string) => {

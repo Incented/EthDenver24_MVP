@@ -12,23 +12,37 @@ import {
   Carrot,
   Plus
 } from "lucide-react";
-import { FC } from "react";
+import { FC, Suspense } from "react";
 import ContributionTable from "./ContributionTable";
 
+import { checkIfUserPrioritizedTask, getPrioritizationDetails } from "@/data/user/tasks";
 import { getUserProfile } from "@/data/user/user";
 import { Table } from "@/types";
 import AddContribution from "./AddContribution";
 import ClaimModal from "./ClaimModal";
 import { PrioritizeDialog } from "./PrioritizeDialog";
+import { PrioritizerCards } from "./PrioritizerCards";
 
 
 interface TaskDetailProps {
   id: string;
+  user_id: string;
   task: Table<"tasks">;
+  isUserMemberOfCommunity: boolean;
+  prioritizationPeriod: number;
 }
-const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
-  const taskCreator = task.user_id ? await getUserProfile(task.user_id) : null;
+const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, prioritizationPeriod, isUserMemberOfCommunity }) => {
+  const [taskCreator, isPrioritizedByUser, taskPrioritizationDetails] = await Promise.all([
+    task.user_id ? getUserProfile(task.user_id) : Promise.resolve(null),
+    checkIfUserPrioritizedTask(task.id),
+    getPrioritizationDetails(task.id),
+  ]);
   let taskStatusBg = "bg-muted text-foreground";
+  // Can be used to check if the task is within the prioritization period
+  const isWithinPrioritizedPeriod = Date.now() < new Date(task.new_task_created_at).getTime() + prioritizationPeriod * 24 * 60 * 60 * 1000;
+
+  // check if taskCreator is the same as the logged in user
+  const isTaskCreator = user_id === task.user_id;
 
   if (task.task_status === "in_progress") {
     taskStatusBg = "bg-blue-500 text-foreground";
@@ -39,6 +53,7 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
   } else {
     taskStatusBg = "bg-muted text-foreground";
   }
+
 
   return (
 
@@ -93,9 +108,10 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
             {/* <Button className="w-full">
               Prioritize
             </Button> */}
-            <PrioritizeDialog />
+            <PrioritizeDialog isTaskCreator={isTaskCreator} task_id={task.id} isPrioritizedByUser={isPrioritizedByUser} isWithinPrioritizedPeriod={isWithinPrioritizedPeriod} isUserMemberOfCommunity={isUserMemberOfCommunity} />
           </div>
         )}
+
         <Card className="p-4 mb-4 flex flex-col gap-4">
           <h1 className="text-sm leading-[14px] font-medium">Proposer</h1>
           <div className="flex items-center gap-[10px]">
@@ -108,36 +124,41 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task }) => {
         </Card>
         <Card className="p-4 mb-4">
           <h1 className="mb-2 text-sm leading-[14px] font-medium">Priority</h1>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 mb-2 border-b pb-2">
             <div className="flex items-center space-x-2">
-              <p>Lower</p>
+              <p className="text-sm text-muted-foreground">Lower</p>
               <CarrotStrikIconDark />
               <p>0</p>
             </div>
             <div className="w-[2px] h-5 bg-gray-300" />
             <div className="flex items-center space-x-2">
-              <p>0</p>
+              <p>100</p>
               <Carrot className="text-primary" />
-              <p>higer</p>
+              <p className="text-sm text-muted-foreground">Higher</p>
             </div>
           </div>
+          <Suspense>
+            <PrioritizerCards prioritizations={taskPrioritizationDetails} />
+          </Suspense>
         </Card>
-        <Card className="p-4 mb-4">
-          <h1 className="mb-2 text-sm leading-[14px] font-medium">Validation</h1>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center space-x-2">
-              <p>Rejected</p>
-              <CarrotStrikIconDark />
-              <p>0</p>
+        {task.task_status === "in_review" && (
+          <Card className="p-4 mb-4">
+            <h1 className="mb-2 text-sm leading-[14px] font-medium">Validation</h1>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center space-x-2">
+                <p>Rejected</p>
+                <CarrotStrikIconDark />
+                <p>0</p>
+              </div>
+              <div className="w-[2px] h-5 bg-gray-300" />
+              <div className="flex items-center space-x-2">
+                <p>0</p>
+                <Carrot className="text-primary" />
+                <p>Approved</p>
+              </div>
             </div>
-            <div className="w-[2px] h-5 bg-gray-300" />
-            <div className="flex items-center space-x-2">
-              <p>0</p>
-              <Carrot className="text-primary" />
-              <p>Approved</p>
-            </div>
-          </div>
-        </Card>
+          </Card>
+        )}
       </section>
     </div>
   );

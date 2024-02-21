@@ -842,21 +842,21 @@ export type Database = {
         Row: {
           count: number;
           created_at: string;
-          id: number;
+          id: string;
           task_id: string;
           user_id: string;
         };
         Insert: {
           count: number;
           created_at?: string;
-          id?: number;
+          id?: string;
           task_id?: string;
           user_id?: string;
         };
         Update: {
           count?: number;
           created_at?: string;
-          id?: number;
+          id?: string;
           task_id?: string;
           user_id?: string;
         };
@@ -1068,6 +1068,7 @@ export type Database = {
           id: string;
           is_task_published: boolean | null;
           name: string;
+          new_task_created_at: string;
           organization_id: string;
           project_status: Database["public"]["Enums"]["project_status"];
           rewards: number | null;
@@ -1086,6 +1087,7 @@ export type Database = {
           id?: string;
           is_task_published?: boolean | null;
           name: string;
+          new_task_created_at: string;
           organization_id: string;
           project_status?: Database["public"]["Enums"]["project_status"];
           rewards?: number | null;
@@ -1104,6 +1106,7 @@ export type Database = {
           id?: string;
           is_task_published?: boolean | null;
           name?: string;
+          new_task_created_at?: string;
           organization_id?: string;
           project_status?: Database["public"]["Enums"]["project_status"];
           rewards?: number | null;
