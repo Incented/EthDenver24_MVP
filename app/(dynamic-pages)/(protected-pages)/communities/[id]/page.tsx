@@ -82,6 +82,7 @@ export default async function CommunityDetailsPage({
       return {
         index: index + 1,
         id: userProfile.id,
+        avatar_url: userProfile.avatar_url,
         name: userProfile.full_name ?? `User ${userProfile.id}`,
         role: member.member_role,
         created_at: moment(member.created_at).format("DD MMM YYYY"),
