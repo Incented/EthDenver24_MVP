@@ -131,7 +131,7 @@ const TaskCard: FC<TaskCardProps> = ({
               <div className="mt-2">
                 <Anchor
                   href={`/dashboard/tasks/${taskId}`}
-                  className="text-base font-semibold leading-7 text-foreground dark:text-white"
+                  className="text-base font-semibold leading-7 text-foreground  dark:text-white"
                 >
                   {taskTitle}
                 </Anchor>
@@ -271,7 +271,7 @@ const TaskCard: FC<TaskCardProps> = ({
                 <div className="mt-4 ">
                   <Anchor
                     href={`/dashboard/tasks/${taskId}`}
-                    className="text-base font-semibold leading-7 text-foreground"
+                    className="text-base font-semibold leading-7 text-foreground whitespace-nowrap truncate"
                   >
                     {taskTitle}
                   </Anchor>

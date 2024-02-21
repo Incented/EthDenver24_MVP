@@ -217,6 +217,19 @@ export const getCommunityTasks = async (communityId: string) => {
   return tasks;
 };
 
+export const getCommunityTasksWithCommunityNames = async (
+  communityId: string
+) => {
+  const tasks = await getCommunityTasks(communityId);
+  const tasksWithCommunityNames = await Promise.all(
+    tasks.map(async (task) => {
+      const communityName = await getOrganizationTitle(task.organization_id);
+      return { ...task, task_community_name: communityName };
+    })
+  );
+  return tasksWithCommunityNames;
+};
+
 export const getAllTasks = async () => {
   const supabase = createSupabaseUserServerComponentClient();
   const { data: tasks, error } = await supabase.from("tasks").select("*");

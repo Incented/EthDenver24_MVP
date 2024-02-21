@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import CommunityMember from "./CommunityMember";
-import { Card } from "@/components/ui/card";
 
 import { TeamMembersTableProps } from "@/types";
 
@@ -22,7 +21,7 @@ export function CommunityMembers({ communityMembers }: CommunityMembersProps) {
                 <CommunityMember
                   key={member.id}
                   name={member.name ?? "Community Member"}
-                  imageUrl=""
+                  imageUrl={member.avatar_url ?? ""}
                 />
               );
             })}
