@@ -90,7 +90,7 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCo
     await updateTaskStatusAction({ status: "in_review", task_id: task.id });
   }
 
-  if (!isClaimed && task.task_status === "prioritized") {
+  if (!isClaimed && task.task_status === "prioritized" && contributions.length !== 0) {
     await updateTaskStatusAction({ status: "in_progress", task_id: task.id });
   }
 
