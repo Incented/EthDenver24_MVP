@@ -1,14 +1,13 @@
 "use server";
 import {
   getAllBookmarkedOrganizationsForUser,
-  getAllOrganizationsForUser,
   getPaginatedOrganizationsList,
-  getTeamMembersInOrganization,
+  getTeamMembersInOrganization
 } from "@/data/user/organizations";
-import CommunityCard from "./CommunityCard";
-import { FiltersSchema } from "./schema";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 import { revalidatePath } from "next/cache";
+import CommunityCard from "./CommunityCard";
+import { FiltersSchema } from "./schema";
 
 export async function CommunitiesList({ filters }: { filters: FiltersSchema }) {
   const user = await serverGetLoggedInUser();

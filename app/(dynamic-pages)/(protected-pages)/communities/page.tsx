@@ -1,22 +1,18 @@
 import { Search } from "@/components/Search";
-import { Button } from "@/components/ui/button";
-import { Filter, Plus } from "lucide-react";
-import CommunityCard from "./_components/CommunityCard";
 import Pagination from "@/components/ui/Pagination";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
-  getAllOrganizationsCount,
-  getAllOrganizationsForUser,
+  getAllOrganizationsCount
 } from "@/data/user/organizations";
-import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
-import { CommunitiesList } from "./_components/CommunitiesList";
-import {
-  appAdminOrganizationsFiltersSchema,
-  filtersSchema,
-} from "./_components/schema";
-import { getOrganizationsTotalPages } from "@/data/admin/organizations";
+import { Plus } from "lucide-react";
+import Link from "next/link";
 import { Suspense } from "react";
+import { CommunitiesList } from "./_components/CommunitiesList";
+import CommunityLoadingSkeleton from "./_components/CommunityLoadingSkeleton";
 import { FilterCommunities } from "./_components/FIlterCommunities";
+import {
+  filtersSchema
+} from "./_components/schema";
 
 export default async function CommunitiesPage({
   searchParams,
@@ -31,7 +27,7 @@ export default async function CommunitiesPage({
   const totalPages = Math.ceil(communityCount / limit);
   // const totalPages = Math.ceil(communityCount / limit);
   return (
-    <main className="h-screen px-8 pb-10 flex flex-col overflow-hidden">
+    <main className="flex flex-col h-screen px-8 pb-10 overflow-hidden">
       <div className="h-screen">
         <div className="items-center mt-8 md:flex">
           <h1 className="text-3xl font-medium ">Communities</h1>
@@ -50,11 +46,7 @@ export default async function CommunitiesPage({
           <Suspense
             key={suspenseKey}
             fallback={
-              <div className="flex-grow w-full">
-                <div className="flex items-center justify-center h-full">
-                  Loading...
-                </div>
-              </div>
+              <CommunityLoadingSkeleton />
             }
           >
             <CommunitiesList filters={validatedSearchParams} />
@@ -65,7 +57,7 @@ export default async function CommunitiesPage({
           <Button variant="link">Show more</Button>
         </div>
       </div>
-      <div className="sticky hidden md:flex py-6 pt-4 bottom-0">
+      <div className="sticky bottom-0 hidden py-6 pt-4 md:flex">
         <Pagination
           title="Communities"
           totalPages={totalPages}
