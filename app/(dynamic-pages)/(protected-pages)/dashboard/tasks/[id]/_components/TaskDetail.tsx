@@ -133,10 +133,12 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCo
         </Card>
 
         <div className="mb-4 p-8 bg-muted rounded-lg">
-          <ContributionTable
-            task_status={task.task_status || "new_task"}
-            contributions={contributions}
-          />
+          <Suspense fallback={<div>Loading contributions...</div>}>
+            <ContributionTable
+              task_status={task.task_status || "new_task"}
+              contributions={contributions}
+            />
+          </Suspense>
         </div>
 
         <Card className="p-8 mb-4 overflow-hidden border-none bg-muted rounded-lg">

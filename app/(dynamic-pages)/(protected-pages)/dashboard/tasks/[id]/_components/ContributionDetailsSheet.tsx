@@ -1,5 +1,6 @@
 "use client";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -8,30 +9,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { ChangeEvent, FC, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
+import { ChangeEvent, FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import Image from "next/image";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { File, MoreVertical } from "lucide-react";
 
 import {
   Carousel,
@@ -40,10 +22,21 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
+import { Table } from "@/types";
+import { AttachmentClient } from "../../create-task/components/AttachmentClient";
 import ContributionDiscussion from "./ContributionDiscussion";
 
-interface ContributionDetailsSheetProps {}
+interface ContributionDetailsSheetProps {
+  contribution: Table<"contributions">;
+  contributorProfile: Table<"user_profiles">;
+  otherContributionsData: Array<{
+    contributionId: string,
+    description: string,
+    avatarUrl: string | null,
+    fullName: string | null,
+    createdAt: string,
+  }>;
+}
 
 const formSchema = z.object({
   description: z.string().min(5, {
@@ -59,7 +52,7 @@ const formSchema = z.object({
   attchament: z.string().optional(),
 });
 
-const ContributionDetailsSheet: FC<ContributionDetailsSheetProps> = ({}) => {
+const ContributionDetailsSheet: FC<ContributionDetailsSheetProps> = ({ contribution, contributorProfile, otherContributionsData }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -75,6 +68,14 @@ const ContributionDetailsSheet: FC<ContributionDetailsSheetProps> = ({}) => {
 
   const [files, setFiles] = useState<File[]>([]);
 
+  type FileWithUrl = {
+    url: string;
+    name: string;
+    // include other properties that might be relevant
+  };
+
+
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const handleImage = (
     e: ChangeEvent<HTMLInputElement>,
     fieldChange: (value: string) => void
@@ -96,74 +97,76 @@ const ContributionDetailsSheet: FC<ContributionDetailsSheetProps> = ({}) => {
       fileReader.readAsDataURL(file);
     }
   };
+
+
   return (
-    <Sheet>
+    <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
       <SheetTrigger>
         <Button variant="outline" size="sm" className="text-foreground">
           View Details
         </Button>
       </SheetTrigger>
-      <SheetContent className="overflow-scroll">
+      <SheetContent className="overflow-scroll flex flex-col gap-4 w-full max-w-lg">
         <SheetHeader>
           <SheetTitle className="mb-4 text-start">
             Contribution Details
           </SheetTitle>
           <div className="flex items-center gap-1">
-            <Avatar>
+            <Avatar className="h-8 w-8">
               <AvatarImage
-                src="/assets/avatar_1.jpg"
-                className="object-cover w-8 h-8 rounded-full"
+                src={contributorProfile.avatar_url || ""}
+                alt={contributorProfile.full_name || ""}
+                className="object-cover rounded-full"
               />
+              <AvatarFallback>{contributorProfile.full_name?.slice(0, 2)}</AvatarFallback>
             </Avatar>
-            <p className="text-xs">Ryan Franci</p>
+            <p className="text-xs">{contributorProfile.full_name}</p>
           </div>
         </SheetHeader>
-        <h1 className="text-sm">Solution</h1>
-        <p className="text-xs text-muted-foreground">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque
-          inventore quidem amet perspiciatis at voluptatum alias reprehenderit?
-          Officia tempore sed optio deserunt ipsam minima dolores, doloribus
-          quod dolor! Provident, odit. Eligendi enim impedit
-        </p>
-        <h1 className="mt-4 mb-2 text-sm">Photos</h1>
+        <div className="space-y-2">
+          <h1 className="text-sm">Solution</h1>
+          <p className="text-xs text-muted-foreground">
+            {contribution.description}
+          </p>
+        </div>
+        <div className="space-y-2">
+          <h1 className="mt-4 mb-2 text-sm">Photos</h1>
 
-        <Carousel
-          opts={{
-            align: "center",
-          }}
-          className="w-full"
-        >
-          <CarouselContent className="w-full">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <CarouselItem key={index} className="basis-1/3">
-                <div className="w-[100px]">
-                  <Image
-                    width={200}
-                    height={200}
-                    src="/assets/avatar_1.jpg"
-                    alt=""
-                    className="w-full h-full rounded-md"
-                  />
-                  <p className="mt-1 text-xs ">it looks good</p>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="flex items-center justify-end gap-3 mt-8">
-            <CarouselPrevious className="" />
-            <CarouselNext className="" />
-          </div>
-        </Carousel>
+          <Carousel
+            opts={{
+              align: "center",
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="w-full">
+              {(contribution.files as FileWithUrl[])?.filter(file => /\.(jpg|jpeg|png|gif)$/.test(file.url)).map((file, index) => (
+                <CarouselItem key={index} className="basis-1/3">
+                  <div className="w-[100px] h-[100px]">
+                    <Image
+                      width={200}
+                      height={200}
+                      src={file?.url}
+                      alt={`Image ${index + 1}`}
+                      className="w-full h-full rounded-md"
+                    />
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground truncate">{file.name}</p>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="flex items-center justify-end gap-3 mt-8">
+              <CarouselPrevious className="" />
+              <CarouselNext className="" />
+            </div>
+          </Carousel>
+        </div>
         <div className="mt-4">
-          <h4 className="mb-2 text-sm font-medium ">Attachment files</h4>
-          <div className="flex items-center gap-1 px-2 py-2.5 border rounded-md w-fit">
-            <File size={16} />
-            <samp className="text-xs">datalist.pdf</samp>
-            <MoreVertical size={16} className="ml-2" />
-          </div>
+          <AttachmentClient
+            attachments={contribution.files as FileWithUrl[]}
+          />
         </div>
 
-        <Card className="p-3 my-4">
+        {/* <Card className="p-3 my-4">
           <p className="mb-2 text-sm">Submit your validation</p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -249,22 +252,19 @@ const ContributionDetailsSheet: FC<ContributionDetailsSheetProps> = ({}) => {
               </Button>
             </form>
           </Form>
-        </Card>
+        </Card> */}
         <div className="space-y-3">
-          <ContributionDiscussion
-            details="Building bridges between communities, fostering innovation, and empowering individuals to reach their full potential. Together, we strive to create a brighter future where every voice is heard, every dream is nurtured, and every opportunity is embraced."
-            contributionCarrots={20}
-            contributorId="23"
-            contributorImage="/assets/avatar_1.jpg"
-            contributorName="Jeph chisom"
-          />
-          <ContributionDiscussion
-            details="Building bridges between communities, fostering innovation, and empowering individuals to reach their full potential. Together, we strive to create a brighter future where every voice is heard, every dream is nurtured, and every opportunity is embraced."
-            contributionCarrots={20}
-            contributorId="23"
-            contributorImage="/assets/avatar_1.jpg"
-            contributorName="Jeph chisom"
-          />
+          {otherContributionsData.map((contribution) => (
+            <ContributionDiscussion
+              key={contribution.contributionId}
+              contributionCreatedAt={`${otherContributionsData.indexOf(contribution) + 1}`}
+              details={contribution.description}
+              contributionCarrots={20} // Assuming a static value for now, adjust as necessary
+              contributorId={contribution.contributionId}
+              contributorImage={contribution.avatarUrl || '/assets/default_avatar.jpg'} // Fallback to a default image if none is provided
+              contributorName={contribution.fullName || 'Anonymous'} // Fallback to 'Anonymous' if no name is provided
+            />
+          ))}
         </div>
       </SheetContent>
     </Sheet>
