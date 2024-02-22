@@ -1,14 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Card } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -18,16 +11,26 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { ChangeEvent, FC, useState } from "react";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus, Upload } from "lucide-react";
+import { ChangeEvent, FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import { Plus, Upload } from "lucide-react";
 
-interface AddContributionProps {}
+interface AddContributionProps {
+  isClaimed?: boolean;
+  isClaimer?: boolean;
+}
 
 const formSchema = z.object({
   description: z.string().min(5, {
@@ -46,7 +49,7 @@ const formSchema = z.object({
   attchament: z.string().optional(),
 });
 
-const AddContribution: FC<AddContributionProps> = ({}) => {
+const AddContribution: FC<AddContributionProps> = ({ isClaimed, isClaimer }) => {
   const [addedLink, setAddedLink] = useState<any[]>([]);
   const [linkNum, setLinkNum] = useState<number>(2);
 
@@ -55,7 +58,6 @@ const AddContribution: FC<AddContributionProps> = ({}) => {
     setLinkNum((pre) => (pre += 1));
     setAddedLink((pre) => [...pre, link]);
   }
-  console.log(addedLink);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -97,7 +99,16 @@ const AddContribution: FC<AddContributionProps> = ({}) => {
   return (
     <Sheet>
       <SheetTrigger className="w-full">
-        <Button className="w-full">Contribute</Button>
+        {
+          isClaimed ? (
+            <Button className="w-full" variant="default" disabled={!isClaimer}>Submit</Button>
+          ) : (
+            <Button className="w-full" disabled={isClaimed}
+            >
+              Contribute
+            </Button>
+          )
+        }
       </SheetTrigger>
       <SheetContent className="overflow-y-scroll">
         <SheetHeader>

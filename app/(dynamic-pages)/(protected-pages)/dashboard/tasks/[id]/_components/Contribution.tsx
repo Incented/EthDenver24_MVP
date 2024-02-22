@@ -19,7 +19,6 @@ const Contribution: FC<ContributionProps> = ({
   return (
     <TableRow>
       <TableCell className="px-6">{description}</TableCell>
-
       <TableCell className="">
         <div className="flex items-center justify-center gap-1">
           <User />

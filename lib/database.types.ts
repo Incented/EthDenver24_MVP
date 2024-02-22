@@ -89,14 +89,14 @@ export type Database = {
           {
             foreignKeyName: "public_claimed_tasks_task_id_fkey";
             columns: ["task_id"];
-            isOneToOne: true;
+            isOneToOne: false;
             referencedRelation: "tasks";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "public_claimed_tasks_user_id_fkey";
             columns: ["user_id"];
-            isOneToOne: false;
+            isOneToOne: true;
             referencedRelation: "user_profiles";
             referencedColumns: ["id"];
           }
@@ -166,6 +166,29 @@ export type Database = {
             columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      freezed_tasks: {
+        Row: {
+          created_at: string;
+          task_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          task_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          task_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_freezed_tasks_task_id_fkey";
+            columns: ["task_id"];
+            isOneToOne: true;
+            referencedRelation: "tasks";
             referencedColumns: ["id"];
           }
         ];
@@ -1663,7 +1686,8 @@ export type Database = {
         | "completed"
         | "failed"
         | "expired"
-        | "protocol_update";
+        | "protocol_update"
+        | "freezed";
     };
     CompositeTypes: {
       [_ in never]: never;

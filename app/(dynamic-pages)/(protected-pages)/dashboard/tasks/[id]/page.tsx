@@ -1,6 +1,6 @@
 import GoBack from "@/components/ui/GoBack";
 import { getOrganizationById, getTeamMembersInOrganization } from "@/data/user/organizations";
-import { checkIfUserPrioritizedTask, getPrioritizationDetails, getTaskById } from "@/data/user/tasks";
+import { checkIfUserClaimedTask, checkIfUserPrioritizedTask, getPrioritizationDetails, getTaskById, getTaskClaimerDetails, getTaskContributions } from "@/data/user/tasks";
 import { getUserProfile } from "@/data/user/user";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 import DraftTaskDetail from "./_components/DraftTaskDetail";
@@ -9,21 +9,22 @@ import TaskDetail from "./_components/TaskDetail";
 export default async function TaskDetailsPage({ params }: { params: unknown }) {
   const parsedParams = params as { id: string };
   const { id } = parsedParams;
-  const [task, user, communityDetails, teamMembersInOrganization,] = await Promise.all([
+  const [task, user, communityDetails, teamMembersInOrganization] = await Promise.all([
     getTaskById(id),
     serverGetLoggedInUser(),
     getOrganizationById((await getTaskById(id)).organization_id),
     getTeamMembersInOrganization((await getTaskById(id)).organization_id)
+
   ]);
 
-  const [taskCreator, isPrioritizedByUser, taskPrioritizationDetails] = await Promise.all([
+  const [taskCreator, isPrioritizedByUser, isClaimedByUser, taskPrioritizationDetails, claimerDetails, contributions] = await Promise.all([
     task.user_id ? getUserProfile(task.user_id) : Promise.resolve(null),
     checkIfUserPrioritizedTask(task.id),
+    checkIfUserClaimedTask(task.id),
     getPrioritizationDetails(task.id),
+    getTaskClaimerDetails(task.id),
+    getTaskContributions(task.id),
   ]);
-
-  const prioritizationPeriod = communityDetails.prioritization_period || 0;
-  const prioritizationQourum = communityDetails.prioritization_quorum_percentage || 0;
 
   const isUserMemberOfCommunity = teamMembersInOrganization.some(
     (member) => member.member_id === user.id
@@ -42,11 +43,13 @@ export default async function TaskDetailsPage({ params }: { params: unknown }) {
           id={id}
           task={task}
           user_id={user.id}
-          prioritizationPeriod={prioritizationPeriod}
-          prioritizationQuorum={prioritizationQourum}
+          community={communityDetails}
           isUserMemberOfCommunity={isUserMemberOfCommunity}
           taskPrioritizationDetails={taskPrioritizationDetails}
+          contributions={contributions}
           isPrioritizedByUser={isPrioritizedByUser}
+          isClaimedByUser={isClaimedByUser}
+          claimerDetails={claimerDetails}
           taskCreator={taskCreator} />
       )}
     </main>
