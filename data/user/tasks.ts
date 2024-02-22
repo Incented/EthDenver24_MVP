@@ -364,6 +364,74 @@ export const contributeToTaskAction = async ({
   }
 };
 
+export const getContributionAndUserProfile = async (
+  contribution_id: string
+) => {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: contribution, error: contributionError } = await supabaseClient
+    .from("contributions")
+    .select("*")
+    .eq("id", contribution_id)
+    .single();
+
+  if (contributionError) {
+    throw contributionError;
+  }
+
+  const { data: userProfile, error: userProfileError } = await supabaseClient
+    .from("user_profiles")
+    .select("*")
+    .eq("id", contribution.user_id)
+    .single();
+
+  if (userProfileError) {
+    throw userProfileError;
+  }
+
+  return {
+    contributionId: contribution.id,
+    description: contribution.description,
+    avatarUrl: userProfile.avatar_url,
+    fullName: userProfile.full_name,
+    createdAt: contribution.created_at,
+  };
+};
+
+export const getTaskContributionsAndUserProfiles = async (task_id: string) => {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: contributions, error: contributionsError } =
+    await supabaseClient
+      .from("contributions")
+      .select("*")
+      .eq("task_id", task_id);
+
+  if (contributionsError) {
+    throw contributionsError;
+  }
+
+  const userIds = contributions.map((contribution) => contribution.user_id);
+  const { data: userProfiles, error: userProfilesError } = await supabaseClient
+    .from("user_profiles")
+    .select("*")
+    .in("id", userIds);
+
+  if (userProfilesError) {
+    throw userProfilesError;
+  }
+
+  const contributionsWithUserProfiles = contributions.map((contribution) => {
+    const userProfile = userProfiles.find(
+      (profile) => profile.id === contribution.user_id
+    );
+    return {
+      ...contribution,
+      userProfile: userProfile,
+    };
+  });
+
+  return contributionsWithUserProfiles;
+};
+
 export const getTaskById = async (taskId: string) => {
   const supabase = createSupabaseUserServerComponentClient();
   const { data: task, error } = await supabase

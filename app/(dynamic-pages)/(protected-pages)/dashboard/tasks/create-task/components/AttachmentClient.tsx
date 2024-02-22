@@ -21,7 +21,7 @@ export function AttachmentClient({
   const handleAttachmentClick = (file: { name: string; url: string }) => {
     setSelectedAttachment({
       name: file.name,
-      type: "image/png", // TODO: fix hard-coded type
+      type: "image/*",
       previewUrl: file.url,
     });
   };

@@ -15,8 +15,7 @@ interface ContributionTableProps {
   contributions: Table<"contributions">[];
 }
 
-
-const ContributionTable: FC<ContributionTableProps> = ({ task_status, contributions }) => {
+const ContributionTable: FC<ContributionTableProps> = async ({ task_status, contributions }) => {
   const showContributions = task_status === "prioritized" || "claimed" && contributions.length !== 0;
   const noContributions = contributions.length === 0
 
@@ -30,6 +29,9 @@ const ContributionTable: FC<ContributionTableProps> = ({ task_status, contributi
               <TableHead className="whitespace-nowrap">
                 Solution Description
               </TableHead>
+              <TableHead className="text-left ">
+                Members
+              </TableHead>
               <TableHead className="text-center whitespace-nowrap">
                 Total Validators
               </TableHead>
@@ -40,7 +42,7 @@ const ContributionTable: FC<ContributionTableProps> = ({ task_status, contributi
             <TableBody>
               {contributions.map((contribution, index) => (
                 <Suspense key={index} fallback={<div>Loading...</div>}>
-                  <Contribution key={index} contribution={contribution} />
+                  <Contribution key={index} contribution={contribution} allContributions={contributions} />
                 </Suspense>
               ))}
             </TableBody>

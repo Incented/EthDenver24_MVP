@@ -32,9 +32,9 @@ interface AddContributionProps {
 }
 
 const AddContribution: FC<AddContributionProps> = ({ isClaimed, isClaimer, task_id }) => {
-  const [addedLink, setAddedLink] = useState<any[]>([]);
-  const [linkNum, setLinkNum] = useState<number>(2);
 
+
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const [taskFileUrls, setTaskFilesUrls] = useState<
     { name: string; url: string }[]
@@ -115,6 +115,7 @@ const AddContribution: FC<AddContributionProps> = ({ isClaimed, isClaimer, task_
     );
   };
 
+
   const { handleSubmit, control, register, setValue } = useForm<ContributionFormSchema>({
     resolver: zodResolver(contributionFormSchema),
     defaultValues: {
@@ -156,6 +157,7 @@ const AddContribution: FC<AddContributionProps> = ({ isClaimed, isClaimer, task_
       successMessage: "Successful",
       onSuccess: (data) => {
         router.push(`/dashboard/tasks/${task_id}`);
+        setIsSheetOpen(false);
       },
     }
   );
@@ -167,7 +169,7 @@ const AddContribution: FC<AddContributionProps> = ({ isClaimed, isClaimer, task_
   const [files, setFiles] = useState<File[]>([]);
 
   return (
-    <Sheet>
+    <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
       <SheetTrigger className="w-full">
         {
           isClaimed ? (
