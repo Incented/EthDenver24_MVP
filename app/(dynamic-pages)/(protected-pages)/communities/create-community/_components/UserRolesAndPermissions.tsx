@@ -1,22 +1,22 @@
 "use client";
 
-import {
-  AdminSettingsSchema,
-  adminSettingsSchema,
-} from "./createCommunitySchema";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Switch } from "@/components/ui/Switch";
 import { Button } from "@/components/ui/button";
 import {
-  Table,
+  ShadcnTable,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Switch } from "@/components/ui/Switch";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { rolesAndPermissions } from "./createCommunityData";
+import {
+  AdminSettingsSchema,
+  adminSettingsSchema,
+} from "./createCommunitySchema";
 
 function UserRolesAndPermissionsForm({
   initialFormValues,
@@ -41,7 +41,7 @@ function UserRolesAndPermissionsForm({
       <div className="flex flex-col w-full gap-4 rounded-b-none rounded-lg md:md:h-[640px]">
         {/* <div className="grid grid-cols-5 gap-4"> */}
         <div className="w-full overflow-auto">
-          <Table className="w-full ">
+          <ShadcnTable className="w-full ">
             <TableHeader>
               <TableRow className="border-none">
                 <TableHead className="w-full pl-0 font-normal sm:w-auto">
@@ -139,7 +139,7 @@ function UserRolesAndPermissionsForm({
                 </TableRow>
               ))}
             </TableBody>
-          </Table>
+          </ShadcnTable>
         </div>
       </div>
       <div className="flex w-full p-6 py-4 pb-6 border rounded-lg rounded-t-none ">
@@ -147,7 +147,7 @@ function UserRolesAndPermissionsForm({
           <Button
             variant="outline"
             className="w-[100px]"
-            onClick={withStep ? moveToPrevStep : () => {}}
+            onClick={withStep ? moveToPrevStep : () => { }}
             type="button"
           >
             {withStep ? "Back" : "Cancel"}

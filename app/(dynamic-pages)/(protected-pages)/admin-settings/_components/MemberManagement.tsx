@@ -1,9 +1,21 @@
 "use client";
 
+import Pagination from "@/components/ui/Pagination";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { FC } from "react";
-import MemberManagementTopCard from "./MemberManagementTopCard";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import {
+  ShadcnTable,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 import {
   CheckCircle,
   Filter,
@@ -12,25 +24,12 @@ import {
   Users,
   XCircle,
 } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import Pagination from "@/components/ui/Pagination";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { FC } from "react";
+import MemberManagementTopCard from "./MemberManagementTopCard";
 
-interface MemberManagementProps {}
+interface MemberManagementProps { }
 
-const MemberManagement: FC<MemberManagementProps> = ({}) => {
+const MemberManagement: FC<MemberManagementProps> = ({ }) => {
   const membersData = [
     {
       name: "Mira Herwitz",
@@ -85,7 +84,7 @@ const MemberManagement: FC<MemberManagementProps> = ({}) => {
         </Button>
       </div>
 
-      <Table className="border">
+      <ShadcnTable className="border">
         <TableHeader>
           <TableRow>
             <TableHead className="">Name</TableHead>
@@ -198,7 +197,7 @@ const MemberManagement: FC<MemberManagementProps> = ({}) => {
             );
           })}
         </TableBody>
-      </Table>
+      </ShadcnTable>
       <Pagination count={12} title="Members" totalPages={10} />
     </Card>
   );

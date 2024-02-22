@@ -1,32 +1,29 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
+  Popover,
   PopoverContent,
   PopoverTrigger,
-  Popover,
 } from "@/components/ui/popover";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Table,
+  ShadcnTable,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { FC } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { ChevronsUpDown } from "lucide-react";
-import Pagination from "@/components/ui/Pagination";
 import { cn } from "@/lib/utils";
+import { ChevronsUpDown } from "lucide-react";
+import { FC } from "react";
 
-interface MyRewardTabsProps {}
+interface MyRewardTabsProps { }
 
-const MyRewardTabs: FC<MyRewardTabsProps> = ({}) => {
+const MyRewardTabs: FC<MyRewardTabsProps> = ({ }) => {
   return (
     <div className="relative overflow-hidden pb-24">
       <Tabs defaultValue="past">
@@ -38,7 +35,7 @@ const MyRewardTabs: FC<MyRewardTabsProps> = ({}) => {
           value="past"
           className="w-full border rounded-lg mt-4 mb-6  overflow-auto"
         >
-          <Table className="w-full border-0 ">
+          <ShadcnTable className="w-full border-0 ">
             <TableHeader className="border-none">
               <TableRow>
                 <TableHead className="">Task</TableHead>
@@ -94,7 +91,7 @@ const MyRewardTabs: FC<MyRewardTabsProps> = ({}) => {
                 </TableRow>
               ))}
             </TableBody>
-          </Table>
+          </ShadcnTable>
         </TabsContent>
         <TabsContent value="potential">priortized</TabsContent>
       </Tabs>
