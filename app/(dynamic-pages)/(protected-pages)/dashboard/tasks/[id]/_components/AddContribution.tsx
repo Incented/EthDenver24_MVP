@@ -1,15 +1,8 @@
 "use client";
 
+import { Attachment } from "@/components/Attachment";
+import { AttachmentDialog } from "@/components/AttachmentDialog";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -20,82 +13,159 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
+import { contributeToTaskAction } from "@/data/user/tasks";
+import { useToastMutation } from "@/hooks/useToastMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Upload } from "lucide-react";
-import { ChangeEvent, FC, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import axios from "axios";
+import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { FC, useState } from "react";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { AttachmentType, FilePreview } from "../../create-task/components/CreateTaskFormTypes";
+import { UploadFiles } from "../../create-task/components/uploadFile";
+import { ContributionFormSchema, contributionFormSchema } from "./ContributionFormSchema";
 
 interface AddContributionProps {
   isClaimed?: boolean;
   isClaimer?: boolean;
+  task_id: string;
 }
 
-const formSchema = z.object({
-  description: z.string().min(5, {
-    message: "Description must be at least 5 characters.",
-  }),
-  link1: z.string().min(5, {
-    message: "Provide a valid Link.",
-  }),
-  link2: z.string().min(5, {
-    message: "Provide a valid Link.",
-  }),
-  link3: z.string().min(5, {
-    message: "Provide a valid Link.",
-  }),
-  image: z.string().optional(),
-  attchament: z.string().optional(),
-});
-
-const AddContribution: FC<AddContributionProps> = ({ isClaimed, isClaimer }) => {
+const AddContribution: FC<AddContributionProps> = ({ isClaimed, isClaimer, task_id }) => {
   const [addedLink, setAddedLink] = useState<any[]>([]);
   const [linkNum, setLinkNum] = useState<number>(2);
 
-  function handleAddLink(link: string) {
-    if (addedLink.length === 2) return;
-    setLinkNum((pre) => (pre += 1));
-    setAddedLink((pre) => [...pre, link]);
-  }
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+
+  const [taskFileUrls, setTaskFilesUrls] = useState<
+    { name: string; url: string }[]
+  >([]);
+
+  const [filePreviews, setFilePreviews] = useState<FilePreview[]>([]);
+
+  const handleFiles = (files: File[], paths: string[]) => {
+    const newFilePreviews = files.map((file, index) => ({
+      file,
+      previewUrl: URL.createObjectURL(file),
+      path: paths[index],
+    }));
+
+    setFilePreviews((currentPreviews) => [
+      ...currentPreviews,
+      ...newFilePreviews, // This now correctly matches the updated state type
+    ]);
+  };
+
+  const [selectedAttachment, setSelectedAttachment] =
+    useState<AttachmentType | null>(null);
+
+  const openPreview = (preview: FilePreview) => {
+    if ("file" in preview) {
+      setSelectedAttachment({
+        file: preview.file,
+        previewUrl: preview.previewUrl,
+      });
+    } else {
+      // Workaround: Explicitly declaring the type of the 'File' constructor
+      const emptyFile: File = new (File as any)([], preview.name, {
+        type: "application/octet-stream",
+      });
+      setSelectedAttachment({
+        file: emptyFile,
+        previewUrl: preview.url,
+      });
+    }
+  };
+
+  const closePreview = () => {
+    setSelectedAttachment(null);
+  };
+
+  const deleteFileMutation = useToastMutation<
+    { message: string }, // Expected success response type
+    Error, // Error type
+    { path: string } // Variables type, assuming you need the file path to delete
+  >(
+    async ({ path }) => {
+      // Call your API endpoint to delete the file
+      const response = await axios.delete("/api/tasks/deleteFile", {
+        data: { path },
+      });
+      return response.data;
+    },
+    {
+      loadingMessage: "Deleting file...",
+      successMessage: "File deleted successfully!",
+      errorMessage: "Failed to delete file",
+    }
+  );
+
+  // Function to handle file deletion
+  const handleDeleteFile = (path: string) => {
+    deleteFileMutation.mutate(
+      { path },
+      {
+        onSuccess: () => {
+          // Remove the file preview from the state after successful deletion
+          setFilePreviews((prev) =>
+            prev.filter((preview) => preview.path !== path)
+          );
+        },
+        // Optionally handle onError to customize error handling
+      }
+    );
+  };
+
+  const { handleSubmit, control, register, setValue } = useForm<ContributionFormSchema>({
+    resolver: zodResolver(contributionFormSchema),
     defaultValues: {
       description: "",
-      link1: "",
-      link2: "",
-      link3: "",
-      image: "",
+      links: [{ link: "" }], // Start with one empty link
+      contribution_files: [],
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  // Use 'useFieldArray' for dynamic form fields
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "links",
+  });
+
+  function handleAddLink() {
+    // This will add a new input to the links array
+    append({ link: "" });
+  }
+
+  const router = useRouter()
+
+  const { mutate } = useToastMutation(
+    async (data: ContributionFormSchema) => {
+      const files = data.contribution_files || [];
+      const links = data.links || [];
+      const description = data.description;
+
+      return await contributeToTaskAction({
+        task_id: task_id,
+        description,
+        files,
+        links,
+      });
+    },
+    {
+      loadingMessage: "Creating Contribution..",
+      errorMessage: "Failed to submit proposal",
+      successMessage: "Successful",
+      onSuccess: (data) => {
+        router.push(`/dashboard/tasks/${task_id}`);
+      },
+    }
+  );
+
+  function onSubmit(values: ContributionFormSchema) {
+    mutate(values);
   }
 
   const [files, setFiles] = useState<File[]>([]);
 
-  const handleImage = (
-    e: ChangeEvent<HTMLInputElement>,
-    fieldChange: (value: string) => void
-  ) => {
-    e.preventDefault();
-    const fileReader = new FileReader();
-
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      setFiles(Array.from(e.target.files));
-
-      if (!file.type.includes("image")) return;
-
-      fileReader.onload = async (event) => {
-        const imageDataUrl = event.target?.result?.toString() || "";
-        fieldChange(imageDataUrl);
-      };
-
-      fileReader.readAsDataURL(file);
-    }
-  };
   return (
     <Sheet>
       <SheetTrigger className="w-full">
@@ -115,142 +185,94 @@ const AddContribution: FC<AddContributionProps> = ({ isClaimed, isClaimer }) => 
           <SheetTitle className="text-start">Contribution</SheetTitle>
         </SheetHeader>
         <div className="my-4">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="description"
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            <div className="space-y-1">
+              <Label className="text-sm leading-[14px]">Solution Description</Label>
+              <Textarea
+                {...register("description")}
+                placeholder="Describe your solution here"
+              />``
+            </div>
+            <div className="space-y-1 col-span-2">
+              <Label className="text-sm leading-[14px]">Upload</Label>
+              <Controller
+                control={control}
+                name="contribution_files"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Solution Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="Describe your solution here"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                  <>
+                    <UploadFiles
+                      onUpload={(filesInfo: { name: string; url: string }[]) => {
+                        field.onChange(filesInfo);
+                        console.log("Uploaded files", filesInfo);
+                        setTaskFilesUrls(filesInfo); // Update the local state if you're using it to display the paths
+                      }}
+                      showFilePreviews={handleFiles}
+                    />
+                  </>
                 )}
               />
-              <div className="col-span-2">
-                <Label>Upload</Label>
-                <Card className="relative mt-1 outline-dashed outline-gray-600">
-                  <FormField
-                    control={form.control}
-                    name="image"
-                    render={({ field }) => (
-                      <FormItem className="relative">
-                        <FormControl className="">
-                          <>
-                            <div className="flex items-center justify-center w-full h-[200px] mx-auto outline-0">
-                              <Input
-                                type="file"
-                                accept="image/*"
-                                placeholder=""
-                                className="z-40 w-full h-full p-4 rounded-full opacity-0 cursor-pointer "
-                                onChange={(e) => handleImage(e, field.onChange)}
-                              />
-                              <div
-                                className={cn(
-                                  "h-full w-full absolute flex justify-center bg-cover bg-center group",
-                                  field.value
-                                    ? "bg-[rgba(22, 28, 36, 0.64)]"
-                                    : "bg-default-100"
-                                )}
-                                style={{
-                                  backgroundImage: `url(${field.value})`,
-                                  objectFit: "contain",
-                                }}
-                              >
-                                <div
-                                  className={cn(
-                                    "flex  justify-center items-center flex-col gap-1 text-default-400",
-                                    field.value ? "opacity-0" : "opacity-1"
-                                  )}
-                                >
-                                  <Upload />
-                                  <p className="text-tiny">
-                                    {field.value
-                                      ? "Update Photo"
-                                      : "Upload photo"}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+            </div>
+            <div className="flex flex-col gap-1">
+              <Label>Attachments</Label>
+              <div className="space-y-2">
+                <div className="flex flex-wrap gap-2">
+                  {filePreviews.map((preview, index) => (
+                    <Attachment
+                      key={preview.path}
+                      name={"file" in preview ? preview.file.name : preview.name}
+                      onClick={() => openPreview(preview)}
+                      onRemove={() => handleDeleteFile(preview.path)}
+                    />
+                  ))}
+                </div>
+
+                {selectedAttachment && (
+                  <AttachmentDialog
+                    onOpenChange={closePreview}
+                    attachment={selectedAttachment}
                   />
-                </Card>
-              </div>
-              <FormField
-                control={form.control}
-                name="attchament"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Attachment</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Describe your solution here"
-                        type="file"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
                 )}
-              />
-              {addedLink.map((link, i) => (
-                <FormField
-                  key={i}
-                  control={form.control}
-                  name={link}
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Add Link(s)</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="https://" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              ))}
-              <div className="flex gap-2">
-                <FormField
-                  control={form.control}
-                  name="link1"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Add Link(s)</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="https://" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  onClick={() => handleAddLink(`link${linkNum}`)}
-                  type="button"
-                  size="icon"
-                  variant="outline"
-                  className="mt-8"
-                >
-                  <Plus />
+              </div>
+              {filePreviews.length === 0 && (
+                <div className="flex justify-between p-4 py-2 pr-8 border rounded-md w-full ">
+                  <p className="text-sm">Choose file</p>
+                  <p className="text-sm">{files.length}</p>
+                </div>
+              )}
+            </div>
+            <div className="space-y-1 w-full">
+              <Label>Add link(s)</Label>
+              <div className="flex flex-col gap-3">
+                {fields.map((field, index) => (
+                  <div key={field.id} className=" w-full">
+                    <Input
+                      {...register(`links.${index}.link`)} // Use register directly without casting
+                      defaultValue={field.link} // Set up the default value
+                      placeholder="https://"
+                      className="w-full"
+                    />
+                    {/* <Button onClick={() => remove(index)} type="button" size="icon" variant="outline">
+                      <X className="text-destructive" size={16} />
+                    </Button> */}
+
+                  </div>
+                ))}
+                <Button onClick={handleAddLink} type="button" variant="tertiary" size='icon' className="w-full">
+                  <Plus size="16" />
                 </Button>
               </div>
-              <Button className="w-full" type="submit">
-                Submit
-              </Button>
-            </form>
-          </Form>
+            </div>
+
+
+            <div className="flex gap-2">
+            </div>
+            <Button className="w-full" type="submit">
+              Submit
+            </Button>
+          </form>
         </div>
-      </SheetContent>
-    </Sheet>
+      </SheetContent >
+    </Sheet >
   );
 };
 

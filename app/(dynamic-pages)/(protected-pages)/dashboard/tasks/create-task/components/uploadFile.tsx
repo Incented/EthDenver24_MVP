@@ -1,8 +1,8 @@
+import { useToastMutation } from "@/hooks/useToastMutation";
+import axios from "axios";
+import { Upload } from "lucide-react";
 import React from "react";
 import { useDropzone } from "react-dropzone";
-import axios from "axios";
-import { useToastMutation } from "@/hooks/useToastMutation";
-import { Upload } from "lucide-react";
 
 const UploadFiles = ({
   onUpload,
@@ -89,7 +89,7 @@ const UploadFiles = ({
         <div className="flex flex-col items-center gap-2">
           <Upload size={20} className="text-muted-foreground" />
           <p className="text-muted-foreground text-sm">
-            Drag 'n' drop files here, or click to select files
+            Drag and Drop or Browse to upload  files / photos
           </p>
         </div>
       )}

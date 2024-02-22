@@ -7,26 +7,13 @@ import {
   TableRow
 } from "@/components/ui/table";
 import { Enum, Table } from "@/types";
-import { FC } from "react";
+import { FC, Suspense } from "react";
 import Contribution from "./Contribution";
 
 interface ContributionTableProps {
   task_status?: Enum<"task_status">;
   contributions: Table<"contributions">[];
 }
-
-// const contributions = [{
-//   description: "Try to calculate the EXE fee...",
-//   member: { name: "Randy Dias", imageUrl: "/assets/avatar_1.jpg" },
-//   attchedFiles: [],
-//   validators: [],
-// },
-// {
-//   description: "Try to calculate the EXE fee...",
-//   member: { name: "Randy Dias", imageUrl: "/assets/avatar_1.jpg" },
-//   attchedFiles: [],
-//   validators: [],
-// }];
 
 
 const ContributionTable: FC<ContributionTableProps> = ({ task_status, contributions }) => {
@@ -49,11 +36,12 @@ const ContributionTable: FC<ContributionTableProps> = ({ task_status, contributi
               <TableHead className="text-center">Action</TableHead>
             </TableRow>
           </TableHeader>
-          {showContributions ? (
+          {contributions ?? showContributions ? (
             <TableBody>
               {contributions.map((contribution, index) => (
-                <Contribution key={index} />
-                // Assuming Contribution is a component that takes a contribution prop
+                <Suspense key={index} fallback={<div>Loading...</div>}>
+                  <Contribution key={index} contribution={contribution} />
+                </Suspense>
               ))}
             </TableBody>
           ) : null}

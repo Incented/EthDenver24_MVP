@@ -84,8 +84,16 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCo
     await updateTaskStatusAction({ status: "claimed", task_id: task.id });
   }
 
-
   const isClaimed = task.task_status === "claimed";
+
+  if (isClaimed && contributions.length !== 0) {
+    await updateTaskStatusAction({ status: "in_review", task_id: task.id });
+  }
+
+  if (!isClaimed && task.task_status === "prioritized") {
+    await updateTaskStatusAction({ status: "in_progress", task_id: task.id });
+  }
+
   const isTaskCreator = user_id === task.user_id;
 
   if (task.task_status === "in_progress") {
@@ -96,15 +104,14 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCo
   } else if (task.task_status === "prioritized") {
     taskStatusBg = "bg-primary text-background"
   } else if (task.task_status === "claimed") {
-    taskStatusBg = "bg-[#A132CD] text-background"
+    taskStatusBg = "bg-[#A132CD] text-primary-foreground"
   } else if (task.task_status === "freezed") {
     taskStatusBg = "bg-zinc-400 dark:bg-zinc-600 text-primary-foreground"
-  }
-  else {
+  } else if (task.task_status === "in_review") {
+    taskStatusBg = "bg-[#DA1DBC] text-primary-foreground"
+  } else {
     taskStatusBg = "bg-muted text-foreground";
   }
-
-
 
   return (
 

@@ -1,28 +1,25 @@
-"use client";
-
 import { TableCell, TableRow } from "@/components/ui/table";
+import { getValidationsForContribution } from "@/data/user/tasks";
+import { Table } from "@/types";
 import { User } from "lucide-react";
 import { FC } from "react";
 import ContributionDetailsSheet from "./ContributionDetailsSheet";
 import ValidateDrawer from "./ValidateDrawer";
 
 interface ContributionProps {
-  description?: string;
-  member?: { name: string; imageUrl: string };
-  attchedFiles?: [];
-  validators?: [];
+  contribution: Table<"contributions">;
 }
-const Contribution: FC<ContributionProps> = ({
-  description = "Try to calculate the EXE fee...",
-  validators = [],
+const Contribution: FC<ContributionProps> = async ({
+  contribution
 }) => {
+  const validationsForContribution = await getValidationsForContribution(contribution.id);
   return (
     <TableRow>
-      <TableCell className="px-6">{description}</TableCell>
+      <TableCell className="px-6">{contribution.description}</TableCell>
       <TableCell className="">
         <div className="flex items-center justify-center gap-1">
           <User />
-          <p className="text-lg text-primary">{validators.length}</p>
+          <p className="text-lg text-primary">{validationsForContribution?.length || 0}</p>
         </div>
       </TableCell>
       <TableCell className="text-center">
