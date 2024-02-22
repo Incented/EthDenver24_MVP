@@ -44,3 +44,5 @@ export const taskData: {
     Icon: Carrot,
   },
 ];
+
+export const carrotDenomination = 40.2;

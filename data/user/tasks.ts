@@ -220,7 +220,26 @@ export const checkIfUserPrioritizedTask = async (
   return prioritizedTask !== null;
 };
 
-export const updateTaskStatus = async ({
+export const checkIfUserClaimedTask = async (
+  task_id: string
+): Promise<boolean> => {
+  const user = await serverGetLoggedInUser();
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: claimedTask, error } = await supabaseClient
+    .from("claimed_tasks")
+    .select("*")
+    .eq("task_id", task_id)
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  return claimedTask !== null;
+};
+
+export const updateTaskStatusAction = async ({
   status,
   task_id,
 }: {
@@ -276,6 +295,49 @@ export const getPrioritizationDetails = async (task_id: string) => {
   return prioritizationDetailsWithUser;
 };
 
+export const getTaskClaimerDetails = async (task_id: string) => {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: claimerData, error: claimerError } = await supabaseClient
+    .from("claimed_tasks")
+    .select("user_id")
+    .eq("task_id", task_id)
+    .maybeSingle();
+
+  if (claimerError) {
+    throw claimerError;
+  }
+
+  if (!claimerData) {
+    return null;
+  }
+
+  const { data: userProfile, error: userProfileError } = await supabaseClient
+    .from("user_profiles")
+    .select("id, full_name, avatar_url")
+    .eq("id", claimerData.user_id)
+    .single();
+
+  if (userProfileError) {
+    throw userProfileError;
+  }
+
+  return userProfile;
+};
+
+export const claimTaskAction = async (task_id: string) => {
+  const user = await serverGetLoggedInUser();
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { error } = await supabaseClient
+    .from("claimed_tasks")
+    .insert({ task_id, user_id: user.id });
+
+  if (error) {
+    throw error;
+  }
+
+  revalidatePath(`/dashboard/tasks/${task_id}`);
+};
+
 export const getTaskById = async (taskId: string) => {
   const supabase = createSupabaseUserServerComponentClient();
   const { data: task, error } = await supabase
@@ -312,6 +374,20 @@ export const getCommunityTasks = async (communityId: string) => {
     .from("tasks")
     .select("*")
     .eq("organization_id", communityId);
+
+  if (error) {
+    throw error;
+  }
+
+  return tasks;
+};
+
+export const getTaskContributions = async (task_id: string) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data: tasks, error } = await supabase
+    .from("contributions")
+    .select("*")
+    .eq("task_id", task_id);
 
   if (error) {
     throw error;

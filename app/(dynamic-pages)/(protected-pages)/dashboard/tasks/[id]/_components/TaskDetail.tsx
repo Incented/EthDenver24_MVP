@@ -15,21 +15,18 @@ import {
 import { FC, Suspense } from "react";
 import ContributionTable from "./ContributionTable";
 
-import { updateTaskStatus } from "@/data/user/tasks";
+import { updateTaskStatusAction } from "@/data/user/tasks";
 import { Table } from "@/types";
-import AddContribution from "./AddContribution";
-import ClaimModal from "./ClaimModal";
-import { PrioritizeDialog } from "./PrioritizeDialog";
 import { PrioritizerCards } from "./PrioritizerCards";
+import { StatusBasedActions } from "./StatusBasedActions";
 
 
 interface TaskDetailProps {
   id: string;
   user_id: string;
   task: Table<"tasks">;
+  community: Table<"organizations">;
   isUserMemberOfCommunity: boolean;
-  prioritizationPeriod: number;
-  prioritizationQuorum: number;
   taskCreator: {
     avatar_url: string | null;
     created_at: string;
@@ -46,13 +43,22 @@ interface TaskDetailProps {
     created_at: string;
     user_id: string;
   }[];
+  isClaimedByUser: boolean;
+  claimerDetails: {
+    id: string;
+    avatar_url: string | null;
+    full_name: string | null;
+  } | null;
 
+  contributions: Table<"contributions">[];
 }
-const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, prioritizationPeriod, prioritizationQuorum, isUserMemberOfCommunity,
-  taskCreator, isPrioritizedByUser, taskPrioritizationDetails
+const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCommunity, community, contributions,
+  taskCreator, isPrioritizedByUser, claimerDetails, isClaimedByUser, taskPrioritizationDetails
 }) => {
   let taskStatusBg = "bg-muted text-foreground";
 
+  const prioritizationPeriod = community.prioritization_period || 0;
+  const prioritizationQourum = community.prioritization_quorum_percentage || 0;
 
   // Can be used to check if the task is within the prioritization period
   const isWithinPrioritizedPeriod = Date.now() < new Date(task.new_task_created_at).getTime() + prioritizationPeriod * 24 * 60 * 60 * 1000;
@@ -70,27 +76,34 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, prioritizationPe
 
   const currentPrioritizationQuorum = (higherPriority / (lowerPriority + higherPriority)) * 100;
 
-  if (task.task_status === "new_task" && currentPrioritizationQuorum >= prioritizationQuorum) {
-    await updateTaskStatus({ status: "prioritized", task_id: task.id });
+  if (task.task_status === "new_task" && currentPrioritizationQuorum >= prioritizationQourum) {
+    await updateTaskStatusAction({ status: "prioritized", task_id: task.id });
   }
 
-  // if (task.task_status === "new_task" && currentPrioritizationQuorum >= prioritizationQuorum && !isWithinPrioritizedPeriod) {
-  //   await updateTaskStatus({ status: "prioritized", task_id: task.id });
-  // }
+  if (task.task_status === "prioritized" && isClaimedByUser) {
+    await updateTaskStatusAction({ status: "claimed", task_id: task.id });
+  }
 
 
-  // check if taskCreator is the same as the logged in user
+  const isClaimed = task.task_status === "claimed";
   const isTaskCreator = user_id === task.user_id;
 
   if (task.task_status === "in_progress") {
     taskStatusBg = "bg-blue-500 text-foreground";
-  } else if (task.task_status === "prioritized") {
-    taskStatusBg = "bg-primary text-background";
+
   } else if (task.task_status === "new_task") {
     taskStatusBg = "bg-zinc-300 dark:bg-zinc-700 text-foreground";
-  } else {
+  } else if (task.task_status === "prioritized") {
+    taskStatusBg = "bg-primary text-background"
+  } else if (task.task_status === "claimed") {
+    taskStatusBg = "bg-[#A132CD] text-background"
+  } else if (task.task_status === "freezed") {
+    taskStatusBg = "bg-zinc-400 dark:bg-zinc-600 text-primary-foreground"
+  }
+  else {
     taskStatusBg = "bg-muted text-foreground";
   }
+
 
 
   return (
@@ -115,6 +128,7 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, prioritizationPe
         <div className="mb-4 p-8 bg-muted rounded-lg">
           <ContributionTable
             task_status={task.task_status || "new_task"}
+            contributions={contributions}
           />
         </div>
 
@@ -137,27 +151,41 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, prioritizationPe
       </div>
 
       <div className="w-full">
-        {task.task_status === "prioritized" && (
-          <div className="flex w-full gap-2 mb-4 md:col-start-3 xl:col-start-4 ">
-            <ClaimModal />
-            <AddContribution />
-          </div>)}
-        {task.task_status === "new_task" && (
-          <div className="flex w-full gap-2 mb-4 md:col-start-3 xl:col-start-4 ">
-            <PrioritizeDialog isTaskCreator={isTaskCreator} task_id={task.id} isPrioritizedByUser={isPrioritizedByUser} isWithinPrioritizedPeriod={isWithinPrioritizedPeriod} isUserMemberOfCommunity={isUserMemberOfCommunity} />
-          </div>
-        )}
+        <Suspense fallback={<div>Loading actions...</div>}>
+          <StatusBasedActions
+            claim_stake_amount={community.claim_stake_amount_percentage}
+            isTaskCreator={isTaskCreator}
+            isPrioritizedByUser={isPrioritizedByUser}
+            isUserMemberOfCommunity={isUserMemberOfCommunity}
+            isWithinPrioritizedPeriod={isWithinPrioritizedPeriod}
+            task_id={task.id}
+            isClaimer={claimerDetails?.id === user_id}
+            task_status={task.task_status}
+          />
+        </Suspense>
 
         <Card className="p-4 mb-4 flex flex-col gap-4">
           <h1 className="text-sm leading-[14px] font-medium">Proposer</h1>
           <div className="flex items-center gap-[10px]">
             <Avatar>
               <AvatarImage src={taskCreator?.avatar_url || ""} />
-              <AvatarFallback>U</AvatarFallback>
+              <AvatarFallback>{taskCreator?.full_name?.slice(0, 1)}</AvatarFallback>
             </Avatar>
             <p className="text-sm text-foreground">{taskCreator?.full_name}</p>
           </div>
         </Card>
+        {isClaimed && (
+          <Card className="p-4 mb-4 flex flex-col gap-4">
+            <h1 className="text-sm leading-[14px] font-medium">Claimed by</h1>
+            <div className="flex items-center gap-[10px]">
+              <Avatar>
+                <AvatarImage src={claimerDetails?.avatar_url || ""} />
+                <AvatarFallback>{claimerDetails?.full_name?.slice(0, 1)}</AvatarFallback>
+              </Avatar>
+              <p className="text-sm text-foreground">{claimerDetails?.full_name}</p>
+            </div>
+          </Card>
+        )}
         <Card className="p-4 mb-4">
           <h1 className="mb-2 text-sm leading-[14px] font-medium">Priority</h1>
           <div className="flex items-center gap-4 mb-2 border-b pb-2">
@@ -196,7 +224,7 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, prioritizationPe
           </Card>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 
