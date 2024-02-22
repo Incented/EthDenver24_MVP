@@ -338,6 +338,32 @@ export const claimTaskAction = async (task_id: string) => {
   revalidatePath(`/dashboard/tasks/${task_id}`);
 };
 
+export const contributeToTaskAction = async ({
+  task_id,
+  description,
+  files,
+  links,
+}: {
+  task_id: string;
+  description: string;
+  files: { name: string; url: string }[];
+  links: { link?: string }[];
+}) => {
+  const user = await serverGetLoggedInUser();
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { error } = await supabaseClient.from("contributions").insert({
+    files: files,
+    links,
+    description: description,
+    task_id: task_id,
+    user_id: user.id,
+  });
+
+  if (error) {
+    throw error;
+  }
+};
+
 export const getTaskById = async (taskId: string) => {
   const supabase = createSupabaseUserServerComponentClient();
   const { data: task, error } = await supabase
@@ -394,6 +420,26 @@ export const getTaskContributions = async (task_id: string) => {
   }
 
   return tasks;
+};
+
+export const getValidationsForContribution = async (
+  contribution_id: string
+) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data: validations, error } = await supabase
+    .from("validations")
+    .select("*")
+    .eq("contribution_id", contribution_id);
+
+  if (error) {
+    throw error;
+  }
+
+  if (!validations) {
+    return null;
+  }
+
+  return validations;
 };
 
 export const getCommunityTasksWithCommunityNames = async (

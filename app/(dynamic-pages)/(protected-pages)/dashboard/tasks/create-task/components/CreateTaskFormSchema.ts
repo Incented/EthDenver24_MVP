@@ -22,7 +22,7 @@ export const TaskType = z.enum([
   "other",
 ]);
 
-const TaskFileSchema = z.object({
+export const TaskFileSchema = z.object({
   name: z.string(),
   url: z.string().url(),
 });

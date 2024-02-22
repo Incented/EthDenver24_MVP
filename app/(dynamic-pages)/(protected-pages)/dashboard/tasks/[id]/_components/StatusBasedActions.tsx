@@ -21,18 +21,18 @@ export function StatusBasedActions({ task_status, task_id, isClaimer, isTaskCrea
                 <ClaimDialog claimStakeAmount={claim_stake_amount}
                     task_id={task_id}
                 />
-                <AddContribution />
+                <AddContribution task_id={task_id} />
             </div>)}
 
         {isClaimed && (
             <div className="flex w-full gap-2 mb-4 md:col-start-3 xl:col-start-4 ">
-                <AddContribution isClaimed={true} isClaimer={isClaimer} />
+                <AddContribution task_id={task_id} isClaimed={true} isClaimer={isClaimer} />
             </div>
         )}
 
         {isInProgress && (
             <div className="flex w-full gap-2 mb-4 md:col-start-3 xl:col-start-4 ">
-                <AddContribution />
+                <AddContribution task_id={task_id} />
             </div>
         )}
 

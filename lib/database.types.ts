@@ -1347,6 +1347,7 @@ export type Database = {
       };
       validations: {
         Row: {
+          contribution_id: string;
           count: number;
           created_at: string;
           description: string;
@@ -1356,6 +1357,7 @@ export type Database = {
           user_id: string;
         };
         Insert: {
+          contribution_id?: string;
           count: number;
           created_at?: string;
           description: string;
@@ -1365,6 +1367,7 @@ export type Database = {
           user_id?: string;
         };
         Update: {
+          contribution_id?: string;
           count?: number;
           created_at?: string;
           description?: string;
@@ -1374,6 +1377,13 @@ export type Database = {
           user_id?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "public_validations_contribution_id_fkey";
+            columns: ["contribution_id"];
+            isOneToOne: false;
+            referencedRelation: "contributions";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "public_validations_task_id_fkey";
             columns: ["task_id"];

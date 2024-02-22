@@ -30,21 +30,8 @@ import { File } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { task_slug } from "../../../FilterTypeMenu";
+import { AttachmentType, FilePreview } from "./CreateTaskFormTypes";
 import { UploadFiles } from "./uploadFile";
-
-export interface BasicFilePreview {
-  name: string;
-  url: string;
-  path: string;
-}
-
-export interface ExtendedFilePreview {
-  file: File;
-  previewUrl: string;
-  path: string;
-}
-
-export type FilePreview = BasicFilePreview | ExtendedFilePreview;
 
 const TipTap = dynamic(() => import("@/components/tip-tap-Editor/TipTap"), {
   ssr: false,
@@ -72,13 +59,9 @@ export function CreateTaskForm({
     { name: string; url: string }[]
   >([]);
 
-  interface Attachment {
-    file: File;
-    previewUrl: string;
-  }
 
   const [selectedAttachment, setSelectedAttachment] =
-    useState<Attachment | null>(null);
+    useState<AttachmentType | null>(null);
 
   const openPreview = (preview: FilePreview) => {
     if ("file" in preview) {
