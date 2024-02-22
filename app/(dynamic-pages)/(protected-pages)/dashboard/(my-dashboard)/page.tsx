@@ -11,6 +11,7 @@ import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 import { Suspense } from "react";
 import FilterTypeMenu from "../FilterTypeMenu";
 import SelectCommunity from "./_components/SelectCommunity";
+import TaskLoadingSkeleton from "./_components/TaskLoadingSkeleton";
 import TaskTab from "./_components/TaskTab";
 import { taskData } from "./data";
 
@@ -63,7 +64,7 @@ const DashboardPage = async () => {
             <Button>Submit Proposal</Button>
           </Anchor>
         </div>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<TaskLoadingSkeleton />}>
           <TaskList />
         </Suspense>
       </div>
