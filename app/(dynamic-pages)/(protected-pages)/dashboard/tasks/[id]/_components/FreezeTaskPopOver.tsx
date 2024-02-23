@@ -26,7 +26,7 @@ export function FreezeTaskPopOver({ task_id }: { task_id: string }) {
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <div className="flex items-center justify-center p-3 h-10 rounded-md border">
+                <div className="flex items-center justify-center w-fit p-3 h-10 mb-4 rounded-md border">
                     <Settings size={16} />
                 </div>
             </PopoverTrigger>

@@ -17,6 +17,7 @@ import ContributionTable from "./ContributionTable";
 
 import { updateTaskStatusAction } from "@/data/user/tasks";
 import { Table } from "@/types";
+import { revalidatePath } from "next/cache";
 import { PrioritizerCards } from "./PrioritizerCards";
 import { StatusBasedActions } from "./StatusBasedActions";
 
@@ -35,7 +36,7 @@ interface TaskDetailProps {
     id: string;
     last_name: string | null;
   } | null;
-  isPrioritizedByUser: boolean;
+  isPrioritizedByLoggedInUser: boolean;
   taskPrioritizationDetails: {
     full_name: string | null;
     avatar_url: string | null;
@@ -53,7 +54,7 @@ interface TaskDetailProps {
   contributions: Table<"contributions">[];
 }
 const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCommunity, community, contributions,
-  taskCreator, isPrioritizedByUser, claimerDetails, isClaimedByUser, taskPrioritizationDetails
+  taskCreator, isPrioritizedByLoggedInUser, claimerDetails, isClaimedByUser, taskPrioritizationDetails
 }) => {
   let taskStatusBg = "bg-muted text-foreground";
 
@@ -113,6 +114,8 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCo
     taskStatusBg = "bg-muted text-foreground";
   }
 
+  revalidatePath(`/dashboard/tasks/${task.id}`);
+
   return (
 
     <div className="w-full gap-4 mt-4 md:grid md:grid-cols-3 xl:grid-cols-4">
@@ -164,7 +167,7 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCo
           <StatusBasedActions
             claim_stake_amount={community.claim_stake_amount_percentage}
             isTaskCreator={isTaskCreator}
-            isPrioritizedByUser={isPrioritizedByUser}
+            isPrioritizedByLoggedInUser={isPrioritizedByLoggedInUser}
             isUserMemberOfCommunity={isUserMemberOfCommunity}
             isWithinPrioritizedPeriod={isWithinPrioritizedPeriod}
             task_id={task.id}

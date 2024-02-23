@@ -19,13 +19,13 @@ export type PrioritizeTaskFormSchema = z.infer<typeof prioritizeTaskFormSchema>;
 export function PrioritizeDialog({
     task_id,
     isTaskCreator,
-    isPrioritizedByUser,
+    isPrioritizedByLoggedInUser,
     isWithinPrioritizedPeriod,
     isUserMemberOfCommunity,
 }: {
     task_id: string;
     isTaskCreator: boolean;
-    isPrioritizedByUser: boolean;
+    isPrioritizedByLoggedInUser: boolean;
     isWithinPrioritizedPeriod: boolean;
     isUserMemberOfCommunity: boolean;
 }) {
@@ -56,7 +56,6 @@ export function PrioritizeDialog({
     }
 
     const handlePrioritizeClick = () => {
-
         setActionType('prioritize')
         setIsDialogOpen(false)
     };
@@ -68,7 +67,7 @@ export function PrioritizeDialog({
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild className="w-full">
-                <Button className="w-full" disabled={isTaskCreator || isPrioritizedByUser || !isWithinPrioritizedPeriod || !isUserMemberOfCommunity}>
+                <Button className="w-full" disabled={isTaskCreator || isPrioritizedByLoggedInUser || !isWithinPrioritizedPeriod || !isUserMemberOfCommunity}>
                     Prioritize
                 </Button>
             </DialogTrigger>

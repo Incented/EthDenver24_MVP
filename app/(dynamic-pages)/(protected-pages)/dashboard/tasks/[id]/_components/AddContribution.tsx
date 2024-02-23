@@ -193,7 +193,7 @@ const AddContribution: FC<AddContributionProps> = ({ isClaimed, isClaimer, task_
               <Textarea
                 {...register("description")}
                 placeholder="Describe your solution here"
-              />``
+              />
             </div>
             <div className="space-y-1 col-span-2">
               <Label className="text-sm leading-[14px]">Upload</Label>

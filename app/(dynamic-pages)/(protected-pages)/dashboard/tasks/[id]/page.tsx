@@ -17,7 +17,7 @@ export default async function TaskDetailsPage({ params }: { params: unknown }) {
 
   ]);
 
-  const [taskCreator, isPrioritizedByUser, isClaimedByUser, taskPrioritizationDetails, claimerDetails, contributions] = await Promise.all([
+  const [taskCreator, isPrioritizedByLoggedInUser, isClaimedByUser, taskPrioritizationDetails, claimerDetails, contributions] = await Promise.all([
     task.user_id ? getUserProfile(task.user_id) : Promise.resolve(null),
     checkIfUserPrioritizedTask(task.id),
     checkIfUserClaimedTask(task.id),
@@ -47,7 +47,7 @@ export default async function TaskDetailsPage({ params }: { params: unknown }) {
           isUserMemberOfCommunity={isUserMemberOfCommunity}
           taskPrioritizationDetails={taskPrioritizationDetails}
           contributions={contributions}
-          isPrioritizedByUser={isPrioritizedByUser}
+          isPrioritizedByLoggedInUser={isPrioritizedByLoggedInUser}
           isClaimedByUser={isClaimedByUser}
           claimerDetails={claimerDetails}
           taskCreator={taskCreator} />

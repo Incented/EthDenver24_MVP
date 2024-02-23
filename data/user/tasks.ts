@@ -364,6 +364,35 @@ export const contributeToTaskAction = async ({
   }
 };
 
+export const validateContributionAction = async ({
+  contribution_id,
+  description,
+  task_id,
+  count,
+  files,
+}: {
+  contribution_id: string;
+  description: string;
+  task_id: string;
+  count: number;
+  files: { name: string; url: string }[];
+}) => {
+  const user = await serverGetLoggedInUser();
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { error } = await supabaseClient.from("validations").insert({
+    contribution_id,
+    description,
+    count,
+    files,
+    task_id,
+    user_id: user.id,
+  });
+
+  if (error) {
+    throw error;
+  }
+};
+
 export const getContributionAndUserProfile = async (
   contribution_id: string
 ) => {
