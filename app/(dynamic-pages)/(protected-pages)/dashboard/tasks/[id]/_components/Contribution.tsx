@@ -58,7 +58,7 @@ const Contribution: FC<ContributionProps> = async ({
           <ContributionDetailsSheet contribution={contribution} contributorProfile={contributorProfile}
             otherContributionsData={otherContributionsData} />
           <ValidateSheet contribution={contribution} contributorProfile={contributorProfile} task_id={contribution.id}
-            loggedInUser={user_id}
+            loggedInUser={loggedInUser}
           />
         </div>
       </TableCell>
