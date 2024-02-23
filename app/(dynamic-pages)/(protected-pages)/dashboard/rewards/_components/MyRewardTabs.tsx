@@ -6,26 +6,39 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  ShadcnTable,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
-import { ChevronsUpDown } from "lucide-react";
 import { FC } from "react";
+import MyRewardsTable from "./MyRewardsTable";
+import MyRewardsTableMobile from "./MyRewardsTableMobile";
 
 interface MyRewardTabsProps { }
 
+const rewards = [
+  {
+    communityImage: "/assets/avatar_1.jpg",
+    communityName: "Buan Fund",
+    date: "10/10/2023",
+    awardSource: "Contribution",
+    totalCarrots: "10",
+    rewardType: "Construction",
+    task: "Clean up trash at the entrance"
+  },
+  {
+    communityImage: "/assets/avatar_2.jpg",
+    communityName: "Community",
+    date: "10/10/2023",
+    awardSource: "Contribution",
+    totalCarrots: "500",
+    rewardType: "Construction",
+    task: "Clean up trash at the entrance"
+  },
+
+]
+
 const MyRewardTabs: FC<MyRewardTabsProps> = ({ }) => {
   return (
-    <div className="relative overflow-hidden pb-24">
+    <div className="relative pb-24 overflow-hidden">
       <Tabs defaultValue="past">
         <TabsList className="justify-start">
           <TabsTrigger value="past">Past Rewards</TabsTrigger>
@@ -33,71 +46,17 @@ const MyRewardTabs: FC<MyRewardTabsProps> = ({ }) => {
         </TabsList>
         <TabsContent
           value="past"
-          className="w-full border rounded-lg mt-4 mb-6  overflow-auto"
+          className="w-full mt-4 mb-6 overflow-auto rounded-lg sm:border"
         >
-          <ShadcnTable className="w-full border-0 ">
-            <TableHeader className="border-none">
-              <TableRow>
-                <TableHead className="">Task</TableHead>
-                <TableHead>Community</TableHead>
-                <TableHead className="text-center">Type</TableHead>
-                <TableHead className="text-center whitespace-nowrap">
-                  Award Source
-                </TableHead>
-                <TableHead className="text-center">
-                  <div className="flex items-center gap-1">
-                    <p>Date</p>
-                    <ChevronsUpDown size={15} />
-                  </div>
-                </TableHead>
-                <TableHead className=" whitespace-nowrap text-end">
-                  <div className="flex items-center justify-end gap-1">
-                    <p>Total Carrots</p>
-                    <ChevronsUpDown size={15} />
-                  </div>
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {Array.from({ length: 16 }).map((_, i) => (
-                <TableRow
-                  key={i}
-                  className={cn("py-0", i % 2 === 0 ? "bg-secondary" : "")}
-                >
-                  <TableCell className="py-1.5 font-medium whitespace-nowrap">
-                    Buy a trash container
-                  </TableCell>
-                  <TableCell className="py-1.5">
-                    <div className=" py-1.5 flex items-center gap-1">
-                      <Avatar>
-                        <AvatarImage
-                          className="w-10 h-10 rounded-full"
-                          src="/assets/avatar_1.jpg"
-                        />
-                      </Avatar>
-                      <p className="whitespace-nowrap">Buan Fund</p>
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-1.5 text-center">
-                    <Badge variant="outline">Constructive</Badge>
-                  </TableCell>
-                  <TableCell className="py-1.5 text-center">
-                    Contribution
-                  </TableCell>
-                  <TableCell className="py-1.5">22/11/2023</TableCell>
-                  <TableCell className="py-1.5 text-end">
-                    <p className="pr-10">500</p>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </ShadcnTable>
+
+          <MyRewardsTable />
+          <MyRewardsTableMobile rewards={rewards} />
         </TabsContent>
         <TabsContent value="potential">priortized</TabsContent>
       </Tabs>
 
       <Popover>
-        <PopoverTrigger className="absolute top-0 right-0 px-4 text-sm font-medium py-2 border rounded-md">
+        <PopoverTrigger className="absolute top-0 right-0 px-4 py-2 text-sm font-medium border rounded-md">
           Filter
         </PopoverTrigger>
         <PopoverContent
