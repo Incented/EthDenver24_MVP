@@ -13,9 +13,10 @@ import Contribution from "./Contribution";
 interface ContributionTableProps {
   task_status?: Enum<"task_status">;
   contributions: Table<"contributions">[];
+  loggedInUser: string;
 }
 
-const ContributionTable: FC<ContributionTableProps> = async ({ task_status, contributions }) => {
+const ContributionTable: FC<ContributionTableProps> = async ({ task_status, contributions, loggedInUser }) => {
   const showContributions = task_status === "prioritized" || "claimed" && contributions.length !== 0;
   const noContributions = contributions.length === 0
 
@@ -42,7 +43,7 @@ const ContributionTable: FC<ContributionTableProps> = async ({ task_status, cont
             <TableBody>
               {contributions.map((contribution, index) => (
                 <Suspense key={index} fallback={<div>Loading...</div>}>
-                  <Contribution key={index} contribution={contribution} allContributions={contributions} />
+                  <Contribution key={index} contribution={contribution} allContributions={contributions} loggedInUser={loggedInUser} />
                 </Suspense>
               ))}
             </TableBody>

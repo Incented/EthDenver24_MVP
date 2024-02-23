@@ -11,10 +11,12 @@ import ValidateSheet from "./ValidateSheet";
 interface ContributionProps {
   contribution: Table<"contributions">;
   allContributions: Table<"contributions">[];
+  loggedInUser: string;
 }
 const Contribution: FC<ContributionProps> = async ({
   contribution,
-  allContributions
+  allContributions,
+  loggedInUser,
 }) => {
 
   const { user_id, task_id } = contribution;
@@ -55,7 +57,9 @@ const Contribution: FC<ContributionProps> = async ({
         <div className="flex justify-center space-x-2">
           <ContributionDetailsSheet contribution={contribution} contributorProfile={contributorProfile}
             otherContributionsData={otherContributionsData} />
-          <ValidateSheet contribution={contribution} contributorProfile={contributorProfile} task_id={contribution.id} />
+          <ValidateSheet contribution={contribution} contributorProfile={contributorProfile} task_id={contribution.id}
+            loggedInUser={user_id}
+          />
         </div>
       </TableCell>
     </TableRow>

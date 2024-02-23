@@ -140,6 +140,7 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCo
             <ContributionTable
               task_status={task.task_status || "new_task"}
               contributions={contributions}
+              loggedInUser={user_id}
             />
           </Suspense>
         </div>

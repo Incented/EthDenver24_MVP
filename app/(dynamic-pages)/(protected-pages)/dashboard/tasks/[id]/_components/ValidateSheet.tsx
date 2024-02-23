@@ -42,25 +42,15 @@ interface ValidateDrawerProps {
   contribution: Table<"contributions">;
   contributorProfile: Table<"user_profiles">;
   task_id: string;
+  loggedInUser: string
 }
 
-// const formSchema = z.object({
-//   description: z.string().min(5, {
-//     message: "Description must be at least 5 characters.",
-//   }),
-//   carrotAmount: z.string().min(5, {
-//     message: "Provide a valid Amount.",
-//   }),
-//   stakeFor: z.string().min(5, {
-//     message: "Select a Stake.",
-//   }),
-//   image: z.string().optional(),
-//   attchament: z.string().optional(),
-// });
 
-const ValidateSheet: FC<ValidateDrawerProps> = ({ contribution, contributorProfile, task_id }) => {
+const ValidateSheet: FC<ValidateDrawerProps> = ({ contribution, contributorProfile, task_id, loggedInUser }) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [actionType, setActionType] = useState<'validate' | 'invalidate'>('validate');
+
+  const isContributor = loggedInUser === contribution.user_id;
 
   const [taskFileUrls, setTaskFilesUrls] = useState<
     { name: string; url: string }[]
@@ -218,7 +208,9 @@ const ValidateSheet: FC<ValidateDrawerProps> = ({ contribution, contributorProfi
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
       <SheetTrigger>
-        <Button className="">Validate</Button>
+        <Button className=""
+          disabled={isContributor}
+        >Validate</Button>
       </SheetTrigger>
       <SheetContent className="overflow-y-scroll flex flex-col gap-4 w-full max-w-lg">
         <SheetHeader>
