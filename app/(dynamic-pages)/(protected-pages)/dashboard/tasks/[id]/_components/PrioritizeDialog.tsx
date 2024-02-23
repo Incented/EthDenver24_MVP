@@ -67,7 +67,7 @@ export function PrioritizeDialog({
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild className="w-full">
-                <Button className="w-full" disabled={isTaskCreator || isPrioritizedByLoggedInUser || !isWithinPrioritizedPeriod || !isUserMemberOfCommunity}>
+                <Button className="w-full" disabled={isTaskCreator || isPrioritizedByLoggedInUser || !isUserMemberOfCommunity}>
                     Prioritize
                 </Button>
             </DialogTrigger>
