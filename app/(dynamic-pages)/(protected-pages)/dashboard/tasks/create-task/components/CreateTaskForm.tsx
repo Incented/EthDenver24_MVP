@@ -250,10 +250,44 @@ export function CreateTaskForm({
   return (
     <div className="">
       {/* <AddTaskTypeDialog createTaskType={createTaskType} /> */}
+
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid gap-6 md:grid-cols-1"
+        className=" grid gap-6 md:grid-cols-1"
       >
+        {/* <div className="block w-full md:absolute md:w-fit md:flex md:gap-4 md:top-8 md:right-4"> */}
+        <div className="flex gap-2 w-full pr-2 md:absolute md:w-fit md:gap-4 md:top-8 md:right-4">
+          <Button variant="outline" type="submit" data-submit-type="draft" className="w-full md:w-fit">
+            Save as draft
+          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild><Button
+              data-submit-type="publish"
+              onClick={() => handleOpenSubmitDialog('publish')}
+              className="w-full md:w-fit">
+              Submit Proposal
+            </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                Are you sure you want to create this proposal?
+              </DialogHeader>
+              <div className="flex gap-2">
+                <Button className="w-full" variant="outline" onClick={() => {
+                  setIsDialogOpen(false);
+                }}>
+                  Cancel
+                </Button>
+                <Button className="w-full" type="button" onClick={() => {
+                  setIsDialogOpen(false); // Close the dialog first
+                  handleSubmit(onSubmit)(); // Programmatically submit the form
+                }}>
+                  Submit Proposal
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
         <div className="w-56 space-y-1">
           <Label>Community</Label>
           <Controller
@@ -512,7 +546,7 @@ export function CreateTaskForm({
             )}
           </div>
         </div>
-        <div className="absolute flex gap-4 top-8 right-4">
+        {/* <div className="hidden md:absolute md:flex gap-4 top-8 right-4">
           <Button variant="outline" type="submit" data-submit-type="draft">
             Save as draft
           </Button>
@@ -542,7 +576,7 @@ export function CreateTaskForm({
               </div>
             </DialogContent>
           </Dialog>
-        </div>
+        </div> */}
       </form>
     </div>
   );
