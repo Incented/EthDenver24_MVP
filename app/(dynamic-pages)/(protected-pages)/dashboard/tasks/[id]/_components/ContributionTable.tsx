@@ -23,10 +23,10 @@ const ContributionTable: FC<ContributionTableProps> = async ({ task_status, cont
   return (
     <Card className="border-none bg-transparent">
       <h1 className="mb-2 text-lg font-bold leading-8">Contributions</h1>
-      <div className="w-full border rounded-md overflow-hidden">
-        <ShadcnTable className="">
-          <TableHeader>
-            <TableRow>
+      <div className="w-full border dark:border-zinc-700 rounded-md overflow-hidden">
+        <ShadcnTable >
+          <TableHeader >
+            <TableRow className="dark:border-zinc-700">
               <TableHead className="whitespace-nowrap">
                 Solution Description
               </TableHead>

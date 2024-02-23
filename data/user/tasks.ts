@@ -426,6 +426,38 @@ export const getContributionAndUserProfile = async (
   };
 };
 
+export const getValidationAndUserProfile = async (validation_id: string) => {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: validation, error: validationError } = await supabaseClient
+    .from("validations")
+    .select("*")
+    .eq("id", validation_id)
+    .single();
+
+  if (validationError) {
+    throw validationError;
+  }
+
+  const { data: userProfile, error: userProfileError } = await supabaseClient
+    .from("user_profiles")
+    .select("*")
+    .eq("id", validation.user_id)
+    .single();
+
+  if (userProfileError) {
+    throw userProfileError;
+  }
+
+  return {
+    validationId: validation.id,
+    contributionId: validation.contribution_id,
+    description: validation.description,
+    avatarUrl: userProfile.avatar_url,
+    fullName: userProfile.full_name,
+    createdAt: validation.created_at,
+  };
+};
+
 export const getTaskContributionsAndUserProfiles = async (task_id: string) => {
   const supabaseClient = createSupabaseUserServerComponentClient();
   const { data: contributions, error: contributionsError } =
