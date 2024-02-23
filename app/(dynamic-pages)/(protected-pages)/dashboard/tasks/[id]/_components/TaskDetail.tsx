@@ -18,6 +18,7 @@ import ContributionTable from "./ContributionTable";
 import { updateTaskStatusAction } from "@/data/user/tasks";
 import { Table } from "@/types";
 import { revalidatePath } from "next/cache";
+import { DemoAutomations } from "../automations";
 import { PrioritizerCards } from "./PrioritizerCards";
 import { StatusBasedActions } from "./StatusBasedActions";
 import { ValidationCards } from "./ValidationCards";
@@ -140,130 +141,132 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCo
   revalidatePath(`/dashboard/tasks/${task.id}`);
 
   return (
+    <>
+      <div className="w-full gap-4 mt-4 md:grid md:grid-cols-3 xl:grid-cols-4">
+        <div className="md:col-span-2 xl:col-span-3">
+          <Card className="relative mb-4 bg-accent/50 overflow-hidden border-none">
+            <div
+              className={cn(
+                " px-6 py-1 text-sm w-fit text-white rounded-br-md ",
+                taskStatusBg
+              )}
+            >
+              {task.task_status?.split("-")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ")
+                .replace("_", " ")}
+            </div>
+            <Detail task={task} />
+          </Card>
 
-    <div className="w-full gap-4 mt-4 md:grid md:grid-cols-3 xl:grid-cols-4">
-      <div className="md:col-span-2 xl:col-span-3">
-        <Card className="relative mb-4 bg-accent/50 overflow-hidden border-none">
-          <div
-            className={cn(
-              " px-6 py-1 text-sm w-fit text-white rounded-br-md ",
-              taskStatusBg
-            )}
-          >
-            {task.task_status?.split("-")
-              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-              .join(" ")
-              .replace("_", " ")}
+          <div className="mb-4 p-8 bg-muted rounded-lg">
+            <Suspense fallback={<div>Loading contributions...</div>}>
+              <ContributionTable
+                task_status={task.task_status || "new_task"}
+                contributions={contributions}
+                loggedInUser={user_id}
+              />
+            </Suspense>
           </div>
-          <Detail task={task} />
-        </Card>
 
-        <div className="mb-4 p-8 bg-muted rounded-lg">
-          <Suspense fallback={<div>Loading contributions...</div>}>
-            <ContributionTable
-              task_status={task.task_status || "new_task"}
-              contributions={contributions}
-              loggedInUser={user_id}
-            />
-          </Suspense>
-        </div>
-
-        <Card className="p-8 mb-4 overflow-hidden border-none bg-muted rounded-lg">
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-lg font-bold ">Discussion</h1>
-            <Button variant="ghost" className="text-primary">
-              <Plus size={16} />
-              Add New Topic
-            </Button>
-          </div>
-          <div className="flex gap-3">
-            <Avatar>
-              <AvatarImage src="/assets/avatar_1.jpg" />
-            </Avatar>
-
-            <Textarea placeholder="Type a new topic here." />
-          </div>
-        </Card>
-      </div>
-
-      <div className="w-full">
-        <Suspense fallback={<div>Loading actions...</div>}>
-          <StatusBasedActions
-            claim_stake_amount={community.claim_stake_amount_percentage}
-            isTaskCreator={isTaskCreator}
-            isPrioritizedByLoggedInUser={isPrioritizedByLoggedInUser}
-            isUserMemberOfCommunity={isUserMemberOfCommunity}
-            isWithinPrioritizedPeriod={isWithinPrioritizedPeriod}
-            task_id={task.id}
-            isClaimer={claimerDetails?.id === user_id}
-            task_status={task.task_status}
-          />
-        </Suspense>
-
-        <Card className="p-4 mb-4 flex flex-col gap-4">
-          <h1 className="text-sm leading-[14px] font-medium">Proposer</h1>
-          <div className="flex items-center gap-[10px]">
-            <Avatar>
-              <AvatarImage src={taskCreator?.avatar_url || ""} />
-              <AvatarFallback>{taskCreator?.full_name?.slice(0, 1)}</AvatarFallback>
-            </Avatar>
-            <p className="text-sm text-foreground">{taskCreator?.full_name}</p>
-          </div>
-        </Card>
-        {isClaimed && (
-          <Card className="p-4 mb-4 flex flex-col gap-4">
-            <h1 className="text-sm leading-[14px] font-medium">Claimed by</h1>
-            <div className="flex items-center gap-[10px]">
+          <Card className="p-8 mb-4 overflow-hidden border-none bg-muted rounded-lg">
+            <div className="flex items-center justify-between mb-2">
+              <h1 className="text-lg font-bold ">Discussion</h1>
+              <Button variant="ghost" className="text-primary">
+                <Plus size={16} />
+                Add New Topic
+              </Button>
+            </div>
+            <div className="flex gap-3">
               <Avatar>
-                <AvatarImage src={claimerDetails?.avatar_url || ""} />
-                <AvatarFallback>{claimerDetails?.full_name?.slice(0, 1)}</AvatarFallback>
+                <AvatarImage src="/assets/avatar_1.jpg" />
               </Avatar>
-              <p className="text-sm text-foreground">{claimerDetails?.full_name}</p>
+
+              <Textarea placeholder="Type a new topic here." />
             </div>
           </Card>
-        )}
-        <Card className="p-4 mb-4">
-          <h1 className="mb-2 text-sm leading-[14px] font-medium">Priority</h1>
-          <div className="flex items-center gap-4 mb-2 border-b pb-2">
-            <div className="flex items-center space-x-2">
-              <p className="text-sm text-muted-foreground">Lower</p>
-              <CarrotStrikIconDark />
-              <p className="text-sm font-semibold text-foreground">{lowerPriority}</p>
-            </div>
-            <div className="w-[2px] h-5 bg-gray-300" />
-            <div className="flex items-center space-x-2">
-              <p className="text-sm font-semibold text-foreground">{higherPriority}</p>
-              <Carrot className="text-primary" />
-              <p className="text-sm text-muted-foreground">Higher</p>
-            </div>
-          </div>
-          <Suspense>
-            <PrioritizerCards prioritizations={taskPrioritizationDetails} />
+        </div>
+
+        <div className="w-full">
+          <Suspense fallback={<div>Loading actions...</div>}>
+            <StatusBasedActions
+              claim_stake_amount={community.claim_stake_amount_percentage}
+              isTaskCreator={isTaskCreator}
+              isPrioritizedByLoggedInUser={isPrioritizedByLoggedInUser}
+              isUserMemberOfCommunity={isUserMemberOfCommunity}
+              isWithinPrioritizedPeriod={isWithinPrioritizedPeriod}
+              task_id={task.id}
+              isClaimer={claimerDetails?.id === user_id}
+              task_status={task.task_status}
+            />
           </Suspense>
-        </Card>
-        {task.task_status === "in_review" && (
+
+          <Card className="p-4 mb-4 flex flex-col gap-4">
+            <h1 className="text-sm leading-[14px] font-medium">Proposer</h1>
+            <div className="flex items-center gap-[10px]">
+              <Avatar>
+                <AvatarImage src={taskCreator?.avatar_url || ""} />
+                <AvatarFallback>{taskCreator?.full_name?.slice(0, 1)}</AvatarFallback>
+              </Avatar>
+              <p className="text-sm text-foreground">{taskCreator?.full_name}</p>
+            </div>
+          </Card>
+          {isClaimed && (
+            <Card className="p-4 mb-4 flex flex-col gap-4">
+              <h1 className="text-sm leading-[14px] font-medium">Claimed by</h1>
+              <div className="flex items-center gap-[10px]">
+                <Avatar>
+                  <AvatarImage src={claimerDetails?.avatar_url || ""} />
+                  <AvatarFallback>{claimerDetails?.full_name?.slice(0, 1)}</AvatarFallback>
+                </Avatar>
+                <p className="text-sm text-foreground">{claimerDetails?.full_name}</p>
+              </div>
+            </Card>
+          )}
           <Card className="p-4 mb-4">
-            <h1 className="mb-2 text-sm leading-[14px] font-medium">Validations</h1>
+            <h1 className="mb-2 text-sm leading-[14px] font-medium">Priority</h1>
             <div className="flex items-center gap-4 mb-2 border-b pb-2">
               <div className="flex items-center space-x-2">
-                <p className="text-sm text-muted-foreground">Rejected</p>
+                <p className="text-sm text-muted-foreground">Lower</p>
                 <CarrotStrikIconDark />
-                <p className="text-sm font-semibold text-foreground">{rejectedValidations}</p>
+                <p className="text-sm font-semibold text-foreground">{lowerPriority}</p>
               </div>
               <div className="w-[2px] h-5 bg-gray-300" />
               <div className="flex items-center space-x-2">
-                <p className="text-sm font-semibold text-foreground">{approvedValidations}</p>
+                <p className="text-sm font-semibold text-foreground">{higherPriority}</p>
                 <Carrot className="text-primary" />
-                <p className="text-sm text-muted-foreground">Approved</p>
+                <p className="text-sm text-muted-foreground">Higher</p>
               </div>
             </div>
             <Suspense>
-              <ValidationCards validations={taskValidationDetails} />
+              <PrioritizerCards prioritizations={taskPrioritizationDetails} />
             </Suspense>
           </Card>
-        )}
-      </div>
-    </div >
+          {task.task_status === "in_review" && (
+            <Card className="p-4 mb-4">
+              <h1 className="mb-2 text-sm leading-[14px] font-medium">Validations</h1>
+              <div className="flex items-center gap-4 mb-2 border-b pb-2">
+                <div className="flex items-center space-x-2">
+                  <p className="text-sm text-muted-foreground">Rejected</p>
+                  <CarrotStrikIconDark />
+                  <p className="text-sm font-semibold text-foreground">{rejectedValidations}</p>
+                </div>
+                <div className="w-[2px] h-5 bg-gray-300" />
+                <div className="flex items-center space-x-2">
+                  <p className="text-sm font-semibold text-foreground">{approvedValidations}</p>
+                  <Carrot className="text-primary" />
+                  <p className="text-sm text-muted-foreground">Approved</p>
+                </div>
+              </div>
+              <Suspense>
+                <ValidationCards validations={taskValidationDetails} />
+              </Suspense>
+            </Card>
+          )}
+        </div>
+      </div >
+      <DemoAutomations taskId={task.id} />
+    </>
   );
 };
 
