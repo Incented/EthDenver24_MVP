@@ -11,7 +11,7 @@ interface PrioritizerCardsProps {
     }[];
 }
 
-export const PrioritizerCards: FC<PrioritizerCardsProps> = ({ prioritizations }) => {
+export const PrioritizerCards: FC<PrioritizerCardsProps> = async ({ prioritizations }) => {
 
     return (
         <div className="flex flex-col">

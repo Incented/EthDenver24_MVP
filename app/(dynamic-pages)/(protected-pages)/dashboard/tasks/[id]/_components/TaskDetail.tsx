@@ -20,6 +20,7 @@ import { Table } from "@/types";
 import { revalidatePath } from "next/cache";
 import { PrioritizerCards } from "./PrioritizerCards";
 import { StatusBasedActions } from "./StatusBasedActions";
+import { ValidationCards } from "./ValidationCards";
 
 
 interface TaskDetailProps {
@@ -44,17 +45,24 @@ interface TaskDetailProps {
     created_at: string;
     user_id: string;
   }[];
+  taskValidationDetails: {
+    full_name: string | null;
+    avatar_url: string | null;
+    count: number;
+    created_at: string;
+    user_id: string;
+  }[];
   isClaimedByUser: boolean;
   claimerDetails: {
     id: string;
     avatar_url: string | null;
     full_name: string | null;
   } | null;
-
   contributions: Table<"contributions">[];
+  validationsForTask: Table<"validations">[] | null;
 }
-const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCommunity, community, contributions,
-  taskCreator, isPrioritizedByLoggedInUser, claimerDetails, isClaimedByUser, taskPrioritizationDetails
+const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCommunity, community, contributions, validationsForTask,
+  taskCreator, isPrioritizedByLoggedInUser, claimerDetails, isClaimedByUser, taskPrioritizationDetails, taskValidationDetails
 }) => {
   let taskStatusBg = "bg-muted text-foreground";
 
@@ -72,6 +80,17 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCo
       lowerPriority += Math.abs(detail.count);
     } else {
       higherPriority += detail.count;
+    }
+  });
+
+  let approvedValidations = 0;
+  let rejectedValidations = 0;
+
+  taskValidationDetails.forEach(detail => {
+    if (detail.count < 0) {
+      rejectedValidations += 1;
+    } else {
+      approvedValidations += 1;
     }
   });
 
@@ -93,6 +112,10 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCo
 
   if (!isClaimed && task.task_status === "prioritized" && contributions.length !== 0) {
     await updateTaskStatusAction({ status: "in_progress", task_id: task.id });
+  }
+
+  if (!isClaimed && task.task_status === "in_progress" && validationsForTask?.length !== 0) {
+    await updateTaskStatusAction({ status: "in_review", task_id: task.id });
   }
 
   const isTaskCreator = user_id === task.user_id;
@@ -220,20 +243,23 @@ const TaskDetail: FC<TaskDetailProps> = async ({ task, user_id, isUserMemberOfCo
         </Card>
         {task.task_status === "in_review" && (
           <Card className="p-4 mb-4">
-            <h1 className="mb-2 text-sm leading-[14px] font-medium">Validation</h1>
-            <div className="flex items-center gap-4">
+            <h1 className="mb-2 text-sm leading-[14px] font-medium">Validations</h1>
+            <div className="flex items-center gap-4 mb-2 border-b pb-2">
               <div className="flex items-center space-x-2">
-                <p>Rejected</p>
+                <p className="text-sm text-muted-foreground">Rejected</p>
                 <CarrotStrikIconDark />
-                <p>0</p>
+                <p className="text-sm font-semibold text-foreground">{rejectedValidations}</p>
               </div>
               <div className="w-[2px] h-5 bg-gray-300" />
               <div className="flex items-center space-x-2">
-                <p>0</p>
+                <p className="text-sm font-semibold text-foreground">{approvedValidations}</p>
                 <Carrot className="text-primary" />
-                <p>Approved</p>
+                <p className="text-sm text-muted-foreground">Approved</p>
               </div>
             </div>
+            <Suspense>
+              <ValidationCards validations={taskValidationDetails} />
+            </Suspense>
           </Card>
         )}
       </div>

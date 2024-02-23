@@ -205,7 +205,6 @@ const AddContribution: FC<AddContributionProps> = ({ isClaimed, isClaimer, task_
                     <UploadFiles
                       onUpload={(filesInfo: { name: string; url: string }[]) => {
                         field.onChange(filesInfo);
-                        console.log("Uploaded files", filesInfo);
                         setTaskFilesUrls(filesInfo); // Update the local state if you're using it to display the paths
                       }}
                       showFilePreviews={handleFiles}
@@ -253,10 +252,6 @@ const AddContribution: FC<AddContributionProps> = ({ isClaimed, isClaimer, task_
                       placeholder="https://"
                       className="w-full"
                     />
-                    {/* <Button onClick={() => remove(index)} type="button" size="icon" variant="outline">
-                      <X className="text-destructive" size={16} />
-                    </Button> */}
-
                   </div>
                 ))}
                 <Button onClick={handleAddLink} type="button" variant="tertiary" size='icon' className="w-full">

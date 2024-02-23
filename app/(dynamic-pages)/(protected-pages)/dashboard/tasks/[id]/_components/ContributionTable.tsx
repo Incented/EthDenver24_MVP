@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/table";
 import { Enum, Table } from "@/types";
 import { FC, Suspense } from "react";
-import Contribution from "./Contribution";
+import ContributionRow from "./ContributionRow";
 
 interface ContributionTableProps {
   task_status?: Enum<"task_status">;
@@ -43,7 +43,7 @@ const ContributionTable: FC<ContributionTableProps> = async ({ task_status, cont
             <TableBody>
               {contributions.map((contribution, index) => (
                 <Suspense key={index} fallback={<div>Loading...</div>}>
-                  <Contribution key={index} contribution={contribution} allContributions={contributions} loggedInUser={loggedInUser} />
+                  <ContributionRow key={index} contribution={contribution} allContributions={contributions} loggedInUser={loggedInUser} />
                 </Suspense>
               ))}
             </TableBody>

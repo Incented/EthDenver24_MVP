@@ -23,6 +23,7 @@ export const validationFormSchema = z.object({
     message: "Description must be at least 5 characters.",
   }),
   count: z.number().min(0.01, "Count must be at least 0.01"), // Allow decimals with a minimum of 0.01
+  actionType: z.enum(["validate", "invalidate"]),
   validation_files: z.array(TaskFileSchema).optional(), // Made optional and nullable
 });
 

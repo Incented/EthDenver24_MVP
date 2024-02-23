@@ -295,6 +295,41 @@ export const getPrioritizationDetails = async (task_id: string) => {
   return prioritizationDetailsWithUser;
 };
 
+export const getValidationDetails = async (task_id: string) => {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const { data: validationDetails, error: validationError } =
+    await supabaseClient
+      .from("validations")
+      .select("count, created_at, user_id")
+      .eq("task_id", task_id);
+
+  if (validationError) {
+    throw validationError;
+  }
+  const userIds = validationDetails.map((detail) => detail.user_id);
+  const { data: userProfiles, error: userProfilesError } = await supabaseClient
+    .from("user_profiles")
+    .select("id, full_name, avatar_url")
+    .in("id", userIds);
+
+  if (userProfilesError) {
+    throw userProfilesError;
+  }
+
+  const validationDetailsWithUser = validationDetails.map((detail) => {
+    const userProfile = userProfiles.find(
+      (profile) => profile.id === detail.user_id
+    );
+    return {
+      ...detail,
+      full_name: userProfile ? userProfile.full_name : null,
+      avatar_url: userProfile ? userProfile.avatar_url : null,
+    };
+  });
+
+  return validationDetailsWithUser;
+};
+
 export const getTaskClaimerDetails = async (task_id: string) => {
   const supabaseClient = createSupabaseUserServerComponentClient();
   const { data: claimerData, error: claimerError } = await supabaseClient
@@ -559,6 +594,24 @@ export const getValidationsForContribution = async (
     .from("validations")
     .select("*")
     .eq("contribution_id", contribution_id);
+
+  if (error) {
+    throw error;
+  }
+
+  if (!validations) {
+    return null;
+  }
+
+  return validations;
+};
+
+export const getValidationsForTask = async (task_id: string) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data: validations, error } = await supabase
+    .from("validations")
+    .select("*")
+    .eq("task_id", task_id);
 
   if (error) {
     throw error;

@@ -1,6 +1,6 @@
 import GoBack from "@/components/ui/GoBack";
 import { getOrganizationById, getTeamMembersInOrganization } from "@/data/user/organizations";
-import { checkIfUserClaimedTask, checkIfUserPrioritizedTask, getPrioritizationDetails, getTaskById, getTaskClaimerDetails, getTaskContributions } from "@/data/user/tasks";
+import { checkIfUserClaimedTask, checkIfUserPrioritizedTask, getPrioritizationDetails, getTaskById, getTaskClaimerDetails, getTaskContributions, getValidationDetails, getValidationsForTask } from "@/data/user/tasks";
 import { getUserProfile } from "@/data/user/user";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 import DraftTaskDetail from "./_components/DraftTaskDetail";
@@ -17,13 +17,15 @@ export default async function TaskDetailsPage({ params }: { params: unknown }) {
 
   ]);
 
-  const [taskCreator, isPrioritizedByLoggedInUser, isClaimedByUser, taskPrioritizationDetails, claimerDetails, contributions] = await Promise.all([
+  const [taskCreator, isPrioritizedByLoggedInUser, isClaimedByUser, taskPrioritizationDetails, taskValidationDetails, claimerDetails, contributions, validationsForTask] = await Promise.all([
     task.user_id ? getUserProfile(task.user_id) : Promise.resolve(null),
     checkIfUserPrioritizedTask(task.id),
     checkIfUserClaimedTask(task.id),
     getPrioritizationDetails(task.id),
+    getValidationDetails(task.id),
     getTaskClaimerDetails(task.id),
     getTaskContributions(task.id),
+    getValidationsForTask(task.id)
   ]);
 
   const isUserMemberOfCommunity = teamMembersInOrganization.some(
@@ -46,11 +48,13 @@ export default async function TaskDetailsPage({ params }: { params: unknown }) {
           community={communityDetails}
           isUserMemberOfCommunity={isUserMemberOfCommunity}
           taskPrioritizationDetails={taskPrioritizationDetails}
+          taskValidationDetails={taskValidationDetails}
           contributions={contributions}
           isPrioritizedByLoggedInUser={isPrioritizedByLoggedInUser}
           isClaimedByUser={isClaimedByUser}
           claimerDetails={claimerDetails}
-          taskCreator={taskCreator} />
+          taskCreator={taskCreator}
+          validationsForTask={validationsForTask} />
       )}
     </main>
   );

@@ -1,10 +1,10 @@
-import { AppProviders } from "./AppProviders";
-import type { Metadata } from "next";
-import "@/styles/globals.css";
-import PrivyProviderWrapper from "@/providers/privy-provider-wrapper";
-import { cookies } from "next/headers";
 import { CARD_VIEW_VERTICAL_LAYOUT_COOKIE_KEY } from "@/constants";
 import { CardVerticalLayoutProvider } from "@/contexts/CardVerticalLayoutContext";
+import PrivyProviderWrapper from "@/providers/privy-provider-wrapper";
+import "@/styles/globals.css";
+import type { Metadata } from "next";
+import { cookies } from "next/headers";
+import { AppProviders } from "./AppProviders";
 
 export const metadata: Metadata = {
   icons: {

@@ -5,15 +5,16 @@ import { getUserProfile } from "@/data/user/user";
 import { Table } from "@/types";
 import { User } from "lucide-react";
 import { FC } from "react";
+import { ContributionDescription } from "./ContributionDescription";
 import ContributionDetailsSheet from "./ContributionDetailsSheet";
 import ValidateSheet from "./ValidateSheet";
 
-interface ContributionProps {
+interface ContributionRowProps {
   contribution: Table<"contributions">;
   allContributions: Table<"contributions">[];
   loggedInUser: string;
 }
-const Contribution: FC<ContributionProps> = async ({
+const ContributionRow: FC<ContributionRowProps> = async ({
   contribution,
   allContributions,
   loggedInUser,
@@ -35,7 +36,7 @@ const Contribution: FC<ContributionProps> = async ({
   );
   return (
     <TableRow>
-      <TableCell className="px-6">{contribution.description}</TableCell>
+      <TableCell className="px-6"><ContributionDescription description={contribution.description} /></TableCell>
       <TableCell>
         <div className="flex gap-2 items-center">
           <Avatar>
@@ -66,4 +67,4 @@ const Contribution: FC<ContributionProps> = async ({
   );
 };
 
-export default Contribution;
+export default ContributionRow;

@@ -138,6 +138,7 @@ const ValidateSheet: FC<ValidateDrawerProps> = ({ contribution, contributorProfi
       description: "",
       // Start with one empty link
       count: 0,
+      actionType: 'validate',
       validation_files: [],
     },
   });
@@ -177,8 +178,9 @@ const ValidateSheet: FC<ValidateDrawerProps> = ({ contribution, contributorProfi
   function onSubmit(values: ValidationFormSchema) {
     const adjustedData = {
       ...values,
-      count: actionType === 'invalidate' ? -Math.abs(values.count) : Math.abs(values.count),
+      count: values.actionType === 'invalidate' ? -Math.abs(values.count) : Math.abs(values.count),
     };
+
     mutate(adjustedData);
   }
 
@@ -368,17 +370,28 @@ const ValidateSheet: FC<ValidateDrawerProps> = ({ contribution, contributorProfi
                   placeholder="0"
                   className="w-24"
                 />
-                <Select
-                  onValueChange={(value) => setActionType(actionType as "validate" | "invalidate")} // Directly update the actionType state
-                >
-                  <SelectTrigger className="w-32">
-                    <SelectValue placeholder="Stake for" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="valildate">stake for</SelectItem>
-                    <SelectItem value="invalidate">stake against</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Controller
+                  control={control}
+                  name="actionType"
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      name={field.name}
+                      onValueChange={(value: 'validate' | 'invalidate') => {
+                        field.onChange(value)
+                        setActionType(value)
+                      }}
+                    >
+                      <SelectTrigger className="w-32">
+                        <SelectValue placeholder="Select Stake" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="validate">stake for</SelectItem>
+                        <SelectItem value="invalidate">stake against</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
               </div>
             </div>
             <div className="space-y-1">
