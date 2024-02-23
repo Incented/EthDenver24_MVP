@@ -1,7 +1,12 @@
 "use server";
 import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
 
-const demoUserIds: string[] = ["4b00d162-60b2-4952-961d-a00f9f750b4f"];
+const demoUserIds: string[] = [
+  "4b00d162-60b2-4952-961d-a00f9f750b4f",
+  "b6dd066d-ecc4-4d55-8ce9-035a2eb5ce8b",
+  "9fb609aa-bc9e-492f-84bf-770258c4668d",
+  "aa0e977f-9553-420c-a1be-7e8c7636cd3c",
+];
 
 function randomNumberBetween(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
