@@ -9,11 +9,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { ChangeEvent, FC, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import {
   Carousel,
@@ -25,11 +22,13 @@ import {
 import { Table } from "@/types";
 import { AttachmentClient } from "../../create-task/components/AttachmentClient";
 import ContributionDiscussion from "./ContributionDiscussion";
+import { FileWithUrl } from "./ContributionTypes";
 
 interface ContributionDetailsSheetProps {
   contribution: Table<"contributions">;
   contributorProfile: Table<"user_profiles">;
   otherContributionsData: Array<{
+    index: number,
     contributionId: string,
     description: string,
     avatarUrl: string | null,
@@ -38,41 +37,9 @@ interface ContributionDetailsSheetProps {
   }>;
 }
 
-const formSchema = z.object({
-  description: z.string().min(5, {
-    message: "Description must be at least 5 characters.",
-  }),
-  carrotAmount: z.string().min(5, {
-    message: "Provide a valid Amount.",
-  }),
-  stakeFor: z.string().min(5, {
-    message: "Select a Stake.",
-  }),
-  image: z.string().optional(),
-  attchament: z.string().optional(),
-});
-
 const ContributionDetailsSheet: FC<ContributionDetailsSheetProps> = ({ contribution, contributorProfile, otherContributionsData }) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      description: "",
-      carrotAmount: "",
-      image: "",
-    },
-  });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
 
   const [files, setFiles] = useState<File[]>([]);
-
-  type FileWithUrl = {
-    url: string;
-    name: string;
-    // include other properties that might be relevant
-  };
 
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -125,7 +92,7 @@ const ContributionDetailsSheet: FC<ContributionDetailsSheetProps> = ({ contribut
         </SheetHeader>
         <div className="space-y-2">
           <h1 className="text-sm">Solution</h1>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-sm leading-6 text-muted-foreground">
             {contribution.description}
           </p>
         </div>
@@ -254,10 +221,11 @@ const ContributionDetailsSheet: FC<ContributionDetailsSheetProps> = ({ contribut
           </Form>
         </Card> */}
         <div className="space-y-3">
+          <h1 className="mt-4 mb-2 text-sm">Other contributions</h1>
           {otherContributionsData.map((contribution) => (
             <ContributionDiscussion
               key={contribution.contributionId}
-              contributionCreatedAt={`${otherContributionsData.indexOf(contribution) + 1}`}
+              contributionIndex={contribution.index}
               details={contribution.description}
               contributionCarrots={20} // Assuming a static value for now, adjust as necessary
               contributorId={contribution.contributionId}

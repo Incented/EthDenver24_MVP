@@ -4,7 +4,7 @@ import ClaimDialog from "./ClaimDialog";
 import { FreezeTaskPopOver } from "./FreezeTaskPopOver";
 import { PrioritizeDialog } from "./PrioritizeDialog";
 
-export function StatusBasedActions({ task_status, task_id, isClaimer, isTaskCreator, claim_stake_amount, isPrioritizedByUser, isWithinPrioritizedPeriod, isUserMemberOfCommunity }: { isClaimer: boolean, task_status: Enum<"task_status"> | null, isTaskCreator: boolean, isPrioritizedByUser: boolean, isWithinPrioritizedPeriod: boolean, isUserMemberOfCommunity: boolean, task_id: string, claim_stake_amount: number | null }) {
+export function StatusBasedActions({ task_status, task_id, isClaimer, isTaskCreator, claim_stake_amount, isPrioritizedByLoggedInUser, isWithinPrioritizedPeriod, isUserMemberOfCommunity }: { isClaimer: boolean, task_status: Enum<"task_status"> | null, isTaskCreator: boolean, isPrioritizedByLoggedInUser: boolean, isWithinPrioritizedPeriod: boolean, isUserMemberOfCommunity: boolean, task_id: string, claim_stake_amount: number | null }) {
     const isNewTask = task_status === "new_task";
     const isPrioritized = task_status === "prioritized";
     const isClaimed = task_status === "claimed";
@@ -12,7 +12,7 @@ export function StatusBasedActions({ task_status, task_id, isClaimer, isTaskCrea
     return (<div className="flex gap-4">
         {isNewTask && (
             <div className="flex w-full gap-2 mb-4 md:col-start-3 xl:col-start-4 ">
-                <PrioritizeDialog isTaskCreator={isTaskCreator} task_id={task_id} isPrioritizedByUser={isPrioritizedByUser} isWithinPrioritizedPeriod={isWithinPrioritizedPeriod} isUserMemberOfCommunity={isUserMemberOfCommunity} />
+                <PrioritizeDialog isTaskCreator={isTaskCreator} task_id={task_id} isPrioritizedByLoggedInUser={isPrioritizedByLoggedInUser} isWithinPrioritizedPeriod={isWithinPrioritizedPeriod} isUserMemberOfCommunity={isUserMemberOfCommunity} />
             </div>
         )}
 

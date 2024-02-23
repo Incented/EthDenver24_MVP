@@ -6,7 +6,7 @@ import { Table } from "@/types";
 import { User } from "lucide-react";
 import { FC } from "react";
 import ContributionDetailsSheet from "./ContributionDetailsSheet";
-import ValidateDrawer from "./ValidateDrawer";
+import ValidateSheet from "./ValidateSheet";
 
 interface ContributionProps {
   contribution: Table<"contributions">;
@@ -23,10 +23,13 @@ const Contribution: FC<ContributionProps> = async ({
     getValidationsForContribution(contribution.id),
   ]);
 
+  const allContributionsWithIndexes = allContributions.map((c, i) => ({ ...c, index: i + 1 }));
+
   const otherContributionsData = await Promise.all(
-    allContributions.filter((c) => c.id !== contribution.id).map(async (c) =>
-      getContributionAndUserProfile(c.id)
-    )
+    allContributionsWithIndexes.filter((c) => c.id !== contribution.id).map(async (c) => {
+      const data = await getContributionAndUserProfile(c.id);
+      return { ...data, index: c.index };
+    })
   );
   return (
     <TableRow>
@@ -52,7 +55,7 @@ const Contribution: FC<ContributionProps> = async ({
         <div className="flex justify-center space-x-2">
           <ContributionDetailsSheet contribution={contribution} contributorProfile={contributorProfile}
             otherContributionsData={otherContributionsData} />
-          <ValidateDrawer />
+          <ValidateSheet contribution={contribution} contributorProfile={contributorProfile} task_id={contribution.id} />
         </div>
       </TableCell>
     </TableRow>

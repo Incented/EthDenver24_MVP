@@ -8,7 +8,7 @@ interface ContributionDiscussionProps {
   contributorId: string;
   contributionCarrots: number;
   details: string;
-  contributionCreatedAt: string;
+  contributionIndex: number;
 }
 
 const ContributionDiscussion: FC<ContributionDiscussionProps> = ({
@@ -17,7 +17,7 @@ const ContributionDiscussion: FC<ContributionDiscussionProps> = ({
   contributorImage,
   contributorName,
   details,
-  contributionCreatedAt,
+  contributionIndex,
 }) => {
   return (
     <Card className="p-4">
@@ -38,7 +38,7 @@ const ContributionDiscussion: FC<ContributionDiscussionProps> = ({
           </div>
         </div>
         <div className="rounded-full bg-secondary p-1 px-2">
-          <h4 className="text-sm">Contr. #{contributionCreatedAt}</h4>
+          <h4 className="text-sm">Contr. #{contributionIndex}</h4>
         </div>
       </div>
       <p className="mt-2 text-xs text-muted-foreground">{details}</p>

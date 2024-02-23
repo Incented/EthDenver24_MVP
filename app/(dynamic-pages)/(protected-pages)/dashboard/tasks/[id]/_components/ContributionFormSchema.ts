@@ -18,4 +18,13 @@ export const contributionFormSchema = z.object({
   contribution_files: z.array(TaskFileSchema).optional(), // Made optional and nullable
 });
 
+export const validationFormSchema = z.object({
+  description: z.string().min(5, {
+    message: "Description must be at least 5 characters.",
+  }),
+  count: z.number().min(0.01, "Count must be at least 0.01"), // Allow decimals with a minimum of 0.01
+  validation_files: z.array(TaskFileSchema).optional(), // Made optional and nullable
+});
+
 export type ContributionFormSchema = z.infer<typeof contributionFormSchema>;
+export type ValidationFormSchema = z.infer<typeof validationFormSchema>;
