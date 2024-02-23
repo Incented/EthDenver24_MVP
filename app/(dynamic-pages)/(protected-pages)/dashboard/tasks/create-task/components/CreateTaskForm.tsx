@@ -253,7 +253,7 @@ export function CreateTaskForm({
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className=" grid gap-6 md:grid-cols-1"
+        className=" grid gap-6 md:grid-cols-1 w-full"
       >
         {/* <div className="block w-full md:absolute md:w-fit md:flex md:gap-4 md:top-8 md:right-4"> */}
         <div className="flex gap-2 w-full pr-2 md:absolute md:w-fit md:gap-4 md:top-8 md:right-4">

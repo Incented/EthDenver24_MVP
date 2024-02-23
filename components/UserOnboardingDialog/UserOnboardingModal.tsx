@@ -2,11 +2,10 @@ import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { getUserAvatarUrl } from "@/utils/helpers";
 import { useRef, useState } from "react";
 
-import { motion } from "framer-motion";
 import { useLoggedInUserEmail } from "@/hooks/useLoggedInUserEmail";
-import Image from "next/image";
+import { motion } from "framer-motion";
 import { UserPlus } from "lucide-react";
-import { Label } from "../ui/label";
+import Image from "next/image";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -16,6 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
+import { Label } from "../ui/label";
 
 const MotionImage = motion(Image);
 
@@ -78,10 +78,10 @@ export const UserOnboardingDialog = ({
                       hasImageLoaded
                         ? undefined
                         : {
-                            duration: 0.5,
-                            repeat: Infinity,
-                            repeatType: "reverse",
-                          }
+                          duration: 0.5,
+                          repeat: Infinity,
+                          repeatType: "reverse",
+                        }
                     }
                     onLoad={() => {
                       setHasImageLoaded(true);
@@ -129,7 +129,7 @@ export const UserOnboardingDialog = ({
               <Label className="text-muted-foreground">Name</Label>
               <input
                 disabled={isLoading}
-                className="mt-1.5 mb-8 shadow appearance-none border h-11 rounded-lg w-full py-2 px-3 focus:ring-0 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-base"
+                className="mt-1.5 mb-8 shadow appearance-none border h-11 rounded-lg w-full py-2 px-3 focus:ring-0 text-foreground leading-tight focus:outline-none focus:shadow-outline text-base"
                 id="name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
