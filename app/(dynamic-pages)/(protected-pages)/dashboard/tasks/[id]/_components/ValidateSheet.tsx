@@ -207,7 +207,7 @@ const ValidateSheet: FC<ValidateDrawerProps> = ({ contribution, contributorProfi
   // };
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-      <SheetTrigger>
+      <SheetTrigger asChild>
         <Button className=""
           disabled={isContributor}
         >Validate</Button>
