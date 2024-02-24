@@ -24,7 +24,7 @@ const NotificationItem: FC<NotificationItemProps> = ({
 const NotificationMenu: FC<NotificationMenuProps> = ({ onNotificationClick }) => {
   return (
     <>
-      <Button className="hidden" variant="ghost" onClick={onNotificationClick}>
+      <Button className="" variant="ghost" onClick={onNotificationClick}>
         <Bell size={16} />
       </Button>
       {/* <Popover>

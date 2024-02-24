@@ -28,7 +28,7 @@ const DashboardPage = async () => {
   ]);
 
   return (
-    <main className="px-4 pb-40 sm:px-8 ">
+    <main className="w-full px-4 pb-40 overflow-x-hidden sm:px-8">
       <h1 className="mt-8 text-3xl font-medium">My Home</h1>
 
       <ScrollArea className="w-full whitespace-nowrap">
@@ -61,7 +61,7 @@ const DashboardPage = async () => {
             <SelectCommunity communities={communities} />
           </Suspense>
           <Anchor href="dashboard/tasks/create-task">
-            <Button>Submit Proposal</Button>
+            <Button>Create Proposal</Button>
           </Anchor>
         </div>
         <Suspense fallback={<TaskLoadingSkeleton />}>
