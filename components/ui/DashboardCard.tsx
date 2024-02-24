@@ -1,12 +1,14 @@
+import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
-import { Card } from "./card";
 import { FC } from "react";
+import { Card } from "./card";
 
 interface DashboardCardProps {
   Icon: LucideIcon;
   title: string;
   value: number;
   description: string;
+  changeValueColor?: boolean;
 }
 
 const DashboardCard: FC<DashboardCardProps> = ({
@@ -14,6 +16,7 @@ const DashboardCard: FC<DashboardCardProps> = ({
   title,
   value,
   description,
+  changeValueColor
 }) => {
   return (
     <Card className="min-w-[230px] w-full p-6 shadow-sm">
@@ -22,7 +25,7 @@ const DashboardCard: FC<DashboardCardProps> = ({
         <Icon size={20} />
       </div>
       <div className="mt-2">
-        <h1 className="text-2xl font-bold leading-8">{value}</h1>
+        <h1 className={cn("text-2xl font-bold leading-8", changeValueColor && "text-primary")}>{value}</h1>
         <p className="text-xs text-gray-400">{description}</p>
       </div>
     </Card>

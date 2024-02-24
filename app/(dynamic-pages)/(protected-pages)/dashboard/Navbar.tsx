@@ -243,7 +243,7 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
             onAvatarClick={handleAvatarClick}
           />
           <Button
-            className="flex items-center gap-2"
+            className="flex items-center hidden gap-2"
             onClick={() => {
               user?.wallet === undefined ? linkWallet() : null;
             }}

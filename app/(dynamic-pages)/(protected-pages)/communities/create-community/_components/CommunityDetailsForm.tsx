@@ -177,7 +177,7 @@ export default function BasicDetailsForm({
                   control={control}
                   name="avatarUrl"
                   render={({ field }) => (
-                    <div className="flex items-center justify-center w-24 h-24 p-4 mb-4 rounded-full bg-background">
+                    <div className="flex items-center justify-center w-24 h-24 p-4 mb-4 rounded-full cursor-pointer bg-background">
                       {/* {initialFormValues.avatarUrl ? (
                         <Image
                           src={initialFormValues.avatarUrl}
@@ -216,7 +216,7 @@ export default function BasicDetailsForm({
                       )}
                       {taskFileUrls.map((file, index) => (
                         <div className="absolute">
-                          <div className="relative rounded-full h-24 w-24">
+                          <div className="relative w-24 h-24 rounded-full">
                             <Image
                               key={index}
                               src={file.url}
@@ -242,7 +242,7 @@ export default function BasicDetailsForm({
                 </p>
                 <Button className="px-8" onClick={(e) => e.preventDefault()}>Update</Button>
               </div>
-              <div className="space-y-4 w-full lg:w-[300px] pb-[10px]">
+              <div className="space-y-4 w-full lg:w-[300px] pb-[10px] px-1">
                 <div className="space-y-2">
                   <Label htmlFor="title">Community Name</Label>
                   <Input

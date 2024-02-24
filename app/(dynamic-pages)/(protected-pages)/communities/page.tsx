@@ -27,7 +27,7 @@ export default async function CommunitiesPage({
   const totalPages = Math.ceil(communityCount / limit);
   // const totalPages = Math.ceil(communityCount / limit);
   return (
-    <main className="flex flex-col h-screen px-8 pb-10 overflow-hidden">
+    <main className="flex flex-col h-screen px-4 pb-10 overflow-hidden sm:px-8">
       <div className="h-screen">
         <div className="items-center mt-8 md:flex">
           <h1 className="text-3xl font-medium ">Communities</h1>

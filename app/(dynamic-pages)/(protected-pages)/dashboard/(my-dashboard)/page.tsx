@@ -28,7 +28,7 @@ const DashboardPage = async () => {
   ]);
 
   return (
-    <main className="px-8 pb-40 ">
+    <main className="px-4 pb-40 sm:px-8 ">
       <h1 className="mt-8 text-3xl font-medium">My Home</h1>
 
       <ScrollArea className="w-full whitespace-nowrap">
