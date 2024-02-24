@@ -22,7 +22,7 @@ export const basicCommunityDetailsSchema = z.object({
     .string()
     .min(3, "Description must be at least 3 characters long."),
   socialLinks: z.array(socialLinkSchema).optional(),
-  // avatarUrl: z.string().url().or(z.literal("")),
+  avatarUrl: z.string().url().or(z.literal("")),
 });
 
 export type BasicCommunityDetailsSchema = z.infer<

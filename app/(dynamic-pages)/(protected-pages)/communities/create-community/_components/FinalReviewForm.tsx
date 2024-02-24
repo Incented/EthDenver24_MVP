@@ -35,6 +35,7 @@ export function FinalReviewForm({
     linkedin: getSocialLink("linkedin"),
     youtube: getSocialLink("youtube"),
   };
+  const communityAvatarUrl = basicDetails?.avatarUrl || "";
   const { handleSubmit } = useForm<CreateCommunitySchema>();
   return (
     <form
@@ -50,6 +51,7 @@ export function FinalReviewForm({
             <div className="flex flex-col w-full gap-4 lg:grid lg:grid-cols-2 xl:flex xl:flex-row">
               <CommunityInfo
                 commuityFee={24}
+                communityImage={communityAvatarUrl}
                 communityName={basicDetails?.title || "Community name"}
                 communityDescription={basicDetails?.description}
                 communityUrls={communityUrls}

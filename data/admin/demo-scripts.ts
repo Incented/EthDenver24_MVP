@@ -2,10 +2,12 @@
 import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
 
 const demoUserIds: string[] = [
-  "4b00d162-60b2-4952-961d-a00f9f750b4f",
-  "b6dd066d-ecc4-4d55-8ce9-035a2eb5ce8b",
-  "9fb609aa-bc9e-492f-84bf-770258c4668d",
-  "aa0e977f-9553-420c-a1be-7e8c7636cd3c",
+  "ea405d02-7c1e-48c1-b6a8-34a05b0a76cb",
+  "fb6d0808-e481-4746-8886-d199aff149b1",
+  "86d65757-e1ee-4af1-9517-c30b4a7fec97",
+  "bd186eff-0df1-402e-a75e-ffece606a47b",
+  "43826c24-ca7e-41b9-87e5-bc327d139a31",
+  "7e744376-de24-4e40-bc7f-d9216fd8c352",
 ];
 
 function randomNumberBetween(min: number, max: number) {
@@ -47,6 +49,35 @@ export async function demoMakeDemoUsersPrioritiseTask(taskId: string) {
     });
 
     return Promise.allSettled(promises);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function demoMakeDemoUsersPrioritizeNewTasks() {
+  try {
+    // Fetch all tasks with the status "new_task"
+    const { data: newTasks, error: fetchError } = await supabaseAdminClient
+      .from("tasks")
+      .select("*")
+      .eq("task_status", "new_task");
+
+    if (fetchError) throw fetchError;
+
+    // For each new task, prioritize it randomly by each demo user
+    const prioritizationPromises = newTasks
+      .map((task) =>
+        demoUserIds.map((userId) =>
+          prioritizeTaskAction({
+            stakeAmount: getPrioritizationCount(),
+            task_id: task.id,
+            user_id: userId,
+          })
+        )
+      )
+      .flat(); // Flatten the array of arrays to get a single array of promises
+
+    return Promise.allSettled(prioritizationPromises);
   } catch (error) {
     console.error(error);
   }
@@ -107,6 +138,60 @@ export async function demoMakeDemoUsersValidateContributions(taskId: string) {
     });
 
     return Promise.allSettled(promises);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function demoMakeDemoUsersValidateContributionsForTasksWithContributions() {
+  try {
+    // Fetch all task_ids that have at least one contribution
+    const { data: contributionTaskIds, error: contributionIdsError } =
+      await supabaseAdminClient
+        .from("contributions")
+        .select("task_id")
+        .not("task_id", "is", null);
+
+    if (contributionIdsError) throw contributionIdsError;
+
+    // Extract the task_ids from the contributions
+    const taskIds = contributionTaskIds.map((c) => c.task_id);
+
+    // Fetch all tasks that have at least one contribution using the 'in' method
+    const { data: tasksWithContributions, error: tasksError } =
+      await supabaseAdminClient.from("tasks").select("id").in("id", taskIds);
+
+    if (tasksError) throw tasksError;
+
+    // For each task, fetch its contributions and create validations
+    const validationPromises = tasksWithContributions.map(async (task) => {
+      // Fetch contributions for the current task
+      const { data: contributions, error: contributionsError } =
+        await supabaseAdminClient
+          .from("contributions")
+          .select("id")
+          .eq("task_id", task.id);
+
+      if (contributionsError) throw contributionsError;
+
+      // Create a validation for each contribution
+      return contributions.map((contribution) => {
+        const randomUserId =
+          demoUserIds[randomNumberBetween(0, demoUserIds.length - 1)];
+        const randomValidationCount = randomNumberBetween(-100, 100);
+
+        return validateContributionAction({
+          contribution_id: contribution.id,
+          validationCount: randomValidationCount,
+          task_id: task.id,
+          user_id: randomUserId,
+        });
+      });
+    });
+
+    // Flatten the array of arrays of promises and wait for all of them to settle
+    const allValidations = (await Promise.all(validationPromises)).flat();
+    return Promise.allSettled(allValidations);
   } catch (error) {
     console.error(error);
   }

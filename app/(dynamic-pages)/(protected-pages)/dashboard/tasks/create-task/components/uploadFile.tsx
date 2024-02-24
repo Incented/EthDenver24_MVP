@@ -12,6 +12,7 @@ const UploadFiles = ({
   showFilePreviews: (files: File[], paths: string[]) => void;
 }) => {
   // const UploadFiles = ({ onUpload }: { onUpload: (files: File[]) => void }) => {
+
   const uploadFileMutation = useToastMutation<string[], unknown, File>(
     async (file) => {
       const formData = new FormData();

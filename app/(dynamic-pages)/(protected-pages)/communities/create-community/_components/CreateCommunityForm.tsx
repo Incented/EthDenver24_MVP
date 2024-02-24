@@ -1,10 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { addPrivateInfoForOrganization } from "@/data/admin/organizations";
+import {
+  createPublicOrganization
+} from "@/data/user/organizations";
+import { useToastMutation } from "@/hooks/useToastMutation";
 import { cn } from "@/lib/utils";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import CarrotPotForm from "./CarrotPotForm";
+import CommunityDetailsForm from "./CommunityDetailsForm";
+import CreateCommnityHeader from "./CreateCommnityHeader";
+import CreateCommunityStep from "./CreateCommunityStep";
+import { FinalReviewForm } from "./FinalReviewForm";
+import ProtocolConfigurationForm from "./ProtocolConfigurationForm";
+import RewardSettingsForm from "./RewardSettingsForm";
+import UserRolesAndPermissionsForm from "./UserRolesAndPermissions";
 import {
   AdminSettingsSchema,
   BasicCommunityDetailsSchema,
@@ -16,21 +29,6 @@ import {
   RewardSettingsSchema,
   createCommunitySchema,
 } from "./createCommunitySchema";
-import { useRouter } from "next/navigation";
-import CreateCommunityStep from "./CreateCommunityStep";
-import { FinalReviewForm } from "./FinalReviewForm";
-import { useToastMutation } from "@/hooks/useToastMutation";
-import {
-  createOrganization,
-  createPublicOrganization,
-} from "@/data/user/organizations";
-import { addPrivateInfoForOrganization } from "@/data/admin/organizations";
-import CreateCommnityHeader from "./CreateCommnityHeader";
-import CommunityDetailsForm from "./CommunityDetailsForm";
-import ProtocolConfigurationForm from "./ProtocolConfigurationForm";
-import CarrotPotForm from "./CarrotPotForm";
-import RewardSettingsForm from "./RewardSettingsForm";
-import UserRolesAndPermissionsForm from "./UserRolesAndPermissions";
 
 export default function CreateCommunityForm() {
   const router = useRouter();
@@ -67,6 +65,7 @@ export default function CreateCommunityForm() {
           url: "",
         },
       ],
+      avatarUrl: "",
     }
   );
 
@@ -450,35 +449,35 @@ export default function CreateCommunityForm() {
             )}
             {currentStepName ===
               CreateCommunityStepName.ProtocolConfiguration && (
-              <div className="p-6 border border-b-0">
-                <CreateCommnityHeader
-                  heading="Protocol Configuration"
-                  subHeading="Manage your community parameters such as protocol fees,
+                <div className="p-6 border border-b-0">
+                  <CreateCommnityHeader
+                    heading="Protocol Configuration"
+                    subHeading="Manage your community parameters such as protocol fees,
               carrot-pot, validation quorum, etc."
-                  stepText="Step 2/6"
-                  stepPercent="20%"
-                  stepValue={20}
-                />
+                    stepText="Step 2/6"
+                    stepPercent="20%"
+                    stepValue={20}
+                  />
 
-                <ProtocolConfigurationForm
-                  initialFormValues={protocolConfiguration}
-                  onFormSubmit={(
-                    formData: ProtocolConfigurationSchema
-                  ): void => {
-                    // Perform state update with formData
-                    setProtocolConfiguration(formData);
+                  <ProtocolConfigurationForm
+                    initialFormValues={protocolConfiguration}
+                    onFormSubmit={(
+                      formData: ProtocolConfigurationSchema
+                    ): void => {
+                      // Perform state update with formData
+                      setProtocolConfiguration(formData);
 
-                    // Move to the next step
-                    setCurrentStepName(CreateCommunityStepName.RewardSettings);
-                  }}
-                  moveToPrevStep={() => {
-                    setCurrentStepName(
-                      CreateCommunityStepName.CommunityDetails
-                    );
-                  }}
-                />
-              </div>
-            )}
+                      // Move to the next step
+                      setCurrentStepName(CreateCommunityStepName.RewardSettings);
+                    }}
+                    moveToPrevStep={() => {
+                      setCurrentStepName(
+                        CreateCommunityStepName.CommunityDetails
+                      );
+                    }}
+                  />
+                </div>
+              )}
             {currentStepName === CreateCommunityStepName.RewardSettings && (
               <div className="p-6 border border-b-0">
                 <CreateCommnityHeader
@@ -537,32 +536,32 @@ export default function CreateCommunityForm() {
             )}
             {currentStepName ===
               CreateCommunityStepName.UserRolesPermissions && (
-              <div className="p-6 border border-b-0">
-                <CreateCommnityHeader
-                  heading="User Roles and Permissions"
-                  subHeading=" Assign roles and define permissions within the community."
-                  stepText="Step 5/6"
-                  stepPercent="80%"
-                  stepValue={80}
-                />
+                <div className="p-6 border border-b-0">
+                  <CreateCommnityHeader
+                    heading="User Roles and Permissions"
+                    subHeading=" Assign roles and define permissions within the community."
+                    stepText="Step 5/6"
+                    stepPercent="80%"
+                    stepValue={80}
+                  />
 
-                <UserRolesAndPermissionsForm
-                  initialFormValues={permissions}
-                  onFormSubmit={(formData: AdminSettingsSchema): void => {
-                    // Perform state update with formData
-                    setPermissions(formData);
+                  <UserRolesAndPermissionsForm
+                    initialFormValues={permissions}
+                    onFormSubmit={(formData: AdminSettingsSchema): void => {
+                      // Perform state update with formData
+                      setPermissions(formData);
 
-                    // Move to the next step
-                    setCurrentStepName(CreateCommunityStepName.FinalReview);
-                  }}
-                  moveToPrevStep={() => {
-                    setCurrentStepName(
-                      CreateCommunityStepName.ConfigureCarrotPot
-                    );
-                  }}
-                />
-              </div>
-            )}
+                      // Move to the next step
+                      setCurrentStepName(CreateCommunityStepName.FinalReview);
+                    }}
+                    moveToPrevStep={() => {
+                      setCurrentStepName(
+                        CreateCommunityStepName.ConfigureCarrotPot
+                      );
+                    }}
+                  />
+                </div>
+              )}
             {currentStepName === CreateCommunityStepName.FinalReview && (
               <div className="p-6 border border-b-0">
                 <CreateCommnityHeader

@@ -610,6 +610,7 @@ export type Database = {
           claim_lock_period_duration: unknown | null;
           claim_stake_amount_percentage: number | null;
           community_fee_percentage: number | null;
+          community_image: string | null;
           contribution_period: number | null;
           created_at: string;
           created_by: string;
@@ -641,6 +642,7 @@ export type Database = {
           claim_lock_period_duration?: unknown | null;
           claim_stake_amount_percentage?: number | null;
           community_fee_percentage?: number | null;
+          community_image?: string | null;
           contribution_period?: number | null;
           created_at?: string;
           created_by: string;
@@ -672,6 +674,7 @@ export type Database = {
           claim_lock_period_duration?: unknown | null;
           claim_stake_amount_percentage?: number | null;
           community_fee_percentage?: number | null;
+          community_image?: string | null;
           contribution_period?: number | null;
           created_at?: string;
           created_by?: string;

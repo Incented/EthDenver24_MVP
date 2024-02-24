@@ -3,23 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import {
-  BasicCommunityDetailsSchema,
-  basicCommunityDetailsSchema,
-} from "./createCommunitySchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ReactNode } from "react";
-import {
-  Facebook,
-  Instagram,
-  Link,
-  Linkedin,
-  Twitter,
-  Youtube,
-  Plus,
-} from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -28,8 +11,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Facebook,
+  Instagram,
+  Link,
+  Linkedin,
+  Plus,
+  Twitter,
+  Youtube,
+} from "lucide-react";
+import Image from "next/image";
+import { ReactNode, useState } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
+import { AttachmentType } from "../../../dashboard/tasks/create-task/components/CreateTaskFormTypes";
+import { UploadImageFile } from "../../../dashboard/tasks/create-task/components/ImageUpload";
+import {
+  BasicCommunityDetailsSchema,
+  basicCommunityDetailsSchema,
+} from "./createCommunitySchema";
 
 export default function BasicDetailsForm({
   initialFormValues,
@@ -110,12 +112,28 @@ export default function BasicDetailsForm({
           url: "",
         },
       ],
+      avatarUrl: initialFormValues?.avatarUrl || "",
     },
   });
+
+  // const [filePreview, setFilePreview] = useState<FilePreview>({
+  //   file: new File([], ""),
+  //   previewUrl: initialFormValues.avatarUrl || "",
+  //   path: '',
+  // });
+
+  const [taskFileUrls, setTaskFilesUrls] = useState<
+    { name: string; url: string }[]
+  >([]);
+
+
+  const [selectedAttachment, setSelectedAttachment] =
+    useState<AttachmentType | null>(null);
 
   const onSubmit: SubmitHandler<BasicCommunityDetailsSchema> = (data) => {
     onFormSubmit(data);
   };
+
 
   const addNewSocialLink = () => {
     const currentLinks = getValues("socialLinks") || [];
@@ -154,29 +172,75 @@ export default function BasicDetailsForm({
           <div className="w-full overflow-auto">
             <div className="flex flex-col gap-6 mt-2 lg:flex-row">
               <div className="bg-muted w-full lg:w-[228px] h-fit rounded-xl flex flex-col justify-center items-center p-6 px-4">
-                <div className="flex items-center justify-center w-24 h-24 p-4 mb-4 rounded-full bg-background">
-                  <svg
-                    width="40"
-                    height="40"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g id="image">
-                      <path
-                        id="Vector"
-                        d="M14 10L11.9427 7.94267C11.6926 7.69271 11.3536 7.55229 11 7.55229C10.6464 7.55229 10.3074 7.69271 10.0573 7.94267L4 14M3.33333 2H12.6667C13.403 2 14 2.59695 14 3.33333V12.6667C14 13.403 13.403 14 12.6667 14H3.33333C2.59695 14 2 13.403 2 12.6667V3.33333C2 2.59695 2.59695 2 3.33333 2ZM7.33333 6C7.33333 6.73638 6.73638 7.33333 6 7.33333C5.26362 7.33333 4.66667 6.73638 4.66667 6C4.66667 5.26362 5.26362 4.66667 6 4.66667C6.73638 4.66667 7.33333 5.26362 7.33333 6Z"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="stroke-border"
+
+                <Controller
+                  control={control}
+                  name="avatarUrl"
+                  render={({ field }) => (
+                    <div className="flex items-center justify-center w-24 h-24 p-4 mb-4 rounded-full bg-background">
+                      {/* {initialFormValues.avatarUrl ? (
+                        <Image
+                          src={initialFormValues.avatarUrl}
+                          alt="Community logo"
+                          className="w-full h-full rounded-full"
+                        />
+                      ) : (
+                        <svg
+                          width="40"
+                          height="40"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <g id="image">
+                            <path
+                              id="Vector"
+                              d="M14 10L11.9427 7.94267C11.6926 7.69271 11.3536 7.55229 11 7.55229C10.6464 7.55229 10.3074 7.69271 10.0573 7.94267L4 14M3.33333 2H12.6667C13.403 2 14 2.59695 14 3.33333V12.6667C14 13.403 13.403 14 12.6667 14H3.33333C2.59695 14 2 13.403 2 12.6667V3.33333C2 2.59695 2.59695 2 3.33333 2ZM7.33333 6C7.33333 6.73638 6.73638 7.33333 6 7.33333C5.26362 7.33333 4.66667 6.73638 4.66667 6C4.66667 5.26362 5.26362 4.66667 6 4.66667C6.73638 4.66667 7.33333 5.26362 7.33333 6Z"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="stroke-border"
+                            />
+                          </g>
+                        </svg>
+                      )} */}
+                      <UploadImageFile
+                        onUpload={(filesInfo: { name: string; url: string }[]) => {
+                          field.onChange(filesInfo[0].url);
+                          setTaskFilesUrls(filesInfo); // Update the local state if you're using it to display the paths
+                        }}
                       />
-                    </g>
-                  </svg>
-                </div>
+                      {errors.avatarUrl?.message && (
+                        <p className="text-sm text-red-600 dark:text-red-500">
+                          {errors.avatarUrl?.message}
+                        </p>
+                      )}
+                      {taskFileUrls.map((file, index) => (
+                        <div className="absolute">
+                          <div className="relative rounded-full h-24 w-24">
+                            <Image
+                              key={index}
+                              src={file.url}
+                              alt={file.name}
+                              fill
+                              className="object-cover object-center rounded-full"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                />
+                {selectedAttachment?.file.type.startsWith("image/") && (
+                  <img
+                    src={selectedAttachment?.previewUrl}
+                    alt={selectedAttachment?.file.name}
+                    className="max-w-full max-h-screen"
+                  />
+                )}
                 <p className="mb-2 text-sm leading-6">
                   Edit your community logo
                 </p>
-                <Button className="px-8">Update</Button>
+                <Button className="px-8" onClick={(e) => e.preventDefault()}>Update</Button>
               </div>
               <div className="space-y-4 w-full lg:w-[300px] pb-[10px]">
                 <div className="space-y-2">

@@ -180,6 +180,7 @@ export default async function CommunityDetailsPage({
             communityName={community.title}
             communityDescription={community.description ?? ""}
             communityUrls={communityUrls}
+            communityImage={community.community_image ?? ""}
             communityMembersCount={communityMembersCount}
             commuityFee={community.community_fee_percentage}
           />

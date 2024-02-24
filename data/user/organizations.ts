@@ -1,12 +1,8 @@
 "use server";
-import {
-  GeneralDetailsSchema,
-  PrivateDetailsSchema,
-} from "@/app/(dynamic-pages)/(protected-pages)/communities/create-community/_components/createCommunitySchema";
+import { GeneralDetailsSchema } from "@/app/(dynamic-pages)/(protected-pages)/communities/create-community/_components/createCommunitySchema";
 import { createSupabaseUserServerActionClient } from "@/supabase-clients/user/createSupabaseUserServerActionClient";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 import { Enum, NormalizedSubscription, Table, UnwrapPromise } from "@/types";
-import { toSiteURL } from "@/utils/helpers";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 import { revalidatePath } from "next/cache";
 
@@ -68,6 +64,7 @@ export const createPublicOrganization = async (
       youtube_url: publicData.socialLinks?.find(
         (link) => link.type === "youtube"
       )?.url,
+      community_image: publicData.avatarUrl,
     })
     .select("*")
     .single();
@@ -241,7 +238,7 @@ export async function getPaginatedOrganizationsList({
   const startIndex = (page - 1) * limit;
   let supabaseQuery = supabaseClient
     .from("organizations")
-    .select("id,title,created_by");
+    .select("id,title,created_by, community_image");
   if (query) {
     supabaseQuery = supabaseQuery.ilike("title", `%${query}%`);
   }
