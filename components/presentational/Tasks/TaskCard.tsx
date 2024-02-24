@@ -164,7 +164,7 @@ const TaskCard: FC<TaskCardProps> = ({
           </div>
         </Card>
       ) : (
-        <Card className="relative overflow-visible rounded-lg">
+        <Card className="relative w-full min-w-full overflow-visible rounded-lg">
           {!isPublished && (
             <div className="absolute top-0 z-10 flex justify-center w-full px-4 py-2 text-xs font-medium rounded-t-lg text-foreground bg-secondary">
               Draft
@@ -246,23 +246,7 @@ const TaskCard: FC<TaskCardProps> = ({
                       ))}
                     </div>
                   </ScrollArea>
-                  {/* <div className="flex w-full gap-2 h-fit whitespace-nowrap">
-                    {taskType.map((type, index) => (
-                      <Badge
-                        key={index}
-                        className="text-xs text-foreground bg-background hover:bg-background"
-                      >
-                        {type
-                          .split("-")
-                          .map(
-                            (word) =>
-                              word.charAt(0).toUpperCase() + word.slice(1)
-                          )
-                          .join(" ")}
-                      </Badge>
-                    ))}
-                  </div> */}
-                  <div className="flex items-center gap-1 ml-auto">
+                  <div className="flex items-center gap-1">
                     <Carrot size={20} />
                     <p className="mr-4">0</p>
                     <CarrotStrikIcon />
@@ -281,8 +265,8 @@ const TaskCard: FC<TaskCardProps> = ({
             </div>
           </div>
           <div className="px-6 mt-3">
-            <p className="w-full text-sm text-muted-foreground">
-              {`${taskDescription.slice(0, 60)}`}...
+            <p className="text-sm truncate text-muted-foreground">
+              {taskDescription}
             </p>
           </div>
 

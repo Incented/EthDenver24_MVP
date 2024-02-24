@@ -27,37 +27,35 @@ export default async function CommunitiesPage({
   const totalPages = Math.ceil(communityCount / limit);
   // const totalPages = Math.ceil(communityCount / limit);
   return (
-    <main className="flex flex-col h-screen px-4 pb-10 overflow-hidden sm:px-8">
-      <div className="h-screen">
-        <div className="items-center mt-8 md:flex">
-          <h1 className="text-3xl font-medium ">Communities</h1>
-          <div className="flex items-center gap-3 mt-4 ml-auto md:mt-0">
-            <Search placeholder="Search Community" />
-            <FilterCommunities />
-            <Link href={`/communities/create-community`}>
-              <Button size="sm">
-                <Plus size={16} />
-                <p className="hidden md:flex">Add Community</p>
-              </Button>
-            </Link>
-          </div>
-        </div>
-        <div className="h-full mt-4 overflow-auto pb-60 ">
-          <Suspense
-            key={suspenseKey}
-            fallback={
-              <CommunityLoadingSkeleton />
-            }
-          >
-            <CommunitiesList filters={validatedSearchParams} />
-          </Suspense>
-        </div>
-
-        <div className="flex justify-center md:hidden">
-          <Button variant="link">Show more</Button>
+    <main className="flex flex-col px-4 pb-10 sm:px-8">
+      <div className="items-center mt-8 md:flex">
+        <h1 className="text-3xl font-medium ">Communities</h1>
+        <div className="flex items-center gap-3 mt-4 ml-auto md:mt-0">
+          <Search placeholder="Search Community" />
+          <FilterCommunities />
+          <Link href={`/communities/create-community`}>
+            <Button size="sm">
+              <Plus size={16} />
+              <p className="hidden md:flex">Add Community</p>
+            </Button>
+          </Link>
         </div>
       </div>
-      <div className="sticky bottom-0 hidden py-6 pt-4 md:flex">
+      <div className="h-full pb-10 mt-4 overflow-auto ">
+        <Suspense
+          key={suspenseKey}
+          fallback={
+            <CommunityLoadingSkeleton />
+          }
+        >
+          <CommunitiesList filters={validatedSearchParams} />
+        </Suspense>
+      </div>
+
+      <div className="flex justify-center md:hidden">
+        <Button variant="link">Show more</Button>
+      </div>
+      <div className="hidden py-6 pt-4 md:flex">
         <Pagination
           title="Communities"
           totalPages={totalPages}
@@ -68,11 +66,4 @@ export default async function CommunitiesPage({
   );
 }
 
-{
-  /* {allCommunities.map((organization) => (
-          <CommunityCard
-            key={organization.id}
-            communityName={organization.title}
-          />
-        ))} */
-}
+

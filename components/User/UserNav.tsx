@@ -28,7 +28,7 @@ const UserNav: FC<UserNavProps> = ({ avatarUrl = "", userName, onAvatarClick }) 
         align="center"
         className="w-[150px] px-4 flex flex-col justify-start"
       >
-        <Link href="#" className="px-2 py-1 rounded-md hover:bg-accent">
+        <Link href="#" className="hidden px-2 py-1 rounded-md hover:bg-accent">
           My Profile
         </Link>
         <Link href="/logout" className="px-2 py-1 rounded-md hover:bg-accent">

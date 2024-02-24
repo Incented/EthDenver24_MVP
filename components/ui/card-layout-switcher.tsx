@@ -1,12 +1,12 @@
 "use client";
+import { setCardLayout } from "@/app/(dynamic-pages)/(protected-pages)/dashboard/(my-dashboard)/card-ui";
+import { CardVerticalLayoutContext } from "@/contexts/CardVerticalLayoutContext";
+import { cn } from "@/lib/utils";
+import { useMutation } from "@tanstack/react-query";
 import { LayoutGrid, LayoutList } from "lucide-react";
 import { useContext } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { setCardLayout } from "@/app/(dynamic-pages)/(protected-pages)/dashboard/(my-dashboard)/card-ui";
 import { toast } from "sonner";
-import { CardVerticalLayoutContext } from "@/contexts/CardVerticalLayoutContext";
 import { Button } from "./button";
-import { cn } from "@/lib/utils";
 
 export function CardLayoutSwitcher() {
   const { setIsVertical: setVerticalLayoutContextValue, isVertical } =
@@ -42,7 +42,7 @@ export function CardLayoutSwitcher() {
       <Button
         variant="outline"
         className={cn(
-          "p-3 px-3",
+          "p-3 px-3 hidden sm:block",
           isVertical
             ? "ring-2 ring-zinc-400 shadow-sm ring-offset-zinc-400"
             : ""

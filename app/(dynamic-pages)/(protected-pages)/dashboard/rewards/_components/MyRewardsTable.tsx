@@ -81,7 +81,7 @@ const MyRewardsTable: FC<MyRewardsTableProps> = ({ }) => {
 
 
   </ShadcnTable>
-  <div className="sticky bottom-0">
+  <div className="sticky bottom-0 hidden sm:flex">
    <Pagination
     title="Rewards"
     totalPages={10}
