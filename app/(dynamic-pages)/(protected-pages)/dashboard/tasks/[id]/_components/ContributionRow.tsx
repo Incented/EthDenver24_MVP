@@ -20,7 +20,7 @@ const ContributionRow: FC<ContributionRowProps> = async ({
   loggedInUser,
 }) => {
 
-  const { user_id, task_id } = contribution;
+  const { user_id } = contribution;
   const [contributorProfile, validationsForContribution] = await Promise.all([
     getUserProfile(user_id),
     getValidationsForContribution(contribution.id),

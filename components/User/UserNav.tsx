@@ -1,23 +1,27 @@
 "use client";
 
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { FC } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
+import { FC } from "react";
+import { Button } from "../ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 interface UserNavProps {
   avatarUrl: string;
   userName: string | null;
+  onAvatarClick?: () => void;
 }
 
-const UserNav: FC<UserNavProps> = ({ avatarUrl = "", userName }) => {
+const UserNav: FC<UserNavProps> = ({ avatarUrl = "", userName, onAvatarClick }) => {
   return (
     <Popover>
-      <PopoverTrigger>
-        <Avatar className="mr-3">
-          <AvatarImage src={avatarUrl} className="object-cover" />
-          <AvatarFallback>{userName?.slice(0, 2)}</AvatarFallback>
-        </Avatar>
+      <PopoverTrigger asChild>
+        <Button variant='ghost' onClick={onAvatarClick} className="w-fit">
+          <Avatar className="">
+            <AvatarImage src={avatarUrl} className="object-cover" />
+            <AvatarFallback>{userName?.slice(0, 2)}</AvatarFallback>
+          </Avatar>
+        </Button>
       </PopoverTrigger>
       <PopoverContent
         sideOffset={30}

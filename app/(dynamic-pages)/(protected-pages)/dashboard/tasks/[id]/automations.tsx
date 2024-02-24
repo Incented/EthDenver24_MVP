@@ -1,6 +1,6 @@
 'use client'
 
-import { demoMakeDemoUsersPrioritiseTask, demoMakeDemoUsersValidateContributions } from "@/data/admin/demo-scripts";
+import { demoMakeDemoUsersPrioritiseTask, demoMakeDemoUsersPrioritizeNewTasks, demoMakeDemoUsersValidateContributions } from "@/data/admin/demo-scripts";
 import { useToastMutation } from "@/hooks/useToastMutation";
 import { useRouter } from "next/navigation";
 import { useKey } from "rooks";
@@ -25,6 +25,14 @@ export function DemoAutomations({ taskId }: {
             router.refresh()
         }
     });
+    const { mutate: makeDemoUsersPrioritiseAllNewTasks } = useToastMutation(demoMakeDemoUsersPrioritizeNewTasks, {
+        loadingMessage: "Prioritizing new tasks...",
+        successMessage: "Tasks prioritized",
+        errorMessage: "Failed to prioritize tasks",
+        onSuccess: () => {
+            router.refresh()
+        }
+    });
 
     useKey(["KeyP"], (event) => {
         // if shift key is pressed
@@ -40,5 +48,12 @@ export function DemoAutomations({ taskId }: {
         }
     })
 
-    return <p>Demo automations</p>;
+    useKey(["KeyV"], (event) => {
+        // if shift key is pressed
+        if (event.shiftKey) {
+            makeDemoUsersPrioritiseAllNewTasks();
+        }
+    })
+
+    return <p></p>;
 }

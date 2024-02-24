@@ -1,18 +1,14 @@
 "use client";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Bell, X } from "lucide-react";
-import { PopoverClose } from "@radix-ui/react-popover";
+import { Button } from "@/components/ui/button";
+import { Bell } from "lucide-react";
 import { FC } from "react";
 
-interface NotificationMenuProps {}
+interface NotificationMenuProps { onNotificationClick?: () => void; }
 interface NotificationItemProps {
   notificationMessage: string;
   notificationTime: string;
+
 }
 
 const NotificationItem: FC<NotificationItemProps> = ({
@@ -25,48 +21,55 @@ const NotificationItem: FC<NotificationItemProps> = ({
   </li>
 );
 
-const NotificationMenu: FC<NotificationMenuProps> = ({}) => {
+const NotificationMenu: FC<NotificationMenuProps> = ({ onNotificationClick }) => {
   return (
-    <Popover>
-      <PopoverTrigger className="px-3">
+    <>
+      <Button variant="ghost" onClick={onNotificationClick}>
         <Bell size={16} />
-      </PopoverTrigger>
-      <PopoverContent
-        sideOffset={30}
-        align="center"
-        className="w-[300px] md:w-[430px] px-4 flex flex-col justify-start max-h-[466px]"
-      >
-        <div className="flex items-center justify-between mb-2">
-          <h1 className="text-lg font-semibold">Notifications</h1>
-          <PopoverClose asChild>
-            <X size={18} className="cursor-pointer" />
-          </PopoverClose>
-        </div>
+      </Button>
+      {/* <Popover>
+        <PopoverTrigger className="px-3">
+          <Button variant="ghost" onClick={onNotificationClick}>
+            <Bell size={16} />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          sideOffset={30}
+          align="center"
+          className="w-[300px] md:w-[430px] px-4 flex flex-col justify-start max-h-[466px]"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-lg font-semibold">Notifications</h1>
+            <PopoverClose asChild>
+              <X size={18} className="cursor-pointer" />
+            </PopoverClose>
+          </div>
 
-        <ul className="flex flex-col gap-3 overflow-y-scroll">
-          <NotificationItem
-            notificationMessage="To eradicate invasive species, reintroduce native species an"
-            notificationTime="2 minutes ago"
-          />
-          <NotificationItem
-            notificationMessage="To eradicate invasive species, reintroduce native species an"
-            notificationTime="2 minutes ago"
-          />
-          <NotificationItem
-            notificationMessage="To eradicate invasive species, reintroduce native species an"
-            notificationTime="2 minutes ago"
-          />
-          <NotificationItem
-            notificationMessage="To eradicate invasive species, reintroduce native species an"
-            notificationTime="2 minutes ago"
-          />
-          <NotificationItem
-            notificationMessage="To eradicate invasive species, reintroduce native species an"
-            notificationTime="2 minutes ago"
-          />
-        </ul>
-      </PopoverContent>
-    </Popover>
+          <ul className="flex flex-col gap-3 overflow-y-scroll">
+            <NotificationItem
+              notificationMessage="To eradicate invasive species, reintroduce native species an"
+              notificationTime="2 minutes ago"
+            />
+            <NotificationItem
+              notificationMessage="To eradicate invasive species, reintroduce native species an"
+              notificationTime="2 minutes ago"
+            />
+            <NotificationItem
+              notificationMessage="To eradicate invasive species, reintroduce native species an"
+              notificationTime="2 minutes ago"
+            />
+            <NotificationItem
+              notificationMessage="To eradicate invasive species, reintroduce native species an"
+              notificationTime="2 minutes ago"
+            />
+            <NotificationItem
+              notificationMessage="To eradicate invasive species, reintroduce native species an"
+              notificationTime="2 minutes ago"
+            />
+          </ul>
+        </PopoverContent>
+      </Popover> */}
+    </>
   );
 };
 

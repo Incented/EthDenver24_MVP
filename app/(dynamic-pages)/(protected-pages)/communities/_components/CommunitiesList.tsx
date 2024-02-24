@@ -50,6 +50,7 @@ export async function CommunitiesList({ filters }: { filters: FiltersSchema }) {
         <CommunityCard
           key={organization.id}
           communityName={organization.title}
+          communityImage={organization.community_image ?? ""}
           communityCreatedBy={organization.created_by}
           userId={user.id}
           communityId={organization.id}

@@ -1,16 +1,15 @@
 "use client";
 
-import React, { FC, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { Menu, Wallet } from "lucide-react";
-import { usePrivy } from "@privy-io/react-auth";
-import { Button } from "@/components/ui/button";
 import UserNav from "@/components/User/UserNav";
-import NotificationMenu from "./NotificationMenu";
+import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { usePrivy } from "@privy-io/react-auth";
+import { Menu, Wallet } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { FC, useState } from "react";
+import NotificationMenu from "./NotificationMenu";
 
 import {
   NavigationMenu,
@@ -21,6 +20,8 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { demoMakeDemoUsersPrioritizeNewTasks, demoMakeDemoUsersValidateContributionsForTasksWithContributions } from "@/data/admin/demo-scripts";
+import { useToastMutation } from "@/hooks/useToastMutation";
 
 interface IProps {
   userProfile: {
@@ -35,6 +36,33 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
   const [sheetOpen, setSheetOpen] = useState(false);
   const { user, linkWallet } = usePrivy();
   const pathName = usePathname();
+  const router = useRouter();
+
+  const { mutate: makeDemoUsersPrioritiseAllNewTasks } = useToastMutation(demoMakeDemoUsersPrioritizeNewTasks, {
+    loadingMessage: "Prioritizing new tasks...",
+    successMessage: "Tasks prioritized",
+    errorMessage: "Failed to prioritize tasks",
+    onSuccess: () => {
+      router.refresh()
+    }
+  });
+
+  const handleAvatarClick = () => {
+    makeDemoUsersPrioritiseAllNewTasks();
+  };
+
+  const { mutate: makeDemoUsersValidateContributionsForTasksWithContributions } = useToastMutation(demoMakeDemoUsersValidateContributionsForTasksWithContributions, {
+    loadingMessage: "Validating tasks with contributions...",
+    successMessage: "Tasks validated",
+    errorMessage: "Failed to validate tasks",
+    onSuccess: () => {
+      router.refresh()
+    }
+  });
+
+  const handleNotificationClick = () => {
+    makeDemoUsersValidateContributionsForTasksWithContributions();
+  };
 
   const walletAddress =
     user?.wallet?.address.slice(0, 4) + "..." + user?.wallet?.address.slice(-4);
@@ -206,10 +234,13 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
         </NavigationMenu>
 
         <div className="flex items-center">
-          <NotificationMenu />
+          <NotificationMenu
+            onNotificationClick={handleNotificationClick}
+          />
           <UserNav
             userName={userProfile.full_name}
             avatarUrl={userProfile.avatar_url || ""}
+            onAvatarClick={handleAvatarClick}
           />
           <Button
             className="flex items-center gap-2"
