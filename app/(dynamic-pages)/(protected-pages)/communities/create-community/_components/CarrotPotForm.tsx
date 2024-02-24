@@ -1,13 +1,7 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { AccordionList } from "./Accordion";
-import { carrotPotItems, rewardAccordionItems } from "./createCommunityData";
-import { carrotPotSchema, CarrotPotSchema } from "./createCommunitySchema";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -16,8 +10,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useRef, useState } from "react";
 import TokenPurchaseModal from "@/components/ui/token-purchase-modal";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRef, useState } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { AccordionList } from "./Accordion";
+import { carrotPotItems } from "./createCommunityData";
+import { CarrotPotSchema, carrotPotSchema } from "./createCommunitySchema";
 
 function CarrotPotForm({
   initialFormValues,
@@ -63,7 +63,7 @@ function CarrotPotForm({
           <div className="flex flex-col h-full gap-8 lg:flex-row">
             <div className="flex-1 space-y-6">
               <div>
-                <div className="grid w-full grid-cols-1 gap-4 mt-2">
+                <div className="grid w-full grid-cols-1 gap-4 px-1 mt-2">
                   <div className="relative space-y-1">
                     <span className="text-sm">Community live status</span>
                     <Controller
@@ -267,7 +267,7 @@ function CarrotPotForm({
           <Button
             variant="outline"
             className="w-[100px]"
-            onClick={withStep ? moveToPrevStep : () => {}}
+            onClick={withStep ? moveToPrevStep : () => { }}
             type="button"
           >
             {withStep ? "Back" : "Cancel"}

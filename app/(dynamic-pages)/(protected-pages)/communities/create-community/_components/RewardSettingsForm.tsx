@@ -1,15 +1,15 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { AccordionList } from "./Accordion";
 import { rewardAccordionItems } from "./createCommunityData";
 import {
   RewardSettingsSchema,
   rewardSettingsSchema,
 } from "./createCommunitySchema";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
 
 export default function RewardsSettingsForm({
   initialFormValues,
@@ -49,7 +49,7 @@ export default function RewardsSettingsForm({
           <div className="flex flex-col h-full gap-8 md:flex-row">
             <div className="flex-1 space-y-6">
               <div>
-                <div className="grid max-w-md grid-cols-1 gap-4 mt-2 md:grid-cols-1 xl:grid-cols-2">
+                <div className="grid max-w-md grid-cols-1 gap-4 px-1 mt-2 md:grid-cols-1 xl:grid-cols-2">
                   <div className="relative w-40 space-y-1">
                     <span className="text-sm">Proposal Reward</span>
                     <Input
@@ -134,7 +134,7 @@ export default function RewardsSettingsForm({
           <Button
             variant="outline"
             className="w-[100px]"
-            onClick={withStep ? moveToPrevStep : () => {}}
+            onClick={withStep ? moveToPrevStep : () => { }}
             type="button"
           >
             {withStep ? "Back" : "Cancel"}

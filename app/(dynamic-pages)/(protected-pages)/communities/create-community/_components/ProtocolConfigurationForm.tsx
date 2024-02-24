@@ -3,15 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
+import { AccordionList } from "./Accordion";
+import { protocolAccordionItems } from "./createCommunityData";
 import {
   ProtocolConfigurationSchema,
   protocolConfigurationSchema,
 } from "./createCommunitySchema";
-import { AccordionList } from "./Accordion";
-import { protocolAccordionItems } from "./createCommunityData";
 
 function ProtocolConfigurationForm({
   initialFormValues,
@@ -53,7 +52,7 @@ function ProtocolConfigurationForm({
       <div className="flex flex-col w-full gap-4 rounded-b-none rounded-lg md:h-[550px]">
         <div className=" h-[484px] overflow-auto ">
           <div className="flex flex-col gap-8 md:flex-row">
-            <div className="flex-1 space-y-6">
+            <div className="flex-1 px-1 space-y-6">
               <div>
                 <h3 className="text-base font-normal leading-9">Quorum</h3>
                 <div className="grid grid-rows-auto md:grid-cols-1 gap-4 w-[160px] md:w-fit">
@@ -159,7 +158,7 @@ function ProtocolConfigurationForm({
           <Button
             variant="outline"
             className="w-[100px]"
-            onClick={withStep ? moveToPrevStep : () => {}}
+            onClick={withStep ? moveToPrevStep : () => { }}
             type="button"
           >
             {withStep ? "Back" : "Cancel"}
