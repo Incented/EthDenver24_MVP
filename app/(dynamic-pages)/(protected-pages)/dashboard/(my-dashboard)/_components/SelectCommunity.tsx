@@ -15,6 +15,7 @@ interface SelectCommunityProps {
   communities: {
     title: string;
     id: string;
+    community_image: string | null;
   }[]
 }
 
@@ -49,26 +50,21 @@ const SelectCommunity: FC<SelectCommunityProps> = ({ communities }) => {
               <RadioGroupItem value="all" id="r1" />
               <Label htmlFor="r1">All Community</Label>
             </div>
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="buanFund" id="r2" />
-              <Avatar>
-                <AvatarImage
-                  className="w-8 h-8 rounded-full"
-                  src="/assets/avatar_1.jpg"
-                />
-              </Avatar>
-              <Label htmlFor="r2">Buan Fund</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="" id="r3" />
-              <Avatar>
-                <AvatarImage
-                  className="w-8 h-8 rounded-full"
-                  src="/assets/avatar_1.jpg"
-                />
-              </Avatar>
-              <Label htmlFor="r3">Nature Lovers</Label>
-            </div>
+            {communities.map((community) => (
+              <div key={community.id} className="flex items-center gap-2">
+                <RadioGroupItem value={community.id} id={`community-${community.id}`} />
+                <Avatar>
+                  <AvatarImage
+                    className="size-4 rounded-full"
+                    src={community.id} // Assuming all communities use the same avatar for this example
+                  />
+                  <AvatarFallback className="bg-muted text-foreground flex items-center justify-center size-4 text-sm">
+                    {community.title.slice(0, 2)}
+                  </AvatarFallback>
+                </Avatar>
+                <Label htmlFor={`community-${community.id}`}>{community.title}</Label>
+              </div>
+            ))}
           </RadioGroup>
         </PopoverContent>
       </Popover>

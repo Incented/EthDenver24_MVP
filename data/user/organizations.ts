@@ -242,7 +242,7 @@ export async function getAllOrganizationNames() {
 
   const { data, error } = await supabaseClient
     .from("organizations")
-    .select("title, id");
+    .select("title, id, community_image");
   if (error) {
     throw error;
   }

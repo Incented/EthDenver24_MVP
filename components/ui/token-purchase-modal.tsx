@@ -1,20 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
+import { Button } from "./button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "./dialog";
-import { Input } from "./input";
-import { RadioGroup } from "./radio-group";
-import { Button } from "./button";
-import { Label } from "./label";
 import {
   Select,
   SelectContent,
@@ -164,8 +159,8 @@ export function TokenPurchaseModal({
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          variant="outline"
-          className="flex gap-2 bg-muted border-none hover:bg-secondary"
+          className="gap-2"
+          variant="secondary"
         >
           <svg
             width="16"
