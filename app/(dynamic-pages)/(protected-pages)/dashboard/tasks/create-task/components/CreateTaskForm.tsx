@@ -85,7 +85,7 @@ export function CreateTaskForm({
     setSelectedAttachment(null);
   };
 
-  const [communityid, setCommunityId] = useState<string>("");
+  const [communityid, setCommunityId] = useState<string>(communities[communities.length - 1].id);
 
   const handleFiles = (files: File[], paths: string[]) => {
     const newFilePreviews = files.map((file, index) => ({
@@ -154,16 +154,18 @@ export function CreateTaskForm({
     control,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<CreateTaskFormSchema>({
     resolver: zodResolver(createTaskFormSchema),
     mode: "onChange",
     defaultValues: {
-      community_id: initialData?.community_id || "",
-      task_description: initialData?.task_description || "",
-      task_types: initialData?.task_types || [],
-      task_rewards: initialData?.task_rewards || 0,
-      task_efforts: initialData?.task_efforts || 0,
+      community_id: initialData?.community_id || communityid,
+      task_title: initialData?.task_title || "Task title",
+      task_description: initialData?.task_description || "This is the task description",
+      task_types: initialData?.task_types || ["software-dev"],
+      task_rewards: initialData?.task_rewards || 10,
+      task_efforts: initialData?.task_efforts || 10,
       task_files: initialData?.task_files || [],
     },
   });
@@ -222,7 +224,7 @@ export function CreateTaskForm({
 
     // Map the fields from `values` to the structure expected by `createTaskAction`
     const taskData = {
-      community_id: communityid,
+      community_id: values.community_id,
       task_title: values.task_title,
       task_description: values.task_description,
       task_rewards: values.task_rewards,
@@ -255,6 +257,7 @@ export function CreateTaskForm({
         onSubmit={handleSubmit(onSubmit)}
         className=" grid gap-6 md:grid-cols-1 w-full"
       >
+
         {/* <div className="block w-full md:absolute md:w-fit md:flex md:gap-4 md:top-8 md:right-4"> */}
         <div className="flex gap-2 w-full pr-2 md:absolute md:w-fit md:gap-4 md:top-8 md:right-4">
           <Button variant="outline" type="submit" data-submit-type="draft" className="w-full md:w-fit">
@@ -309,7 +312,6 @@ export function CreateTaskForm({
                 <SelectTrigger aria-label="Select community" className="pr-2">
                   <SelectValue
                     placeholder="Select community"
-                    defaultValue={field.value}
                   />
                 </SelectTrigger>
                 <SelectContent>
@@ -317,7 +319,7 @@ export function CreateTaskForm({
                     {communities.map((community, index) => (
                       <SelectItem
                         key={`${community.title}-${index}`}
-                        value={community.title || `Community ${index + 1}`}
+                        value={community.id}
                         defaultValue={field.value}
                       >
                         {community.title || `Community ${index + 1}`}

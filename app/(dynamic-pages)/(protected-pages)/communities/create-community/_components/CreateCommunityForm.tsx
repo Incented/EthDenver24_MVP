@@ -41,31 +41,31 @@ export default function CreateCommunityForm() {
 
   const [basicDetails, setBasicDetails] = useState<BasicCommunityDetailsSchema>(
     {
-      title: "",
-      description: "",
+      title: "New Community",
+      description: "This is the description for the community",
       socialLinks: [
         {
           type: "website",
-          url: "",
+          url: "http://via.placeholder.com/640x360",
         },
         {
           type: "facebook",
-          url: "",
+          url: "http://via.placeholder.com/640x360",
         },
         {
           type: "twitter",
-          url: "",
+          url: "http://via.placeholder.com/640x360",
         },
         {
           type: "linkedin",
-          url: "",
+          url: "http://via.placeholder.com/640x360",
         },
         {
           type: "youtube",
-          url: "",
+          url: "http://via.placeholder.com/640x360",
         },
       ],
-      avatarUrl: "",
+      avatarUrl: "https://pbs.twimg.com/profile_images/1716958184043102208/PNdMGT-4_400x400.jpg",
     }
   );
 
