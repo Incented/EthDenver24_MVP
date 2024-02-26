@@ -1,17 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { useToastMutation } from "@/hooks/useToastMutation";
-import {
-  signInWithMagicLink,
-  signInWithProvider,
-  signInWithPassword,
-} from "@/data/auth/auth";
-import { AuthProvider } from "@/types";
-import { useRouter } from "next/navigation";
 import { Anchor } from "@/components/Anchor";
 import { Email } from "@/components/Auth/Email";
 import { EmailAndPassword } from "@/components/Auth/EmailAndPassword";
+import {
+  signInWithMagicLink,
+  signInWithPassword,
+  signInWithProvider,
+} from "@/data/auth/auth";
+import { useToastMutation } from "@/hooks/useToastMutation";
+import { supabaseUserClientComponentClient } from "@/supabase-clients/user/supabaseUserClientComponentClient";
+import { AuthProvider } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function Login({
   next,
@@ -69,6 +71,25 @@ export function Login({
       errorMessage: "Failed to login",
     }
   );
+
+  const { data: isLoggedIn } = useQuery(
+    ['isLoggedInHome'],
+    async () => {
+      const response = await supabaseUserClientComponentClient.auth.getUser();
+      return Boolean(response.data.user?.id);
+    },
+    {
+      initialData: false,
+      refetchOnMount: true,
+      refetchInterval: false,
+      refetchOnWindowFocus: false,
+      refetchIntervalInBackground: false,
+      cacheTime: 0,
+      staleTime: 0,
+    },
+  );
+
+  isLoggedIn && redirectToDashboard();
   return (
     <div className="container h-full grid items-center text-left max-w-lg mx-auto overflow-auto">
       {successMessage ? (
