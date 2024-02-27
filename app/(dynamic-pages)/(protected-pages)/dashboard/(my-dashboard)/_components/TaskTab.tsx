@@ -7,6 +7,7 @@ import { CardVerticalLayoutContext } from "@/contexts/CardVerticalLayoutContext"
 import { Json } from "@/lib/database.types";
 import { cn } from "@/lib/utils";
 import { Table } from "@/types";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useContext } from "react";
 import {
   TaskFileArray,
@@ -71,6 +72,10 @@ const getTaskFeaturedImage = (task: Table<"tasks">) => {
 };
 
 const TaskTab = ({ userId, tasks }: TaskTabProps) => {
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const router = useRouter()
+  const communityFilterParams = searchParams?.getAll('community') ?? []
   const { isVertical } = useContext(CardVerticalLayoutContext);
   return (
     <Tabs defaultValue="all tasks" >
@@ -104,28 +109,33 @@ const TaskTab = ({ userId, tasks }: TaskTabProps) => {
               : "sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3"
           )}
         >
-          {tasks.filter(task => task.is_task_published).map((filteredTask, i) => (
-            <TaskCard
-              key={i}
-              taskId={filteredTask.id}
-              communityId={filteredTask.organization_id}
-              imageUrl={getTaskFeaturedImage(filteredTask)}
-              taskTitle={filteredTask.name}
-              rewards={
-                filteredTask.rewards
-                  ? `${filteredTask.rewards} carrots`
-                  : "0 carrots"
-              }
-              efforts={
-                filteredTask.efforts ? `${filteredTask.efforts} days` : "0 days"
-              }
-              taskCommunity={filteredTask.task_community_name || "Community Name"}
-              taskType={parseJsonToStringArray(filteredTask.task_types)}
-              taskStatus={filteredTask.task_status || "new_task"}
-              isVertical={isVertical}
-              isPublished={filteredTask.is_task_published || false}
-            />
-          ))}
+          {tasks
+            .filter(task => task.is_task_published)
+            .filter(filteredTask =>
+              communityFilterParams.includes('all') ? true : communityFilterParams.length === 0 || communityFilterParams.includes(filteredTask.task_community_name?.toLowerCase().replace(/\s+/g, '-') || "")
+            )
+            .map((filteredTask, i) => (
+              <TaskCard
+                key={i}
+                taskId={filteredTask.id}
+                communityId={filteredTask.organization_id}
+                imageUrl={getTaskFeaturedImage(filteredTask)}
+                taskTitle={filteredTask.name}
+                rewards={
+                  filteredTask.rewards
+                    ? `${filteredTask.rewards} carrots`
+                    : "0 carrots"
+                }
+                efforts={
+                  filteredTask.efforts ? `${filteredTask.efforts} days` : "0 days"
+                }
+                taskCommunity={filteredTask.task_community_name || "Community Name"}
+                taskType={parseJsonToStringArray(filteredTask.task_types)}
+                taskStatus={filteredTask.task_status || "new_task"}
+                isVertical={isVertical}
+                isPublished={filteredTask.is_task_published || false}
+              />
+            ))}
         </div>
       </TabsContent>
 
@@ -138,7 +148,9 @@ const TaskTab = ({ userId, tasks }: TaskTabProps) => {
               : "sm:grid-cols-2 md:grid-cols-3"
           )}
         >
-          {tasks.filter(task => task.user_id === userId).map((filteredTask, i) => (
+          {tasks.filter(task => task.user_id === userId).filter(filteredTask =>
+            communityFilterParams.includes('all') ? true : communityFilterParams.length === 0 || communityFilterParams.includes(filteredTask.task_community_name?.toLowerCase().replace(/\s+/g, '-') || "")
+          ).map((filteredTask, i) => (
             <TaskCard
               key={i}
               taskId={filteredTask.id}
@@ -176,7 +188,9 @@ const TaskTab = ({ userId, tasks }: TaskTabProps) => {
             )}
           >
             {tasks
-              .filter((task) => task.task_status === status)
+              .filter((task) => task.task_status === status).filter(filteredTask =>
+                communityFilterParams.includes('all') ? true : communityFilterParams.length === 0 || communityFilterParams.includes(filteredTask.task_community_name?.toLowerCase().replace(/\s+/g, '-') || "")
+              )
               .map((filteredTask, i) => (
                 <TaskCard
                   key={i}

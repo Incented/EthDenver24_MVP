@@ -337,7 +337,7 @@ export function CreateTaskForm({
           )}
         </div>
 
-        <div className=" w-56 space-y-1">
+        <div className="w-56 space-y-1">
           <Label>Title</Label>
           <Input
             {...register("task_title")}
@@ -369,7 +369,7 @@ export function CreateTaskForm({
 
         <div className=" space-y-2">
           <Label>Task Types</Label>
-          <div className="flex flex-wrap w-full gap-3">
+          <div className=" flex flex-wrap w-full gap-3 *:cursor-pointer *:rounded-full *:text-xs *:h-5 *:leading-4 *:p-0 *:px-[10px] *:border-none *:hover:border-1 *:font-medium">
             <Controller
               control={control}
               name="task_types"
@@ -389,11 +389,12 @@ export function CreateTaskForm({
                         );
                         field.onChange(newSelectedTypes);
                       }}
-                      className={`cursor-pointer rounded-full border-none hover:border hover:border-1 text-xs font-medium leading-4 h-5 p-0 px-[10px] ${field.value.includes(type.slug as task_slug)
+
+                      className={` ${field.value.includes(type.slug as task_slug)
                         ? "bg-foreground text-background hover:bg-foreground/50 hover:text-background"
                         : "bg-secondary hover:bg-secondary/50"
                         }`}
-                      variant="outline"
+                      variant="secondary"
                     >
                       {type.name}
                     </Button>
