@@ -115,7 +115,7 @@ export default async function CommunityDetailsPage({
   };
 
   return (
-    <div className="relative mx-8 mb-10">
+    <div className="relative mx-4 mb-10 sm:mx-8">
       <div className="grid items-center grid-cols-2 mt-8 mb-4">
         <div className="md:col-span-2 h-9">
           <GoBack />

@@ -1,16 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-import { Bookmark } from "lucide-react";
 import Link from "next/link";
-import { FC } from "react";
 
-import JoinCommunityModal from "./JoinCommunityModal";
 import {
-  getOrganizationById,
   getTeamMembersCountInOrganization,
-  getTeamMembersInOrganization,
+  getTeamMembersInOrganization
 } from "@/data/user/organizations";
-import { Button } from "@/components/ui/button";
 import BookmarkComponent from "./BookMarkComponent";
 
 type CommunityCardProps = {
@@ -42,64 +37,60 @@ export async function CommunityCard({
   ]);
   const isMember = members.some((member) => member.member_id === userId);
   return (
-    <Card className="p-6 rounded-lg gap-4">
-      <div className="flex items-center gap-4 mb-4">
-        <Avatar>
-          <AvatarImage
-            src={communityImage}
-            className="object-cover w-10 h-10 rounded-full"
+    <Link href={`/communities/${id}`}>
+      <Card className="gap-4 p-6 rounded-lg cursor-pointer"
+      >
+        <div className="flex items-center gap-4 mb-4">
+          <Avatar>
+            <AvatarImage
+              src={communityImage}
+              className="object-cover w-10 h-10 rounded-full"
+            />
+            <AvatarFallback>
+              {communityName.slice(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col">
+            <p
+              className="text-base font-bold leading-7 text-foreground"
+            >
+              {communityName ?? "Community Name"}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {communityAddress ?? "New York, USA"}
+            </p>
+          </div>
+
+          <BookmarkComponent
+            id={userId}
+            organizationId={id}
+            isBookmarked={isBookmarked}
           />
-          <AvatarFallback>
-            {communityName.slice(0, 2).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        <div className="flex flex-col">
-          <Link
-            href={`/communities/${id}`}
-            className="text-base font-bold text-foreground leading-7"
-          >
-            {communityName ?? "Community Name"}
-          </Link>
-          <p className="text-xs text-muted-foreground">
-            {communityAddress ?? "New York, USA"}
-          </p>
         </div>
-        {/* <Button
-          variant="outline"
-          className="flex items-center px-2 justify-center ml-auto border rounded-full"
-        >
-          <Bookmark size={20} className="text-primary" />
-        </Button> */}
-        <BookmarkComponent
-          id={userId}
-          organizationId={id}
-          isBookmarked={isBookmarked}
-        />
-      </div>
-      <p className="mb-4 text-sm text-muted-foreground">
-        {communityDescription ?? "Buan onsulting is a community of developers"}
-      </p>
+        <p className="mb-4 text-sm text-muted-foreground">
+          {communityDescription ?? "Buan onsulting is a community of developers"}
+        </p>
 
-      <div className="flex items-center gap-3 mb-4">
-        <div className="">
-          <p className="text-base leading-7 font-bold">
-            {communityTasks ?? 100}
-          </p>
-          <p className="text-xs leading-[14px] text-muted-foreground">
-            Active Tasks
-          </p>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="">
+            <p className="text-base font-bold leading-7">
+              {communityTasks ?? 100}
+            </p>
+            <p className="text-xs leading-[14px] text-muted-foreground">
+              Active Tasks
+            </p>
+          </div>
+          <div className="h-[35px] w-[1px] bg-muted" />
+
+          <div className="">
+            <p className="text-base font-bold leading-7">{communityMembers}</p>
+            <p className="text-xs leading-[14px] text-muted-foreground">
+              Total members
+            </p>
+          </div>
         </div>
-        <div className="h-[35px] w-[1px] bg-muted" />
 
-        <div className="">
-          <p className="text-base leading-7 font-bold">{communityMembers}</p>
-          <p className="text-xs leading-[14px] text-muted-foreground">
-            Total members
-          </p>
-        </div>
-      </div>
-
-      {isMember ? (
+        {/* {isMember ? (
         <JoinCommunityModal
           triggerText="Join"
           community={communityName}
@@ -107,8 +98,9 @@ export async function CommunityCard({
         />
       ) : (
         <JoinCommunityModal triggerText="Join" community={communityName} />
-      )}
-    </Card>
+      )} */}
+      </Card>
+    </Link>
   );
 }
 
