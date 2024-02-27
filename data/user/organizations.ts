@@ -26,6 +26,31 @@ export const createOrganization = async ({ name }: { name: string }) => {
   return data;
 };
 
+// Right now this is similar to the  createOrganization function, but it's a placeholder for the future
+export const createOnboardingOrganization = async ({
+  name,
+}: {
+  name: string;
+}) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const user = await serverGetLoggedInUser();
+  const { data, error } = await supabase
+    .from("organizations")
+    .insert({
+      title: name,
+      created_by: user.id,
+    })
+    .select("*")
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+};
+
 export const createPublicOrganization = async (
   publicData: GeneralDetailsSchema
 ) => {

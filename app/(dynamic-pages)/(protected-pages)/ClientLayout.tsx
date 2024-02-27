@@ -69,13 +69,13 @@
 //   );
 // }
 
-import { useState, useEffect } from "react";
-import { useWindowSize } from "rooks";
-import Confetti from "react-confetti";
-import { Table } from "@/types";
-import PostHogProvider from "@/contexts/PostHogProvider";
 import { MaintenanceModeBanner } from "@/components/presentational/MaintenanceModeBanner";
-import { UserOnboardingFlow } from "./UserOnboardingFlow";
+import PostHogProvider from "@/contexts/PostHogProvider";
+import { Table } from "@/types";
+import { useEffect, useState } from "react";
+import Confetti from "react-confetti";
+import { useWindowSize } from "rooks";
+import { UserOnboardingFlowWrapper } from "./UserOnboardingFlow";
 
 export function ClientLayout({
   children,
@@ -127,12 +127,11 @@ export function ClientLayout({
             />
           )}
         </div>
-        {!userProfile.full_name && (
-          <UserOnboardingFlow
-            onSuccess={handleSuccess}
-            userProfile={userProfile}
-          />
-        )}
+        <UserOnboardingFlowWrapper
+          onSuccess={handleSuccess}
+          userProfile={userProfile}
+          shouldStart={!Boolean(userProfile.full_name)}
+        />
       </div>
     </PostHogProvider>
   );
