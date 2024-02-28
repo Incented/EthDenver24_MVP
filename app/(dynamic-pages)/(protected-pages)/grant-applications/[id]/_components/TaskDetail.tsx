@@ -2,7 +2,6 @@ import {
   CarrotStrikIconDark
 } from "@/components/Icons/CustomIcons";
 import { Card } from "@/components/ui/card";
-import Detail from "./Detail";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -18,9 +17,11 @@ import ContributionTable from "./ContributionTable";
 import { updateTaskStatusAction } from "@/data/user/tasks";
 import { Table } from "@/types";
 import { revalidatePath } from "next/cache";
+import Detail from "../../../dashboard/tasks/[id]/_components/Detail";
 import { DemoAutomations } from "../automations";
 import { PrioritizerCards } from "./PrioritizerCards";
-import { StatusBasedActions } from "./StatusBasedActions";
+
+import { StatusBasedActions } from "../../../dashboard/tasks/[id]/_components/StatusBasedActions";
 import { ValidationCards } from "./ValidationCards";
 
 
