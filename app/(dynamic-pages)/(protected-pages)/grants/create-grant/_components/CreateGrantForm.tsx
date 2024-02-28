@@ -1,6 +1,7 @@
 "use client";
 
-import { addPrivateInfoForGrant, createGrantAction } from "@/data/admin/grants";
+import { addPrivateInfoForGrant } from "@/data/admin/grants";
+import { createGrantAction } from "@/data/user/grants";
 import { useToastMutation } from "@/hooks/useToastMutation";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
