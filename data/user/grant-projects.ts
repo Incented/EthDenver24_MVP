@@ -141,6 +141,20 @@ export const publishGrantAction = async (id: string) => {
   return null;
 };
 
+export const getGrantApplicationsByGrantId = async (grantId: string) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data, error } = await supabase
+    .from("grant_applications")
+    .select("*")
+    .eq("organization_id", grantId);
+
+  if (error) {
+    throw error;
+  }
+
+  return data ?? [];
+};
+
 export const updateGrantProjectStatusAction = async ({
   status,
   grantProjectId,

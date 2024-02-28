@@ -56,6 +56,20 @@ export const createGrantAction = async (
   return data;
 };
 
+export const getAllGrants = async () => {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+
+  const { data, error } = await supabaseClient
+    .from("grant_programs")
+    .select("*");
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+};
+
 export const getGrantProgramById = async (grantId: string) => {
   const supabaseClient = createSupabaseUserServerComponentClient();
 

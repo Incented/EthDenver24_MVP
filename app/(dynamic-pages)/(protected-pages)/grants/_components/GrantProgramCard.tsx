@@ -6,9 +6,8 @@ import {
   getTeamMembersCountInOrganization,
   getTeamMembersInOrganization
 } from "@/data/user/organizations";
-import BookmarkComponent from "./BookMarkComponent";
 
-type CommunityCardProps = {
+type GrantProgramCardProps = {
   communityName: string;
   communityDescription?: string;
   communityImage?: string;
@@ -16,11 +15,9 @@ type CommunityCardProps = {
   communityAddress?: string;
   communityId: string;
   communityCreatedBy?: string;
-  userId: string;
-  isBookmarked?: boolean;
 };
 
-export async function CommunityCard({
+export async function GrantProgramCard({
   communityName,
   communityDescription,
   communityImage,
@@ -28,16 +25,13 @@ export async function CommunityCard({
   communityAddress,
   communityId: id,
   communityCreatedBy,
-  userId,
-  isBookmarked,
-}: CommunityCardProps) {
+}: GrantProgramCardProps) {
   const [communityMembers, members] = await Promise.all([
     getTeamMembersCountInOrganization(id),
     getTeamMembersInOrganization(id),
   ]);
-  const isMember = members.some((member) => member.member_id === userId);
   return (
-    <Link href={`/communities/${id}`}>
+    <Link href={`/grants/${id}`}>
       <Card className="gap-4 p-6 rounded-lg cursor-pointer"
       >
         <div className="flex items-center gap-4 mb-4">
@@ -60,16 +54,9 @@ export async function CommunityCard({
               {communityAddress ?? "New York, USA"}
             </p>
           </div>
-
-          <BookmarkComponent
-            id={userId}
-            organizationId={id}
-            isBookmarked={isBookmarked}
-          />
         </div>
-        <p className="mb-4 text-sm text-muted-foreground">
-          {communityDescription ?? "Buan onsulting is a community of developers"}
-        </p>
+
+        {communityDescription ? <div className="text-sm text-muted-foreground truncate line-clamp-1" dangerouslySetInnerHTML={{ __html: communityDescription as string }} /> : <p className="mb-4 text-sm text-muted-foreground">"Buan onsulting is a community of developers"</p>}
 
         <div className="flex items-center gap-3 mb-4">
           <div className="">
@@ -100,8 +87,8 @@ export async function CommunityCard({
         <JoinCommunityModal triggerText="Join" community={communityName} />
       )} */}
       </Card>
-    </Link>
+    </Link >
   );
 }
 
-export default CommunityCard;
+export default GrantProgramCard;

@@ -312,7 +312,7 @@ export type Database = {
           proposal_absolute_reward?: number | null;
           slash_percentage: number;
           task_expiration_time?: string | null;
-          title?: string;
+          title: string;
           total_members?: number | null;
           total_tasks?: number | null;
           twitter_url?: string | null;
