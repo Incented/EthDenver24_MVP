@@ -199,16 +199,16 @@ export type Database = {
           description: string | null;
           efforts: number | null;
           files: Json | null;
+          grant_amount: number;
+          grant_community: string | null;
+          grant_project_status: Database["public"]["Enums"]["grant_project_status"];
+          grant_project_types: Json;
           id: string;
-          is_task_published: boolean | null;
+          is_grant_published: boolean;
           name: string;
-          new_task_created_at: string;
+          new_grant_project_created_at: string;
           organization_id: string;
           project_status: Database["public"]["Enums"]["project_status"];
-          rewards: number | null;
-          task_community: string | null;
-          task_status: Database["public"]["Enums"]["task_status"] | null;
-          task_types: Json | null;
           team_id: number | null;
           updated_at: string;
           user_id: string | null;
@@ -218,16 +218,16 @@ export type Database = {
           description?: string | null;
           efforts?: number | null;
           files?: Json | null;
+          grant_amount: number;
+          grant_community?: string | null;
+          grant_project_status: Database["public"]["Enums"]["grant_project_status"];
+          grant_project_types: Json;
           id?: string;
-          is_task_published?: boolean | null;
+          is_grant_published?: boolean;
           name: string;
-          new_task_created_at: string;
+          new_grant_project_created_at: string;
           organization_id: string;
           project_status?: Database["public"]["Enums"]["project_status"];
-          rewards?: number | null;
-          task_community?: string | null;
-          task_status?: Database["public"]["Enums"]["task_status"] | null;
-          task_types?: Json | null;
           team_id?: number | null;
           updated_at?: string;
           user_id?: string | null;
@@ -237,16 +237,16 @@ export type Database = {
           description?: string | null;
           efforts?: number | null;
           files?: Json | null;
+          grant_amount?: number;
+          grant_community?: string | null;
+          grant_project_status?: Database["public"]["Enums"]["grant_project_status"];
+          grant_project_types?: Json;
           id?: string;
-          is_task_published?: boolean | null;
+          is_grant_published?: boolean;
           name?: string;
-          new_task_created_at?: string;
+          new_grant_project_created_at?: string;
           organization_id?: string;
           project_status?: Database["public"]["Enums"]["project_status"];
-          rewards?: number | null;
-          task_community?: string | null;
-          task_status?: Database["public"]["Enums"]["task_status"] | null;
-          task_types?: Json | null;
           team_id?: number | null;
           updated_at?: string;
           user_id?: string | null;
@@ -357,6 +357,104 @@ export type Database = {
           {
             foreignKeyName: "public_grant_programs_created_by_fkey";
             columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "user_profiles";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      grant_project_all_types: {
+        Row: {
+          description: string;
+          id: number;
+          name: string;
+          slug: string;
+        };
+        Insert: {
+          description: string;
+          id?: number;
+          name: string;
+          slug: string;
+        };
+        Update: {
+          description?: string;
+          id?: number;
+          name?: string;
+          slug?: string;
+        };
+        Relationships: [];
+      };
+      grant_project_milestones: {
+        Row: {
+          budget: number;
+          created_at: string;
+          description: string;
+          effort: number;
+          grant_project_id: string;
+          id: string;
+          title: string;
+        };
+        Insert: {
+          budget: number;
+          created_at?: string;
+          description: string;
+          effort: number;
+          grant_project_id?: string;
+          id?: string;
+          title: string;
+        };
+        Update: {
+          budget?: number;
+          created_at?: string;
+          description?: string;
+          effort?: number;
+          grant_project_id?: string;
+          id?: string;
+          title?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_grant_project_milestones_grant_project_id_fkey";
+            columns: ["grant_project_id"];
+            isOneToOne: false;
+            referencedRelation: "grant_applications";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      grant_project_prioritizations: {
+        Row: {
+          count: number;
+          created_at: string;
+          grant_project_id: string;
+          id: string;
+          user_id: string;
+        };
+        Insert: {
+          count: number;
+          created_at?: string;
+          grant_project_id?: string;
+          id?: string;
+          user_id?: string;
+        };
+        Update: {
+          count?: number;
+          created_at?: string;
+          grant_project_id?: string;
+          id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_grant_prioritizations_grant_project_id_fkey";
+            columns: ["grant_project_id"];
+            isOneToOne: false;
+            referencedRelation: "grant_applications";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "public_prioritized_grants_user_id_fkey";
+            columns: ["user_id"];
             isOneToOne: false;
             referencedRelation: "user_profiles";
             referencedColumns: ["id"];
@@ -1174,45 +1272,6 @@ export type Database = {
           }
         ];
       };
-      prioritized_grants: {
-        Row: {
-          count: number;
-          created_at: string;
-          id: string;
-          task_id: string;
-          user_id: string;
-        };
-        Insert: {
-          count: number;
-          created_at?: string;
-          id?: string;
-          task_id?: string;
-          user_id?: string;
-        };
-        Update: {
-          count?: number;
-          created_at?: string;
-          id?: string;
-          task_id?: string;
-          user_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "public_prioritized_grants_task_id_fkey";
-            columns: ["task_id"];
-            isOneToOne: false;
-            referencedRelation: "tasks";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "public_prioritized_grants_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "user_profiles";
-            referencedColumns: ["id"];
-          }
-        ];
-      };
       products: {
         Row: {
           active: boolean | null;
@@ -1964,6 +2023,29 @@ export type Database = {
         | "my_communities"
         | "bookmarked";
       community_live_status_enum: "live" | "testnet";
+      grant_project_status:
+        | "draft"
+        | "new_application"
+        | "prioritized"
+        | "project";
+      grant_project_types:
+        | "compute-network"
+        | "cryptocurrency"
+        | "data"
+        | "developer-tooling"
+        | "entertainment"
+        | "financial-services"
+        | "governance"
+        | "marketplace"
+        | "metaverse-gaming"
+        | "mining-validation"
+        | "network"
+        | "news-info"
+        | "physical-infrastructure-networks"
+        | "security"
+        | "synthetic-assets"
+        | "wallet"
+        | "other";
       internal_blog_post_status: "draft" | "published";
       internal_feedback_thread_priority: "low" | "medium" | "high";
       internal_feedback_thread_status:

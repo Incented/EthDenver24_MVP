@@ -1,0 +1,18 @@
+export type grant_project_type_slug =
+  | "compute-networks"
+  | "cryptocurrency"
+  | "data"
+  | "developer-tooling"
+  | "entertainment"
+  | "financial-services"
+  | "governance"
+  | "marketplace"
+  | "metaverse-gaming"
+  | "mining-validation"
+  | "network"
+  | "news-info"
+  | "physical-infrastructure-networks"
+  | "security"
+  | "synthetic-assets"
+  | "wallet"
+  | "other";

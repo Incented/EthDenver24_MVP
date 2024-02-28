@@ -1,6 +1,8 @@
 
 
-import { getGrantById } from "@/data/admin/grants";
+import { Button } from "@/components/ui/button";
+import { getGrantProgramById } from "@/data/user/grants";
+import Link from "next/link";
 import { z } from "zod";
 import { Periods } from "../../communities/create-community/_components/createCommunitySchema";
 import { GrantRewardSettingsSchema } from "../create-grant/_components/createGrantSchema";
@@ -18,7 +20,7 @@ export default async function GrantDetailsPage({
   const { id } = parsedParams;
   const [grant] =
     await Promise.all([
-      getGrantById(id),
+      getGrantProgramById(id),
     ]);
 
   const rewards: GrantRewardSettingsSchema = {
@@ -46,6 +48,9 @@ export default async function GrantDetailsPage({
   return (
     <div className="relative mx-4 mb-10 sm:mx-8">
       <pre>{JSON.stringify(id, null, 2)}</pre>
+      <Link href={`/grants/${id}/submit-application`}>
+        <Button>Submit application</Button>
+      </Link>
     </div>
   );
 }
