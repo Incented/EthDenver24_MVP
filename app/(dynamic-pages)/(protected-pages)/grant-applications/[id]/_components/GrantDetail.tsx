@@ -159,7 +159,7 @@ const GrantDetail: FC<GrantDetailProps> = async ({ grant, grantProgram, loggedIn
           }}
         ></div>
       </div>
-      <div className="grid grid-cols-4 gap-8 w-full">
+      <div className="md:grid md:grid-cols-4 md:gap-8 w-full">
 
         {/* {taskDescription} */}
         <div className="col-span-1 flex flex-col max-w-lg gap-4 ">
@@ -176,7 +176,7 @@ const GrantDetail: FC<GrantDetailProps> = async ({ grant, grantProgram, loggedIn
           </Card>
           <div className="w-64 mb-6">
             <GrantApplicationAttributes
-              amount={String(grant.)}
+              amount={String(grant.grant_amount)}
               efforts={deadLine}
               deadline={deadLine}
             />
