@@ -41,6 +41,7 @@ export default function CreateGrantForm() {
     {
       title: "New Grant",
       pool: 100000,
+      slash_percentage: 5,
       description: "This is the description for the grant",
       socialLinks: [
         {

@@ -43,6 +43,7 @@ export const createGrantAction = async (
       )?.url,
       grant_image: publicData.avatarUrl,
       grant_pool: publicData.pool,
+      slash_percentage: publicData.slash_percentage,
     })
     .select("*")
     .single();
