@@ -112,6 +112,16 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
+                  <Link href="/grants" legacyBehavior passHref>
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                      onClick={() => setSheetOpen(false)}
+                    >
+                      Grants
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
                   <Link href="/dashboard/rewards" legacyBehavior passHref>
                     <NavigationMenuLink
                       className={navigationMenuTriggerStyle()}
@@ -185,6 +195,15 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
               <Link href="/dashboard" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   My Dashboard
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/grants" legacyBehavior passHref>
+                <NavigationMenuLink
+                  className={navigationMenuTriggerStyle()}
+                >
+                  Grants
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
