@@ -1,61 +1,33 @@
 import GoBack from "@/components/ui/GoBack";
-import { getOrganizationById, getTeamMembersInOrganization } from "@/data/user/organizations";
-import { checkIfUserClaimedTask, checkIfUserPrioritizedTask, getPrioritizationDetails, getTaskById, getTaskClaimerDetails, getTaskContributions, getValidationDetails, getValidationsForTask } from "@/data/user/tasks";
+import { getAllMilestonesForGrantProject, getGrantProjectById, getGrantProjectPrioritizations } from "@/data/user/grant-projects";
+import { getGrantProgramById } from "@/data/user/grants";
 import { getUserProfile } from "@/data/user/user";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
-import DraftTaskDetail from "./_components/DraftTaskDetail";
-import TaskDetail from "./_components/TaskDetail";
+import { z } from "zod";
+import GrantApplicationDetail from "./_components/GrantApplicationDetail";
+
+const paramsSchema = z.object({
+  id: z.string(),
+});
 
 export default async function GrantDetailsPage({ params }: { params: unknown }) {
-  const parsedParams = params as { id: string };
+  const parsedParams = paramsSchema.parse(params);
   const { id } = parsedParams;
-  const [task, user, communityDetails, teamMembersInOrganization] = await Promise.all([
-    getTaskById(id),
+  const [grant, user, grantProgram, grantProjectPrioritizations] = await Promise.all([
+    getGrantProjectById(id),
     serverGetLoggedInUser(),
-    getOrganizationById((await getTaskById(id)).organization_id),
-    getTeamMembersInOrganization((await getTaskById(id)).organization_id)
-
+    getGrantProgramById((await getGrantProjectById(id)).organization_id),
+    getGrantProjectPrioritizations(id),
   ]);
-
-  const [taskCreator, isPrioritizedByLoggedInUser, isClaimedByUser, taskPrioritizationDetails, taskValidationDetails, claimerDetails, contributions, validationsForTask] = await Promise.all([
-    task.user_id ? getUserProfile(task.user_id) : Promise.resolve(null),
-    checkIfUserPrioritizedTask(task.id),
-    checkIfUserClaimedTask(task.id),
-    getPrioritizationDetails(task.id),
-    getValidationDetails(task.id),
-    getTaskClaimerDetails(task.id),
-    getTaskContributions(task.id),
-    getValidationsForTask(task.id)
+  const [grantCreator, milestones] = await Promise.all([
+    getUserProfile(grant.user_id as string),
+    getAllMilestonesForGrantProject(id),
   ]);
-
-  const isUserMemberOfCommunity = teamMembersInOrganization.some(
-    (member) => member.member_id === user.id
-  );
-
-  const isTaskPublished = task.is_task_published;
 
   return (
     <main className="md:mx-4 md:pt-0 md:px-8 md:pb-8  px-6 pb-8 mt-4">
       <GoBack />
-      {/* TODO: draft task component. NOTE: This is a placeholder for actual condition. After figuring out rendering logic, modify accordingly */}
-      {!isTaskPublished ? (
-        <DraftTaskDetail id={id} task={task} />
-      ) : (
-        <TaskDetail
-          id={id}
-          task={task}
-          user_id={user.id}
-          community={communityDetails}
-          isUserMemberOfCommunity={isUserMemberOfCommunity}
-          taskPrioritizationDetails={taskPrioritizationDetails}
-          taskValidationDetails={taskValidationDetails}
-          contributions={contributions}
-          isPrioritizedByLoggedInUser={isPrioritizedByLoggedInUser}
-          isClaimedByUser={isClaimedByUser}
-          claimerDetails={claimerDetails}
-          taskCreator={taskCreator}
-          validationsForTask={validationsForTask} />
-      )}
+      <GrantApplicationDetail grant={grant} grantProgram={grantProgram} milestones={milestones} loggedInUserId={user.id} grantProjectPrioritizations={grantProjectPrioritizations} grantCreator={grantCreator} />
     </main>
   );
 }
