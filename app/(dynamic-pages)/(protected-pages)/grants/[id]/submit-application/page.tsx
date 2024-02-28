@@ -1,6 +1,5 @@
 import GoBack from "@/components/ui/GoBack";
 import { getAllNamesOfGrantProjectTypes } from "@/data/user/grant-projects";
-import { Suspense } from "react";
 import { z } from "zod";
 import { CreateGrantApplicationForm } from "./components/CreateGrantApplicationForm";
 
@@ -21,9 +20,7 @@ export default async function CreateGrantApplicationPage({ params }: { params: u
         Grant Application Form
       </h1>
 
-      <Suspense fallback={<div>Loading...</div>}>
-        <CreateGrantApplicationForm grantProjectTypes={grantProjectTypes} grantProgramId={id} />
-      </Suspense>
+      <CreateGrantApplicationForm grantProjectTypes={grantProjectTypes} grantProgramId={id} />
     </main>
   );
 }

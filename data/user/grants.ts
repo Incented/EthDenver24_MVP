@@ -1,3 +1,4 @@
+"use server";
 import { GrantGeneralDetailsSchema } from "@/app/(dynamic-pages)/(protected-pages)/grants/create-grant/_components/createGrantSchema";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";

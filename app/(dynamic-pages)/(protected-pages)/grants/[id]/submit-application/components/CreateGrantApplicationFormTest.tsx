@@ -214,9 +214,7 @@ export function CreateGrantApplicationForm({
       loadingMessage: "Creating..",
       errorMessage: "Failed to submit grant application",
       successMessage: "Successful",
-      onSuccess: (grantApplicationId => {
-        router.push(`/grant-applications/${grantApplicationId}`);
-      })
+
     }
   );
 
@@ -252,7 +250,7 @@ export function CreateGrantApplicationForm({
 
   return (
     <div className="">
-      {/* <pre>{JSON.stringify(watch(), null, 2)}</pre> */}
+      <pre>{JSON.stringify(watch(), null, 2)}</pre>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className=" grid gap-6 md:grid-cols-1 w-full"
