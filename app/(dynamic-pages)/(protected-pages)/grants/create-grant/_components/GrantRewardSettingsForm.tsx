@@ -5,24 +5,24 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { AccordionList } from "./Accordion";
-import { rewardAccordionItems } from "./createCommunityData";
+import { rewardAccordionItems } from "./createGrantData";
 import {
-  RewardSettingsSchema,
-  rewardSettingsSchema,
-} from "./createCommunitySchema";
+  GrantRewardSettingsSchema,
+  grantRewardsSettingsSchema,
+} from "./createGrantSchema";
 
 export default function RewardsSettingsForm({
   initialFormValues,
   onFormSubmit,
   moveToPrevStep,
   withStep = true,
-}: FormProps<RewardSettingsSchema>) {
+}: FormProps<GrantRewardSettingsSchema>) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RewardSettingsSchema>({
-    resolver: zodResolver(rewardSettingsSchema),
+  } = useForm<GrantRewardSettingsSchema>({
+    resolver: zodResolver(grantRewardsSettingsSchema),
     defaultValues: {
       proposalReward: initialFormValues?.proposalReward ?? 0,
       prioritizationReward: initialFormValues?.prioritizationReward ?? 0,
@@ -31,7 +31,7 @@ export default function RewardsSettingsForm({
     },
   });
 
-  const onSubmit: SubmitHandler<RewardSettingsSchema> = (data) => {
+  const onSubmit: SubmitHandler<GrantRewardSettingsSchema> = (data) => {
     const numericData = {
       ...data,
       proposalReward: Number(data.proposalReward),

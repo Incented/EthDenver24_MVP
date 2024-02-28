@@ -6,26 +6,26 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { AccordionList } from "./Accordion";
-import { protocolAccordionItems } from "./createCommunityData";
+import { protocolAccordionItems } from "./createGrantData";
 import {
-  ProtocolConfigurationSchema,
-  protocolConfigurationSchema,
-} from "./createCommunitySchema";
+  GrantProtocolConfigurationSchema,
+  grantProtocolConfigurationSchema,
+} from "./createGrantSchema";
 
 function ProtocolConfigurationForm({
   initialFormValues,
   onFormSubmit,
   moveToPrevStep,
   withStep = true,
-}: FormProps<ProtocolConfigurationSchema>) {
+}: FormProps<GrantProtocolConfigurationSchema>) {
   const {
     register,
     handleSubmit,
     getValues,
     reset,
     formState: { errors },
-  } = useForm<ProtocolConfigurationSchema>({
-    resolver: zodResolver(protocolConfigurationSchema),
+  } = useForm<GrantProtocolConfigurationSchema>({
+    resolver: zodResolver(grantProtocolConfigurationSchema),
     defaultValues: {
       prioritizationQourum: initialFormValues?.prioritizationQourum ?? 0,
       validationQuorum: initialFormValues?.validationQuorum ?? 0,
@@ -35,7 +35,7 @@ function ProtocolConfigurationForm({
     },
   });
 
-  const onSubmit: SubmitHandler<ProtocolConfigurationSchema> = (data) => {
+  const onSubmit: SubmitHandler<GrantProtocolConfigurationSchema> = (data) => {
     const numericData = {
       ...data,
       prioritizationQourum: Number(data.prioritizationQourum),

@@ -2,7 +2,6 @@
 import {
   AdminSettingsSchema,
   CarrotPotSchema,
-  PrivateDetailsSchema,
 } from "@/app/(dynamic-pages)/(protected-pages)/communities/create-community/_components/createCommunitySchema";
 import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
 import { ensureAppAdmin } from "@/utils/route-handlers/ensureAppAdmin";

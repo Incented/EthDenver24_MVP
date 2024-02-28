@@ -12,27 +12,28 @@ import {
 } from "@/components/ui/table";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { rolesAndPermissions } from "./createCommunityData";
+import { rolesAndPermissions } from "./createGrantData";
 import {
-  AdminSettingsSchema,
-  adminSettingsSchema,
-} from "./createCommunitySchema";
+  GrantAdminSettingsSchema,
+  grantAdminSettingsSchema,
+} from "./createGrantSchema";
 
-function UserRolesAndPermissionsForm({
+function GrantUserRolesAndPermissionsForm({
   initialFormValues,
   onFormSubmit,
   moveToPrevStep,
   withStep = true,
-}: FormProps<AdminSettingsSchema>) {
+}: FormProps<GrantAdminSettingsSchema>) {
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<AdminSettingsSchema>({
-    resolver: zodResolver(adminSettingsSchema),
+    watch,
+  } = useForm<GrantAdminSettingsSchema>({
+    resolver: zodResolver(grantAdminSettingsSchema),
   });
 
-  const onSubmit: SubmitHandler<AdminSettingsSchema> = (data) => {
+  const onSubmit: SubmitHandler<GrantAdminSettingsSchema> = (data) => {
     onFormSubmit(data);
   };
 
@@ -162,4 +163,4 @@ function UserRolesAndPermissionsForm({
   );
 }
 
-export default UserRolesAndPermissionsForm;
+export default GrantUserRolesAndPermissionsForm;

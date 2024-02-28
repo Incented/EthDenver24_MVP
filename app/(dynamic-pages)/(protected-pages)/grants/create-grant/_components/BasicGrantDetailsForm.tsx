@@ -1,26 +1,9 @@
 "use client";
 
+import { Progress } from "@/components/ui/Progress";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import {
-  BasicCommunityDetailsSchema,
-  basicCommunityDetailsSchema,
-} from "./createCommunitySchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Progress } from "@/components/ui/Progress";
-import { ReactNode, useEffect, useState } from "react";
-import {
-  Facebook,
-  Instagram,
-  Link,
-  Linkedin,
-  Twitter,
-  Youtube,
-  Plus,
-} from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -29,14 +12,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Facebook,
+  Instagram,
+  Link,
+  Linkedin,
+  Plus,
+  Twitter,
+  Youtube,
+} from "lucide-react";
+import { ReactNode } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
+import {
+  BasicGrantDetailsSchema,
+  basicGrantDetailsSchema,
+} from "./createGrantSchema";
 
-export default function BasicDetailsForm({
+export default function BasicGrantDetailsForm({
   initialFormValues,
   onFormSubmit,
   moveToPrevStep,
-}: FormProps<BasicCommunityDetailsSchema>) {
+}: FormProps<BasicGrantDetailsSchema>) {
   type socialMediaOption = {
     id: number;
     value: string;
@@ -94,8 +93,8 @@ export default function BasicDetailsForm({
     reset,
     control,
     formState: { errors },
-  } = useForm<BasicCommunityDetailsSchema>({
-    resolver: zodResolver(basicCommunityDetailsSchema),
+  } = useForm<BasicGrantDetailsSchema>({
+    resolver: zodResolver(basicGrantDetailsSchema),
     defaultValues: {
       title: initialFormValues?.title || "",
       description: initialFormValues?.description || "",
@@ -114,7 +113,7 @@ export default function BasicDetailsForm({
     },
   });
 
-  const onSubmit: SubmitHandler<BasicCommunityDetailsSchema> = (data) => {
+  const onSubmit: SubmitHandler<BasicGrantDetailsSchema> = (data) => {
     onFormSubmit(data);
   };
 

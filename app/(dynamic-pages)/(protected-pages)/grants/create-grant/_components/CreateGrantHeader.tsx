@@ -2,7 +2,7 @@
 import { Progress } from "@/components/ui/Progress";
 import { FC } from "react";
 
-interface CreateCommnityHeaderProps {
+interface CreateGrantHeaderProps {
   heading: string;
   subHeading: string;
   stepText: string;
@@ -10,7 +10,7 @@ interface CreateCommnityHeaderProps {
   stepValue: number;
 }
 
-const CreateCommnityHeader: FC<CreateCommnityHeaderProps> = ({
+const CreateGrantHeader: FC<CreateGrantHeaderProps> = ({
   heading,
   subHeading,
   stepText,
@@ -37,4 +37,4 @@ const CreateCommnityHeader: FC<CreateCommnityHeaderProps> = ({
   );
 };
 
-export default CreateCommnityHeader;
+export default CreateGrantHeader;

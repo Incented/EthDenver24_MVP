@@ -261,12 +261,13 @@ export type Database = {
           claim_lock_period_duration: unknown | null;
           claim_stake_amount_percentage: number | null;
           community_fee_percentage: number | null;
-          community_image: string | null;
           contribution_period: number | null;
           created_at: string;
           created_by: string;
           description: string | null;
           facebook_url: string | null;
+          grant_image: string | null;
+          grant_pool: number;
           id: string;
           instagram_url: string | null;
           linkedin_url: string | null;
@@ -293,12 +294,13 @@ export type Database = {
           claim_lock_period_duration?: unknown | null;
           claim_stake_amount_percentage?: number | null;
           community_fee_percentage?: number | null;
-          community_image?: string | null;
           contribution_period?: number | null;
           created_at?: string;
           created_by: string;
           description?: string | null;
           facebook_url?: string | null;
+          grant_image?: string | null;
+          grant_pool: number;
           id?: string;
           instagram_url?: string | null;
           linkedin_url?: string | null;
@@ -325,12 +327,13 @@ export type Database = {
           claim_lock_period_duration?: unknown | null;
           claim_stake_amount_percentage?: number | null;
           community_fee_percentage?: number | null;
-          community_image?: string | null;
           contribution_period?: number | null;
           created_at?: string;
           created_by?: string;
           description?: string | null;
           facebook_url?: string | null;
+          grant_image?: string | null;
+          grant_pool?: number;
           id?: string;
           instagram_url?: string | null;
           linkedin_url?: string | null;
@@ -356,6 +359,107 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "user_profiles";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      grants_private_info: {
+        Row: {
+          active_tasks: number | null;
+          addresses_with_veto: string | null;
+          billing_address: Json | null;
+          carrot_pot_initial_amount: number | null;
+          claim_lock_period_duration: unknown | null;
+          claim_stake_amount_percentage: number | null;
+          community_fee_percentage: number | null;
+          community_live_status:
+            | Database["public"]["Enums"]["community_live_status_enum"]
+            | null;
+          community_token: string | null;
+          contribution_period_duration: unknown | null;
+          id: string;
+          location: string | null;
+          payment_method: Json | null;
+          prioritization_period_duration: unknown | null;
+          prioritization_period_start: string | null;
+          prioritization_quorum_percentage: number | null;
+          prioritization_reward_percentage: number | null;
+          proposal_absolute_reward: number | null;
+          proposal_relative_reward: number | null;
+          task_expiration_time: string | null;
+          total_members: number | null;
+          total_tasks: number | null;
+          user_roles: Json | null;
+          validation_period_duration: unknown | null;
+          validation_quorum_percentage: number | null;
+          validation_reward_percentage: number | null;
+        };
+        Insert: {
+          active_tasks?: number | null;
+          addresses_with_veto?: string | null;
+          billing_address?: Json | null;
+          carrot_pot_initial_amount?: number | null;
+          claim_lock_period_duration?: unknown | null;
+          claim_stake_amount_percentage?: number | null;
+          community_fee_percentage?: number | null;
+          community_live_status?:
+            | Database["public"]["Enums"]["community_live_status_enum"]
+            | null;
+          community_token?: string | null;
+          contribution_period_duration?: unknown | null;
+          id: string;
+          location?: string | null;
+          payment_method?: Json | null;
+          prioritization_period_duration?: unknown | null;
+          prioritization_period_start?: string | null;
+          prioritization_quorum_percentage?: number | null;
+          prioritization_reward_percentage?: number | null;
+          proposal_absolute_reward?: number | null;
+          proposal_relative_reward?: number | null;
+          task_expiration_time?: string | null;
+          total_members?: number | null;
+          total_tasks?: number | null;
+          user_roles?: Json | null;
+          validation_period_duration?: unknown | null;
+          validation_quorum_percentage?: number | null;
+          validation_reward_percentage?: number | null;
+        };
+        Update: {
+          active_tasks?: number | null;
+          addresses_with_veto?: string | null;
+          billing_address?: Json | null;
+          carrot_pot_initial_amount?: number | null;
+          claim_lock_period_duration?: unknown | null;
+          claim_stake_amount_percentage?: number | null;
+          community_fee_percentage?: number | null;
+          community_live_status?:
+            | Database["public"]["Enums"]["community_live_status_enum"]
+            | null;
+          community_token?: string | null;
+          contribution_period_duration?: unknown | null;
+          id?: string;
+          location?: string | null;
+          payment_method?: Json | null;
+          prioritization_period_duration?: unknown | null;
+          prioritization_period_start?: string | null;
+          prioritization_quorum_percentage?: number | null;
+          prioritization_reward_percentage?: number | null;
+          proposal_absolute_reward?: number | null;
+          proposal_relative_reward?: number | null;
+          task_expiration_time?: string | null;
+          total_members?: number | null;
+          total_tasks?: number | null;
+          user_roles?: Json | null;
+          validation_period_duration?: unknown | null;
+          validation_quorum_percentage?: number | null;
+          validation_reward_percentage?: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_grants_private_info_id_fkey";
+            columns: ["id"];
+            isOneToOne: true;
+            referencedRelation: "organizations";
             referencedColumns: ["id"];
           }
         ];

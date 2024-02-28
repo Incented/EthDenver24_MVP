@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Info } from "lucide-react";
-import { Periods } from "../../create-grant/_components/createCommunitySchema";
+import { Periods } from "../../../communities/create-community/_components/createCommunitySchema";
+
 
 export function PeriodsCardSlim({ periods }: { periods: Periods }) {
   return (
