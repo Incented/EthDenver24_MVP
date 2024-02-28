@@ -1,8 +1,7 @@
 import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
 import { FC } from "react";
 
-interface CreateCommunityStepProps {
+interface CreateGrantStepProps {
   step: {
     name: string; // Use the enum here
     icon: JSX.Element;
@@ -10,7 +9,7 @@ interface CreateCommunityStepProps {
   currentStepName: string; // Use the enum for current step name
 }
 
-const CreateCommunityStep: FC<CreateCommunityStepProps> = ({
+const CreateGrantStep: FC<CreateGrantStepProps> = ({
   step,
   currentStepName,
 }) => {
@@ -44,4 +43,4 @@ const CreateCommunityStep: FC<CreateCommunityStepProps> = ({
   );
 };
 
-export default CreateCommunityStep;
+export default CreateGrantStep;

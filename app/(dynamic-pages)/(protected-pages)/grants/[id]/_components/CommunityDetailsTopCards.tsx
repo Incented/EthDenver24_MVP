@@ -1,12 +1,12 @@
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ArrowBigUp, Calendar, Carrot, Trophy } from "lucide-react";
-import { RewardSettingsSchema } from "../../create-grant/_components/createCommunitySchema";
+import { GrantRewardSettingsSchema } from "../../create-grant/_components/createGrantSchema";
 import CommunityDetailTopCard from "./CommunityDetailTopCard";
 
 export function CommunityDetailsTopCards({
   rewards,
 }: {
-  rewards: RewardSettingsSchema | undefined;
+  rewards: GrantRewardSettingsSchema | undefined;
 }) {
   return (
     <ScrollArea className="lg:col-span-2 xl:col-span-3">

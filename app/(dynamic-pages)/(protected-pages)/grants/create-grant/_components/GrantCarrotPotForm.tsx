@@ -16,15 +16,15 @@ import { useRef, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { AccordionList } from "./Accordion";
-import { carrotPotItems } from "./createCommunityData";
-import { CarrotPotSchema, carrotPotSchema } from "./createCommunitySchema";
+import { carrotPotItems } from "./createGrantData";
+import { GrantCarrotPotSchema, grantCarrotPotSchema } from "./createGrantSchema";
 
-function CarrotPotForm({
+function GrantCarrotPotForm({
   initialFormValues,
   onFormSubmit,
   moveToPrevStep,
   withStep = true,
-}: FormProps<CarrotPotSchema>) {
+}: FormProps<GrantCarrotPotSchema>) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -43,16 +43,16 @@ function CarrotPotForm({
     reset,
     control,
     formState: { errors },
-  } = useForm<CarrotPotSchema>({
-    resolver: zodResolver(carrotPotSchema),
+  } = useForm<GrantCarrotPotSchema>({
+    resolver: zodResolver(grantCarrotPotSchema),
     defaultValues: {
-      community_live_status: initialFormValues?.community_live_status,
-      community_token: initialFormValues?.community_token,
+      grant_live_status: initialFormValues?.grant_live_status,
+      grant_token: initialFormValues?.grant_token,
       // carrot_pot_address: carrotPotSettings?.carrot_pot_address || "",
     },
   });
 
-  const onSubmit: SubmitHandler<CarrotPotSchema> = (data) => {
+  const onSubmit: SubmitHandler<GrantCarrotPotSchema> = (data) => {
     onFormSubmit(data);
   };
 
@@ -65,9 +65,9 @@ function CarrotPotForm({
               <div>
                 <div className="grid w-full grid-cols-1 gap-4 px-1 mt-2">
                   <div className="relative space-y-1">
-                    <span className="text-sm">Community live status</span>
+                    <span className="text-sm">Grant live status</span>
                     <Controller
-                      name="community_live_status"
+                      name="grant_live_status"
                       control={control}
                       render={({ field }) => (
                         <Select
@@ -113,7 +113,7 @@ function CarrotPotForm({
                   <div className="relative space-y-1">
                     <span className="text-sm">Choose token</span>
                     <Controller
-                      name="community_token"
+                      name="grant_token"
                       control={control}
                       render={({ field }) => (
                         <Select
@@ -282,4 +282,4 @@ function CarrotPotForm({
   );
 }
 
-export default CarrotPotForm;
+export default GrantCarrotPotForm;

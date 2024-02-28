@@ -29,15 +29,15 @@ import { toast } from "sonner";
 import { AttachmentType } from "../../../dashboard/tasks/create-task/components/CreateTaskFormTypes";
 import { UploadImageFile } from "../../../dashboard/tasks/create-task/components/ImageUpload";
 import {
-  BasicCommunityDetailsSchema,
-  basicCommunityDetailsSchema,
-} from "./createCommunitySchema";
+  BasicGrantDetailsSchema,
+  basicGrantDetailsSchema,
+} from "./createGrantSchema";
 
-export default function BasicDetailsForm({
+export default function GrantDetailsForm({
   initialFormValues,
   onFormSubmit,
   moveToPrevStep,
-}: FormProps<BasicCommunityDetailsSchema>) {
+}: FormProps<BasicGrantDetailsSchema>) {
   type socialMediaOption = {
     id: number;
     value: string;
@@ -95,10 +95,11 @@ export default function BasicDetailsForm({
     reset,
     control,
     formState: { errors },
-  } = useForm<BasicCommunityDetailsSchema>({
-    resolver: zodResolver(basicCommunityDetailsSchema),
+  } = useForm<BasicGrantDetailsSchema>({
+    resolver: zodResolver(basicGrantDetailsSchema),
     defaultValues: {
       title: initialFormValues?.title || "",
+      pool: initialFormValues?.pool || 0,
       description: initialFormValues?.description || "",
       socialLinks: initialFormValues?.socialLinks || [
         {
@@ -130,7 +131,7 @@ export default function BasicDetailsForm({
   const [selectedAttachment, setSelectedAttachment] =
     useState<AttachmentType | null>(null);
 
-  const onSubmit: SubmitHandler<BasicCommunityDetailsSchema> = (data) => {
+  const onSubmit: SubmitHandler<BasicGrantDetailsSchema> = (data) => {
     onFormSubmit(data);
   };
 
@@ -238,17 +239,17 @@ export default function BasicDetailsForm({
                   />
                 )}
                 <p className="mb-2 text-sm leading-6">
-                  Edit your community logo
+                  Edit your grant program logo
                 </p>
                 <Button className="px-8" onClick={(e) => e.preventDefault()}>Update</Button>
               </div>
               <div className="space-y-4 w-full lg:w-[300px] pb-[10px] px-1">
                 <div className="space-y-2">
-                  <Label htmlFor="title">Community Name</Label>
+                  <Label htmlFor="title">Grant Name</Label>
                   <Input
                     {...register("title")}
                     type="text"
-                    placeholder="Community Name"
+                    placeholder="Grant Name"
                   />
                   {errors.title?.message && (
                     <p className="text-sm text-red-600 dark:text-red-500">
@@ -257,11 +258,24 @@ export default function BasicDetailsForm({
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description">Community Description</Label>
+                  <Label htmlFor="pool">Grant Pool</Label>
+                  <Input
+                    {...register("pool", { valueAsNumber: true, min: 0.01 })}
+                    type="number"
+                    placeholder="Grant Pool"
+                  />
+                  {errors.pool?.message && (
+                    <p className="text-sm text-red-600 dark:text-red-500">
+                      {errors.pool?.message}
+                    </p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="description">Grant Description</Label>
                   <Textarea
                     {...register("description")}
                     className="h-24"
-                    placeholder="Community description"
+                    placeholder="Grant description"
                   />
                   {errors.description?.message && (
                     <p className="text-sm text-red-600 dark:text-red-500">

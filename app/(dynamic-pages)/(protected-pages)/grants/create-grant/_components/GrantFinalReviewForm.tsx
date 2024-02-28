@@ -5,13 +5,13 @@ import CommunityInfo from "../../[id]/_components/CommunityInfo";
 import PeriodsCardSlim from "../../[id]/_components/PeriodsCardSlim";
 import { PriorityCard } from "../../[id]/_components/PriorityCards";
 import {
-  BasicCommunityDetailsSchema,
-  CreateCommunitySchema,
-  ProtocolConfigurationSchema,
-  RewardSettingsSchema
-} from "./createCommunitySchema";
+  BasicGrantDetailsSchema,
+  CreateGrantSchema,
+  GrantProtocolConfigurationSchema,
+  GrantRewardSettingsSchema
+} from "./createGrantSchema";
 
-export function FinalReviewForm({
+export function GrantFinalReviewForm({
   basicDetails,
   rewardSettings,
   protocolConfiguration,
@@ -19,11 +19,11 @@ export function FinalReviewForm({
   onSubmit,
   isLoading,
 }: {
-  basicDetails: BasicCommunityDetailsSchema | undefined;
-  rewardSettings: RewardSettingsSchema | undefined;
-  protocolConfiguration: ProtocolConfigurationSchema | undefined;
+  basicDetails: BasicGrantDetailsSchema | undefined;
+  rewardSettings: GrantRewardSettingsSchema | undefined;
+  protocolConfiguration: GrantProtocolConfigurationSchema | undefined;
   moveToPrevStep: () => void;
-  onSubmit: SubmitHandler<CreateCommunitySchema>;
+  onSubmit: SubmitHandler<CreateGrantSchema>;
   isLoading: boolean;
 }) {
   const getSocialLink = (type: string) =>
@@ -36,7 +36,7 @@ export function FinalReviewForm({
     youtube: getSocialLink("youtube"),
   };
   const communityAvatarUrl = basicDetails?.avatarUrl || "";
-  const { handleSubmit } = useForm<CreateCommunitySchema>();
+  const { handleSubmit } = useForm<CreateGrantSchema>();
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -92,7 +92,7 @@ export function FinalReviewForm({
             className="w-full"
             disabled={isLoading}
           >
-            Create Community
+            Create Grant Program
           </Button>
         </div>
       </div>

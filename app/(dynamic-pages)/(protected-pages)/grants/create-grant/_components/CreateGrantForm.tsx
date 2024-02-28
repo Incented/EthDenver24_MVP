@@ -1,48 +1,46 @@
 "use client";
 
-import { addPrivateInfoForOrganization } from "@/data/admin/organizations";
-import {
-  createPublicOrganization
-} from "@/data/user/organizations";
+import { addPrivateInfoForGrant, createGrantAction } from "@/data/admin/grants";
 import { useToastMutation } from "@/hooks/useToastMutation";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import CarrotPotForm from "./CarrotPotForm";
-import CommunityDetailsForm from "./CommunityDetailsForm";
-import CreateCommnityHeader from "./CreateCommnityHeader";
-import CreateCommunityStep from "./CreateCommunityStep";
-import { FinalReviewForm } from "./FinalReviewForm";
-import ProtocolConfigurationForm from "./ProtocolConfigurationForm";
-import RewardSettingsForm from "./RewardSettingsForm";
-import UserRolesAndPermissionsForm from "./UserRolesAndPermissions";
+import { default as CreateGrantHeader } from "./CreateGrantHeader";
+import CreateGrantStep from "./CreateGrantStep";
+import GrantCarrotPotForm from "./GrantCarrotPotForm";
+import GrantDetailsForm from "./GrantDetailsForm";
+import { GrantFinalReviewForm } from "./GrantFinalReviewForm";
+import GrantProtocolConfigurationForm from "./GrantProtocolConfigurationForm";
+import GrantRewardSettingsForm from "./GrantRewardSettingsForm";
+import GrantUserRolesAndPermissionsForm from "./GrantUserRolesAndPermissionsForm";
 import {
-  AdminSettingsSchema,
-  BasicCommunityDetailsSchema,
-  CarrotPotSchema,
-  CreateCommunitySchema,
-  GeneralDetailsSchema,
-  PrivateDetailsSchema,
-  ProtocolConfigurationSchema,
-  RewardSettingsSchema,
-  createCommunitySchema,
-} from "./createCommunitySchema";
+  BasicGrantDetailsSchema,
+  CreateGrantSchema,
+  GrantAdminSettingsSchema,
+  GrantCarrotPotSchema,
+  GrantGeneralDetailsSchema,
+  GrantPrivateDetailsSchema,
+  GrantProtocolConfigurationSchema,
+  GrantRewardSettingsSchema,
+  createGrantSchema
+} from "./createGrantSchema";
 
 export default function CreateGrantForm() {
   const router = useRouter();
 
   const {
     formState: { errors },
-  } = useForm<CreateCommunitySchema>({
-    resolver: zodResolver(createCommunitySchema),
+  } = useForm<CreateGrantSchema>({
+    resolver: zodResolver(createGrantSchema),
   });
 
-  const [basicDetails, setBasicDetails] = useState<BasicCommunityDetailsSchema>(
+  const [basicDetails, setBasicDetails] = useState<BasicGrantDetailsSchema>(
     {
-      title: "New Community",
-      description: "This is the description for the community",
+      title: "New Grant",
+      pool: 100000,
+      description: "This is the description for the grant",
       socialLinks: [
         {
           type: "website",
@@ -70,7 +68,7 @@ export default function CreateGrantForm() {
   );
 
   const [protocolConfiguration, setProtocolConfiguration] =
-    useState<ProtocolConfigurationSchema>({
+    useState<GrantProtocolConfigurationSchema>({
       contributionPeriod: 0,
       prioritizationPeriod: 0,
       validationPeriod: 0,
@@ -78,14 +76,14 @@ export default function CreateGrantForm() {
       prioritizationQourum: 0,
     });
 
-  const [rewardSettings, setRewardsSettings] = useState<RewardSettingsSchema>({
+  const [rewardSettings, setRewardsSettings] = useState<GrantRewardSettingsSchema>({
     prioritizationReward: 0,
     validationReward: 0,
     proposalReward: 0,
     claimStakeAmount: 100,
   });
 
-  const [permissions, setPermissions] = useState<AdminSettingsSchema>({
+  const [permissions, setPermissions] = useState<GrantAdminSettingsSchema>({
     addOrRemoveMembers: {
       isValidForMembers: false,
       isValidForAdmin: false,
@@ -116,7 +114,7 @@ export default function CreateGrantForm() {
       isValidForAdmin: false,
       isValidForVetoPower: false,
     },
-    communitySpecificSettings: {
+    grantSpecificSettings: {
       isValidForMembers: false,
       isValidForAdmin: false,
       isValidForVetoPower: false,
@@ -156,7 +154,7 @@ export default function CreateGrantForm() {
       isValidForAdmin: false,
       isValidForVetoPower: false,
     },
-    reviewCommunityPerformance: {
+    reviewGrantPerformance: {
       isValidForMembers: false,
       isValidForAdmin: false,
       isValidForVetoPower: false,
@@ -183,13 +181,13 @@ export default function CreateGrantForm() {
     },
   });
 
-  const [carrotPotSettings, setCarrotPotSettings] = useState<CarrotPotSchema>({
-    community_live_status: "live",
-    community_token: "carrot",
+  const [carrotPotSettings, setCarrotPotSettings] = useState<GrantCarrotPotSchema>({
+    grant_live_status: "live",
+    grant_token: "carrot",
   });
 
-  enum CreateCommunityStepName {
-    CommunityDetails = "Community Details",
+  enum CreateGrantStepName {
+    GrantDetails = "Grant Details",
     ProtocolConfiguration = "Protocol Configuration",
     RewardSettings = "Reward Settings",
     ConfigureCarrotPot = "Configure Carrot Pot",
@@ -198,7 +196,7 @@ export default function CreateGrantForm() {
   }
   const newSteps = [
     {
-      name: CreateCommunityStepName.CommunityDetails,
+      name: CreateGrantStepName.GrantDetails,
       icon: (
         <svg
           width="16px"
@@ -232,7 +230,7 @@ export default function CreateGrantForm() {
       ),
     },
     {
-      name: CreateCommunityStepName.ProtocolConfiguration,
+      name: CreateGrantStepName.ProtocolConfiguration,
       icon: (
         <svg
           width="16"
@@ -253,7 +251,7 @@ export default function CreateGrantForm() {
       ),
     },
     {
-      name: CreateCommunityStepName.RewardSettings,
+      name: CreateGrantStepName.RewardSettings,
       icon: (
         <svg
           width="16"
@@ -279,7 +277,7 @@ export default function CreateGrantForm() {
       ),
     },
     {
-      name: CreateCommunityStepName.ConfigureCarrotPot,
+      name: CreateGrantStepName.ConfigureCarrotPot,
       icon: (
         <svg
           width="16"
@@ -300,7 +298,7 @@ export default function CreateGrantForm() {
       ),
     },
     {
-      name: CreateCommunityStepName.UserRolesPermissions,
+      name: CreateGrantStepName.UserRolesPermissions,
       icon: (
         <svg
           width="16"
@@ -321,7 +319,7 @@ export default function CreateGrantForm() {
       ),
     },
     {
-      name: CreateCommunityStepName.FinalReview,
+      name: CreateGrantStepName.FinalReview,
       icon: (
         <svg
           width="16"
@@ -340,23 +338,23 @@ export default function CreateGrantForm() {
     },
   ];
   const [currentStepName, setCurrentStepName] =
-    useState<CreateCommunityStepName>(CreateCommunityStepName.CommunityDetails);
+    useState<CreateGrantStepName>(CreateGrantStepName.GrantDetails);
 
   type AllData = {
-    publicData: GeneralDetailsSchema;
-    privateData: PrivateDetailsSchema;
+    publicData: GrantGeneralDetailsSchema;
+    privateData: GrantPrivateDetailsSchema;
   };
 
   type PrivateData = {
-    permissions: AdminSettingsSchema;
+    permissions: GrantAdminSettingsSchema;
     communityId: string;
-    carrotPotSettings: CarrotPotSchema;
+    carrotPotSettings: GrantCarrotPotSchema;
   };
 
   const { mutate: addPrivateData, isLoading: isAddingPrivateData } =
     useToastMutation(async (privateData: PrivateData) => {
       const { permissions, communityId, carrotPotSettings } = privateData;
-      return await addPrivateInfoForOrganization(
+      return await addPrivateInfoForGrant(
         permissions,
         communityId,
         carrotPotSettings
@@ -366,22 +364,22 @@ export default function CreateGrantForm() {
   const { mutate, isLoading } = useToastMutation(
     async (alldata: AllData) => {
       const { publicData } = alldata;
-      return await createPublicOrganization(publicData);
+      return await createGrantAction(publicData);
     },
     {
-      loadingMessage: "Creating Community data...",
-      errorMessage: "Failed to create Community ",
-      successMessage: "Community Created!",
+      loadingMessage: "Creating grant data...",
+      errorMessage: "Failed to create Grant Program ",
+      successMessage: "Grant Program Created!",
       onSuccess: (data) => {
         const { id } = data;
         console.log(data);
         addPrivateData({ permissions, communityId: id, carrotPotSettings });
-        router.push(`/communities/${id}`);
+        router.push(`/grants/${id}`);
       },
     }
   );
 
-  const onSubmit: SubmitHandler<CreateCommunitySchema> = (data) => {
+  const onSubmit: SubmitHandler<CreateGrantSchema> = (data) => {
     const publicData = {
       ...rewardSettings,
       ...protocolConfiguration,
@@ -412,7 +410,7 @@ export default function CreateGrantForm() {
           <hr className="absolute block md:hidden left-12 top-1/2 z-0 w-[400px] border-t border-border" />
           {newSteps.map((step) => {
             return (
-              <CreateCommunityStep
+              <CreateGrantStep
                 step={step}
                 currentStepName={currentStepName}
                 key={step.name}
@@ -422,162 +420,162 @@ export default function CreateGrantForm() {
         </div>
         <div className="w-full">
           <div className="w-full">
-            {currentStepName === CreateCommunityStepName.CommunityDetails && (
+            {currentStepName === CreateGrantStepName.GrantDetails && (
               <div className="p-6 border border-b-0">
-                <CreateCommnityHeader
-                  heading="Community Details"
-                  subHeading="Basic information about the community."
+                <CreateGrantHeader
+                  heading="Grant Details"
+                  subHeading="Basic information about the grant."
                   stepText="Step 1/6"
                   stepPercent="0%"
                   stepValue={0}
                 />
-                <CommunityDetailsForm
+                <GrantDetailsForm
                   initialFormValues={basicDetails}
                   onFormSubmit={(
-                    formData: BasicCommunityDetailsSchema
+                    formData: BasicGrantDetailsSchema
                   ): void => {
                     // Perform state update with formData
                     setBasicDetails(formData);
 
                     // Move to the next step
                     setCurrentStepName(
-                      CreateCommunityStepName.ProtocolConfiguration
+                      CreateGrantStepName.ProtocolConfiguration
                     );
                   }}
                 />
               </div>
             )}
             {currentStepName ===
-              CreateCommunityStepName.ProtocolConfiguration && (
+              CreateGrantStepName.ProtocolConfiguration && (
                 <div className="p-6 border border-b-0">
-                  <CreateCommnityHeader
+                  <CreateGrantHeader
                     heading="Protocol Configuration"
-                    subHeading="Manage your community parameters such as protocol fees,
+                    subHeading="Manage your grant parameters such as protocol fees,
               carrot-pot, validation quorum, etc."
                     stepText="Step 2/6"
                     stepPercent="20%"
                     stepValue={20}
                   />
 
-                  <ProtocolConfigurationForm
+                  <GrantProtocolConfigurationForm
                     initialFormValues={protocolConfiguration}
                     onFormSubmit={(
-                      formData: ProtocolConfigurationSchema
+                      formData: GrantProtocolConfigurationSchema
                     ): void => {
                       // Perform state update with formData
                       setProtocolConfiguration(formData);
 
                       // Move to the next step
-                      setCurrentStepName(CreateCommunityStepName.RewardSettings);
+                      setCurrentStepName(CreateGrantStepName.RewardSettings);
                     }}
                     moveToPrevStep={() => {
                       setCurrentStepName(
-                        CreateCommunityStepName.CommunityDetails
+                        CreateGrantStepName.GrantDetails
                       );
                     }}
                   />
                 </div>
               )}
-            {currentStepName === CreateCommunityStepName.RewardSettings && (
+            {currentStepName === CreateGrantStepName.RewardSettings && (
               <div className="p-6 border border-b-0">
-                <CreateCommnityHeader
+                <CreateGrantHeader
                   heading="Reward Settings"
-                  subHeading="Manage the task reward for your community members."
+                  subHeading="Manage the task reward for your grant members."
                   stepText="Step 3/6"
                   stepPercent="40%"
                   stepValue={40}
                 />
 
-                <RewardSettingsForm
+                <GrantRewardSettingsForm
                   initialFormValues={rewardSettings}
-                  onFormSubmit={(formData: RewardSettingsSchema): void => {
+                  onFormSubmit={(formData: GrantRewardSettingsSchema): void => {
                     // Perform state update with formData
                     setRewardsSettings(formData);
 
                     // Move to the next step
                     setCurrentStepName(
-                      CreateCommunityStepName.ConfigureCarrotPot
+                      CreateGrantStepName.ConfigureCarrotPot
                     );
                   }}
                   moveToPrevStep={() => {
                     setCurrentStepName(
-                      CreateCommunityStepName.ProtocolConfiguration
+                      CreateGrantStepName.ProtocolConfiguration
                     );
                   }}
                 />
               </div>
             )}
-            {currentStepName === CreateCommunityStepName.ConfigureCarrotPot && (
+            {currentStepName === CreateGrantStepName.ConfigureCarrotPot && (
               <div className="p-6 border border-b-0">
-                <CreateCommnityHeader
+                <CreateGrantHeader
                   heading="Carrot Pot"
-                  subHeading="Manage the task reward for your community members."
+                  subHeading="Manage the task reward for your grant members."
                   stepText="Step 4/6"
                   stepPercent="60%"
                   stepValue={60}
                 />
 
-                <CarrotPotForm
+                <GrantCarrotPotForm
                   initialFormValues={carrotPotSettings}
-                  onFormSubmit={(formData: CarrotPotSchema): void => {
+                  onFormSubmit={(formData: GrantCarrotPotSchema): void => {
                     // Perform state update with formData
                     setCarrotPotSettings(formData);
 
                     // Move to the next step
                     setCurrentStepName(
-                      CreateCommunityStepName.UserRolesPermissions
+                      CreateGrantStepName.UserRolesPermissions
                     );
                   }}
                   moveToPrevStep={() => {
-                    setCurrentStepName(CreateCommunityStepName.RewardSettings);
+                    setCurrentStepName(CreateGrantStepName.RewardSettings);
                   }}
                 />
               </div>
             )}
             {currentStepName ===
-              CreateCommunityStepName.UserRolesPermissions && (
+              CreateGrantStepName.UserRolesPermissions && (
                 <div className="p-6 border border-b-0">
-                  <CreateCommnityHeader
+                  <CreateGrantHeader
                     heading="User Roles and Permissions"
-                    subHeading=" Assign roles and define permissions within the community."
+                    subHeading=" Assign roles and define permissions within the grant."
                     stepText="Step 5/6"
                     stepPercent="80%"
                     stepValue={80}
                   />
 
-                  <UserRolesAndPermissionsForm
+                  <GrantUserRolesAndPermissionsForm
                     initialFormValues={permissions}
-                    onFormSubmit={(formData: AdminSettingsSchema): void => {
+                    onFormSubmit={(formData: GrantAdminSettingsSchema): void => {
                       // Perform state update with formData
                       setPermissions(formData);
 
                       // Move to the next step
-                      setCurrentStepName(CreateCommunityStepName.FinalReview);
+                      setCurrentStepName(CreateGrantStepName.FinalReview);
                     }}
                     moveToPrevStep={() => {
                       setCurrentStepName(
-                        CreateCommunityStepName.ConfigureCarrotPot
+                        CreateGrantStepName.ConfigureCarrotPot
                       );
                     }}
                   />
                 </div>
               )}
-            {currentStepName === CreateCommunityStepName.FinalReview && (
+            {currentStepName === CreateGrantStepName.FinalReview && (
               <div className="p-6 border border-b-0">
-                <CreateCommnityHeader
+                <CreateGrantHeader
                   heading="Final Review"
-                  subHeading="Assign roles and define permissions within the community."
+                  subHeading="Assign roles and define permissions within the grant."
                   stepText="Step 6/6"
                   stepPercent="100%"
                   stepValue={100}
                 />
-                <FinalReviewForm
+                <GrantFinalReviewForm
                   basicDetails={basicDetails}
                   rewardSettings={rewardSettings}
                   protocolConfiguration={protocolConfiguration}
                   moveToPrevStep={() => {
                     setCurrentStepName(
-                      CreateCommunityStepName.UserRolesPermissions
+                      CreateGrantStepName.UserRolesPermissions
                     );
                   }}
                   onSubmit={onSubmit}
