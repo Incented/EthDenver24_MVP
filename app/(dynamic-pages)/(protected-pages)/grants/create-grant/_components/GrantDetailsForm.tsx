@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -11,7 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Facebook,
@@ -22,6 +22,7 @@ import {
   Twitter,
   Youtube,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { ReactNode, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -32,6 +33,10 @@ import {
   BasicGrantDetailsSchema,
   basicGrantDetailsSchema,
 } from "./createGrantSchema";
+
+const TipTap = dynamic(() => import("@/components/tip-tap-Editor/TipTap"), {
+  ssr: false,
+});
 
 export default function GrantDetailsForm({
   initialFormValues,
@@ -100,6 +105,7 @@ export default function GrantDetailsForm({
     defaultValues: {
       title: initialFormValues?.title || "",
       pool: initialFormValues?.pool || 0,
+      slash_percentage: initialFormValues?.slash_percentage || 0,
       description: initialFormValues?.description || "",
       socialLinks: initialFormValues?.socialLinks || [
         {
@@ -243,7 +249,7 @@ export default function GrantDetailsForm({
                 </p>
                 <Button className="px-8" onClick={(e) => e.preventDefault()}>Update</Button>
               </div>
-              <div className="space-y-4 w-full lg:w-[300px] pb-[10px] px-1">
+              <div className="space-y-4 w-full lg:w-[640px] pb-[10px] px-1">
                 <div className="space-y-2">
                   <Label htmlFor="title">Grant Name</Label>
                   <Input
@@ -254,6 +260,27 @@ export default function GrantDetailsForm({
                   {errors.title?.message && (
                     <p className="text-sm text-red-600 dark:text-red-500">
                       {errors.title?.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="description">Grant Description</Label>
+                  {/* <Textarea
+                    {...register("description")}
+                    className="h-24"
+                    placeholder="Grant description"
+                  /> */}
+                  <Card className="mt-1">
+                    <Controller
+                      name="description"
+                      control={control}
+                      render={({ field }) => <TipTap {...field} />}
+                    />
+                  </Card>
+                  {errors.description?.message && (
+                    <p className="text-sm text-red-600 dark:text-red-500">
+                      {errors.description?.message}
                     </p>
                   )}
                 </div>
@@ -271,15 +298,15 @@ export default function GrantDetailsForm({
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description">Grant Description</Label>
-                  <Textarea
-                    {...register("description")}
-                    className="h-24"
-                    placeholder="Grant description"
+                  <Label htmlFor="slash_percentage">Slash Percentage</Label>
+                  <Input
+                    {...register("slash_percentage", { valueAsNumber: true, min: 0.01 })}
+                    type="number"
+                    placeholder="Grant Pool"
                   />
-                  {errors.description?.message && (
+                  {errors.slash_percentage?.message && (
                     <p className="text-sm text-red-600 dark:text-red-500">
-                      {errors.description?.message}
+                      {errors.slash_percentage?.message}
                     </p>
                   )}
                 </div>

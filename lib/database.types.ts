@@ -276,6 +276,7 @@ export type Database = {
           prioritization_quorum_percentage: number | null;
           prioritization_reward_percentage: number | null;
           proposal_absolute_reward: number | null;
+          slash_percentage: number;
           task_expiration_time: string | null;
           title: string;
           total_members: number | null;
@@ -309,8 +310,9 @@ export type Database = {
           prioritization_quorum_percentage?: number | null;
           prioritization_reward_percentage?: number | null;
           proposal_absolute_reward?: number | null;
+          slash_percentage: number;
           task_expiration_time?: string | null;
-          title?: string;
+          title: string;
           total_members?: number | null;
           total_tasks?: number | null;
           twitter_url?: string | null;
@@ -342,6 +344,7 @@ export type Database = {
           prioritization_quorum_percentage?: number | null;
           prioritization_reward_percentage?: number | null;
           proposal_absolute_reward?: number | null;
+          slash_percentage?: number;
           task_expiration_time?: string | null;
           title?: string;
           total_members?: number | null;

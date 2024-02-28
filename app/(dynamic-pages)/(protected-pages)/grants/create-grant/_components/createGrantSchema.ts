@@ -22,6 +22,7 @@ export const basicGrantDetailsSchema = z.object({
     .string()
     .min(3, "Description must be at least 3 characters long."),
   pool: z.number().min(0.01, "Grant pool must be at least 0.01"),
+  slash_percentage: z.number().min(0, "Slash percentage must be at least 0"),
   socialLinks: z.array(socialLinkSchema).optional(),
   avatarUrl: z.string().url().or(z.literal("")),
 });

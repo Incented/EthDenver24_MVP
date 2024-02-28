@@ -43,12 +43,27 @@ export const createGrantAction = async (
       )?.url,
       grant_image: publicData.avatarUrl,
       grant_pool: publicData.pool,
+      slash_percentage: publicData.slash_percentage,
     })
     .select("*")
     .single();
 
   if (error) {
     console.error(error);
+    throw error;
+  }
+
+  return data;
+};
+
+export const getAllGrants = async () => {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+
+  const { data, error } = await supabaseClient
+    .from("grant_programs")
+    .select("*");
+
+  if (error) {
     throw error;
   }
 
