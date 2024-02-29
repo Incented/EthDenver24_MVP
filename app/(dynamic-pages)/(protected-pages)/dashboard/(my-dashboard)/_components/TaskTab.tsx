@@ -4,8 +4,7 @@ import TaskCard from "@/components/presentational/Tasks/TaskCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CardVerticalLayoutContext } from "@/contexts/CardVerticalLayoutContext";
-import { Json } from "@/lib/database.types";
-import { cn } from "@/lib/utils";
+import { cn, parseJsonToStringArray } from "@/lib/utils";
 import { Table } from "@/types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useContext } from "react";
@@ -34,23 +33,6 @@ const generalStatuses = [
   "expired",
   "protocol_update"
 ];
-
-function parseJsonToStringArray(json: Json): string[] {
-  if (typeof json === "string") {
-    try {
-      const parsed = JSON.parse(json);
-      if (
-        Array.isArray(parsed) &&
-        parsed.every((item) => typeof item === "string")
-      ) {
-        return parsed;
-      }
-    } catch (error) {
-      console.error("Failed to parse JSON:", error);
-    }
-  }
-  return []; // Return an empty array if parsing fails or if the JSON is not an array of strings
-}
 
 const getTaskFeaturedImage = (task: Table<"tasks">) => {
   const imageUrl = "/images/task1.jpeg";

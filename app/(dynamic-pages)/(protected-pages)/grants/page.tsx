@@ -1,4 +1,6 @@
+import { Button } from "@/components/ui/button";
 import { getAllGrants } from "@/data/user/grants";
+import Link from "next/link";
 import { GrantProgramCard } from "./_components/GrantProgramCard";
 import {
   filtersSchema
@@ -17,8 +19,10 @@ export default async function GrantsPage({
   // const totalPages = Math.ceil(communityCount / limit);
   return (
     <main className="flex flex-col px-4 pb-10 sm:px-8">
-      <div className="items-center mt-8 md:flex">
+      <div className="items-center gap-8 mt-8 md:flex">
         <h1 className="text-3xl font-medium ">Grants</h1>
+        <Link href={`grants/create-grant`}>
+          <Button>Create Grant Program</Button></Link>
       </div>
 
       <div className="grid gap-4 my-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -32,9 +36,6 @@ export default async function GrantsPage({
             communityId={grantProgram.id}
           />
         ))}
-      </div>
-
-      <div className="h-full pb-10 mt-4 overflow-auto ">
       </div>
     </main>
   );

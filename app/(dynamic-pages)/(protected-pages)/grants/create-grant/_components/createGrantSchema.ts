@@ -57,28 +57,23 @@ export const grantProtocolConfigurationSchema = z.object({
   prioritizationQourum: z
     .number()
     .int()
-    .min(0, "Prioritization qourum must be min of 0")
-    .nullable(),
+    .min(0, "Prioritization qourum must be min of 0"),
   validationQuorum: z
     .number()
     .int()
-    .min(0, "Validation qourum must be min of 0")
-    .nullable(),
+    .min(0, "Validation qourum must be min of 0"),
   prioritizationPeriod: z
     .number()
     .int()
-    .min(0, "Prioritization period must be a number")
-    .nullable(),
+    .min(0, "Prioritization period must be a number"),
   contributionPeriod: z
     .number()
     .int()
-    .min(0, "Contribution period must be a number")
-    .nullable(),
+    .min(0, "Contribution period must be a number"),
   validationPeriod: z
     .number()
     .int()
-    .min(0, "Validation period must be a number")
-    .nullable(),
+    .min(0, "Validation period must be a number"),
 });
 
 export type GrantProtocolConfigurationSchema = z.infer<

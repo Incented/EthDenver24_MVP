@@ -146,7 +146,10 @@ export const getGrantApplicationsByGrantId = async (grantId: string) => {
   const { data, error } = await supabase
     .from("grant_applications")
     .select("*")
-    .eq("organization_id", grantId);
+    .eq("organization_id", grantId)
+    .or(
+      "grant_project_status.eq.new_application,grant_project_status.eq.project"
+    );
 
   if (error) {
     throw error;
@@ -165,7 +168,11 @@ export const updateGrantProjectStatusAction = async ({
   const supabaseClient = createSupabaseUserServerComponentClient();
   const { error } = await supabaseClient
     .from("grant_applications")
-    .update({ grant_project_status: status })
+    .update({
+      grant_project_status: status,
+      new_grant_project_created_at: new Date().toISOString(),
+      is_grant_published: true,
+    })
     .eq("id", grantProjectId)
     .single();
 

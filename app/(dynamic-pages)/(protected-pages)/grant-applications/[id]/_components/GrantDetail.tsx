@@ -9,6 +9,7 @@ import { checkIfUserPrioritizedGrantProject, updateGrantProjectStatusAction } fr
 import { getGrantProgramById } from "@/data/user/grants";
 import { Table } from "@/types";
 import moment from "moment";
+import Link from "next/link";
 import { z } from "zod";
 import { AttachmentClient } from "../../../grants/[id]/submit-application/components/AttachmentClient";
 import { grantProjectTypesSchema } from "../../../grants/[id]/submit-application/components/CreateGrantApplicationFormSchema";
@@ -84,8 +85,6 @@ const GrantDetail: FC<GrantDetailProps> = async ({ grant, grantProgram, loggedIn
   let lowerPriority = 0;
   let higherPriority = 0;
 
-  const currentGrantPrioritizationQourum = (higherPriority / (lowerPriority + higherPriority)) * 100;
-
   grantProjectPrioritizations.forEach(detail => {
     if (detail.count < 0) {
       lowerPriority += Math.abs(detail.count);
@@ -94,20 +93,11 @@ const GrantDetail: FC<GrantDetailProps> = async ({ grant, grantProgram, loggedIn
     }
   });
 
-  if (grant.grant_project_status === "new_application" && currentGrantPrioritizationQourum >= grantPrioritizationQuorum!) {
-    await updateGrantProjectStatusAction({ status: "prioritized", grantProjectId: grant.id });
-  }
+  let totalVotes = lowerPriority + higherPriority;
+  let currentGrantPrioritizationQuorum = totalVotes === 0 ? 0 : (higherPriority / totalVotes) * 100;
 
-  let grantStatusBg = "bg-black";
-
-  if (grant.grant_project_status === "draft") {
-    grantStatusBg = "bg-muted text-foreground";
-  } else if (grant.grant_project_status === "new_application") {
-    grantStatusBg = "bg-black text-primary-foreground";
-  } else if (grant.grant_project_status === "prioritized") {
-    grantStatusBg = "bg-primary text-primary-foreground";
-  } else {
-    grantStatusBg = "bg-black";
+  if (grant.grant_project_status === "new_application" && currentGrantPrioritizationQuorum >= grantPrioritizationQuorum!) {
+    await updateGrantProjectStatusAction({ status: "project", grantProjectId: grant.id });
   }
 
   let files: TaskFileArray = [];
@@ -148,7 +138,16 @@ const GrantDetail: FC<GrantDetailProps> = async ({ grant, grantProgram, loggedIn
         ))}
       </div>
       <p className="text-sm text-muted-foreground">Posted {timeSincePosted}</p>
-      <h1 className="mb-6 text-2xl font-semibold">{grant.name}</h1>
+      {grant.grant_project_status === "project" ? (
+        <div className="flex gap-4 items-baseline">
+          <h1 className="mb-6 text-2xl font-semibold">{grant.name}</h1>
+          <Link href={`/grants/${grant.organization_id}/projects/${grant.id}`} className=" text-sm text-primary underline underline-offset-2 hover:text-foreground transition-colors">
+            View Project
+          </Link>
+        </div>
+      ) :
+        <h1 className="mb-6 text-2xl font-semibold">{grant.name}</h1>
+      }
       <div className="relative w-full h-[165px] mb-6 rounded-md overflow-hidden">
         <div
           className="h-full w-full"

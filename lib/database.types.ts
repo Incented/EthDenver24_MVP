@@ -196,7 +196,7 @@ export type Database = {
       grant_applications: {
         Row: {
           created_at: string;
-          description: string | null;
+          description: string;
           efforts: number | null;
           files: Json | null;
           grant_amount: number;
@@ -216,7 +216,7 @@ export type Database = {
         };
         Insert: {
           created_at?: string;
-          description?: string | null;
+          description: string;
           efforts?: number | null;
           files?: Json | null;
           grant_amount: number;
@@ -236,7 +236,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
-          description?: string | null;
+          description?: string;
           efforts?: number | null;
           files?: Json | null;
           grant_amount?: number;
@@ -276,7 +276,7 @@ export type Database = {
           linkedin_url: string | null;
           location: string | null;
           prioritization_period: number | null;
-          prioritization_quorum_percentage: number | null;
+          prioritization_quorum_percentage: number;
           prioritization_reward_percentage: number | null;
           proposal_absolute_reward: number | null;
           slash_percentage: number;
@@ -310,12 +310,12 @@ export type Database = {
           linkedin_url?: string | null;
           location?: string | null;
           prioritization_period?: number | null;
-          prioritization_quorum_percentage?: number | null;
+          prioritization_quorum_percentage: number;
           prioritization_reward_percentage?: number | null;
           proposal_absolute_reward?: number | null;
           slash_percentage: number;
           task_expiration_time?: string | null;
-          title?: string;
+          title: string;
           total_members?: number | null;
           total_tasks?: number | null;
           twitter_url?: string | null;
@@ -344,7 +344,7 @@ export type Database = {
           linkedin_url?: string | null;
           location?: string | null;
           prioritization_period?: number | null;
-          prioritization_quorum_percentage?: number | null;
+          prioritization_quorum_percentage?: number;
           prioritization_reward_percentage?: number | null;
           proposal_absolute_reward?: number | null;
           slash_percentage?: number;
@@ -394,7 +394,7 @@ export type Database = {
         Row: {
           budget: number;
           created_at: string;
-          description: string | null;
+          description: string;
           effort: number;
           grant_project_id: string;
           id: number;
@@ -403,7 +403,7 @@ export type Database = {
         Insert: {
           budget: number;
           created_at?: string;
-          description?: string | null;
+          description: string;
           effort: number;
           grant_project_id?: string;
           id?: number;
@@ -412,7 +412,7 @@ export type Database = {
         Update: {
           budget?: number;
           created_at?: string;
-          description?: string | null;
+          description?: string;
           effort?: number;
           grant_project_id?: string;
           id?: number;

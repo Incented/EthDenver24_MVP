@@ -23,7 +23,7 @@ import axios from "axios";
 import { File } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { grant_project_type_slug } from "../../../../grant-applications/grantTypes";
+import { grant_project_type_slug } from "../../../../grant-applications/[id]/grantTypes";
 import { AttachmentType, FilePreview } from "./CreateTaskFormTypes";
 import { UploadFiles } from "./uploadFile";
 
