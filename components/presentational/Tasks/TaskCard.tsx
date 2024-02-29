@@ -32,6 +32,7 @@ interface TaskCardProps {
   imageUrl?: string;
   isVertical?: boolean;
   isPublished?: boolean;
+  isGrant?: boolean;
 }
 
 const TaskCard: FC<TaskCardProps> = ({
@@ -47,7 +48,7 @@ const TaskCard: FC<TaskCardProps> = ({
   efforts = "7 days",
   imageUrl = "/images/task1.jpeg",
   isVertical,
-  isPublished,
+  isPublished, isGrant
 }: TaskCardProps) => {
   let taskStatusBg = "bg-muted text-foreground";
 
@@ -151,6 +152,7 @@ const TaskCard: FC<TaskCardProps> = ({
                 rewards={rewards}
                 efforts={efforts}
                 deadline={deadLine}
+                isGrant={isGrant}
               />
               <div className="w-px h-full bg-border" />
             </div>
@@ -276,6 +278,8 @@ const TaskCard: FC<TaskCardProps> = ({
                 rewards={rewards}
                 efforts={efforts}
                 deadline={deadLine}
+                isGrant={isGrant}
+
               />
             </div>
           </Card>
