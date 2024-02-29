@@ -202,13 +202,14 @@ export type Database = {
           grant_amount: number;
           grant_community: string | null;
           grant_project_status: Database["public"]["Enums"]["grant_project_status"];
-          grant_project_types: Json;
+          grant_project_types: Json | null;
           id: string;
           is_grant_published: boolean;
           name: string;
           new_grant_project_created_at: string;
           organization_id: string;
           project_status: Database["public"]["Enums"]["project_status"];
+          rewards: number | null;
           team_id: number | null;
           updated_at: string;
           user_id: string | null;
@@ -221,13 +222,14 @@ export type Database = {
           grant_amount: number;
           grant_community?: string | null;
           grant_project_status: Database["public"]["Enums"]["grant_project_status"];
-          grant_project_types: Json;
+          grant_project_types?: Json | null;
           id?: string;
           is_grant_published?: boolean;
           name: string;
           new_grant_project_created_at: string;
           organization_id: string;
           project_status?: Database["public"]["Enums"]["project_status"];
+          rewards?: number | null;
           team_id?: number | null;
           updated_at?: string;
           user_id?: string | null;
@@ -240,13 +242,14 @@ export type Database = {
           grant_amount?: number;
           grant_community?: string | null;
           grant_project_status?: Database["public"]["Enums"]["grant_project_status"];
-          grant_project_types?: Json;
+          grant_project_types?: Json | null;
           id?: string;
           is_grant_published?: boolean;
           name?: string;
           new_grant_project_created_at?: string;
           organization_id?: string;
           project_status?: Database["public"]["Enums"]["project_status"];
+          rewards?: number | null;
           team_id?: number | null;
           updated_at?: string;
           user_id?: string | null;
@@ -312,7 +315,7 @@ export type Database = {
           proposal_absolute_reward?: number | null;
           slash_percentage: number;
           task_expiration_time?: string | null;
-          title: string;
+          title?: string;
           total_members?: number | null;
           total_tasks?: number | null;
           twitter_url?: string | null;
@@ -391,28 +394,28 @@ export type Database = {
         Row: {
           budget: number;
           created_at: string;
-          description: string;
+          description: string | null;
           effort: number;
           grant_project_id: string;
-          id: string;
+          id: number;
           title: string;
         };
         Insert: {
           budget: number;
           created_at?: string;
-          description: string;
+          description?: string | null;
           effort: number;
           grant_project_id?: string;
-          id?: string;
+          id?: number;
           title: string;
         };
         Update: {
           budget?: number;
           created_at?: string;
-          description?: string;
+          description?: string | null;
           effort?: number;
           grant_project_id?: string;
-          id?: string;
+          id?: number;
           title?: string;
         };
         Relationships: [
@@ -449,14 +452,14 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: "public_grant_prioritizations_grant_project_id_fkey";
+            foreignKeyName: "public_grant_project_prioritizations_grant_project_id_fkey";
             columns: ["grant_project_id"];
             isOneToOne: false;
             referencedRelation: "grant_applications";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "public_prioritized_grants_user_id_fkey";
+            foreignKeyName: "public_grant_project_prioritizations_user_id_fkey";
             columns: ["user_id"];
             isOneToOne: false;
             referencedRelation: "user_profiles";
@@ -913,21 +916,21 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: "organization_join_invitations_invitee_user_id_fkey";
+            foreignKeyName: "public_organization_join_invitations_invitee_user_id_fkey";
             columns: ["invitee_user_id"];
             isOneToOne: false;
             referencedRelation: "user_profiles";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "organization_join_invitations_inviter_user_id_fkey";
+            foreignKeyName: "public_organization_join_invitations_inviter_user_id_fkey";
             columns: ["inviter_user_id"];
             isOneToOne: false;
             referencedRelation: "user_profiles";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "organization_join_invitations_organization_id_fkey";
+            foreignKeyName: "public_organization_join_invitations_organization_id_fkey";
             columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "organizations";
@@ -959,14 +962,14 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: "organization_members_member_id_fkey";
+            foreignKeyName: "public_organization_members_member_id_fkey";
             columns: ["member_id"];
             isOneToOne: false;
             referencedRelation: "user_profiles";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "organization_members_organization_id_fkey";
+            foreignKeyName: "public_organization_members_organization_id_fkey";
             columns: ["organization_id"];
             isOneToOne: false;
             referencedRelation: "organizations";
@@ -1073,7 +1076,7 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: "organizations_created_by_fkey";
+            foreignKeyName: "public_organizations_created_by_fkey";
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "user_profiles";
@@ -1174,7 +1177,7 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: "organizations_private_info_id_fkey";
+            foreignKeyName: "public_organizations_private_info_id_fkey";
             columns: ["id"];
             isOneToOne: true;
             referencedRelation: "organizations";
@@ -1656,21 +1659,21 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: "user_private_info_default_organization_fkey";
+            foreignKeyName: "public_user_private_info_default_organization_fkey";
             columns: ["default_organization"];
             isOneToOne: false;
             referencedRelation: "organizations";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "user_private_info_id_fkey";
+            foreignKeyName: "public_user_private_info_id_fkey";
             columns: ["id"];
             isOneToOne: true;
             referencedRelation: "app_admin_all_users";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "user_private_info_id_fkey";
+            foreignKeyName: "public_user_private_info_id_fkey";
             columns: ["id"];
             isOneToOne: true;
             referencedRelation: "users";
@@ -1705,14 +1708,14 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: "user_profiles_id_fkey";
+            foreignKeyName: "public_user_profiles_id_fkey";
             columns: ["id"];
             isOneToOne: true;
             referencedRelation: "app_admin_all_users";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "user_profiles_id_fkey";
+            foreignKeyName: "public_user_profiles_id_fkey";
             columns: ["id"];
             isOneToOne: true;
             referencedRelation: "users";
