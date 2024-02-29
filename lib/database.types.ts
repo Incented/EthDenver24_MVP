@@ -254,7 +254,15 @@ export type Database = {
           updated_at?: string;
           user_id?: string | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "public_grant_applications_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "grant_programs";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       grant_programs: {
         Row: {
