@@ -21,6 +21,7 @@ type ExtendedTask = Table<"tasks"> & {
 type TaskTabProps = {
   tasks: ExtendedTask[];
   userId?: string;
+  isGrant?: boolean;
 };
 
 const generalStatuses = [
@@ -71,7 +72,7 @@ const getTaskFeaturedImage = (task: Table<"tasks">) => {
   return featuredImageUrl;
 };
 
-const TaskTab = ({ userId, tasks }: TaskTabProps) => {
+const TaskTab = ({ userId, tasks, isGrant }: TaskTabProps) => {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
@@ -134,6 +135,7 @@ const TaskTab = ({ userId, tasks }: TaskTabProps) => {
                 taskStatus={filteredTask.task_status || "new_task"}
                 isVertical={isVertical}
                 isPublished={filteredTask.is_task_published || false}
+                isGrant={isGrant}
               />
             ))}
         </div>
