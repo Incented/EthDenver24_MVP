@@ -94,7 +94,7 @@ const GrantDetail: FC<GrantDetailProps> = async ({ grant, grantProgram, loggedIn
   });
 
   let totalVotes = lowerPriority + higherPriority;
-  let currentGrantPrioritizationQuorum = totalVotes === 0 ? 0 : (higherPriority / totalVotes) * 100;
+  let currentGrantPrioritizationQuorum = (higherPriority / (higherPriority / totalVotes)) * 100;
 
   if (grant.grant_project_status === "new_application" && currentGrantPrioritizationQuorum >= grantPrioritizationQuorum!) {
     await updateGrantProjectStatusAction({ status: "project", grantProjectId: grant.id });
