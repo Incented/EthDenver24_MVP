@@ -10,49 +10,50 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn, getGrantProjectBgClass } from "@/lib/utils";
-import { Enum, Table } from "@/types";
 import { Carrot, Info } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
-import GrantApplicationAttributes from "../../../grant-applications/[id]/_components/GrantApplicationAttributes";
+import GrantApplicationAttributes from "./GrantApplicationAttributes";
 
-interface GrantApplicationCardProps {
-  grantId: string;
+interface GrantProjectMilestoneCardProps {
+  milestoneId: number;
+  grantProjectId: string;
   grantProgramId: string;
-  grantTitle: string;
-  grantDescription: string;
-  grantProjectStatus: Enum<"grant_project_status">;
-  grantProgram: Table<"grant_programs">;
-  grantProjectType: string[];
+  milestoneTitle?: string;
+  milestoneProjectName: string;
+  milestoneDescription: string;
+  taskStatus: "new_task";
+  taskType: string[];
   rabbitHole?: string;
-  amount?: string;
   deadLine?: string;
+  rewards: string;
   efforts?: string;
   imageUrl?: string;
   isVertical?: boolean;
   isPublished?: boolean;
+  isGrant?: boolean;
 }
 
-const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
-  grantId,
+const GrantProjectMilestoneCard: FC<GrantProjectMilestoneCardProps> = ({
+  milestoneId,
+  grantProjectId,
   grantProgramId,
-  grantTitle = "Buy a trash container",
-  grantDescription = "To eradicate invasive species, reintroduce native species and",
-  grantProjectStatus,
-  grantProjectType,
-  grantProgram,
-  amount,
+  milestoneTitle = "Buy a trash container",
+  milestoneDescription,
+  taskStatus,
+  taskType,
+  milestoneProjectName,
   deadLine = "3 days 7hours",
+  rewards,
   efforts = "7 days",
   imageUrl = "/images/task1.jpeg",
   isVertical,
-  isPublished,
-}: GrantApplicationCardProps) => {
+  isPublished, isGrant
+}: GrantProjectMilestoneCardProps) => {
+  let taskStatusBg = "bg-muted text-foreground";
 
-  let grantStatusBg = "bg-black";
-
-  grantStatusBg = getGrantProjectBgClass(grantProjectStatus);
+  taskStatusBg = getGrantProjectBgClass(taskStatus);
   return (
     <>
       {isVertical ? (
@@ -60,12 +61,11 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
           <div
             className={cn(
               "absolute top-0 right-0 px-4 py-2 text-xs font-medium text-white rounded-tr-md rounded-bl-md",
-              grantStatusBg
+              taskStatusBg
             )}
           >
-            {grantProjectStatus
-              .replace("project", "approved")
-              .replace("new_application", "in_review")
+            {taskStatus
+              .replace("published", "new_task")
               .split("-")
               .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
               .join(" ")
@@ -81,7 +81,7 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
           </div>
           <div className="relative w-full h-full px-6 py-6 text-foreground">
             <div className="flex items-center gap-2 text-sm">
-              <p className="text-xs font-medium leading-6">{grantProgram.title}</p>
+              <p className="text-xs font-medium leading-6">{milestoneProjectName}</p>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild className="z-20 cursor-pointer">
@@ -89,13 +89,13 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
                   </TooltipTrigger>
                   <TooltipContent className="z-50">
                     <div className="">
-                      <p className="mb-2 text-sm">Grant Details</p>
-                      <p className="mb-1 text-xs">
-                        Prioritization Reward Percentage {grantProgram.prioritization_reward_percentage}
+                      <p className="mb-2 text-sm">Project Details</p>
+                      {/* <p className="mb-1 text-xs">
+                        Prioritization Reward Percentage 10%
                       </p>
                       <p className="text-xs">
-                        Validation Reward Percentage {grantProgram.validation_reward_percentage}
-                      </p>
+                        Validation Reward Percentage 10%
+                      </p> */}
                     </div>
                   </TooltipContent>
                 </Tooltip>
@@ -105,7 +105,7 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
               <ScrollArea className="max-w-xs h-fit">
                 {" "}
                 <div className="flex items-center gap-2 my-1 whitespace-nowrap">
-                  {grantProjectType.map((type, index) => (
+                  {taskType.map((type, index) => (
                     <Badge
                       key={index}
                       className="text-xs text-foreground bg-secondary hover:bg-secondary"
@@ -124,15 +124,15 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
 
               <div className="mt-2">
                 <Anchor
-                  href={`/dashboard/tasks/${grantId}`}
+                  href={`/dashboard/tasks/${milestoneId}`}
                   className="text-base font-semibold leading-7 text-foreground dark:text-white"
                 >
-                  {grantTitle}
+                  {milestoneTitle}
                 </Anchor>
               </div>
               <div className="mt-2 ">
                 <p className="w-full text-sm text-muted-foreground">
-                  {`${grantDescription}`}...
+                  {`${milestoneDescription}`}...
                 </p>
               </div>
             </div>
@@ -142,8 +142,10 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
             <div className="flex items-center h-full gap-8 py-6 my-auto ">
               <div className="w-px h-full bg-border" />
               <GrantApplicationAttributes
+                amount={rewards}
                 efforts={efforts}
-                deadline={deadLine} amount={""} />
+                deadline={deadLine}
+              />
               <div className="w-px h-full bg-border" />
             </div>
 
@@ -156,9 +158,9 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
           </div>
         </Card>
       ) : (
-        <Link href={`/grant-applications/${grantId}`}>
+        <Link href={`/dashboard/tasks/${milestoneId}`}>
           <Card className="relative w-full min-w-full overflow-visible rounded-lg">
-            {grantProjectStatus === "draft" && (
+            {!isPublished && (
               <div className="absolute top-0 z-10 flex justify-center w-full px-4 py-2 text-xs font-medium rounded-t-lg text-foreground bg-secondary">
                 Draft
               </div>
@@ -181,12 +183,11 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
                 <div
                   className={cn(
                     "absolute top-0 right-0 px-4 py-2 text-xs font-medium rounded-tr-md rounded-bl-md",
-                    grantStatusBg
+                    taskStatusBg
                   )}
                 >
-                  {grantProjectStatus
-                    .replace("project", "approved")
-                    .replace("new_application", "in_review")
+                  {taskStatus
+                    .replace("published", "new_task")
                     .split("-")
                     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                     .join(" ")
@@ -197,24 +198,22 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
                     <TooltipTrigger asChild className="z-20 cursor-pointer">
                       <div className="flex w-fit items-center gap-2 text-sm px-6 py-[10px]">
                         <p className="text-xs font-medium leading-6 text-background">
-                          {grantProgram.title}
+                          {milestoneProjectName}
                         </p>
                         <Info size={18} className="text-background" />
                       </div>
                     </TooltipTrigger>
                     <TooltipContent className="z-50 ml-4 -mb-3">
                       <div className="flex flex-col">
-                        <div className="">
-                          <p className="mb-2 text-sm">Grant Details</p>
-                          <p className="mb-1 text-xs">
-                            Prioritization Reward Percentage {grantProgram.prioritization_reward_percentage}%
-                          </p>
-                          <p className="text-xs">
-                            Validation Reward Percentage {grantProgram.validation_reward_percentage}%
-                          </p>
-                        </div>
-                        <Link href={`/grants/${grantProgramId}`} className="pt-4 text-xs underline text-muted-foreground hover:text-foreground">
-                          View Grant
+                        <p className="mb-2 text-sm">Project Details</p>
+                        {/* <p className="mb-1 text-xs">
+                        Prioritization Reward Percentage 10%
+                      </p>
+                      <p className="text-xs">
+                        Validation Reward Percentage 10%
+                      </p> */}
+                        <Link href={`/grants/${grantProgramId}/projects/${grantProjectId}`} className="pt-4 text-xs underline text-muted-foreground hover:text-foreground">
+                          View project
                         </Link>
                       </div>
                     </TooltipContent>
@@ -225,7 +224,7 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
                     <ScrollArea className="w-full whitespace-no-wrap h-fit">
                       <div className="flex gap-2 h-fit whitespace-nowrap">
                         {/* need to fix to show all from design */}
-                        {grantProjectType.splice(0, 1).map((type, index) => (
+                        {taskType.splice(0, 1).map((type, index) => (
                           <Badge
                             key={index}
                             className="text-xs text-foreground bg-background hover:bg-background"
@@ -251,10 +250,10 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
                   </div>
                   <div className="mt-4 ">
                     <Anchor
-                      href={`/dashboard/tasks/${grantId}`}
+                      href={`/dashboard/tasks/${milestoneId}`}
                       className="text-base font-semibold leading-7 truncate text-foreground whitespace-nowrap"
                     >
-                      {grantTitle}
+                      {milestoneTitle}
                     </Anchor>
                   </div>
                 </div>
@@ -262,16 +261,17 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
             </div>
             <div className="px-6 mt-3">
               <div
-                className="prose prose-lg text-sm text-muted-foreground prose-slate dark:prose-invert prose-headings:font-display font-default focus:outline-none max-w-full mb-2"
-                dangerouslySetInnerHTML={{ __html: grantDescription as string }}
+                className="prose text-sm prose-lg prose-slate dark:prose-invert prose-headings:font-display font-default focus:outline-none max-w-full mb-6"
+                dangerouslySetInnerHTML={{ __html: milestoneDescription as string }}
               />
             </div>
 
             <div className="mx-6 my-6 mt-4">
               <GrantApplicationAttributes
+                amount={rewards}
                 efforts={efforts}
                 deadline={deadLine}
-                amount={""} />
+              />
             </div>
           </Card>
         </Link>
@@ -280,4 +280,4 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
   );
 };
 
-export default GrantApplicationCard;
+export default GrantProjectMilestoneCard;

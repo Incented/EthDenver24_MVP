@@ -2,7 +2,7 @@ import { Typography } from "@/components/ui/Typography";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
+import { cn, getGrantProjectBgClass } from "@/lib/utils";
 import { Table } from "@/types";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -33,7 +33,7 @@ interface GrantApplicationDetailProps {
   grantCreator: Table<"user_profiles">;
 }
 // http://localhost:3000/dashboard/tasks/b9af7c90-f276-449d-a14b-511f12524e9d
-const GrantApplicationDetail: FC<GrantApplicationDetailProps> = ({
+const GrantApplicationDetail: FC<GrantApplicationDetailProps> = async ({
   grant,
   grantProgram,
   milestones,
@@ -51,15 +51,7 @@ const GrantApplicationDetail: FC<GrantApplicationDetailProps> = ({
 
   let grantStatusBg = "bg-black";
 
-  if (grant.grant_project_status === "draft") {
-    grantStatusBg = "bg-muted text-foreground";
-  } else if (grant.grant_project_status === "new_application") {
-    grantStatusBg = "bg-black text-primary-foreground";
-  } else if (grant.grant_project_status === "prioritized") {
-    grantStatusBg = "bg-primary text-primary-foreground";
-  } else {
-    grantStatusBg = "bg-black";
-  }
+  grantStatusBg = getGrantProjectBgClass(grant.grant_project_status);
 
 
   return (

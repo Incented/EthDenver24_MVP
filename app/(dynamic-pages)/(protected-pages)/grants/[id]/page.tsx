@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getGrantApplicationsByGrantId } from "@/data/user/grant-projects";
 import { getGrantProgramById } from "@/data/user/grants";
+import { parseJsonToStringArray } from "@/lib/utils";
 import { Table } from "@/types";
 import Link from "next/link";
 import { z } from "zod";
@@ -50,9 +51,6 @@ export default async function GrantDetailsPage({
   };
 
 
-  function parseJsonToStringArray(grant_project_types: string | number | boolean | { [key: string]: import("../../../../../lib/database.types").Json | undefined; } | import("../../../../../lib/database.types").Json[] | null): string[] {
-    throw new Error("Function not implemented.");
-  }
 
   return (
     <div className="relative mx-4 my-10 mb-10 sm:mx-8">
@@ -78,38 +76,34 @@ export default async function GrantDetailsPage({
             </div>
           </div>
           <Card className="flex-1 space-y-4 shadow-none border-none bg-muted p-8">
-            <div>
-              <p className="text-lg font-medium">
-                The Arbitrum Foundation Grant Program supports builders with milestones-based funding for growth. All
-                grants issued through this program will serve to improve the adoption of Arbitrum chains, create stronger
-                technical structures, and build sustainable communities in the Arbitrum ecosystem.
-              </p>
-              <h4 className="mt-4 text-lg font-semibold">Who are we looking for</h4>
-              <p className="text-lg">Currently accepting applications for Decentralized Applications ("dApps")</p>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold">Applications are now open</h4>
-              <p className="text-lg">
-                Applications are being approved on a rolling basis. To maximize the impact of our grant program, we will
-                be tracking milestone progress for all approved applicants.
-              </p>
+            <div className="flex flex-col justify-between h-full">
+              <div
+                className="prose text-base text-muted-foreground prose-lg prose-slate  dark:prose-invert prose-headings:font-display font-default focus:outline-none max-w-full mb-6"
+                dangerouslySetInnerHTML={{ __html: grantProgram.description as string }}
+              />
               <Link href={`/grants/${id}/submit-application`}>
                 <Button className="mt-4 w-full bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600">
                   Apply
                 </Button>
               </Link>
             </div>
+
           </Card>
         </div>
       </Card>
+      <Typography.H3 className="mt-8 mb-6">Grant Applications</Typography.H3>
       <div className="grid grid-cols-3 gap-4 w-full">
-        {grantApplications.map((application) => (
+        {grantApplications.filter(application => application.grant_project_status !== "draft").map((application) => (
           <GrantApplicationCard
             key={application.id}
             grantTitle={application.name}
             grantDescription={application.description ?? ""}
             imageUrl={getGrantApplicationFeaturedImage(application)}
-            grantId={application.id} grantProgramId={application.organization_id} grantProgram={grantProgram} grantProjectStatus={application.grant_project_status} grantProjectType={parseJsonToStringArray(application.grant_project_types)} />
+            grantId={application.id}
+            grantProgramId={application.organization_id}
+            grantProgram={grantProgram}
+            grantProjectStatus={application.grant_project_status}
+            grantProjectType={parseJsonToStringArray(application.grant_project_types)} />
         ))}
       </div>
     </div>

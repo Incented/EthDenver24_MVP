@@ -33,7 +33,7 @@ export const Attribute = ({
   return (
     <div className="grid grid-cols-2 gap-2 items-center w-full">
       <div className=" flex items-center gap-2 w-full">
-        <div className="flex items-center justify-center w-6 h-6 text-white rounded-md bg-primary">
+        <div className="flex items-center justify-center w-6 h-6 text-white rounded-md bg-[#12AAFF]">
           <Icon size={16} />
         </div>
         <p className="text-sm text-muted-foreground">{title}</p>

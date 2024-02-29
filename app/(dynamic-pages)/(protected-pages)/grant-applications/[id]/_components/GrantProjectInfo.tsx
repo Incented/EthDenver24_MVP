@@ -6,7 +6,7 @@ import Link from "next/link";
 
 type GrantProjectInfoProps = {
   grantProjectName: string;
-  grantProjectDescription?: string;
+  grantProjectDescription: string;
   communityImage?: string;
   communityMembersCount?: number;
   communityUrls?: {
@@ -44,8 +44,11 @@ function GrantProjectInfo({
       </div>
 
       <p className="mb-4 text-sm leading-6 text-muted-foreground">
-        {grantProjectDescription}
-        {grantProjectDescription && grantProjectDescription?.length > 100 && (
+        <div
+          className="prose text-sm truncate line-clamp-3 text-muted-foreground prose-lg prose-slate dark:prose-invert prose-headings:font-display font-default focus:outline-none max-w-full mb-6"
+          dangerouslySetInnerHTML={{ __html: grantProjectDescription as string }}
+        />
+        {grantProjectDescription && grantProjectDescription?.length > 250 && (
           <span className="text-primary">See more</span>
         )}
       </p>
