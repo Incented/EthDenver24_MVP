@@ -128,7 +128,7 @@ export const publishGrantAction = async (id: string) => {
     .from("grant_applications")
     .update({
       is_grant_published: true,
-      new_task_created_at: currentTime,
+      new_grant_project_created_at: currentTime,
       grant_project_status: "new_application",
     })
     .eq("id", id);

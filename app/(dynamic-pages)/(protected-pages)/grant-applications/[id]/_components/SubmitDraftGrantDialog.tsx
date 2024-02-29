@@ -16,9 +16,9 @@ export function SubmitDraftGrantDialog({ id }: { id: string }) {
                 publishGrantAction(id);
             },
             {
-                loadingMessage: "Publishing Task..",
-                successMessage: "New task created!",
-                errorMessage: "Failed to create task",
+                loadingMessage: "Publishing grant pplication..",
+                successMessage: "New grant application created!",
+                errorMessage: "Failed to create grant application",
                 onSuccess: () => {
                     router.refresh();
                     setIsOpen(false);
