@@ -2,7 +2,6 @@
 
 import { Search } from "@/components/Search";
 import GoBack from "@/components/ui/GoBack";
-import Pagination from "@/components/ui/Pagination";
 import { Typography } from "@/components/ui/Typography";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -125,13 +124,13 @@ export default async function GrantDetailsPage({
           />
         ))}
       </div>
-      <div className="py-4 ">
+      {/* <div className="py-4 ">
         <Pagination
           title="Applications"
           totalPages={10}
           count={3}
         />
-      </div>
+      </div> */}
     </div>
   );
 }
