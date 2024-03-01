@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Bell } from "lucide-react";
 import { FC } from "react";
 
-interface NotificationMenuProps { onNotificationClick?: () => void; }
+interface NotificationMenuProps { }
 interface NotificationItemProps {
   notificationMessage: string;
   notificationTime: string;
@@ -21,10 +21,10 @@ const NotificationItem: FC<NotificationItemProps> = ({
   </li>
 );
 
-const NotificationMenu: FC<NotificationMenuProps> = ({ onNotificationClick }) => {
+const NotificationMenu: FC<NotificationMenuProps> = () => {
   return (
     <>
-      <Button className="" variant="ghost" onClick={onNotificationClick}>
+      <Button className="" variant="ghost" >
         <Bell size={16} />
       </Button>
       {/* <Popover>
