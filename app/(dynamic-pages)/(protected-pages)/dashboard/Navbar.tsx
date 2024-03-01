@@ -10,6 +10,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FC, useState } from "react";
 
+import Web3ModalButton from "@/components/Web3Modal/Web3ModalButton";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -241,6 +242,7 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
               {user?.wallet ? walletAddress : "Connect"}
             </p>
           </Button>
+          <Web3ModalButton />
         </div>
       </nav>
     </header>
