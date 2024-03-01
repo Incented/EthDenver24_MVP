@@ -9,17 +9,15 @@ import Image from 'next/image'
 import { FC } from 'react'
 
 interface GrantApplicationProps {
- image?: string
+ imageUrl?: string
  grantTitle?: string
  grantDescription?: string
  grantStatus?: string
  grantType?: string
  grantCommunity?: string
-
-
 }
 
-const GrantApplication: FC<GrantApplicationProps> = ({ }) => {
+const GrantApplication: FC<GrantApplicationProps> = ({ imageUrl, grantTitle, grantDescription, grantStatus, grantType, grantCommunity }) => {
  return (
   <>
    <Card className="relative justify-between hidden w-full rounded-lg sm:flex">
@@ -35,7 +33,7 @@ const GrantApplication: FC<GrantApplicationProps> = ({ }) => {
      <Image
       src="/images/task2.jpeg"
       alt="logo"
-      className="object-cover object-center w-full h-40 rounded-md"
+      className="object-cover object-center w-full h-40 rounded-tl-md rounded-bl-md"
       width={300}
       height={300}
      />
