@@ -237,7 +237,7 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
                   </div>
                   <div className="mt-4 ">
                     <Anchor
-                      href={`/dashboard/tasks/${grantId}`}
+                      href={`/grant-applications/${grantId}`}
                       className="text-base font-semibold leading-7 truncate text-foreground whitespace-nowrap"
                     >
                       {grantTitle}

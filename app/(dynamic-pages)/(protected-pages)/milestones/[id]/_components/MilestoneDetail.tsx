@@ -145,7 +145,7 @@ const MilestoneDetail: FC<MilestoneDetailProps> = async ({ milestone, user_id, i
     taskStatusBg = "bg-muted text-foreground";
   }
 
-  revalidatePath(`/dashboard/tasks/${milestone.id}`);
+  revalidatePath(`/milestones/${milestone.id}`);
 
   return (
     <>
