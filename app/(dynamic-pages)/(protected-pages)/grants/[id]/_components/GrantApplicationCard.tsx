@@ -1,6 +1,7 @@
 import { Anchor } from "@/components/Anchor";
 import { CarrotStrikIcon } from "@/components/Icons/CustomIcons";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -76,7 +77,7 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
               src={imageUrl}
               alt={imageUrl}
               fill
-              className="object-cover object-center"
+              className="object-cover object-center rounded-tl-md rounded-bl-md"
             />
           </div>
           <div className="relative w-full h-full px-6 py-6 text-foreground">
@@ -102,26 +103,6 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
               </TooltipProvider>
             </div>
             <div className="mt-2">
-              <ScrollArea className="max-w-xs h-fit">
-                {" "}
-                <div className="flex items-center gap-2 my-1 whitespace-nowrap">
-                  {grantProjectType.map((type, index) => (
-                    <Badge
-                      key={index}
-                      className="text-xs text-foreground bg-secondary hover:bg-secondary"
-                    >
-                      {type
-                        .split("-")
-                        .map(
-                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
-                        )
-                        .join(" ")
-                        .replace("_", " ")}
-                    </Badge>
-                  ))}
-                </div>{" "}
-              </ScrollArea>
-
               <div className="mt-2">
                 <Anchor
                   href={`/grant-applications/${grantId}`}
@@ -129,16 +110,20 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
                 >
                   {grantTitle}
                 </Anchor>
+                <Badge variant="secondary" className='ml-2'>
+                  {grantProjectType?.[0] || "Defi"}
+                </Badge>
               </div>
               <div className="mt-2 ">
-                <p className="w-full text-sm text-muted-foreground">
-                  {`${grantDescription}`}...
-                </p>
+                <p className="w-full text-sm text-muted-foreground"
+                  dangerouslySetInnerHTML={{ __html: grantDescription as string }}
+                />
+
               </div>
             </div>
           </div>
 
-          <div className="flex justify-end w-full">
+          {/* <div className="flex justify-end w-full">
             <div className="flex items-center h-full gap-8 py-6 my-auto ">
               <div className="w-px h-full bg-border" />
               <GrantApplicationAttributes
@@ -153,7 +138,8 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
               <CarrotStrikIcon />
               <p>0</p>
             </div>
-          </div>
+          </div> */}
+          <Button className="absolute top-1/2 right-4">View Application</Button>
         </Card>
       ) : (
         <Link href={`/grant-applications/${grantId}`}>
@@ -251,7 +237,7 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
                   </div>
                   <div className="mt-4 ">
                     <Anchor
-                      href={`/dashboard/tasks/${grantId}`}
+                      href={`/grant-applications/${grantId}`}
                       className="text-base font-semibold leading-7 truncate text-foreground whitespace-nowrap"
                     >
                       {grantTitle}
@@ -262,7 +248,7 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
             </div>
             <div className="px-6 mt-3">
               <div
-                className="prose prose-lg text-sm text-muted-foreground prose-slate dark:prose-invert prose-headings:font-display font-default focus:outline-none max-w-full mb-2"
+                className="max-w-full mb-2 text-sm prose prose-lg text-muted-foreground prose-slate dark:prose-invert prose-headings:font-display font-default focus:outline-none"
                 dangerouslySetInnerHTML={{ __html: grantDescription as string }}
               />
             </div>
