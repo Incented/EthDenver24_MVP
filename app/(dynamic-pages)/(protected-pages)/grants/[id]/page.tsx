@@ -92,7 +92,7 @@ export default async function GrantDetailsPage({
         </div>
       </Card>
       <Typography.H3 className="mt-8 mb-6">Grant Applications</Typography.H3>
-      <div className="grid grid-cols-3 gap-4 w-full">
+      <div className="grid grid-rows-1 gap-4 w-full">
         {grantApplications.filter(application => application.grant_project_status !== "draft").map((application) => (
           <GrantApplicationCard
             key={application.id}
@@ -103,7 +103,9 @@ export default async function GrantDetailsPage({
             grantProgramId={application.organization_id}
             grantProgram={grantProgram}
             grantProjectStatus={application.grant_project_status}
-            grantProjectType={parseJsonToStringArray(application.grant_project_types)} />
+            grantProjectType={parseJsonToStringArray(application.grant_project_types)}
+            isVertical={true}
+          />
         ))}
       </div>
     </div>
