@@ -9,7 +9,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FC, useState } from "react";
-import NotificationMenu from "./NotificationMenu";
 
 import {
   NavigationMenu,
@@ -20,8 +19,6 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { demoMakeDemoUsersPrioritizeNewTasks, demoMakeDemoUsersValidateContributionsForTasksWithContributions } from "@/data/admin/demo-scripts";
-import { useToastMutation } from "@/hooks/useToastMutation";
 
 interface IProps {
   userProfile: {
@@ -37,32 +34,6 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
   const { user, linkWallet } = usePrivy();
   const pathName = usePathname();
   const router = useRouter();
-
-  const { mutate: makeDemoUsersPrioritiseAllNewTasks } = useToastMutation(demoMakeDemoUsersPrioritizeNewTasks, {
-    loadingMessage: "Prioritizing new tasks...",
-    successMessage: "Tasks prioritized",
-    errorMessage: "Failed to prioritize tasks",
-    onSuccess: () => {
-      router.refresh()
-    }
-  });
-
-  const handleAvatarClick = () => {
-    makeDemoUsersPrioritiseAllNewTasks();
-  };
-
-  const { mutate: makeDemoUsersValidateContributionsForTasksWithContributions } = useToastMutation(demoMakeDemoUsersValidateContributionsForTasksWithContributions, {
-    loadingMessage: "Validating tasks with contributions...",
-    successMessage: "Tasks validated",
-    errorMessage: "Failed to validate tasks",
-    onSuccess: () => {
-      router.refresh()
-    }
-  });
-
-  const handleNotificationClick = () => {
-    makeDemoUsersValidateContributionsForTasksWithContributions();
-  };
 
   const walletAddress =
     user?.wallet?.address.slice(0, 4) + "..." + user?.wallet?.address.slice(-4);
@@ -252,14 +223,12 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <div className="flex items-center">
-          <NotificationMenu
-            onNotificationClick={handleNotificationClick}
-          />
+        <div className="flex items-center gap-2">
+          {/* <NotificationMenu
+          /> */}
           <UserNav
             userName={userProfile.full_name}
             avatarUrl={userProfile.avatar_url || ""}
-            onAvatarClick={handleAvatarClick}
           />
           <Button
             className="flex items-center hidden gap-2"
