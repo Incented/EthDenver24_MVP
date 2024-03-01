@@ -94,9 +94,13 @@ const GrantDetail: FC<GrantDetailProps> = async ({ grant, grantProgram, loggedIn
   });
 
   let totalVotes = lowerPriority + higherPriority;
-  let currentGrantPrioritizationQuorum = (higherPriority / (higherPriority / totalVotes)) * 100;
+  let currentGrantPrioritizationQuorum = (higherPriority / (totalVotes)) * 100;
 
-  if (grant.grant_project_status === "new_application" && currentGrantPrioritizationQuorum >= grantPrioritizationQuorum!) {
+  if (grant.grant_project_status === "new_application" && grantProjectPrioritizations.length !== 0) {
+    await updateGrantProjectStatusAction({ status: "prioritized", grantProjectId: grant.id });
+  }
+
+  if (grant.grant_project_status === "prioritized" && currentGrantPrioritizationQuorum >= grantPrioritizationQuorum) {
     await updateGrantProjectStatusAction({ status: "project", grantProjectId: grant.id });
   }
 
@@ -124,6 +128,12 @@ const GrantDetail: FC<GrantDetailProps> = async ({ grant, grantProgram, loggedIn
   const timeSincePosted = createdAt.fromNow();
   return (
     <div className="p-8 bg-accent/50">
+      {/* <pre>{grant.grant_project_status}</pre>
+      <pre>{JSON.stringify(totalVotes, null, 2)}</pre>
+      <pre>{JSON.stringify(lowerPriority, null, 2)}</pre>
+      <pre>{JSON.stringify(higherPriority, null, 2)}</pre>
+      <pre>{JSON.stringify(currentGrantPrioritizationQuorum, null, 2)}</pre>
+      <pre>{JSON.stringify(grantPrioritizationQuorum, null, 2)}</pre> */}
       <Suspense fallback={<div>Loading...</div>}>
         <GrantProgramDetails organizationId={organizationId} />
       </Suspense>

@@ -3,38 +3,38 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { prioritizeGrantProjectAction } from "@/data/user/grant-projects";
+import { prioritizeMilestoneAction } from "@/data/user/milestones";
 import { useToastMutation } from "@/hooks/useToastMutation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { TokenData } from "./TokenData";
+import { TokenData } from "../../../grant-applications/[id]/_components/TokenData";
 
-export const prioritizeGrantProjectActionSchema = z.object({
+export const prioritizeTaskFormSchema = z.object({
     count: z.number().min(0.01, "Count must be at least 0.01"), // Allow decimals with a minimum of 0.01
 });
 
-export type PrioritizeGrantProjectActionSchema = z.infer<typeof prioritizeGrantProjectActionSchema>;
+export type PrioritizeTaskFormSchema = z.infer<typeof prioritizeTaskFormSchema>;
 
-export function PrioritizeGrantDialog({
-    grantProjectId,
-    isGrantApplicationCreator,
-    isPrioritizedByLoggedInUser,
+export function MilestonePrioritizeDialog({
+    milestone_id,
+    isMilestoneCreator,
+    isMilestonePrioritizedByLoggedInUser,
     isWithinPrioritizedPeriod,
-    isUserMemberOfCommunity,
+    isUserMemberOfGrantProject,
 }: {
-    grantProjectId: string;
-    isGrantApplicationCreator: boolean;
-    isPrioritizedByLoggedInUser: boolean;
+    milestone_id: string;
+    isMilestoneCreator: boolean;
+    isMilestonePrioritizedByLoggedInUser: boolean;
     isWithinPrioritizedPeriod: boolean;
-    isUserMemberOfCommunity: boolean;
+    isUserMemberOfGrantProject: boolean;
 }) {
     const [actionType, setActionType] = useState<'prioritize' | 'deprioritize'>('prioritize');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    const { mutate: prioritizeTask } = useToastMutation(async (data: PrioritizeGrantProjectActionSchema) => {
-        await prioritizeGrantProjectAction({
-            grantProjectId: grantProjectId,
+    const { mutate: prioritizeTask } = useToastMutation(async (data: PrioritizeTaskFormSchema) => {
+        await prioritizeMilestoneAction({
+            grant_project_milestone_id: milestone_id,
             stakeAmount: data.count,
         })
 
@@ -45,9 +45,9 @@ export function PrioritizeGrantDialog({
     })
 
 
-    const { handleSubmit, register } = useForm<PrioritizeGrantProjectActionSchema>()
+    const { handleSubmit, register } = useForm<PrioritizeTaskFormSchema>()
 
-    const onSubmit = (data: PrioritizeGrantProjectActionSchema) => {
+    const onSubmit = (data: PrioritizeTaskFormSchema) => {
         const adjustedData = {
             ...data,
             count: actionType === 'deprioritize' ? -Math.abs(data.count) : Math.abs(data.count),
@@ -67,8 +67,8 @@ export function PrioritizeGrantDialog({
     return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild className="w-full">
-                <Button className="w-full" disabled={isGrantApplicationCreator || isPrioritizedByLoggedInUser || !isUserMemberOfCommunity}>
-                    Vote
+                <Button className="w-full" disabled={isMilestoneCreator || isMilestonePrioritizedByLoggedInUser || !isUserMemberOfGrantProject}>
+                    Prioritize
                 </Button>
             </DialogTrigger>
             <DialogContent>
@@ -132,6 +132,7 @@ export function PrioritizeGrantDialog({
                         </Button>
                     </div>
                 </form>
+
             </DialogContent>
         </Dialog>)
 }

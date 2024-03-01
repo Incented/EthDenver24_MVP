@@ -170,6 +170,29 @@ export type Database = {
           }
         ];
       };
+      freezed_milestones: {
+        Row: {
+          created_at: string;
+          milestone_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          milestone_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          milestone_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_freezed_milestones_milestone_id_fkey";
+            columns: ["milestone_id"];
+            isOneToOne: true;
+            referencedRelation: "grant_project_milestones_2";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
       freezed_tasks: {
         Row: {
           created_at: string;
@@ -195,6 +218,7 @@ export type Database = {
       };
       grant_applications: {
         Row: {
+          claim_stake_amount_percentage: number | null;
           created_at: string;
           description: string;
           efforts: number | null;
@@ -208,13 +232,19 @@ export type Database = {
           name: string;
           new_grant_project_created_at: string;
           organization_id: string;
+          prioritization_period: number | null;
+          prioritization_quorum_percentage: number | null;
+          prioritization_reward_percentage: number | null;
           project_status: Database["public"]["Enums"]["project_status"];
           rewards: number | null;
           team_id: number | null;
           updated_at: string;
           user_id: string | null;
+          validation_qourum_percentage: number | null;
+          validation_reward_percentage: number | null;
         };
         Insert: {
+          claim_stake_amount_percentage?: number | null;
           created_at?: string;
           description: string;
           efforts?: number | null;
@@ -228,13 +258,19 @@ export type Database = {
           name: string;
           new_grant_project_created_at: string;
           organization_id: string;
+          prioritization_period?: number | null;
+          prioritization_quorum_percentage?: number | null;
+          prioritization_reward_percentage?: number | null;
           project_status?: Database["public"]["Enums"]["project_status"];
           rewards?: number | null;
           team_id?: number | null;
           updated_at?: string;
           user_id?: string | null;
+          validation_qourum_percentage?: number | null;
+          validation_reward_percentage?: number | null;
         };
         Update: {
+          claim_stake_amount_percentage?: number | null;
           created_at?: string;
           description?: string;
           efforts?: number | null;
@@ -248,11 +284,16 @@ export type Database = {
           name?: string;
           new_grant_project_created_at?: string;
           organization_id?: string;
+          prioritization_period?: number | null;
+          prioritization_quorum_percentage?: number | null;
+          prioritization_reward_percentage?: number | null;
           project_status?: Database["public"]["Enums"]["project_status"];
           rewards?: number | null;
           team_id?: number | null;
           updated_at?: string;
           user_id?: string | null;
+          validation_qourum_percentage?: number | null;
+          validation_reward_percentage?: number | null;
         };
         Relationships: [
           {
@@ -398,6 +439,133 @@ export type Database = {
         };
         Relationships: [];
       };
+      grant_project_claimed_milestones: {
+        Row: {
+          created_at: string;
+          milestone_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          milestone_id?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          milestone_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_grant_project_claimed_milestones_milestone_id_fkey";
+            columns: ["milestone_id"];
+            isOneToOne: false;
+            referencedRelation: "grant_project_milestones_2";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "public_grant_project_claimed_milestones_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: true;
+            referencedRelation: "user_profiles";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      grant_project_milestone_prioritizations: {
+        Row: {
+          count: number;
+          created_at: string;
+          grant_project_milestone_id: string;
+          id: string;
+          user_id: string;
+        };
+        Insert: {
+          count: number;
+          created_at?: string;
+          grant_project_milestone_id?: string;
+          id?: string;
+          user_id?: string;
+        };
+        Update: {
+          count?: number;
+          created_at?: string;
+          grant_project_milestone_id?: string;
+          id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_grant_project_milestone_prioritizations_grant_project_mi";
+            columns: ["grant_project_milestone_id"];
+            isOneToOne: false;
+            referencedRelation: "grant_project_milestones_2";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "public_grant_project_milestone_prioritizations_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "user_profiles";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      grant_project_milestone_validations: {
+        Row: {
+          contribution_id: string;
+          count: number;
+          created_at: string;
+          description: string;
+          files: Json;
+          grant_project_milestone_id: string;
+          id: string;
+          user_id: string;
+        };
+        Insert: {
+          contribution_id?: string;
+          count: number;
+          created_at?: string;
+          description: string;
+          files: Json;
+          grant_project_milestone_id?: string;
+          id?: string;
+          user_id?: string;
+        };
+        Update: {
+          contribution_id?: string;
+          count?: number;
+          created_at?: string;
+          description?: string;
+          files?: Json;
+          grant_project_milestone_id?: string;
+          id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_grant_project_milestone_validations_contribution_id_fkey";
+            columns: ["contribution_id"];
+            isOneToOne: false;
+            referencedRelation: "grant_project_milestones_contributions";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "public_grant_project_milestone_validations_grant_project_milest";
+            columns: ["grant_project_milestone_id"];
+            isOneToOne: false;
+            referencedRelation: "grant_project_milestones_2";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "public_grant_project_milestone_validations_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "user_profiles";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
       grant_project_milestones: {
         Row: {
           budget: number;
@@ -432,6 +600,122 @@ export type Database = {
             columns: ["grant_project_id"];
             isOneToOne: false;
             referencedRelation: "grant_applications";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      grant_project_milestones_2: {
+        Row: {
+          created_at: string;
+          description: string;
+          efforts: number | null;
+          files: Json | null;
+          grant_community: string | null;
+          grant_project_id: string;
+          grant_project_milestone_amount: number;
+          grant_project_milestone_status: Database["public"]["Enums"]["task_status"];
+          grant_project_milestone_types: Json;
+          id: string;
+          is_milestone_published: boolean;
+          name: string;
+          new_grant_project_milestone_created_at: string;
+          project_status: Database["public"]["Enums"]["project_status"];
+          rewards: number;
+          team_id: number | null;
+          updated_at: string;
+          user_id: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          description: string;
+          efforts?: number | null;
+          files?: Json | null;
+          grant_community?: string | null;
+          grant_project_id: string;
+          grant_project_milestone_amount: number;
+          grant_project_milestone_status: Database["public"]["Enums"]["task_status"];
+          grant_project_milestone_types: Json;
+          id?: string;
+          is_milestone_published?: boolean;
+          name: string;
+          new_grant_project_milestone_created_at: string;
+          project_status?: Database["public"]["Enums"]["project_status"];
+          rewards: number;
+          team_id?: number | null;
+          updated_at?: string;
+          user_id?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          description?: string;
+          efforts?: number | null;
+          files?: Json | null;
+          grant_community?: string | null;
+          grant_project_id?: string;
+          grant_project_milestone_amount?: number;
+          grant_project_milestone_status?: Database["public"]["Enums"]["task_status"];
+          grant_project_milestone_types?: Json;
+          id?: string;
+          is_milestone_published?: boolean;
+          name?: string;
+          new_grant_project_milestone_created_at?: string;
+          project_status?: Database["public"]["Enums"]["project_status"];
+          rewards?: number;
+          team_id?: number | null;
+          updated_at?: string;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_grant_project_milestones_2_grant_project_id_fkey";
+            columns: ["grant_project_id"];
+            isOneToOne: false;
+            referencedRelation: "grant_applications";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      grant_project_milestones_contributions: {
+        Row: {
+          created_at: string;
+          description: string;
+          files: Json;
+          grant_project_milestone_id: string;
+          id: string;
+          links: Json;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          description: string;
+          files: Json;
+          grant_project_milestone_id?: string;
+          id?: string;
+          links: Json;
+          user_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string;
+          files?: Json;
+          grant_project_milestone_id?: string;
+          id?: string;
+          links?: Json;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "public_grant_project_milestones_contributions_grant_project_mil";
+            columns: ["grant_project_milestone_id"];
+            isOneToOne: false;
+            referencedRelation: "grant_project_milestones_2";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "public_grant_project_milestones_contributions_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "user_profiles";
             referencedColumns: ["id"];
           }
         ];

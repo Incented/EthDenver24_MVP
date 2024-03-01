@@ -252,7 +252,6 @@ export function CreateGrantApplicationForm({
 
   return (
     <div className="">
-      {/* <pre>{JSON.stringify(watch(), null, 2)}</pre> */}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className=" grid gap-6 md:grid-cols-1 w-full"
