@@ -124,7 +124,7 @@ const GrantProjectMilestoneCard: FC<GrantProjectMilestoneCardProps> = ({
 
               <div className="mt-2">
                 <Anchor
-                  href={`/dashboard/tasks/${milestoneId}`}
+                  href={`/grant-applications/${milestoneId}`}
                   className="text-base font-semibold leading-7 text-foreground dark:text-white"
                 >
                   {milestoneTitle}
