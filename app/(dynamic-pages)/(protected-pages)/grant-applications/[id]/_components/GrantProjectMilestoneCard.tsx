@@ -17,7 +17,7 @@ import { FC } from "react";
 import GrantApplicationAttributes from "./GrantApplicationAttributes";
 
 interface GrantProjectMilestoneCardProps {
-  milestoneId: number;
+  milestoneId: string;
   grantProjectId: string;
   grantProgramId: string;
   milestoneTitle?: string;
@@ -158,7 +158,7 @@ const GrantProjectMilestoneCard: FC<GrantProjectMilestoneCardProps> = ({
           </div>
         </Card>
       ) : (
-        <Link href={`/dashboard/tasks/${milestoneId}`}>
+        <Link href={`/milestones/${milestoneId}`}>
           <Card className="relative w-full min-w-full overflow-visible rounded-lg">
             {!isPublished && (
               <div className="absolute top-0 z-10 flex justify-center w-full px-4 py-2 text-xs font-medium rounded-t-lg text-foreground bg-secondary">

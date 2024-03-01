@@ -10,7 +10,7 @@ import { useContext } from "react";
 import GrantProjectMilestoneCard from "./GrantProjectMilestoneCard";
 
 type GrantProjectTasksTabProps = {
-  milestones: Table<"grant_project_milestones">[];
+  milestones: Table<"grant_project_milestones_2">[];
   userId?: string;
   isGrant?: boolean;
   grantProject: Table<"grant_applications">;
@@ -75,20 +75,20 @@ const GrantProjectTasksTab = ({ userId, milestones, isGrant, grantProject }: Gra
               grantProjectId={milestone.grant_project_id}
               grantProgramId={grantProject.organization_id}
               imageUrl={featuredImageUrl}
-              milestoneTitle={milestone.title}
+              milestoneTitle={milestone.name}
               milestoneDescription={milestone.description}
               rewards={
-                milestone.budget
-                  ? `${milestone.budget} ARB`
+                milestone.grant_project_milestone_amount
+                  ? `${milestone.grant_project_milestone_amount} ARB`
                   : "0 ARB"
               }
               efforts={
-                milestone.effort ? `${milestone.effort} days` : "0 days"
+                milestone.efforts ? `${milestone.efforts} days` : "0 days"
               }
               milestoneProjectName={grantProject.name || "Community Name"}
               taskType={parseJsonToStringArray(grantProject.grant_project_types)}
               taskStatus={"new_task"}
-              isVertical={isVertical}
+              isVertical={false}
               isPublished={grantProject.is_grant_published}
               isGrant={true}
             />
@@ -109,25 +109,25 @@ const GrantProjectTasksTab = ({ userId, milestones, isGrant, grantProject }: Gra
             <GrantProjectMilestoneCard
               key={i}
               milestoneId={milestone.id}
-              milestoneDescription={milestone.description}
               grantProjectId={milestone.grant_project_id}
               grantProgramId={grantProject.organization_id}
               imageUrl={featuredImageUrl}
-              milestoneTitle={milestone.title}
+              milestoneTitle={milestone.name}
+              milestoneDescription={milestone.description}
               rewards={
-                milestone.budget
-                  ? `${milestone.budget} ARB`
+                milestone.grant_project_milestone_amount
+                  ? `${milestone.grant_project_milestone_amount} ARB`
                   : "0 ARB"
               }
               efforts={
-                milestone.effort ? `${milestone.effort} days` : "0 days"
+                milestone.efforts ? `${milestone.efforts} days` : "0 days"
               }
               milestoneProjectName={grantProject.name || "Community Name"}
               taskType={parseJsonToStringArray(grantProject.grant_project_types)}
               taskStatus={"new_task"}
               isVertical={isVertical}
               isPublished={grantProject.is_grant_published}
-              isGrant={isGrant}
+              isGrant={true}
             />
           ))}
         </div>
@@ -150,22 +150,22 @@ const GrantProjectTasksTab = ({ userId, milestones, isGrant, grantProject }: Gra
                 grantProjectId={milestone.grant_project_id}
                 grantProgramId={grantProject.organization_id}
                 imageUrl={featuredImageUrl}
-                milestoneTitle={milestone.title}
+                milestoneTitle={milestone.name}
                 milestoneDescription={milestone.description}
                 rewards={
-                  milestone.budget
-                    ? `${milestone.budget} ARB`
+                  milestone.grant_project_milestone_amount
+                    ? `${milestone.grant_project_milestone_amount} ARB`
                     : "0 ARB"
                 }
                 efforts={
-                  milestone.effort ? `${milestone.effort} days` : "0 days"
+                  milestone.efforts ? `${milestone.efforts} days` : "0 days"
                 }
                 milestoneProjectName={grantProject.name || "Community Name"}
                 taskType={parseJsonToStringArray(grantProject.grant_project_types)}
                 taskStatus={"new_task"}
-                isVertical={isVertical}
+                isVertical={false}
                 isPublished={grantProject.is_grant_published}
-                isGrant={isGrant}
+                isGrant={true}
               />
             ))}
           </div>

@@ -63,13 +63,20 @@ export const createGrantApplicationAction = async ({
     throw error;
   }
 
-  const milestones: TableInsertPayload<"grant_project_milestones">[] =
+  const milestones: TableInsertPayload<"grant_project_milestones_2">[] =
     grant_milestones.map((milestone) => ({
       grant_project_id: grantApplication.id,
-      title: milestone.milestone_title,
+      name: milestone.milestone_title,
       description: milestone.milestone_description,
-      effort: milestone.milestone_effort,
-      budget: milestone.milestone_budget,
+      efforts: milestone.milestone_effort,
+      grant_project_milestone_amount: milestone.milestone_budget,
+      grant_project_milestone_status: "new_task",
+      grant_project_milestone_types: [],
+      new_grant_project_milestone_created_at: new Date().toISOString(),
+      rewards: 0,
+      files: [],
+      is_milestone_published: true,
+      user_id: user.id,
     }));
 
   await createMilestonesForGrantProject(milestones);
@@ -78,11 +85,11 @@ export const createGrantApplicationAction = async ({
 };
 
 export const createMilestonesForGrantProject = async (
-  milestones: TableInsertPayload<"grant_project_milestones">[]
+  milestones: TableInsertPayload<"grant_project_milestones_2">[]
 ) => {
   const supabaseClient = createSupabaseUserServerComponentClient();
   const { error } = await supabaseClient
-    .from("grant_project_milestones")
+    .from("grant_project_milestones_2")
     .insert(milestones);
 
   if (error) {
@@ -188,7 +195,7 @@ export const getAllMilestonesForGrantProject = async (
 ) => {
   const supabase = createSupabaseUserServerComponentClient();
   const { data, error } = await supabase
-    .from("grant_project_milestones")
+    .from("grant_project_milestones_2")
     .select("*")
     .eq("grant_project_id", grantProjectId);
 

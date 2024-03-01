@@ -27,7 +27,7 @@ export type TaskFileArray = z.infer<typeof filesSchema>;
 interface GrantApplicationDetailProps {
   grant: Table<"grant_applications">;
   grantProgram: Table<"grant_programs">;
-  milestones: Table<"grant_project_milestones">[];
+  milestones: Table<"grant_project_milestones_2">[];
   loggedInUserId: string;
   grantProjectPrioritizations: Table<"grant_project_prioritizations">[];
   grantCreator: Table<"user_profiles">;
@@ -43,7 +43,7 @@ const GrantApplicationDetail: FC<GrantApplicationDetailProps> = async ({
 }: {
   grant: Table<"grant_applications">;
   grantProgram: Table<"grant_programs">;
-  milestones: Table<"grant_project_milestones">[];
+  milestones: Table<"grant_project_milestones_2">[];
   loggedInUserId: string;
   grantProjectPrioritizations: Table<"grant_project_prioritizations">[];
   grantCreator: Table<"user_profiles">;
@@ -108,9 +108,9 @@ const GrantApplicationDetail: FC<GrantApplicationDetailProps> = async ({
             {milestones.map((milestone, index) =>
               <div key={index} className="flex flex-col gap-2">
                 <div className="flex flex-wrap md:grid md:grid-cols-3 w-full gap-4">
-                  <div><Typography.Small className="font-normal">Milestone {index + 1} :</Typography.Small> <Typography.Small className="font-semibold">{milestone.title}</Typography.Small></div>
-                  <div><Typography.Small className="font-normal">Effort Estimate :</Typography.Small> <Typography.Small className="font-semibold">{milestone.effort} days</Typography.Small></div>
-                  <div><Typography.Small className="font-normal">Budget :</Typography.Small> <Typography.Small className="font-semibold"> ${milestone.budget} USD</Typography.Small></div>
+                  <div><Typography.Small className="font-normal">Milestone {index + 1} :</Typography.Small> <Typography.Small className="font-semibold">{milestone.name}</Typography.Small></div>
+                  <div><Typography.Small className="font-normal">Effort Estimate :</Typography.Small> <Typography.Small className="font-semibold">{milestone.efforts} days</Typography.Small></div>
+                  <div><Typography.Small className="font-normal">Budget :</Typography.Small> <Typography.Small className="font-semibold"> ${milestone.grant_project_milestone_amount} USD</Typography.Small></div>
                 </div>
                 <Typography.Small className="font-normal">Milestone Description: </Typography.Small>
                 <div
