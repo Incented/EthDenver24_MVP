@@ -55,34 +55,34 @@ export default async function GrantDetailsPage({
   return (
     <div className="relative mx-4 my-10 mb-10 sm:mx-8">
       <GoBack />
-      <Card className=" p-6 border-none shadow-none">
-        <div className="flex flex-col space-y-4 gap-12 lg:flex-row lg:space-y-0 lg:space-x-8">
+      <Card className="p-6 border-none shadow-none ">
+        <div className="flex flex-col gap-12 space-y-4 lg:flex-row lg:space-y-0 lg:space-x-8">
           <div className="flex-1">
             <Typography.H2>{grantProgram.title}</Typography.H2>
             <Typography.P className="text-sm text-muted-foreground">Managed by: The Arbitrum Foundation</Typography.P>
             <div className="mt-4 space-y-2">
-              <Card className="shadow-none p-4 flex justify-between">
+              <Card className="flex justify-between p-4 shadow-none">
                 <Typography.P className="text-lg font-medium">Grant Pool</Typography.P>
-                <Typography.P className="text-primary text-lg font-semibold">{grantProgram.grant_pool} ARB</Typography.P>
+                <Typography.P className="text-lg font-semibold text-primary">{grantProgram.grant_pool} ARB</Typography.P>
               </Card>
-              <Card className="shadow-none p-4 flex justify-between">
+              <Card className="flex justify-between p-4 shadow-none">
                 <Typography.P className="text-lg font-medium">Prioritization Reward Pool</Typography.P>
-                <Typography.P className="text-primary text-lg font-semibold">{grantProgram.prioritization_reward_percentage! * 4 * 10} ARB</Typography.P>
+                <Typography.P className="text-lg font-semibold text-primary">{grantProgram.prioritization_reward_percentage! * 4 * 10} ARB</Typography.P>
               </Card>
-              <Card className="shadow-none p-4 flex justify-between">
+              <Card className="flex justify-between p-4 shadow-none">
                 <Typography.P className="text-lg font-medium">Slash Percentage</Typography.P>
-                <Typography.P className="text-primary text-lg font-semibold">{grantProgram.slash_percentage} %</Typography.P>
+                <Typography.P className="text-lg font-semibold text-primary">{grantProgram.slash_percentage} %</Typography.P>
               </Card>
             </div>
           </div>
-          <Card className="flex-1 space-y-4 shadow-none border-none bg-muted p-8">
+          <Card className="flex-1 p-8 space-y-4 border-none shadow-none bg-muted">
             <div className="flex flex-col justify-between h-full">
               <div
-                className="prose text-base text-muted-foreground prose-lg prose-slate  dark:prose-invert prose-headings:font-display font-default focus:outline-none max-w-full mb-6"
+                className="max-w-full mb-6 text-base prose prose-lg text-muted-foreground prose-slate dark:prose-invert prose-headings:font-display font-default focus:outline-none"
                 dangerouslySetInnerHTML={{ __html: grantProgram.description as string }}
               />
               <Link href={`/grants/${id}/submit-application`}>
-                <Button className="mt-4 w-full bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600">
+                <Button className="w-full px-4 py-2 mt-4 text-white bg-orange-500 rounded hover:bg-orange-600">
                   Apply
                 </Button>
               </Link>
@@ -92,7 +92,7 @@ export default async function GrantDetailsPage({
         </div>
       </Card>
       <Typography.H3 className="mt-8 mb-6">Grant Applications</Typography.H3>
-      <div className="grid grid-cols-3 gap-4 w-full">
+      <div className="grid w-full grid-cols-3 gap-4">
         {grantApplications.filter(application => application.grant_project_status !== "draft").map((application) => (
           <GrantApplicationCard
             key={application.id}
