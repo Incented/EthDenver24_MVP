@@ -2,9 +2,13 @@ import { CARD_VIEW_VERTICAL_LAYOUT_COOKIE_KEY } from "@/constants";
 import { CardVerticalLayoutProvider } from "@/contexts/CardVerticalLayoutContext";
 import PrivyProviderWrapper from "@/providers/privy-provider-wrapper";
 import "@/styles/globals.css";
+import { config } from "@/wallet/config";
+import { ContextProvider } from "@/wallet/context";
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
+import { cookieToInitialState } from 'wagmi';
 import { AppProviders } from "./AppProviders";
+
 
 export const metadata: Metadata = {
   icons: {
@@ -32,14 +36,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const cardLayoutVertical = getCardLayout();
+  const initialState = cookieToInitialState(config, headers().get('cookie'))
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="text-foreground bg-background">
-        <CardVerticalLayoutProvider initialValue={cardLayoutVertical}>
-          <PrivyProviderWrapper>
-            <AppProviders>{children}</AppProviders>
-          </PrivyProviderWrapper>
-        </CardVerticalLayoutProvider>
+        <ContextProvider initialState={initialState}>
+          <CardVerticalLayoutProvider initialValue={cardLayoutVertical}>
+            <PrivyProviderWrapper>
+              <AppProviders>{children}</AppProviders>
+            </PrivyProviderWrapper>
+          </CardVerticalLayoutProvider>
+        </ContextProvider>
       </body>
     </html>
   );
