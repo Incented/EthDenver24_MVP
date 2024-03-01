@@ -65,7 +65,7 @@ export function PrioritizeGrantDialog({
     };
 
     return (
-        <Dialog open={true} onOpenChange={setIsDialogOpen}>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild className="w-full">
                 <Button className="w-full" disabled={isGrantApplicationCreator || isPrioritizedByLoggedInUser || !isUserMemberOfCommunity}>
                     Vote
