@@ -91,16 +91,16 @@ export function PrioritizeGrantDialog({
                                     className="w-32"
                                     step="0.01"
                                 />
-                                <TokenData />
+                                <TokenData token='ARB' />
                             </div>
-                            <div className="flex justify-between items-center">
+                            {/* <div className="flex justify-between items-center">
                                 <span className="text-sm font-normal text-muted-foreground">
                                     $ 0.00
                                 </span>
                                 <span className="text-sm font-normal text-muted-foreground">
                                     300.00
                                 </span>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="mt-4 flex gap-2 w-full ">
                             <Button className=" w-full gap-2" variant="secondary" data-submit-type="deprioritize" onClick={handleDeprioritizeClick}>
