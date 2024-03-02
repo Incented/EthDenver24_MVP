@@ -241,12 +241,12 @@ const GrantProjectMilestoneCard: FC<GrantProjectMilestoneCardProps> = ({
                         ))}
                       </div>
                     </ScrollArea>
-                    <div className="flex items-center gap-1">
+                    {/* <div className="flex items-center gap-1">
                       <Carrot size={20} />
                       <p className="mr-4">0</p>
                       <CarrotStrikIcon />
                       <p>0</p>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="mt-4 ">
                     <Anchor
