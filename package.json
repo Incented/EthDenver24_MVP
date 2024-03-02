@@ -36,6 +36,7 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toggle": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@rainbow-me/rainbowkit": "^2.0.1",
     "@supabase/auth-helpers-nextjs": "^0.8.7",
     "@supabase/auth-helpers-react": "^0.4.2",
     "@supabase/supabase-js": "^2.39.3",
@@ -95,7 +96,7 @@
     "tiptap-markdown": "^0.8.9",
     "url-join": "^5.0.0",
     "use-debounce": "^10.0.0",
-    "viem": "^2.7.16",
+    "viem": "2.x",
     "wagmi": "^2.5.7",
     "zod": "^3.22.4"
   },
