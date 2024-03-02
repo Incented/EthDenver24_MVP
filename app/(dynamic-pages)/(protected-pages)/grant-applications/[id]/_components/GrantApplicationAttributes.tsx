@@ -1,4 +1,4 @@
-import { AlarmClock, Calendar, DollarSign, LucideIcon } from "lucide-react";
+import { DollarSign, LucideIcon } from "lucide-react";
 import { FC } from "react";
 
 interface GrantApplicationAttributesProps {
@@ -15,8 +15,8 @@ const GrantApplicationAttributes: FC<GrantApplicationAttributesProps> = ({
   return (
     <div className="flex flex-col gap-4 w-full">
       <Attribute Icon={DollarSign} value={amount} title="Amount" />
-      <Attribute Icon={Calendar} value={efforts} title="Efforts" />
-      <Attribute Icon={AlarmClock} value={deadline} title="Deadline" />
+      {/* <Attribute Icon={Calendar} value={efforts} title="Efforts" />
+      <Attribute Icon={AlarmClock} value={deadline} title="Deadline" /> */}
     </div>
   );
 };

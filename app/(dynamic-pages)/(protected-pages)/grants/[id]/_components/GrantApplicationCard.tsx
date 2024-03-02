@@ -128,7 +128,7 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
                 <Button variant='default'>View Application</Button>
               </Link>
             ) : (<Link href={`/grants/${grantProgramId}/projects/${grantId}`} className="w-full h-full flex flex-col place-content-center px-6">
-              <Button className="border border-primary bg-background text-primary hover:text-primary hover:bg-primary/10" variant='outline'>View Project</Button>
+              <Button className="border border-primary px-12 bg-background text-primary hover:text-primary hover:bg-primary/10" variant='outline'>View Project</Button>
             </Link>)}
           </Card>
         </Link>
