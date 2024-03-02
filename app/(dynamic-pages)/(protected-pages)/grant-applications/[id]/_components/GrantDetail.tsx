@@ -120,6 +120,7 @@ const GrantDetail: FC<GrantDetailProps> = async ({ grant, grantProgram, loggedIn
     console.log(error);
   }
   const firstFile = files[0];
+  console.log(firstFile);
   const featuredImageUrl = firstFile?.url ?? imageUrl;
 
   const deadLine = String(grant.efforts);
@@ -162,7 +163,7 @@ const GrantDetail: FC<GrantDetailProps> = async ({ grant, grantProgram, loggedIn
         <div
           className="h-full w-full"
           style={{
-            backgroundImage: `url(${featuredImageUrl})`,
+            backgroundImage: `url("${featuredImageUrl}")`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

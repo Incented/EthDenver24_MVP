@@ -1,5 +1,6 @@
 "use server";
 import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
+import { TableInsertPayload } from "@/types";
 import { updateGrantProjectStatusAction } from "../user/grant-projects";
 
 const demoUserIds: string[] = [
@@ -285,4 +286,123 @@ export const getCurrentPrioritizationCount = async (projectId: string) => {
   let currentGrantPrioritizationQuorum = (higherPriority / totalVotes) * 100;
 
   return currentGrantPrioritizationQuorum;
+};
+
+export const demoRevertProjectsStatusToNewApplication = async (
+  grant_project_id: string
+) => {
+  try {
+    const { data, error } = await supabaseAdminClient
+      .from("grant_project_prioritizations")
+      .delete()
+      .eq("grant_project_id", grant_project_id);
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const resetGrantApplicationsForNextDemo = async () => {
+  const organizationId = "d28edab0-9b7d-4319-b37f-c8aaf57ce374";
+  const rowsToAdd: Array<TableInsertPayload<"grant_applications">> = [
+    {
+      name: "Sven needs money",
+      organization_id: organizationId,
+      project_status: "draft",
+      description: "<p>I am poor, please give me a grant</p>",
+      user_id: "37cd86de-8c19-4889-b0b9-224716e2174b",
+      files: [
+        {
+          url: "https://zrrvbemasvqppixraece.supabase.co/storage/v1/object/public/task-assets/download-(32).png",
+          name: "download (32).png",
+        },
+      ],
+      grant_project_types: ["compute-networks", "wallet", "synthetic-assets"],
+      is_grant_published: true,
+      grant_community: "",
+      new_grant_project_created_at: "2024-03-01 18:32:37.211+00",
+      grant_amount: 100000,
+      grant_project_status: "new_application",
+      prioritization_quorum_percentage: 41,
+    },
+    {
+      name: "This is the titlefkvadf;vj",
+      organization_id: organizationId,
+      project_status: "draft",
+      description: "This is the task description",
+      user_id: "37cd86de-8c19-4889-b0b9-224716e2174b",
+      files: [
+        {
+          url: "https://zrrvbemasvqppixraece.supabase.co/storage/v1/object/public/task-assets/410099074_750951666467604_7704977087930814188_n.jpg",
+          name: "410099074_750951666467604_7704977087930814188_n.jpg",
+        },
+      ],
+      grant_project_types: ["developer-tooling", "data"],
+      is_grant_published: true,
+      grant_community: "",
+      new_grant_project_created_at: "2024-03-01 20:58:59.738+00",
+      grant_amount: 10,
+      grant_project_status: "new_application",
+      prioritization_quorum_percentage: 41,
+    },
+    {
+      name: "This is the title",
+      organization_id: organizationId,
+      project_status: "draft",
+      description: "This is the task description",
+      user_id: "b8f746b2-bf09-4d6d-b20a-0fd0aa00f239",
+      files: [],
+      grant_project_types: ["compute-networks"],
+      is_grant_published: true,
+      grant_community: "",
+      new_grant_project_created_at: "2024-03-02 00:09:51.347+00",
+      grant_amount: 10,
+      grant_project_status: "new_application",
+      prioritization_quorum_percentage: 40,
+    },
+    {
+      name: "This is the title",
+      organization_id: organizationId,
+      project_status: "draft",
+      description: "This is the task description",
+      user_id: "37cd86de-8c19-4889-b0b9-224716e2174b",
+      files: [],
+      grant_project_types: ["compute-networks"],
+      is_grant_published: true,
+      grant_community: "",
+      new_grant_project_created_at: "2024-03-02 01:21:33.824+00",
+      grant_amount: 10,
+      grant_project_status: "new_application",
+      prioritization_quorum_percentage: 42,
+    },
+  ];
+
+  // delete all the grant applications in this organization
+
+  const { error } = await supabaseAdminClient
+    .from("grant_applications")
+    .delete()
+    .eq("organization_id", organizationId);
+
+  if (error) {
+    throw error;
+  }
+
+  // insert the new grant applications
+
+  const { data, error: insertError } = await supabaseAdminClient
+    .from("grant_applications")
+    .insert(rowsToAdd)
+    .select("id");
+
+  if (insertError) {
+    throw insertError;
+  }
+
+  return data;
 };

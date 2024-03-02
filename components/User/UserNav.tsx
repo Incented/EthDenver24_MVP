@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { demoMakeDemoUsersPrioritizeNewTasks, demoMakeDemoUsersValidateContributionsForTasksWithContributions, demoUpdateProjectsStatusBasedOnQuorum } from "@/data/admin/demo-scripts";
+import { demoMakeDemoUsersPrioritizeNewTasks, demoMakeDemoUsersValidateContributionsForTasksWithContributions, demoUpdateProjectsStatusBasedOnQuorum, resetGrantApplicationsForNextDemo } from "@/data/admin/demo-scripts";
 import { useToastMutation } from "@/hooks/useToastMutation";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -54,6 +54,15 @@ const UserNav: FC<UserNavProps> = ({ avatarUrl = "", userName }) => {
     makeDemoUpdateProjectsStatusBasedOnQuorum();
   };
 
+  const { mutate: makeResetGrantApplicationsForNextDemo } = useToastMutation(resetGrantApplicationsForNextDemo, {
+    loadingMessage: "Resetting...",
+    successMessage: "Done",
+    errorMessage: "Failed to reset",
+    onSuccess: () => {
+      router.refresh()
+    }
+  });
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -74,6 +83,9 @@ const UserNav: FC<UserNavProps> = ({ avatarUrl = "", userName }) => {
           Prioritize        </Link>
         <Link href="#" className="w-full text-sm font-normal px-2 py-1 rounded-md hover:bg-accent" onClick={handleValidateClick}>
           Validate
+        </Link>
+        <Link href="#" className="w-full text-sm font-normal px-2 py-1 rounded-md hover:bg-accent" onClick={() => makeResetGrantApplicationsForNextDemo()}>
+          Reset grant applications
         </Link>
         <Link href="#" className="hidden text-sm font-normal px-2 py-1 rounded-md hover:bg-accent">
           My Profile
