@@ -55,6 +55,7 @@ export const createGrantApplicationAction = async ({
       grant_project_status: grant_project_status,
       is_grant_published: is_grant_published,
       new_grant_project_created_at: new Date().toISOString(),
+      prioritization_quorum_percentage: 42,
     })
     .select("id")
     .single();
@@ -155,7 +156,7 @@ export const getGrantApplicationsByGrantId = async (grantId: string) => {
     .select("*")
     .eq("organization_id", grantId)
     .or(
-      "grant_project_status.eq.new_application,grant_project_status.eq.project"
+      "grant_project_status.eq.new_application,grant_project_status.eq.prioritized,grant_project_status.eq.project"
     );
 
   if (error) {

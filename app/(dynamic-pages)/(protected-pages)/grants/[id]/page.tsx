@@ -97,7 +97,7 @@ export default async function GrantDetailsPage({
         </div>
       </Card>
 
-      <div className="items-center md:flex">
+      <div className="items-center mx-4 md:flex">
         <Typography.H3 className="mt-4 mb-6">Grant Applications</Typography.H3>
         <div className="flex items-center gap-3 mt-4 ml-auto md:mt-0">
           <Search placeholder="Search Application" />
@@ -108,21 +108,31 @@ export default async function GrantDetailsPage({
         </div>
       </div>
 
-      <div className="grid w-full gap-4">
-        {grantApplications.filter(application => application.grant_project_status !== "draft").map((application) => (
-          <GrantApplicationCard
-            key={application.id}
-            grantTitle={application.name}
-            grantDescription={application.description ?? ""}
-            imageUrl={getGrantApplicationFeaturedImage(application)}
-            grantId={application.id}
-            grantProgramId={application.organization_id}
-            grantProgram={grantProgram}
-            grantProjectStatus={application.grant_project_status}
-            grantProjectType={parseJsonToStringArray(application.grant_project_types)}
-            isVertical
-          />
-        ))}
+      <div className="grid w-full mx-4 gap-4">
+        {grantApplications
+          .sort((a, b) => {
+            if (a.grant_project_status === "project" && b.grant_project_status !== "project") {
+              return -1;
+            } else if (a.grant_project_status !== "project" && b.grant_project_status === "project") {
+              return 1;
+            } else {
+              return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+            }
+          })
+          .map((application) => (
+            <GrantApplicationCard
+              key={application.id}
+              grantTitle={application.name}
+              grantDescription={application.description ?? ""}
+              imageUrl={getGrantApplicationFeaturedImage(application)}
+              grantId={application.id}
+              grantProgramId={application.organization_id}
+              grantProgram={grantProgram}
+              grantProjectStatus={application.grant_project_status}
+              grantProjectType={parseJsonToStringArray(application.grant_project_types)}
+              isVertical
+            />
+          ))}
       </div>
       {/* <div className="py-4 ">
         <Pagination

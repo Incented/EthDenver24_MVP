@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { demoMakeDemoUsersPrioritizeNewTasks, demoMakeDemoUsersValidateContributionsForTasksWithContributions } from "@/data/admin/demo-scripts";
+import { demoMakeDemoUsersPrioritizeNewTasks, demoMakeDemoUsersValidateContributionsForTasksWithContributions, demoUpdateProjectsStatusBasedOnQuorum } from "@/data/admin/demo-scripts";
 import { useToastMutation } from "@/hooks/useToastMutation";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -41,6 +41,19 @@ const UserNav: FC<UserNavProps> = ({ avatarUrl = "", userName }) => {
     makeDemoUsersValidateContributionsForTasksWithContributions();
   };
 
+  const { mutate: makeDemoUpdateProjectsStatusBasedOnQuorum } = useToastMutation(demoUpdateProjectsStatusBasedOnQuorum, {
+    loadingMessage: "Settling...",
+    successMessage: "Settled",
+    errorMessage: "Failed to settle",
+    onSuccess: () => {
+      router.refresh()
+    }
+  });
+
+  const handleUpdateQuorumClick = () => {
+    makeDemoUpdateProjectsStatusBasedOnQuorum();
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -54,7 +67,7 @@ const UserNav: FC<UserNavProps> = ({ avatarUrl = "", userName }) => {
         side="bottom"
         className="-mt-6 -ml-6 w-[120px] flex flex-col justify-start p-2"
       >
-        <Link href="#" className="w-full text-sm font-normal px-2 py-1 rounded-md hover:bg-accent" >
+        <Link href="#" className="w-full text-sm font-normal px-2 py-1 rounded-md hover:bg-accent" onClick={handleUpdateQuorumClick} >
           Settle
         </Link>
         <Link href="#" className="w-full text-sm font-normal px-2 py-1 rounded-md hover:bg-accent" onClick={handlePrioritizeClick}>

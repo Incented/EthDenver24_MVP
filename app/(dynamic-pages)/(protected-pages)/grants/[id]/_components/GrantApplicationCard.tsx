@@ -57,90 +57,81 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
   return (
     <>
       {isVertical ? (
-        <Card className="relative flex justify-between w-full rounded-lg">
-          <div
-            className={cn(
-              "absolute top-0 right-0 px-4 py-2 text-xs font-medium text-white rounded-tr-md rounded-bl-md",
-              grantStatusBg
-            )}
-          >
-            {grantProjectStatus
-              .replace("project", "approved")
-              .replace("new_application", "in_review")
-              .split("-")
-              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-              .join(" ")
-              .replace("_", " ")}
-          </div>
-          <div className="relative w-[400px] h-full ">
-            <Image
-              src={imageUrl}
-              alt={imageUrl}
-              fill
-              className="object-cover object-center rounded-tl-md rounded-bl-md"
-            />
-          </div>
-          <div className="relative w-full h-full px-6 py-6 text-foreground">
-            <div className="flex items-center gap-2 text-sm">
-              <p className="text-xs font-medium leading-6">{grantProgram.title}</p>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild className="z-20 cursor-pointer">
-                    <Info size={18} />
-                  </TooltipTrigger>
-                  <TooltipContent className="z-50">
-                    <div className="">
-                      <p className="mb-2 text-sm">Grant Details</p>
-                      <p className="mb-1 text-xs">
-                        Prioritization Reward Percentage {grantProgram.prioritization_reward_percentage}
-                      </p>
-                      <p className="text-xs">
-                        Validation Reward Percentage {grantProgram.validation_reward_percentage}
-                      </p>
-                    </div>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+        <Link href={`/grant-applications/${grantId}`} className="w-full">
+          <Card className="relative grid grid-cols-8 justify-between w-full rounded-lg">
+            <div
+              className={cn(
+                "absolute top-0 right-0 px-4 py-2 text-xs font-medium text-white rounded-tr-md rounded-bl-md",
+                grantStatusBg
+              )}
+            >
+              {grantProjectStatus
+                .replace("project", "approved")
+                .split("-")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ")
+                .replace("_", " ")}
             </div>
-            <div className="mt-2">
-              <div className="mt-2">
-                <Anchor
-                  href={`/grant-applications/${grantId}`}
-                  className="text-base font-semibold leading-7 text-foreground dark:text-white"
-                >
-                  {grantTitle}
-                </Anchor>
-                <Badge variant="secondary" className='ml-2'>
-                  {grantProjectType?.[0] || "Defi"}
-                </Badge>
+            <div className="relative col-span-1 h-full ">
+              <Image
+                src={imageUrl}
+                alt={imageUrl}
+                fill
+                className="object-cover object-center rounded-tl-md rounded-bl-md"
+              />
+            </div>
+            <div className="relative col-span-6 *:w-full h-full px-6 py-6 text-foreground">
+              <div className="flex items-center gap-2 text-sm">
+                <p className="text-xs font-medium leading-6">{grantProgram.title}</p>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild className="z-20 cursor-pointer">
+                      <Info size={18} />
+                    </TooltipTrigger>
+                    <TooltipContent className="z-50">
+                      <div className="">
+                        <p className="mb-2 text-sm">Grant Details</p>
+                        <p className="mb-1 text-xs">
+                          Prioritization Reward Percentage {grantProgram.prioritization_reward_percentage}
+                        </p>
+                        <p className="text-xs">
+                          Validation Reward Percentage {grantProgram.validation_reward_percentage}
+                        </p>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
               <div className="mt-2 ">
-                <p className="w-full text-sm text-muted-foreground"
-                  dangerouslySetInnerHTML={{ __html: grantDescription as string }}
-                />
+                <div className="mt-2">
+                  <Anchor
+                    href={`/grant-applications/${grantId}`}
+                    className="text-base font-semibold leading-7 text-foreground dark:text-white"
+                  >
+                    {grantTitle}
+                  </Anchor>
+                  <Badge variant="secondary" className='ml-2'>
+                    {grantProjectType?.[0] || "Defi"}
+                  </Badge>
+                </div>
+                <div className="mt-2 ">
+                  <p className="w-full text-sm text-muted-foreground"
+                    dangerouslySetInnerHTML={{ __html: grantDescription as string }}
+                  />
 
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* <div className="flex justify-end w-full">
-            <div className="flex items-center h-full gap-8 py-6 my-auto ">
-              <div className="w-px h-full bg-border" />
-              <GrantApplicationAttributes
-                efforts={efforts}
-                deadline={deadLine} amount={""} />
-              <div className="w-px h-full bg-border" />
-            </div>
-
-            <div className="flex items-center gap-1 w-fit px-7">
-              <Carrot size={20} />
-              <p className="mr-4">0</p>
-              <CarrotStrikIcon />
-              <p>0</p>
-            </div>
-          </div> */}
-          <Button className="absolute top-1/2 right-4">View Application</Button>
-        </Card>
+            {grantProjectStatus === "new_application" || grantProjectStatus === "prioritized" ? (
+              <Link href={`/grant-applications/${grantId}`} className="w-full h-full flex flex-col place-content-center px-6">
+                <Button variant='default'>View Application</Button>
+              </Link>
+            ) : (<Link href={`/grants/${grantProgramId}/projects/${grantId}`} className="w-full h-full flex flex-col place-content-center px-6">
+              <Button className="border border-primary bg-background text-primary hover:text-primary hover:bg-primary/10" variant='outline'>View Project</Button>
+            </Link>)}
+          </Card>
+        </Link>
       ) : (
         <Link href={`/grant-applications/${grantId}`}>
           <Card className="relative w-full min-w-full overflow-visible rounded-lg">

@@ -233,7 +233,7 @@ export type Database = {
           new_grant_project_created_at: string;
           organization_id: string;
           prioritization_period: number | null;
-          prioritization_quorum_percentage: number | null;
+          prioritization_quorum_percentage: number;
           prioritization_reward_percentage: number | null;
           project_status: Database["public"]["Enums"]["project_status"];
           rewards: number | null;
@@ -259,7 +259,7 @@ export type Database = {
           new_grant_project_created_at: string;
           organization_id: string;
           prioritization_period?: number | null;
-          prioritization_quorum_percentage?: number | null;
+          prioritization_quorum_percentage: number;
           prioritization_reward_percentage?: number | null;
           project_status?: Database["public"]["Enums"]["project_status"];
           rewards?: number | null;
@@ -285,7 +285,7 @@ export type Database = {
           new_grant_project_created_at?: string;
           organization_id?: string;
           prioritization_period?: number | null;
-          prioritization_quorum_percentage?: number | null;
+          prioritization_quorum_percentage?: number;
           prioritization_reward_percentage?: number | null;
           project_status?: Database["public"]["Enums"]["project_status"];
           rewards?: number | null;

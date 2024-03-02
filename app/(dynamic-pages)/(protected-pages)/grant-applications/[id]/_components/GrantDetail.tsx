@@ -100,9 +100,9 @@ const GrantDetail: FC<GrantDetailProps> = async ({ grant, grantProgram, loggedIn
     await updateGrantProjectStatusAction({ status: "prioritized", grantProjectId: grant.id });
   }
 
-  if (grant.grant_project_status === "prioritized" && currentGrantPrioritizationQuorum >= grantPrioritizationQuorum) {
-    await updateGrantProjectStatusAction({ status: "project", grantProjectId: grant.id });
-  }
+  // if (grant.grant_project_status === "prioritized" && currentGrantPrioritizationQuorum >= grantPrioritizationQuorum) {
+  //   await updateGrantProjectStatusAction({ status: "project", grantProjectId: grant.id });
+  // }
 
   let files: TaskFileArray = [];
   let grantProjectTypes: string[] = [];

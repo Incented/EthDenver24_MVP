@@ -1,5 +1,6 @@
 "use server";
 import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
+import { updateGrantProjectStatusAction } from "../user/grant-projects";
 
 const demoUserIds: string[] = [
   "ea405d02-7c1e-48c1-b6a8-34a05b0a76cb",
@@ -196,3 +197,81 @@ export async function demoMakeDemoUsersValidateContributionsForTasksWithContribu
     console.error(error);
   }
 }
+
+export const demoUpdateProjectsStatusBasedOnQuorum = async () => {
+  try {
+    const projects = await getGrantApplicationsByStatus("prioritized");
+    const promises = projects.map(async (project) => {
+      const currentPrioritizationCount = await getCurrentPrioritizationCount(
+        project.id
+      );
+      console.log("project", project.id, currentPrioritizationCount);
+
+      if (
+        currentPrioritizationCount >= project.prioritization_quorum_percentage
+      ) {
+        return await updateGrantProjectStatusAction({
+          status: "project",
+          grantProjectId: project.id,
+        });
+      }
+    });
+
+    return Promise.allSettled(promises);
+  } catch (error) {
+    console.error(error);
+  }
+  // return projects.map(async (project) => {
+  //   const prioritizationQuorum = project.prioritization_quorum_percentage;
+  //   const currentPrioritizationCount = await getCurrentPrioritizationCount(
+  //     project.id
+  //   );
+
+  //   if (currentPrioritizationCount > prioritizationQuorum) {
+  //     return await updateGrantProjectStatusAction({
+  //       status: "project", // Assuming 'project' is a valid status in your Enum
+  //       grantProjectId: project.id,
+  //     });
+  //   }
+  // });
+};
+
+export const getGrantApplicationsByStatus = async (status: string) => {
+  const { data, error } = await supabaseAdminClient
+    .from("grant_applications")
+    .select("*")
+    .eq("grant_project_status", status);
+
+  if (error) {
+    throw error;
+  }
+
+  return data ?? [];
+};
+
+export const getCurrentPrioritizationCount = async (projectId: string) => {
+  const { data, error } = await supabaseAdminClient
+    .from("grant_project_prioritizations")
+    .select("count")
+    .eq("id", projectId);
+
+  if (error) {
+    throw error;
+  }
+
+  let lowerPriority = 0;
+  let higherPriority = 0;
+
+  data.forEach((prioritization) => {
+    if (prioritization.count < 0) {
+      lowerPriority += Math.abs(prioritization.count);
+    } else {
+      higherPriority += prioritization.count;
+    }
+  });
+
+  let totalVotes = lowerPriority + higherPriority;
+  let currentGrantPrioritizationQuorum = (higherPriority / totalVotes) * 100;
+
+  return currentGrantPrioritizationQuorum;
+};
