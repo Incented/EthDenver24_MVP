@@ -3,12 +3,18 @@ import { getOrganizationById, getTeamMembersInOrganization } from "@/data/user/o
 import { checkIfUserClaimedTask, checkIfUserPrioritizedTask, getPrioritizationDetails, getTaskById, getTaskClaimerDetails, getTaskContributions, getValidationDetails, getValidationsForTask } from "@/data/user/tasks";
 import { getUserProfile } from "@/data/user/user";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
+import { z } from "zod";
 import DraftTaskDetail from "./_components/DraftTaskDetail";
 import TaskDetail from "./_components/TaskDetail";
 
+const paramsSchema = z.object({
+  id: z.string(),
+})
+
 export default async function TaskDetailsPage({ params }: { params: unknown }) {
-  const parsedParams = params as { id: string };
-  const { id } = parsedParams;
+  const { id } = paramsSchema.parse(params);
+  console.log("task id", id);
+
   const [task, user, communityDetails, teamMembersInOrganization] = await Promise.all([
     getTaskById(id),
     serverGetLoggedInUser(),
@@ -18,7 +24,7 @@ export default async function TaskDetailsPage({ params }: { params: unknown }) {
   ]);
 
   const [taskCreator, isPrioritizedByLoggedInUser, isClaimedByUser, taskPrioritizationDetails, taskValidationDetails, claimerDetails, contributions, validationsForTask] = await Promise.all([
-    task.user_id ? getUserProfile(task.user_id) : Promise.resolve(null),
+    getUserProfile(task.user_id!),
     checkIfUserPrioritizedTask(task.id),
     checkIfUserClaimedTask(task.id),
     getPrioritizationDetails(task.id),

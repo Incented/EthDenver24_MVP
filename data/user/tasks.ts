@@ -206,18 +206,17 @@ export const checkIfUserPrioritizedTask = async (
 ): Promise<boolean> => {
   const user = await serverGetLoggedInUser();
   const supabaseClient = createSupabaseUserServerComponentClient();
-  const { data: prioritizedTask, error } = await supabaseClient
+  const { data: prioritizations, error } = await supabaseClient
     .from("prioritizations")
     .select("*")
     .eq("task_id", task_id)
-    .eq("user_id", user.id)
-    .maybeSingle();
+    .eq("user_id", user.id);
 
   if (error) {
     throw error;
   }
 
-  return prioritizedTask !== null;
+  return prioritizations.length >= 1;
 };
 
 export const checkIfUserClaimedTask = async (

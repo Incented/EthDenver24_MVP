@@ -56,7 +56,7 @@ export async function GrantProgramCard({
           </div>
         </div>
 
-        {communityDescription ? <div className="text-sm text-muted-foreground truncate line-clamp-1" dangerouslySetInnerHTML={{ __html: communityDescription as string }} /> : <p className="mb-4 text-sm text-muted-foreground">"Buan onsulting is a community of developers"</p>}
+        {communityDescription ? <div className="text-sm text-muted-foreground leading-6 leading- truncate line-clamp-1" dangerouslySetInnerHTML={{ __html: communityDescription as string }} /> : <p className="mb-4 text-sm text-muted-foreground">"Buan onsulting is a community of developers"</p>}
 
         <div className="flex items-center gap-3 mb-4">
           <div className="">
