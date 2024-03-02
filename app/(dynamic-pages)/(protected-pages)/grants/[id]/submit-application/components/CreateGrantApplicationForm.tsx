@@ -17,12 +17,14 @@ import { AttachmentDialog } from "@/components/AttachmentDialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import taskContract from "@/contracts/TaskContract.json";
 import { createGrantApplicationAction } from "@/data/user/grant-projects";
 import { useToastMutation } from "@/hooks/useToastMutation";
 import axios from "axios";
 import { File } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { grant_project_type_slug } from "../../../../grant-applications/[id]/grantTypes";
 import { AttachmentType, FilePreview } from "./CreateTaskFormTypes";
 import { UploadFiles } from "./uploadFile";
@@ -44,10 +46,16 @@ export function CreateGrantApplicationForm({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [filePreviews, setFilePreviews] = useState<FilePreview[]>([]);
-
   const [taskFileUrls, setTaskFilesUrls] = useState<
     { name: string; url: string }[]
   >([]);
+
+  const { writeContract, data: hash, error } = useWriteContract();
+  const { isLoading, isSuccess } =
+    useWaitForTransactionReceipt({
+      hash,
+    })
+  const { address } = useAccount();
 
   const [selectedAttachment, setSelectedAttachment] =
     useState<AttachmentType | null>(null);
@@ -226,6 +234,17 @@ export function CreateGrantApplicationForm({
   const onSubmit = (values: CreateGrantApplicationFormSchema) => {
     console.log("Form values: ", values);
 
+    // TODO: needs to accomodate for multiple submissions after demo
+    // Only focusing on first submission for now due to time constraints
+
+    writeContract({
+      address: "0x2701aE2558643E400a9a3E4058e5081B29412d17", //contract address
+      abi: taskContract,
+      functionName: 'initialize',
+      args: [address, values.grant_project_amount, '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d', '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d', values.grant_milestones[0].milestone_effort]
+      //project, reward, creator, tokenAddress(USDC testnet), time
+    })
+
     // Map the fields from `values` to the structure expected by `createTaskAction`
     const grantApplicationData = {
       grant_program_id: grantProgramId,
@@ -238,11 +257,15 @@ export function CreateGrantApplicationForm({
       is_grant_published: isSubmittingProposal,
     };
 
-    mutate({
-      grant_milestones: values.grant_milestones,
-      grantProjectData: grantApplicationData
-    });
+    if (error) console.error('error: ', error)
 
+
+    if (isSuccess) {
+      mutate({
+        grant_milestones: values.grant_milestones,
+        grantProjectData: grantApplicationData
+      });
+    }
   };
 
   const handleOpenSubmitDialog = (submitType: 'publish') => {
