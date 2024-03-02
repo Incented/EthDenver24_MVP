@@ -307,75 +307,188 @@ export const demoRevertProjectsStatusToNewApplication = async (
   }
 };
 
+// export const resetGrantApplicationsForNextDemo = async () => {
+//   const organizationId = "d28edab0-9b7d-4319-b37f-c8aaf57ce374";
+//   const rowsToAdd: Array<TableInsertPayload<"grant_applications">> = [
+//     {
+//       name: "Sven needs money",
+//       organization_id: organizationId,
+//       project_status: "draft",
+//       description: "<p>I am poor, please give me a grant</p>",
+//       user_id: "37cd86de-8c19-4889-b0b9-224716e2174b",
+//       files: [
+//         {
+//           url: "https://zrrvbemasvqppixraece.supabase.co/storage/v1/object/public/task-assets/download-(32).png",
+//           name: "download (32).png",
+//         },
+//       ],
+//       grant_project_types: ["compute-networks", "wallet", "synthetic-assets"],
+//       is_grant_published: true,
+//       grant_community: "",
+//       new_grant_project_created_at: "2024-03-01 18:32:37.211+00",
+//       grant_amount: 100000,
+//       grant_project_status: "new_application",
+//       prioritization_quorum_percentage: 41,
+//     },
+//     {
+//       name: "This is the titlefkvadf;vj",
+//       organization_id: organizationId,
+//       project_status: "draft",
+//       description: "This is the task description",
+//       user_id: "37cd86de-8c19-4889-b0b9-224716e2174b",
+//       files: [
+//         {
+//           url: "https://zrrvbemasvqppixraece.supabase.co/storage/v1/object/public/task-assets/410099074_750951666467604_7704977087930814188_n.jpg",
+//           name: "410099074_750951666467604_7704977087930814188_n.jpg",
+//         },
+//       ],
+//       grant_project_types: ["developer-tooling", "data"],
+//       is_grant_published: true,
+//       grant_community: "",
+//       new_grant_project_created_at: "2024-03-01 20:58:59.738+00",
+//       grant_amount: 10,
+//       grant_project_status: "new_application",
+//       prioritization_quorum_percentage: 41,
+//     },
+//     {
+//       name: "This is the title",
+//       organization_id: organizationId,
+//       project_status: "draft",
+//       description: "This is the task description",
+//       user_id: "b8f746b2-bf09-4d6d-b20a-0fd0aa00f239",
+//       files: [],
+//       grant_project_types: ["compute-networks"],
+//       is_grant_published: true,
+//       grant_community: "",
+//       new_grant_project_created_at: "2024-03-02 00:09:51.347+00",
+//       grant_amount: 10,
+//       grant_project_status: "new_application",
+//       prioritization_quorum_percentage: 40,
+//     },
+//     {
+//       name: "This is the title",
+//       organization_id: organizationId,
+//       project_status: "draft",
+//       description: "This is the task description",
+//       user_id: "37cd86de-8c19-4889-b0b9-224716e2174b",
+//       files: [],
+//       grant_project_types: ["compute-networks"],
+//       is_grant_published: true,
+//       grant_community: "",
+//       new_grant_project_created_at: "2024-03-02 01:21:33.824+00",
+//       grant_amount: 10,
+//       grant_project_status: "new_application",
+//       prioritization_quorum_percentage: 42,
+//     },
+//   ];
+
+//   // delete all the grant applications in this organization
+
+//   const { error } = await supabaseAdminClient
+//     .from("grant_applications")
+//     .delete()
+//     .eq("organization_id", organizationId);
+
+//   if (error) {
+//     throw error;
+//   }
+
+//   // insert the new grant applications
+
+//   const { data, error: insertError } = await supabaseAdminClient
+//     .from("grant_applications")
+//     .insert(rowsToAdd)
+//     .select("id");
+
+//   if (insertError) {
+//     throw insertError;
+//   }
+
+//   return data;
+// };
+
+// Ensure this is the right data. The organization_id is different from the one in the original snippet
+// Do not provide id, created_at, or updated_at as they are automatically generated
+
 export const resetGrantApplicationsForNextDemo = async () => {
-  const organizationId = "d28edab0-9b7d-4319-b37f-c8aaf57ce374";
+  const organizationId = "379f55af-2377-49c5-8203-600aabcc1cab";
   const rowsToAdd: Array<TableInsertPayload<"grant_applications">> = [
     {
-      name: "Sven needs money",
-      organization_id: organizationId,
+      name: "Artium - NFT Marketplace on Arbitrum",
+      organization_id: "379f55af-2377-49c5-8203-600aabcc1cab",
       project_status: "draft",
-      description: "<p>I am poor, please give me a grant</p>",
+      description:
+        "<p>Artium seeks to revolutionize the NFT marketplace on Arbitrum by offering low-cost minting, buying, and selling of NFTs. It will feature unique artist collaborations, community-driven collections, and seamless integration with the broader Arbitrum DeFi ecosystem.</p>",
       user_id: "37cd86de-8c19-4889-b0b9-224716e2174b",
       files: [
         {
-          url: "https://zrrvbemasvqppixraece.supabase.co/storage/v1/object/public/task-assets/download-(32).png",
-          name: "download (32).png",
+          url: "https://zrrvbemasvqppixraece.supabase.co/storage/v1/object/public/task-assets/Screenshot-2024-03-02-002312.png",
+          name: "Screenshot 2024-03-02 002312.png",
         },
       ],
-      grant_project_types: ["compute-networks", "wallet", "synthetic-assets"],
+      grant_project_types: ["marketplace"],
       is_grant_published: true,
       grant_community: "",
-      new_grant_project_created_at: "2024-03-01 18:32:37.211+00",
-      grant_amount: 100000,
-      grant_project_status: "new_application",
-      prioritization_quorum_percentage: 41,
+      new_grant_project_created_at: "2024-03-02 13:11:29.688+00",
+      grant_amount: 160000,
+      grant_project_status: "project",
+      prioritization_quorum_percentage: 42,
     },
     {
-      name: "This is the titlefkvadf;vj",
-      organization_id: organizationId,
+      name: "ArbQuest - Adventure RPG on Arbitrum",
+      updated_at: "2024-03-02 07:42:57.229",
+      organization_id: "379f55af-2377-49c5-8203-600aabcc1cab",
       project_status: "draft",
-      description: "This is the task description",
+      description:
+        "<p>ArbQuest is a blockchain-based RPG game that utilizes NFTs for characters, items, and lands. Players can explore, battle, and trade within an expansive universe, all while benefiting from Arbitrum's low-cost transactions.</p>",
       user_id: "37cd86de-8c19-4889-b0b9-224716e2174b",
       files: [
         {
-          url: "https://zrrvbemasvqppixraece.supabase.co/storage/v1/object/public/task-assets/410099074_750951666467604_7704977087930814188_n.jpg",
-          name: "410099074_750951666467604_7704977087930814188_n.jpg",
+          url: "https://zrrvbemasvqppixraece.supabase.co/storage/v1/object/public/task-assets/123.jpg",
+          name: "123.jpg",
         },
       ],
-      grant_project_types: ["developer-tooling", "data"],
+      grant_project_types: ["compute-networks"],
       is_grant_published: true,
       grant_community: "",
-      new_grant_project_created_at: "2024-03-01 20:58:59.738+00",
-      grant_amount: 10,
+      new_grant_project_created_at: "2024-03-02 07:42:57.503+00",
+      grant_amount: 170000,
       grant_project_status: "new_application",
-      prioritization_quorum_percentage: 41,
+      prioritization_quorum_percentage: 42,
     },
     {
-      name: "This is the title",
-      organization_id: organizationId,
+      name: "ArbiLend - Decentralized Lending and Borrowing",
+      organization_id: "379f55af-2377-49c5-8203-600aabcc1cab",
       project_status: "draft",
-      description: "This is the task description",
-      user_id: "b8f746b2-bf09-4d6d-b20a-0fd0aa00f239",
+      description:
+        "<p>ArbiLend aims to become a leading decentralized finance (DeFi) platform on Arbitrum, offering secure and efficient lending and borrowing services. By utilizing Arbitrum's low transaction fees and high throughput, ArbiLend will offer competitive interest rates for lenders and borrowers across a variety of cryptocurrencies.</p>",
+      user_id: "37cd86de-8c19-4889-b0b9-224716e2174b",
+      files: [
+        {
+          url: "https://zrrvbemasvqppixraece.supabase.co/storage/v1/object/public/task-assets/Screenshot-2024-03-01-233858.png",
+          name: "Screenshot 2024-03-01 233858.png",
+        },
+      ],
+      grant_project_types: ["cryptocurrency", "financial-services"],
+      is_grant_published: true,
+      grant_community: "",
+      new_grant_project_created_at: "2024-03-02 06:39:42.72+00",
+      grant_amount: 180000,
+      grant_project_status: "new_application",
+      prioritization_quorum_percentage: 42,
+    },
+    {
+      name: "Buidl Week Support",
+      organization_id: "379f55af-2377-49c5-8203-600aabcc1cab",
+      project_status: "draft",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      user_id: "7e744376-de24-4e40-bc7f-d9216fd8c352",
       files: [],
       grant_project_types: ["compute-networks"],
       is_grant_published: true,
       grant_community: "",
-      new_grant_project_created_at: "2024-03-02 00:09:51.347+00",
-      grant_amount: 10,
-      grant_project_status: "new_application",
-      prioritization_quorum_percentage: 40,
-    },
-    {
-      name: "This is the title",
-      organization_id: organizationId,
-      project_status: "draft",
-      description: "This is the task description",
-      user_id: "37cd86de-8c19-4889-b0b9-224716e2174b",
-      files: [],
-      grant_project_types: ["compute-networks"],
-      is_grant_published: true,
-      grant_community: "",
-      new_grant_project_created_at: "2024-03-02 01:21:33.824+00",
+      new_grant_project_created_at: "2024-03-02 12:32:21.364+00",
       grant_amount: 10,
       grant_project_status: "new_application",
       prioritization_quorum_percentage: 42,
