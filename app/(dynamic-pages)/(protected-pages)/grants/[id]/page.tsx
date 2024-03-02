@@ -122,23 +122,30 @@ export default async function GrantDetailsPage({
           })
           .map((application) => (
             <div key={application.id} className="flex gap-4">
-              <div className={cn("relative bg-primary h-[200px] w-[240px] rounded-lg p-6 items-center justify-center",
+              <div className={cn("relative flex flex-col  bg-primary h-full w-[240px] rounded-lg p-6 items-center justify-start",
                 application.grant_project_status === "project" ? "flex bg-primary" : "hidden"
               )}>
-                <svg width="64" height="64" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" className="z-50 stroke-primary fill-primary/10" >
-                  <g clipPath="url(#clip0_22_469)">
-                    <path d="M4 6.00001H3C2.55797 6.00001 2.13405 5.82442 1.82149 5.51185C1.50893 5.19929 1.33334 4.77537 1.33334 4.33334C1.33334 3.89132 1.50893 3.46739 1.82149 3.15483C2.13405 2.84227 2.55797 2.66668 3 2.66668H4M4 6.00001V1.33334H12V6.00001M4 6.00001C4 7.06088 4.42143 8.07829 5.17158 8.82844C5.92172 9.57858 6.93914 10 8 10C9.06087 10 10.0783 9.57858 10.8284 8.82844C11.5786 8.07829 12 7.06088 12 6.00001M12 6.00001H13C13.442 6.00001 13.866 5.82442 14.1785 5.51185C14.4911 5.19929 14.6667 4.77537 14.6667 4.33334C14.6667 3.89132 14.4911 3.46739 14.1785 3.15483C13.866 2.84227 13.442 2.66668 13 2.66668H12M2.66667 14.6667H13.3333M6.66667 9.77334V11.3333C6.66667 11.7 6.35334 11.9867 6.02 12.14C5.23334 12.5 4.66667 13.4933 4.66667 14.6667M9.33334 9.77334V11.3333C9.33334 11.7 9.64667 11.9867 9.98 12.14C10.7667 12.5 11.3333 13.4933 11.3333 14.6667" strokeLinecap="round" strokeLinejoin="round" />
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_22_469">
-                      <rect width="16" height="16" />
-                    </clipPath>
-                  </defs>
-                </svg>
-                <div className="absolute z-10">
-                  <div className="relatives size-32">
-                    <Image fill src="/images/polygon.png" alt="bg" />
-                  </div></div>
+                <div className="relative flex flex-col h-fit pt-8 gap-10">
+                  <div className="relative flex justify-center place-items-center ">
+                    <svg width="64" height="64" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" className="z-50 stroke-primary fill-primary/10" >
+                      <g clipPath="url(#clip0_22_469)">
+                        <path d="M4 6.00001H3C2.55797 6.00001 2.13405 5.82442 1.82149 5.51185C1.50893 5.19929 1.33334 4.77537 1.33334 4.33334C1.33334 3.89132 1.50893 3.46739 1.82149 3.15483C2.13405 2.84227 2.55797 2.66668 3 2.66668H4M4 6.00001V1.33334H12V6.00001M4 6.00001C4 7.06088 4.42143 8.07829 5.17158 8.82844C5.92172 9.57858 6.93914 10 8 10C9.06087 10 10.0783 9.57858 10.8284 8.82844C11.5786 8.07829 12 7.06088 12 6.00001M12 6.00001H13C13.442 6.00001 13.866 5.82442 14.1785 5.51185C14.4911 5.19929 14.6667 4.77537 14.6667 4.33334C14.6667 3.89132 14.4911 3.46739 14.1785 3.15483C13.866 2.84227 13.442 2.66668 13 2.66668H12M2.66667 14.6667H13.3333M6.66667 9.77334V11.3333C6.66667 11.7 6.35334 11.9867 6.02 12.14C5.23334 12.5 4.66667 13.4933 4.66667 14.6667M9.33334 9.77334V11.3333C9.33334 11.7 9.64667 11.9867 9.98 12.14C10.7667 12.5 11.3333 13.4933 11.3333 14.6667" strokeLinecap="round" strokeLinejoin="round" />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_22_469">
+                          <rect width="16" height="16" />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    <div className="absolute z-0">
+                      <div className="relatives size-32">
+                        <Image fill src="/images/polygon.png" alt="bg" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <Typography.Large className="text-primary-foreground font-semibold -mb-2">Grant winner</Typography.Large>
+                </div>
 
               </div>
               <GrantApplicationCard

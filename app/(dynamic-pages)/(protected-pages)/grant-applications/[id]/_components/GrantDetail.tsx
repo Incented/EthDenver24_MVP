@@ -193,7 +193,7 @@ const GrantDetail: FC<GrantDetailProps> = async ({ grant, grantProgram, loggedIn
         </div>
         {grant.description && (
           <div
-            className="prose prose-lg prose-slate dark:prose-invert prose-headings:font-display font-default focus:outline-none max-w-full mb-6"
+            className="col-span-3 prose prose-lg prose-stone dark:prose-invert prose-headings:font-display font-default focus:outline-none max-w-full mb-6"
             dangerouslySetInnerHTML={{ __html: grant.description as string }}
           />
         )}
