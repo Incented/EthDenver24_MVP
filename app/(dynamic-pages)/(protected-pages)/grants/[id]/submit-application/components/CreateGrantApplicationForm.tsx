@@ -51,7 +51,7 @@ export function CreateGrantApplicationForm({
   >([]);
 
   const { writeContract, data: hash, error } = useWriteContract();
-  const { isLoading, isSuccess } =
+  const result =
     useWaitForTransactionReceipt({
       hash,
     })
@@ -228,8 +228,32 @@ export function CreateGrantApplicationForm({
     }
   );
 
+  const [payload, setPayload] = useState<CreateGrantApplicationFormSchema | null>(null);
+  const [successEventSent, setSuccessEventSent] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (result.data && result.data.status === 'success' && !successEventSent) {
+      setSuccessEventSent(true);
+      console.log('ben:: emitted success event',)
 
+      const grantApplicationData = {
+        grant_program_id: grantProgramId,
+        grant_project_title: payload!.grant_project_title,
+        grant_project_summary: payload!.grant_project_summary,
+        grant_project_amount: payload!.grant_project_amount, // Corrected property name
+        grant_project_files: payload!.grant_project_files, // Ensure this casting is appropriate based on your schema
+        grant_project_types: payload!.grant_project_types || [],
+        grant_project_status: isSubmittingProposal ? "new_application" : "draft",
+        is_grant_published: isSubmittingProposal,
+        grant_milestones: payload!.grant_milestones
+      };
+
+      mutate({
+        grant_milestones: payload!.grant_milestones,
+        grantProjectData: grantApplicationData
+      });
+    }
+  }, [result])
 
   const onSubmit = (values: CreateGrantApplicationFormSchema) => {
     console.log("Form values: ", values);
@@ -242,7 +266,7 @@ export function CreateGrantApplicationForm({
       abi: taskContract,
       functionName: 'initialize',
       args: [address, values.grant_milestones[0].milestone_budget, '0x292B316069aeA40AF6dAb5b2aa79C85cefc46148', '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d', values.grant_milestones[0].milestone_effort]
-      //project, reward, creator (this contract address), tokenAddress(USDC testnet), time
+      //projectAddress, reward(Bugdget), creator(contractAddress), tokenAddress(USDC testnet), time(effort)
     })
 
     // Map the fields from `values` to the structure expected by `createTaskAction`
@@ -255,17 +279,13 @@ export function CreateGrantApplicationForm({
       grant_project_types: values.grant_project_types || [],
       grant_project_status: isSubmittingProposal ? "new_application" : "draft",
       is_grant_published: isSubmittingProposal,
+      grant_milestones: values.grant_milestones
     };
 
-    if (error) console.error('error: ', error)
+    // result isn't a promise, so we need a useEffect in order to detect when a transaction is mined
+    // and so we store the grantApplicationData in state in order to submit to supabase if the mine is successful
+    setPayload(values)
 
-
-    if (isSuccess) {
-      mutate({
-        grant_milestones: values.grant_milestones,
-        grantProjectData: grantApplicationData
-      });
-    }
   };
 
   const handleOpenSubmitDialog = (submitType: 'publish') => {
