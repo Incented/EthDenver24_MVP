@@ -17,12 +17,14 @@ import { AttachmentDialog } from "@/components/AttachmentDialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import taskContract from "@/contracts/TaskContract.json";
 import { createGrantApplicationAction } from "@/data/user/grant-projects";
 import { useToastMutation } from "@/hooks/useToastMutation";
 import axios from "axios";
 import { File } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { grant_project_type_slug } from "../../../../grant-applications/[id]/grantTypes";
 import { AttachmentType, FilePreview } from "./CreateTaskFormTypes";
 import { UploadFiles } from "./uploadFile";
@@ -44,10 +46,16 @@ export function CreateGrantApplicationForm({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [filePreviews, setFilePreviews] = useState<FilePreview[]>([]);
-
   const [taskFileUrls, setTaskFilesUrls] = useState<
     { name: string; url: string }[]
   >([]);
+
+  const { writeContract, data: hash, error } = useWriteContract();
+  const result =
+    useWaitForTransactionReceipt({
+      hash,
+    })
+  const { address } = useAccount();
 
   const [selectedAttachment, setSelectedAttachment] =
     useState<AttachmentType | null>(null);
@@ -220,11 +228,46 @@ export function CreateGrantApplicationForm({
     }
   );
 
+  const [payload, setPayload] = useState<CreateGrantApplicationFormSchema | null>(null);
+  const [successEventSent, setSuccessEventSent] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (result.data && result.data.status === 'success' && !successEventSent) {
+      setSuccessEventSent(true);
+      console.log('ben:: emitted success event',)
 
+      const grantApplicationData = {
+        grant_program_id: grantProgramId,
+        grant_project_title: payload!.grant_project_title,
+        grant_project_summary: payload!.grant_project_summary,
+        grant_project_amount: payload!.grant_project_amount, // Corrected property name
+        grant_project_files: payload!.grant_project_files, // Ensure this casting is appropriate based on your schema
+        grant_project_types: payload!.grant_project_types || [],
+        grant_project_status: isSubmittingProposal ? "new_application" : "draft",
+        is_grant_published: isSubmittingProposal,
+        grant_milestones: payload!.grant_milestones
+      };
+
+      mutate({
+        grant_milestones: payload!.grant_milestones,
+        grantProjectData: grantApplicationData
+      });
+    }
+  }, [result])
 
   const onSubmit = (values: CreateGrantApplicationFormSchema) => {
     console.log("Form values: ", values);
+
+    // TODO: needs to accomodate for multiple submissions after demo
+    // Only focusing on first submission for now due to time constraints
+
+    writeContract({
+      address: "0x292B316069aeA40AF6dAb5b2aa79C85cefc46148", //contract address
+      abi: taskContract,
+      functionName: 'initialize',
+      args: [address, values.grant_milestones[0].milestone_budget, '0x292B316069aeA40AF6dAb5b2aa79C85cefc46148', '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d', values.grant_milestones[0].milestone_effort]
+      //projectAddress, reward(Bugdget), creator(contractAddress), tokenAddress(USDC testnet), time(effort)
+    })
 
     // Map the fields from `values` to the structure expected by `createTaskAction`
     const grantApplicationData = {
@@ -236,12 +279,12 @@ export function CreateGrantApplicationForm({
       grant_project_types: values.grant_project_types || [],
       grant_project_status: isSubmittingProposal ? "new_application" : "draft",
       is_grant_published: isSubmittingProposal,
+      grant_milestones: values.grant_milestones
     };
 
-    mutate({
-      grant_milestones: values.grant_milestones,
-      grantProjectData: grantApplicationData
-    });
+    // result isn't a promise, so we need a useEffect in order to detect when a transaction is mined
+    // and so we store the grantApplicationData in state in order to submit to supabase if the mine is successful
+    setPayload(values)
 
   };
 

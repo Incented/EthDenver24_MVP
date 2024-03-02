@@ -2,14 +2,6 @@
 
 import UserNav from "@/components/User/UserNav";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { usePrivy } from "@privy-io/react-auth";
-import { Menu, Wallet } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { FC, useState } from "react";
-
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -19,6 +11,14 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { usePrivy } from "@privy-io/react-auth";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { Menu, Wallet } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { FC, useState } from "react";
 
 interface IProps {
   userProfile: {
@@ -241,6 +241,7 @@ const Navbar: FC<IProps> = ({ userProfile }) => {
               {user?.wallet ? walletAddress : "Connect"}
             </p>
           </Button>
+          <ConnectButton />
         </div>
       </nav>
     </header>
