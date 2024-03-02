@@ -238,11 +238,11 @@ export function CreateGrantApplicationForm({
     // Only focusing on first submission for now due to time constraints
 
     writeContract({
-      address: "0x2701aE2558643E400a9a3E4058e5081B29412d17", //contract address
+      address: "0x292B316069aeA40AF6dAb5b2aa79C85cefc46148", //contract address
       abi: taskContract,
       functionName: 'initialize',
-      args: [address, values.grant_project_amount, '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d', '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d', values.grant_milestones[0].milestone_effort]
-      //project, reward, creator, tokenAddress(USDC testnet), time
+      args: [address, values.grant_milestones[0].milestone_budget, '0x292B316069aeA40AF6dAb5b2aa79C85cefc46148', '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d', values.grant_milestones[0].milestone_effort]
+      //project, reward, creator (this contract address), tokenAddress(USDC testnet), time
     })
 
     // Map the fields from `values` to the structure expected by `createTaskAction`
