@@ -270,6 +270,17 @@ export const getCurrentPrioritizationCount = async (projectId: string) => {
     }
   });
 
+  console.log("lowerPriority", lowerPriority);
+  console.log("higherPriority", higherPriority);
+
+  if (lowerPriority === 0) {
+    return 100;
+  }
+
+  if (higherPriority === 0) {
+    return 0;
+  }
+
   let totalVotes = lowerPriority + higherPriority;
   let currentGrantPrioritizationQuorum = (higherPriority / totalVotes) * 100;
 

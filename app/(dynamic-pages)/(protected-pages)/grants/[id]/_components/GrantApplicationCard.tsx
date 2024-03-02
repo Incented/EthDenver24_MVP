@@ -57,8 +57,8 @@ const GrantApplicationCard: FC<GrantApplicationCardProps> = ({
   return (
     <>
       {isVertical ? (
-        <Link href={`/grant-applications/${grantId}`} className="w-full">
-          <Card className="relative grid grid-cols-8 justify-between w-full rounded-lg">
+        <Link href={`/grant-applications/${grantId}`} className="h-full w-full">
+          <Card className="relative grid grid-cols-8 justify-between w-full rounded-lg h-full">
             <div
               className={cn(
                 "absolute top-0 right-0 px-4 py-2 text-xs font-medium text-white rounded-tr-md rounded-bl-md",
