@@ -15,17 +15,25 @@ import TaskLoadingSkeleton from "./_components/TaskLoadingSkeleton";
 import TaskTab from "./_components/TaskTab";
 import { taskData } from "./data";
 
-async function TaskList() {
-  const { id } = await serverGetLoggedInUser();
-  const tasks = await getAllTasksWithCommunityNames();
-  const bookmarkedList = await getAllBookmarkedOrganizationsForUser(id);
-  return <TaskTab tasks={tasks} userId={id} bookmarkedList={bookmarkedList} />
+async function TaskList({
+  tasks,
+  userId,
+  bookmarkedList,
+}: {
+  tasks: any;
+  userId: string;
+  bookmarkedList: string[];
+}) {
+  return <TaskTab tasks={tasks} userId={userId} bookmarkedList={bookmarkedList} />
 }
 
 const DashboardPage = async () => {
-  const [communities, taskTypes] = await Promise.all([
+  const { id } = await serverGetLoggedInUser();
+  const [communities, taskTypes, tasks, bookmarkedList] = await Promise.all([
     getAllOrganizationNames(),
     getAllNamesOfTaskTypes(),
+    getAllTasksWithCommunityNames(),
+    getAllBookmarkedOrganizationsForUser(id),
   ]);
 
   return (
@@ -66,7 +74,11 @@ const DashboardPage = async () => {
           </Anchor>
         </div>
         <Suspense fallback={<TaskLoadingSkeleton />}>
-          <TaskList />
+          <TaskList
+            tasks={tasks}
+            userId={id}
+            bookmarkedList={bookmarkedList}
+          />
         </Suspense>
       </div>
 

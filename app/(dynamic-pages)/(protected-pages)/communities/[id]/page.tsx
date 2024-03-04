@@ -8,13 +8,15 @@ import { Card } from "@/components/ui/card";
 import { Search } from "@/components/Search";
 import Pagination from "@/components/ui/Pagination";
 import {
+  getAllBookmarkedOrganizationsForUser,
   getOrganizationAdmins,
   getOrganizationById,
   getTeamMembersCountInOrganization,
   getTeamMembersInOrganization,
 } from "@/data/user/organizations";
-import { getCommunityTasks, getCommunityTasksWithCommunityNames } from "@/data/user/tasks";
+import { getCommunityTasks } from "@/data/user/tasks";
 import { TeamMembersTableProps } from "@/types";
+import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 import { Filter } from "lucide-react";
 import moment from "moment";
 import { z } from "zod";
@@ -43,14 +45,15 @@ export default async function CommunityDetailsPage({
 }) {
   const parsedParams = paramsSchema.parse(params);
   const { id } = parsedParams;
-  const [community, members, communityMembersCount, communityTasks, admins] =
+  const { id: userId } = await serverGetLoggedInUser();
+  const [community, members, communityMembersCount, communityTasks, admins, bookmarkedList] =
     await Promise.all([
       getOrganizationById(id),
       getTeamMembersInOrganization(id),
       getTeamMembersCountInOrganization(id),
       getCommunityTasks(id),
       getOrganizationAdmins(id),
-      getCommunityTasksWithCommunityNames(id),
+      getAllBookmarkedOrganizationsForUser(userId),
     ]);
 
   const normalizedMembers: TeamMembersTableProps["members"] = members.map(
@@ -155,7 +158,8 @@ export default async function CommunityDetailsPage({
               </div>
             </div>
             <div>
-              <TaskTab tasks={communityTasks} />
+              <TaskTab tasks={communityTasks} bookmarkedList={bookmarkedList}
+              />
               <div className="hidden pt-4 md:flex">
                 <Pagination
                   count={20}
