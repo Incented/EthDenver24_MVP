@@ -59,6 +59,7 @@ const TaskTab = ({ userId, tasks, isGrant }: TaskTabProps) => {
   const pathname = usePathname()
   const router = useRouter()
   const communityFilterParams = searchParams?.getAll('community') ?? []
+  const communityFilterTypeParams = searchParams?.getAll('type') ?? []
   const { isVertical } = useContext(CardVerticalLayoutContext);
   return (
     <Tabs defaultValue="all tasks" >
@@ -96,6 +97,11 @@ const TaskTab = ({ userId, tasks, isGrant }: TaskTabProps) => {
             .filter(task => task.is_task_published)
             .filter(filteredTask =>
               communityFilterParams.includes('all') ? true : communityFilterParams.length === 0 || communityFilterParams.includes(filteredTask.task_community_name?.toLowerCase().replace(/\s+/g, '-') || "")
+            )
+            .filter(filteredTask =>
+              communityFilterTypeParams.length === 0 || communityFilterTypeParams.some(param =>
+                (Array.isArray(filteredTask.task_types) ? filteredTask.task_types : [filteredTask.task_types]).includes(param)
+              )
             )
             .map((filteredTask, i) => (
               <TaskCard
