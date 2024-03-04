@@ -518,3 +518,150 @@ export const resetGrantApplicationsForNextDemo = async () => {
 
   return data;
 };
+
+// export const resetGrantApplicationsAndMilestonesForNextDemo = async () => {
+//   const organizationId = "e38e385f-d6c1-46e1-be41-5989ae74c572";
+//   const rowsToAdd: Array<TableInsertPayload<"grant_applications">> = [
+//     {
+//       name: "Figma for Web3",
+//       organization_id: "e38e385f-d6c1-46e1-be41-5989ae74c572",
+//       project_status: "draft",
+//       description:
+//         "<p>Artium seeks to revolutionize the NFT marketplace on Arbitrum by offering low-cost minting, buying, and selling of NFTs. It will feature unique artist collaborations, community-driven collections, and seamless integration with the broader Arbitrum DeFi ecosystem.</p>",
+//       user_id: "37cd86de-8c19-4889-b0b9-224716e2174b",
+//       files: [
+//         {
+//           url: "https://zrrvbemasvqppixraece.supabase.co/storage/v1/object/public/task-assets/Screenshot-2024-03-02-002312.png",
+//           name: "Screenshot 2024-03-02 002312.png",
+//         },
+//       ],
+//       grant_project_types: ["marketplace"],
+//       is_grant_published: true,
+//       grant_community: "",
+//       new_grant_project_created_at: "2024-03-02 13:11:29.688+00",
+//       grant_amount: 160000,
+//       grant_project_status: "project",
+//       prioritization_quorum_percentage: 42,
+//     },
+//     {
+//       name: "FigJam for Web3",
+//       organization_id: "e38e385f-d6c1-46e1-be41-5989ae74c572",
+//       project_status: "draft",
+//       description:
+//         "<p>ArbQuest is a blockchain-based RPG game that utilizes NFTs for characters, items, and lands. Players can explore, battle, and trade within an expansive universe, all while benefiting from Arbitrum's low-cost transactions.</p>",
+//       user_id: "37cd86de-8c19-4889-b0b9-224716e2174b",
+//       files: [
+//         {
+//           url: "https://zrrvbemasvqppixraece.supabase.co/storage/v1/object/public/task-assets/123.jpg",
+//           name: "123.jpg",
+//         },
+//       ],
+//       grant_project_types: ["compute-networks"],
+//       is_grant_published: true,
+//       grant_community: "",
+//       new_grant_project_created_at: "2024-03-02 07:42:57.503+00",
+//       grant_amount: 170000,
+//       grant_project_status: "new_application",
+//       prioritization_quorum_percentage: 42,
+//     },
+//     {
+//       name: "FigJam and Figma for Web3",
+//       organization_id: "e38e385f-d6c1-46e1-be41-5989ae74c572",
+//       project_status: "draft",
+//       description:
+//         "<p>ArbiLend aims to become a leading decentralized finance (DeFi) platform on Arbitrum, offering secure and efficient lending and borrowing services. By utilizing Arbitrum's low transaction fees and high throughput, ArbiLend will offer competitive interest rates for lenders and borrowers across a variety of cryptocurrencies.</p>",
+//       user_id: "37cd86de-8c19-4889-b0b9-224716e2174b",
+//       files: [
+//         {
+//           url: "https://zrrvbemasvqppixraece.supabase.co/storage/v1/object/public/task-assets/Screenshot-2024-03-01-233858.png",
+//           name: "Screenshot 2024-03-01 233858.png",
+//         },
+//       ],
+//       grant_project_types: ["cryptocurrency", "financial-services"],
+//       is_grant_published: true,
+//       grant_community: "",
+//       new_grant_project_created_at: "2024-03-02 06:39:42.72+00",
+//       grant_amount: 180000,
+//       grant_project_status: "new_application",
+//       prioritization_quorum_percentage: 42,
+//     },
+//     {
+//       name: "Figma, Figjam and prototypes for Web3",
+//       organization_id: "e38e385f-d6c1-46e1-be41-5989ae74c572",
+//       project_status: "draft",
+//       description:
+//         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+//       user_id: "7e744376-de24-4e40-bc7f-d9216fd8c352",
+//       files: [],
+//       grant_project_types: ["compute-networks"],
+//       is_grant_published: true,
+//       grant_community: "",
+//       new_grant_project_created_at: "2024-03-02 12:32:21.364+00",
+//       grant_amount: 10,
+//       grant_project_status: "new_application",
+//       prioritization_quorum_percentage: 42,
+//     },
+//   ];
+
+//   // delete all the grant applications in this organization
+
+//   const { error } = await supabaseAdminClient
+//     .from("grant_applications")
+//     .delete()
+//     .eq("organization_id", organizationId);
+
+//   if (error) {
+//     throw error;
+//   }
+
+//   // insert the new grant applications
+
+//   const { data, error: insertError } = await supabaseAdminClient
+//     .from("grant_applications")
+//     .insert(rowsToAdd)
+//     .select("id");
+
+//   if (insertError) {
+//     throw insertError;
+//   }
+
+//   // get the grant application ids
+//   const grantApplicationIds = await Promise.all(
+//     rowsToAdd.map((row) => getGrantApplicationIdByName(row.name))
+//   );
+
+//   // insert the new grant application milestones
+//   const milestoneRowsToAdd: Array<
+//     TableInsertPayload<"grant_project_milestones_2">
+//   > = [];
+
+//   grantApplicationIds.forEach((grantApplicationId) => {
+//     for (let i = 1; i <= 4; i++) {
+//       milestoneRowsToAdd.push({
+//         grant_project_id: grantApplicationId,
+//         name: `Milestone ${i}`,
+//         description: "This is a milestone",
+//         efforts: 10,
+//         grant_project_milestone_amount: 1000,
+//         grant_project_milestone_status: "new_task",
+//         grant_project_milestone_types: [],
+//         new_grant_project_milestone_created_at: new Date().toISOString(),
+//         rewards: 0,
+//         files: [],
+//         is_milestone_published: true,
+//         user_id: "37cd86de-8c19-4889-b0b9-224716e2174b",
+//       });
+//     }
+//   });
+
+//   const { data: milestones, error: milestonesError } = await supabaseAdminClient
+//     .from("grant_project_milestones_2")
+//     .insert(milestoneRowsToAdd)
+//     .select("id");
+
+//   if (milestonesError) {
+//     throw milestonesError;
+//   }
+
+//   return milestones;
+// };

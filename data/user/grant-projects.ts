@@ -249,3 +249,18 @@ export const checkIfUserPrioritizedGrantProject = async (
 
   return data.length > 0;
 };
+
+export const getGrantApplicationIdByName = async (grantProjectName: string) => {
+  const supabase = createSupabaseUserServerComponentClient();
+  const { data, error } = await supabase
+    .from("grant_applications")
+    .select("id")
+    .eq("name", grantProjectName)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data?.id;
+};
