@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CardVerticalLayoutContext } from "@/contexts/CardVerticalLayoutContext";
 import { cn, parseJsonToStringArray } from "@/lib/utils";
 import { Table } from "@/types";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useContext } from "react";
 import {
   TaskFileArray,
@@ -20,6 +20,7 @@ type ExtendedTask = Table<"tasks"> & {
 type TaskTabProps = {
   tasks: ExtendedTask[];
   userId?: string;
+  bookmarkedList: string[];
   isGrant?: boolean;
 };
 
@@ -54,10 +55,8 @@ const getTaskFeaturedImage = (task: Table<"tasks">) => {
   return featuredImageUrl;
 };
 
-const TaskTab = ({ userId, tasks, isGrant }: TaskTabProps) => {
+const TaskTab = ({ userId, tasks, bookmarkedList, isGrant }: TaskTabProps) => {
   const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const router = useRouter()
   const communityFilterParams = searchParams?.getAll('community') ?? []
   const { isVertical } = useContext(CardVerticalLayoutContext);
   return (
@@ -100,6 +99,8 @@ const TaskTab = ({ userId, tasks, isGrant }: TaskTabProps) => {
             .map((filteredTask, i) => (
               <TaskCard
                 key={i}
+                userId={userId || ""}
+                isBookmarked={bookmarkedList.includes(filteredTask.id)}
                 taskId={filteredTask.id}
                 communityId={filteredTask.organization_id}
                 imageUrl={getTaskFeaturedImage(filteredTask)}
@@ -137,10 +138,12 @@ const TaskTab = ({ userId, tasks, isGrant }: TaskTabProps) => {
           ).map((filteredTask, i) => (
             <TaskCard
               key={i}
+              userId={userId || ""}
               taskId={filteredTask.id}
               communityId={filteredTask.organization_id}
               imageUrl={getTaskFeaturedImage(filteredTask)}
               taskTitle={filteredTask.name}
+              isBookmarked={bookmarkedList.includes(filteredTask.id)}
               taskCommunity={filteredTask.task_community_name || "Community Name"}
               taskType={parseJsonToStringArray(filteredTask.task_types)}
               rewards={
@@ -178,7 +181,9 @@ const TaskTab = ({ userId, tasks, isGrant }: TaskTabProps) => {
               .map((filteredTask, i) => (
                 <TaskCard
                   key={i}
+                  userId={userId || ""}
                   taskId={filteredTask.id}
+                  isBookmarked={bookmarkedList.includes(filteredTask.id) || false}
                   communityId={filteredTask.organization_id}
                   imageUrl={getTaskFeaturedImage(filteredTask)}
                   taskTitle={filteredTask.name}

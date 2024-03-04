@@ -5,7 +5,7 @@ import { Anchor } from "@/components/Anchor";
 import DashboardCard from "@/components/ui/DashboardCard";
 import { CardLayoutSwitcher } from "@/components/ui/card-layout-switcher";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { getAllOrganizationNames } from "@/data/user/organizations";
+import { getAllBookmarkedOrganizationsForUser, getAllOrganizationNames } from "@/data/user/organizations";
 import { getAllNamesOfTaskTypes, getAllTasksWithCommunityNames } from "@/data/user/tasks";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 import { Suspense } from "react";
@@ -18,7 +18,8 @@ import { taskData } from "./data";
 async function TaskList() {
   const { id } = await serverGetLoggedInUser();
   const tasks = await getAllTasksWithCommunityNames();
-  return <TaskTab tasks={tasks} userId={id} />
+  const bookmarkedList = await getAllBookmarkedOrganizationsForUser(id);
+  return <TaskTab tasks={tasks} userId={id} bookmarkedList={bookmarkedList} />
 }
 
 const DashboardPage = async () => {

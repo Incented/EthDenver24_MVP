@@ -9,15 +9,18 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { addBookmark, removeBookmark } from "@/data/user/organizations";
 import { cn } from "@/lib/utils";
 import { Enum } from "@/types";
 import { Carrot, Info } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
+import BookmarkComponent from "../BookmarkComponent";
 import TaksAttributes from "./TaksAttributes";
 
 interface TaskCardProps {
+  userId: string;
   taskId: string;
   communityId: string;
   taskTitle?: string;
@@ -25,6 +28,7 @@ interface TaskCardProps {
   taskDescription?: string;
   taskStatus: Enum<"task_status">;
   taskType: string[];
+  isBookmarked: boolean;
   rabbitHole?: string;
   deadLine?: string;
   rewards: string;
@@ -36,8 +40,10 @@ interface TaskCardProps {
 }
 
 const TaskCard: FC<TaskCardProps> = ({
+  userId,
   taskId,
   communityId,
+  isBookmarked,
   taskTitle = "Buy a trash container",
   taskDescription = "To eradicate invasive species, reintroduce native species and",
   taskStatus,
@@ -168,6 +174,7 @@ const TaskCard: FC<TaskCardProps> = ({
       ) : (
         <Link href={`/dashboard/tasks/${taskId}`}>
           <Card className="relative w-full min-w-full overflow-visible rounded-lg">
+            <BookmarkComponent id={userId} parentId={taskId} addBookmark={addBookmark} removeBookmark={removeBookmark} className="absolute top-1 right-28 z-50 " isBookmarked={isBookmarked} />
             {!isPublished && (
               <div className="absolute top-0 z-10 flex justify-center w-full px-4 py-2 text-xs font-medium rounded-t-lg text-foreground bg-secondary">
                 Draft
@@ -263,7 +270,9 @@ const TaskCard: FC<TaskCardProps> = ({
                     >
                       {taskTitle}
                     </Anchor>
+
                   </div>
+
                 </div>
               </div>
             </div>
