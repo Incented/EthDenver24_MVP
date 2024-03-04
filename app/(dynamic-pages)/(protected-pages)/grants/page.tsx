@@ -25,7 +25,7 @@ export default async function GrantsPage({
           <Button>Create Grant Program</Button></Link>
       </div>
 
-      <div className="grid gap-4 my-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="w-full grid gap-4 my-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {grantPrograms.map((grantProgram) => (
           <GrantProgramCard
             key={grantProgram.id}

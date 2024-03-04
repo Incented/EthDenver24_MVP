@@ -31,10 +31,10 @@ export async function GrantProgramCard({
     getTeamMembersInOrganization(id),
   ]);
   return (
-    <Link href={`/grants/${id}`}>
-      <Card className="gap-4 p-6 rounded-lg cursor-pointer"
+    <Link href={`/grants/${id}`} className="w-full">
+      <Card className="w-full gap-4 p-6 rounded-lg cursor-pointer overflow-hidden"
       >
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex items-center gap-4 mb-4 w-full">
           <Avatar>
             <AvatarImage
               src={communityImage}
@@ -44,21 +44,21 @@ export async function GrantProgramCard({
               {communityName.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className="flex flex-col">
+          <div className="flex flex-col truncate line-clamp-1 w-full">
             <p
-              className="text-base font-bold leading-7 text-foreground"
+              className="text-base font-bold leading-7 text-foreground truncate"
             >
               {communityName ?? "Community Name"}
             </p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground ">
               {communityAddress ?? "New York, USA"}
             </p>
           </div>
         </div>
 
-        {communityDescription ? <div className="text-sm text-muted-foreground leading-6 leading- truncate line-clamp-1" dangerouslySetInnerHTML={{ __html: communityDescription as string }} /> : <p className="mb-4 text-sm text-muted-foreground">"Buan onsulting is a community of developers"</p>}
+        {communityDescription ? <div className=" w-full max-w-md text-sm text-muted-foreground leading-6 truncate line-clamp-1" dangerouslySetInnerHTML={{ __html: communityDescription as string }} /> : <p className="mb-4 w-full text-sm text-muted-foreground">"Buan onsulting is a community of developers"</p>}
 
-        <div className="flex items-center gap-3 mb-4">
+        <div className="w-full flex items-center gap-3 mb-4">
           <div className="">
             <p className="text-base font-bold leading-7">
               {communityTasks ?? 100}
