@@ -19,13 +19,13 @@ export default async function GrantsPage({
   // const totalPages = Math.ceil(communityCount / limit);
   return (
     <main className="flex flex-col px-4 pb-10 sm:px-8">
-      <div className="items-center gap-8 mt-8 md:flex">
+      <div className="w-full mt-8 flex flex-col gap-4 md:flex md:flex-row md:items-center md:gap-6">
         <h1 className="text-3xl font-medium ">Grants</h1>
-        <Link href={`grants/create-grant`}>
-          <Button>Create Grant Program</Button></Link>
+        <Link href={`grants/create-grant`} >
+          <Button className="w-full md:w-fit">Create Grant Program</Button></Link>
       </div>
 
-      <div className="w-full grid gap-4 my-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="w-full grid gap-4 my-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {grantPrograms.map((grantProgram) => (
           <GrantProgramCard
             key={grantProgram.id}
